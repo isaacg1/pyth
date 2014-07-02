@@ -1,10 +1,9 @@
 ############################################################################
-#                            Pyth version 1.0.3                            #
-#                          Posted before 7-1-2014                          #
-# Changes from 1.0.2: Expanded p to do print with specified ending,        #
-# changed built-in variable to contain space, not ". Freed up J and K, and #
-# used them as autoinitializers - equivalent to J=_ or K=_ at their first  #
-# use, and normal variables thereafter.                                    #
+#                            Pyth version 1.0.4                            #
+#                          Posted before 7-2-2014                          #
+# Changes from 1.0.3: C and o (chr and ord) combined into one function, C, #
+# and o is used as order, a sort by lambda. h made into a function, as     #
+# former functionality is superseded by J and K.  } is now in, ' is head.  #
 #                                                                          #
 # This python program is an interpreter for the pyth programming language. #
 # It is still in development - expect new versions often.                  #
@@ -181,7 +180,7 @@ def _tuple(*a):return a             # (     Y - general
 def minus(a,b):
     if type(a)==type(set()):
         return a.difference(b)
-    return a-b           # -     Y
+    return a-b                      # -     Y
 def neg(a):return -a                # _     Y
 def plus(a,b):
     if type(a)==type(set()):
@@ -194,7 +193,7 @@ copy = copy.deepcopy
 def _list(*a):return list(a)        # [     Y
 # set                               # {     Y
 # [_]                               # ]     Y
-# dict                              # }     Y
+# in                                # }     Y
 # or                                # |     Y
 # break out of all containing       # )     Y
 def at_slice(a,b,c=None):           # :     Y
@@ -202,8 +201,8 @@ def at_slice(a,b,c=None):           # :     Y
         return a[slice(b,c)]
     else:
         return a[slice(b)]
-def pop(a):return a.pop()           # ;     Y
-# in                                # '     Y
+# _.pop()                           # ;     Y
+def head(a):return a[0]             # '     Y
 # " is special - string literal             Y
 # , is special - 2 character function       Y
 def lt(a,b):                        # <     Y
@@ -224,6 +223,11 @@ def div(a,b):return a//b            # /     Y
 # break                             # B     Y
 b="\n"                              # b     Y
 # chr                               # C     Y
+def _chr(a):
+    if type(a)==type(0):
+        return chr(a)
+    if type(a)==type(''):
+        return ord(a[0])
 def count(a,b):return a.count(b)    # c     Y
 # def                               # D     Y
 # variable - associated with map    # d     Y
@@ -269,7 +273,11 @@ N=None                              # N     Y
 # min                               # n     Y
 def rand(a,b):                      # O     Y
     return random.randint(a,b)
-# ord                               # o     Y
+# order (sorted with key)           # o     Y
+def order(a,b):
+    if type(b)==type(''):
+        return ''.join(sorted(b, key=a))
+    return sorted(b, key=a)
 def split(a,b=None):                # P     Y
     if b:
         return a.split(b)
@@ -316,7 +324,7 @@ Y=[]                                # Y     Y
 Z=0                                 # Z     Y
 def _zip(a,b):return list(zip(a,b)) # z     Y
 
-no_init_paren='fmu'
+no_init_paren='fmou'
 end_statement='BR'
 variables='bdGHkNTYZ'
 
@@ -350,11 +358,11 @@ c_to_i={
     '|':(('(',' or ',')'),2),
     '=':(('','=copy(',')'),2),
     ']':(('[',']'),1),
-    "'":(('(',' in ',')'),2),
+    '}':(('(',' in ',')'),2),
     '?':(('(',' if ',' else ',')'),3),
+    ';':(('','.pop()',),1),
     'a':(('','.append(',')'),2),
     'B':(('break',),0),
-    'h':(('','=read_file()'),1),
     'J':(('J=copy(',')'),1),
     'K':(('K=',''),1),
     'R':(('return ',''),1),
@@ -377,27 +385,27 @@ c_to_f={
     '+':('plus',2),
     '[':('_list',-1),
     '{':('set',1),
-    '}':('dict',0),
+    "'":('head',1),
     ':':('at_slice',3),
-    ';':('pop',1),
     '<':('lt',2),
     '>':('gt',2),
     '/':('div',2),
     ' ':('',1),
     'A':('all',1),
-    'C':('chr',1),
+    'C':('_chr',1),
     'c':('count',2),
     'e':('lower',1),
     'f':('_filter(lambda T:',2),
     'g':('gte',2),
+    'h':('read_file',0),
     'i':('_round',2),
     'j':('join',2),
     'L':('lte',2),
     'l':('len',1),
     'M':('max',1),
     'm':('_map(lambda d:',2),
-    'O':('rand',0),
-    'o':('ord',1),
+    'O':('rand',2),
+    'o':('order(lambda N:',2),
     'P':('split',2),
     'p':('_print',2),
     'Q':('quotient',2),
@@ -423,6 +431,7 @@ c_to_f={
 next_c_to_f={
     'f':[('_filter(lambda Y:',2), ('_filter(lambda Z:',2),],
     'm':[('_map(lambda k:',2), ('_map(lambda b:',2),],
+    'o':[('order(lambda Z:',2),],
     'u':[('reduce(lambda N,T:',2),],
     }
 
