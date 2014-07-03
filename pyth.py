@@ -1,9 +1,8 @@
 ############################################################################
-#                            Pyth version 1.0.4                            #
-#                          Posted before 7-2-2014                          #
-# Changes from 1.0.3: C and o (chr and ord) combined into one function, C, #
-# and o is used as order, a sort by lambda. h made into a function, as     #
-# former functionality is superseded by J and K.  } is now in, ' is head.  #
+#                            Pyth version 1.0.5                            #
+#                          Posted before 7-3-2014                          #
+# Changes from 1.0.4: Added pop (;) to the implicit print list. That list  #
+# should contain ever function that returns anything but None.
 #                                                                          #
 # This python program is an interpreter for the pyth programming language. #
 # It is still in development - expect new versions often.                  #
@@ -147,7 +146,7 @@ def parse(code,spacing="\n "):
             if len(rest_code)>0:
                 if ((rest_code[0] not in 'p ' and rest_code[0] in c_to_f) or
                 rest_code[0] in variables or
-                rest_code[0] in "@&|]'?\".0123456789#,"):
+                rest_code[0] in "@&|]'?;\".0123456789#,"):
                     rest_code='p"\\n"'+rest_code
             parsed,rest_code=parse(rest_code,spacing+' ')
             args_list.append(parsed)
@@ -451,7 +450,7 @@ def general_parse(code):
         if len(code)>0:
             if ((code[0] not in 'p ' and code[0] in c_to_f) or
             code[0] in variables or
-            code[0] in "@&|]'?\".0123456789#,"):
+            code[0] in "@&|]'?;\".0123456789#,"):
                 code='p"\\n"'+code
         parsed,code=parse(code)
         # Necessary for backslash not to infinite loop
