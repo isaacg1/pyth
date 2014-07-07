@@ -1,3 +1,7 @@
+JUwo_cJNUG
+ETAOIN SHRDLU golf
+10 character golf. Best other is CJam, 19 and Pyth 1.0.2, 19.
+
 =,bd*2]Or14O-{L4[0bd
 Choose random number from one to three which is not A or B.
 First 11 characters generate the random numbers that are disallowed.
