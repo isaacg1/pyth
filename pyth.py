@@ -2,7 +2,7 @@
 #                            Pyth version 1.0.6                            #
 #                          Posted before 7-7-2014                          #
 # Added correct incarnations of J and K to print list. Changed O to be     #
-# random sample. Made comma the pairing function - ,(_,_) -> _,_.          #
+# random sample. Made comma the pairing function - ,(_,_) -> (_,_).        #
 # Added one argument range - L. lte removed, because gte exists. Added     #
 # the original code to the debug output. Numeric literals of over one      #
 # character must be prependeded with .                                     #
@@ -360,7 +360,7 @@ c_to_i={
     ']':(('[',']'),1),
     '}':(('(',' in ',')'),2),
     '?':(('(',' if ',' else ',')'),3),
-    ',':(('',',',''),2),
+    ',':(('(',',',')'),2),
     ';':(('','.pop()',),1),
     'a':(('','.append(',')'),2),
     'B':(('break',),0),
