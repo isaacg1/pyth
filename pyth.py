@@ -1,8 +1,11 @@
 ############################################################################
-#                            Pyth version 1.0.5                            #
-#                          Posted before 7-3-2014                          #
-# Changes from 1.0.4: Added pop (;) to the implicit print list. That list  #
-# should contain ever function that returns anything but None.
+#                            Pyth version 1.0.6                            #
+#                          Posted before 7-7-2014                          #
+# Added correct incarnations of J and K to print list. Changed O to be     #
+# random sample. Made comma the pairing function - ,(_,_) -> _,_.          #
+# Added one argument range - L. lte removed, because gte exists. Added     #
+# the original code to the debug output. Numeric literals of over one      #
+# character must be prependeded with .                                     #
 #                                                                          #
 # This python program is an interpreter for the pyth programming language. #
 # It is still in development - expect new versions often.                  #
@@ -29,14 +32,16 @@ def parse(code,spacing="\n "):
     active_char=code[0]
     rest_code=code[1:]
     # Deal with numbers
-    if active_char in ".0123456789":
-        output=active_char
+    if active_char == ".":
+        output=""
         while (len(rest_code)>0
                and rest_code[0] in ".0123456789"
                and (output+rest_code[0]).count(".")<=1):
             output+=rest_code[0]
             rest_code=rest_code[1:]
         return output,rest_code
+    if active_char in ".0123456789":
+        return active_char,rest_code
     # String literals
     if active_char=='"':
         output=active_char
@@ -74,15 +79,9 @@ def parse(code,spacing="\n "):
     # And for general functions
     global c_to_f
     global next_c_to_f
-    if active_char in c_to_f or active_char==',':
-        if active_char==',':
-            func_name=rest_code[0]*2
-            init_paren=True
-            arity=-1
-            rest_code=rest_code[1:]
-        else:
-            func_name,arity=c_to_f[active_char]
-            init_paren = (active_char not in no_init_paren)
+    if active_char in c_to_f:
+        func_name,arity=c_to_f[active_char]
+        init_paren = (active_char not in no_init_paren)
         # Swap what variables are used in the map, filter or reduce.
         if active_char in next_c_to_f:
             temp=c_to_f[active_char]
@@ -146,6 +145,7 @@ def parse(code,spacing="\n "):
             if len(rest_code)>0:
                 if ((rest_code[0] not in 'p ' and rest_code[0] in c_to_f) or
                 rest_code[0] in variables or
+                (rest_code[0] in 'JK' and c_to_i[rest_code[0]]==next_c_to_i[rest_code[0]]) or
                 rest_code[0] in "@&|]'?;\".0123456789#,"):
                     rest_code='p"\\n"'+rest_code
             parsed,rest_code=parse(rest_code,spacing+' ')
@@ -180,7 +180,8 @@ def minus(a,b):
     if type(a)==type(set()):
         return a.difference(b)
     return a-b                      # -     Y
-def neg(a):return -a                # _     Y
+def neg(a):                         # _     Y
+        return -a
 def plus(a,b):
     if type(a)==type(set()):
         return a.union(b)
@@ -203,7 +204,7 @@ def at_slice(a,b,c=None):           # :     Y
 # _.pop()                           # ;     Y
 def head(a):return a[0]             # '     Y
 # " is special - string literal             Y
-# , is special - 2 character function       Y
+# Pairing                           # ,     Y
 def lt(a,b):                        # <     Y
     if type(a)==type(set()):
         return a.issubset(b) and a!=b
@@ -261,17 +262,17 @@ def join(a,b):                      # j     Y
     return a.join(list(map(lambda N:str(N),b)))
 # Autoinitializing variable         # K     Y
 k=''                                # k     Y
-def lte(a,b):                       # L     Y
-    if type(a)==type(set()):
-        return a.issubset(b)
-    return a<=b
+def lrange(a):                      # L     Y
+    if type(a)==type(0):
+        return list(range(a))
+    return list(range(len(a)))
 # len                               # l     Y
 # max                               # M     Y
 def _map(a,b):return list(map(a,b)) # m     Y
 N=None                              # N     Y
 # min                               # n     Y
-def rand(a,b):                      # O     Y
-    return random.randint(a,b)
+def rchoice(a):                     # O     Y
+    return random.choice(list(a))
 # order (sorted with key)           # o     Y
 def order(a,b):
     if type(b)==type(''):
@@ -359,6 +360,7 @@ c_to_i={
     ']':(('[',']'),1),
     '}':(('(',' in ',')'),2),
     '?':(('(',' if ',' else ',')'),3),
+    ',':(('',',',''),2),
     ';':(('','.pop()',),1),
     'a':(('','.append(',')'),2),
     'B':(('break',),0),
@@ -380,7 +382,7 @@ c_to_f={
     '*':('times',2),
     '(':('_tuple',-1),
     '-':('minus',2),
-    '_':('neg',1),
+    '_':('neg_1r',1),
     '+':('plus',2),
     '[':('_list',-1),
     '{':('set',1),
@@ -390,6 +392,7 @@ c_to_f={
     '>':('gt',2),
     '/':('div',2),
     ' ':('',1),
+    '\t':('',1),
     'A':('all',1),
     'C':('_chr',1),
     'c':('count',2),
@@ -399,11 +402,11 @@ c_to_f={
     'h':('read_file',0),
     'i':('_round',2),
     'j':('join',2),
-    'L':('lte',2),
+    'L':('lrange',1),
     'l':('len',1),
     'M':('max',1),
     'm':('_map(lambda d:',2),
-    'O':('rand',2),
+    'O':('rchoice',1),
     'o':('order(lambda N:',2),
     'P':('split',2),
     'p':('_print',2),
@@ -450,6 +453,7 @@ def general_parse(code):
         if len(code)>0:
             if ((code[0] not in 'p ' and code[0] in c_to_f) or
             code[0] in variables or
+            (code[0] in 'JK' and c_to_i[code[0]]==next_c_to_i[code[0]]) or
             code[0] in "@&|]'?;\".0123456789#,"):
                 code='p"\\n"'+code
         parsed,code=parse(code)
@@ -461,6 +465,7 @@ def general_parse(code):
     py_code='\n'.join(args_list[:-1])
     return py_code
 code=input()
+print(code)
 py_code=general_parse(code)
 print(py_code)
 print('='*50)
