@@ -1,11 +1,8 @@
 ############################################################################
-#                            Pyth version 1.0.6                            #
-#                          Posted before 7-7-2014                          #
-# Added correct incarnations of J and K to print list. Changed O to be     #
-# random sample. Made comma the pairing function - ,(_,_) -> (_,_).        #
-# Added one argument range - L. lte removed, because gte exists. Added     #
-# the original code to the debug output. Numeric literals of over one      #
-# character must be prependeded with .                                     #
+#                            Pyth version 1.0.8                            #
+#                          Posted before 7-8-2014                          #
+#                                                                          #
+# O now implicitly converts ints to ranges.                                #
 #                                                                          #
 # This python program is an interpreter for the pyth programming language. #
 # It is still in development - expect new versions often.                  #
@@ -272,6 +269,8 @@ def _map(a,b):return list(map(a,b)) # m     Y
 N=None                              # N     Y
 # min                               # n     Y
 def rchoice(a):                     # O     Y
+    if type(a)==type(0):
+        return random.choice(_range(a))
     return random.choice(list(a))
 # order (sorted with key)           # o     Y
 def order(a,b):
@@ -309,7 +308,7 @@ def reduce(a,b):                    # u     Y
         seq=seq[1:]
     return acc
 def rev(a): return a[::-1]          # V     Y
-# eval(parse                        # v     Y
+# eval                              # v     Y
 # while                             # W     Y
 # input                             # w     Y
 def index(a,b):                     # X     Y
@@ -428,6 +427,7 @@ c_to_f={
 # Gives next function header to use - for filter, map, reduce.
 # map: d, k, b
 # filter: T, Y, Z
+# order: N, Z,
 # reduce: (G,H), (N,T)
 
 next_c_to_f={
