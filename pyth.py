@@ -1,8 +1,9 @@
 ############################################################################
-#                            Pyth version 1.0.8                            #
-#                          Posted before 7-8-2014                          #
+#                            Pyth version 1.0.9                            #
+#                          Posted before 7-13-2014                         #
 #                                                                          #
-# O now implicitly converts ints to ranges.                                #
+# Revert numerical changes - back to any numeric can start a number.       #
+# head is also +1, tail is also -1                                         #
 #                                                                          #
 # This python program is an interpreter for the pyth programming language. #
 # It is still in development - expect new versions often.                  #
@@ -29,16 +30,14 @@ def parse(code,spacing="\n "):
     active_char=code[0]
     rest_code=code[1:]
     # Deal with numbers
-    if active_char == ".":
-        output=""
+    if active_char in ".0123456789":
+        output=active_char
         while (len(rest_code)>0
                and rest_code[0] in ".0123456789"
                and (output+rest_code[0]).count(".")<=1):
             output+=rest_code[0]
             rest_code=rest_code[1:]
         return output,rest_code
-    if active_char in ".0123456789":
-        return active_char,rest_code
     # String literals
     if active_char=='"':
         output=active_char
@@ -199,7 +198,10 @@ def at_slice(a,b,c=None):           # :     Y
     else:
         return a[slice(b)]
 # _.pop()                           # ;     Y
-def head(a):return a[0]             # '     Y
+def head(a):                        # '     Y
+    if type(a)==type(0):
+        return a+1
+    return a[0]  
 # " is special - string literal             Y
 # Pairing                           # ,     Y
 def lt(a,b):                        # <     Y
@@ -297,7 +299,10 @@ def _sum(a):
     return reduce(lambda b,c:b+c,a) # s     Y
 # T is associated with filter       # T     Y
 T=10
-def tail(a):return a[1:]            # t     Y
+def tail(a):                        # t     Y
+    if type(a)==type(0):
+        return a-1
+    return a[1:]
 def upper(a):return a.upper()       # U     Y
 def reduce(a,b):                    # u     Y
     acc=b[0]
