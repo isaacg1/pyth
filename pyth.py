@@ -1,9 +1,9 @@
 ############################################################################
-#                            Pyth version 1.0.9                            #
-#                          Posted before 7-13-2014                         #
+#                            Pyth version 1.1.0                            #
+#                          Posted before 7-18-2014                         #
 #                                                                          #
-# Revert numerical changes - back to any numeric can start a number.       #
-# head is also +1, tail is also -1                                         #
+# Added #, Utf-32 -> ascii, to win all of the "character count" challenges.#
+# I agree it's dumb, but them's the rules.                                 #
 #                                                                          #
 # This python program is an interpreter for the pyth programming language. #
 # It is still in development - expect new versions often.                  #
@@ -68,10 +68,6 @@ def parse(code,spacing="\n "):
     # Designated variables
     if active_char in variables:
         return active_char,rest_code
-    # Now for the two letter variables/functions
-    if active_char=='#':
-        assert len(rest_code)>0
-        return rest_code[0]*2,rest_code[1:]
     # And for general functions
     global c_to_f
     global next_c_to_f
@@ -164,7 +160,35 @@ import string
 # repr                              # `     Y - General
 def _not(a):return not a            # !     Y - General
 # _[_]                              # @     Y - Ints
-# # is special - 2 character variable       Y - General
+def utf32_ascii(a):                 # #
+    if type(a)==type(''):
+        utf_str=a
+        text_num=0
+        for char in utf_str:
+            text_num*=(2**20+2**16)
+            text_num+=ord(char)
+        out_str=''
+        while text_num>0:
+            next_num=text_num%96
+            next_chr=chr(next_num+31) if next_num else '\n'
+            out_str=next_chr+out_str
+            text_num//=96
+        return out_str
+    else:
+        ascii_str=a[0]
+        text_num=0
+        for char in ascii_str:
+            num=ord(char)
+            text_num*=96
+            if 32<=num<=126:
+                text_num+=num-31
+        out_str=''
+        while text_num>0:
+            next_chr=chr(text_num%(2**20+2**16))
+            out_str=next_chr+out_str
+            text_num//=(2**20+2**16)
+        return out_str
+
 # $ is special - python literal             Y - General
 def mod(a,b):return a%b             # %     Y - Lists, Sets
 # pow                               # ^     Y - non num
@@ -381,6 +405,7 @@ c_to_i={
 c_to_f={
     '`':('repr',1),
     '!':('_not',1),
+    '#':('utf32_ascii',1),
     '%':('mod',2),
     '^':('pow',2),
     '*':('times',2),

@@ -3,11 +3,11 @@ Pyth documentation.
   - Space character. Identity function, suppresses print at beginning of line.
 ! - Logical not.
 " - Begins and ends string literals.
-# - Creation of 2 letter variables. Deprecated - avoid.
+# - For utf32 compression and decompression. String to de-, 1 entry list to -.
 $ - Toggle non-parsing mode. Characters placed directly into python code.
 % - Mod. Can also be used for formatted strings, in theory.
 & - Logical and, with short circuit evaluation.
-' - Head. First element of list/string.
+' - Head. First element of list/string. Also +1 for integers.
 ( - Tuple. Unbounded arity.
 ) - End current argument. Ends unbounded functions, statements.
 * - Times. For lists, strings, numbers.
@@ -77,7 +77,7 @@ p - print. Implicitly print newline terminated. Use p to alter.
 q - ==
 r - range. Cast to list, though. 2 input.
 s - sum. Reduce on +.
-t - tail. _[1:]
+t - tail. _[1:]. Also, -1 for integers.
 u - reduce. lambda is G,H -> N,T -> G,H
 v - eval. Uses python eval. Use to cast to int and such.
 x - exec. Uses pyth exec.
