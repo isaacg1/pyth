@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 ############################################################################
-#                            Pyth version 1.1.0                            #
-#                          Posted before 7-18-2014                         #
+#                            Pyth version 1.1.1                            #
+#                          Posted before 8-10-2014                         #
 #                                                                          #
 # Bug fixes in _ and E, added int to S if used on non-list.                #
 #                                                                          #
