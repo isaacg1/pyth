@@ -1,9 +1,9 @@
+#!/usr/bin/python3
 ############################################################################
 #                            Pyth version 1.1.0                            #
 #                          Posted before 7-18-2014                         #
 #                                                                          #
-# Added #, Utf-32 -> ascii, to win all of the "character count" challenges.#
-# I agree it's dumb, but them's the rules.                                 #
+# Bug fixes in _ and E, added int to S if used on non-list.                #
 #                                                                          #
 # This python program is an interpreter for the pyth programming language. #
 # It is still in development - expect new versions often.                  #
@@ -319,8 +319,11 @@ def _range(a,b=None):               # r     Y
     else:
         return list(range(a))
 # sorted                            # S     Y
-def _sum(a):
-    return reduce(lambda b,c:b+c,a) # s     Y
+def _sum(a):                        # s     Y
+    if type(a)==type([]):
+        return reduce(lambda b,c:b+c,a)
+    else:
+        return int(a)
 # T is associated with filter       # T     Y
 T=10
 def tail(a):                        # t     Y
