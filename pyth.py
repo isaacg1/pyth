@@ -111,6 +111,13 @@ def parse(code, spacing="\n "):
             py_code += args_list[i]
             py_code += infixes[i+1]
         return py_code, rest_code
+    if active_char in replacement:
+        number_to_take = replacement[active_char][1]
+        unformatted = replacement[active_char][0]
+        taken = tuple(rest_code[:number_to_take])
+        untaken = rest_code[number_to_take:]
+        formatted = unformatted.format(*taken)
+        return formatted, untaken
     # Statements:
     if active_char in c_to_s:
         # Handle the initial portion (head)
@@ -134,7 +141,7 @@ def parse(code, spacing="\n "):
             if len(rest_code) > 0:
                 if ((rest_code[0] not in 'p ' and rest_code[0] in c_to_f) or
                     rest_code[0] in variables or
-                    rest_code[0] in "@&|]'?;\".0123456789#," or
+                    rest_code[0] in "@&|]'?;\".0123456789#,Q" or
                     (rest_code[0] in 'JK' and
                         c_to_i[rest_code[0]] == next_c_to_i[rest_code[0]])):
                     rest_code = 'p"\\n"' + rest_code
@@ -157,12 +164,12 @@ import sys
 
 
 # Function library. See later for letter -> function correspondences.
-# All types
+# !. All.
 def _not(a):
     return not a
 
 
-# Slated for removal.
+# #. Slated for removal.
 def utf32_ascii(a):
     if isinstance(a, str):
         utf_str = a
@@ -193,192 +200,251 @@ def utf32_ascii(a):
         return out_str
 
 
-# Useful for num, str. Open to list, set.
+# %. int, str.
 def mod(a, b):
     return a % b
 
 
-# Useful for num, str, list. Open to set.
+# *. int, str, list.
 def times(a, b):
     return a*b
 
 
-# All types
+# (. All types
 def _tuple(*a):
     return a
 
 
-# Useful for num, set. Open to list, str.
+# -. int, set.
 # Possibly remove all occurances of?
-def minus(a, b):
-    if isinstance(a,set):
+def minus(a, b=None):
+    if isinstance(a, int):
+        return a-b
+    if isinstance(a, set):
         return a.difference(b)
-    return a-b
+    if b:
+        return a.split(b)
+    else:
+        return a.split()
 
 
-# Useful for num. Open to str, list, set. 
+# _. All.
 def neg(a):
-    if isinstance(a,int):
+    if isinstance(a, int):
         return -a
     else:
         return a[::-1]
 
 
-def plus(a,b):
-    if type(a)==type(set()):
+# +. All.
+def plus(a, b):
+    if isinstance(a, set):
         return a.union(b)
-    if type(b)==type(set()):
+    if isinstance(b, set):
         return b.union(a)
-    return a+b                      # +     Y
-# = deepcopy                        # =     Y
+    return a+b
+
+
+# =. All.
 copy = copy.deepcopy
-def _list(*a):return list(a)        # [     Y
-# set                               # {     Y
-# [_]                               # ]     Y
-# in                                # }     Y
-# or                                # |     Y
-# break out of all containing       # )     Y
-def at_slice(a,b,c=None):           # :     Y
+
+
+# [. All.
+def _list(*a):
+    return list(a)
+
+
+# :. list.
+def at_slice(a, b, c=None):
     if c:
-        return a[slice(b,c)]
+        return a[slice(b, c)]
     else:
         return a[slice(b)]
-# _.pop()                           # ;     Y
-def head(a):                        # '     Y
-    if type(a)==type(0):
+
+
+# '. int, str, list.
+def head(a):
+    if isinstance(a, int):
         return a+1
-    return a[0]  
-# " is special - string literal             Y
-# Pairing                           # ,     Y
-def lt(a,b):                        # <     Y
-    if type(a)==type(set()):
-        return a.issubset(b) and a!=b
-    return a<b
-# . is special - numbers            # .     Y
-def gt(a,b):                        # >     Y
-    if type(a)==type(set()):
-        return a.issuperset(b) and a!=b
-    return a>b
-def div(a,b):return a//b            # /     Y
-# if else                           # ?     Y
-# 0-9 are special - numbers         # 0-9   Y
-# (x)                               #| |    Y
-# all                               # A     Y
-# .append()                         # a     Y
-# break                             # B     Y
-b="\n"                              # b     Y
-# chr                               # C     Y
+    return a[0]
+
+
+# <. All.
+def lt(a, b):
+    if isinstance(a, set):
+        return a.issubset(b) and a != b
+    return a < b
+
+
+# >. All.
+def gt(a, b):
+    if isinstance(a, set):
+        return a.issuperset(b) and a != b
+    return a > b
+
+
+# /. int.
+def div(a, b):
+    if isinstance(a, int):
+        return a // b
+    return a.count(b)
+b = "\n"
+
+
+# C. int, str.
 def _chr(a):
-    if type(a)==type(0):
+    if isinstance(a, int):
         return chr(a)
-    if type(a)==type(''):
+    if isinstance(a, str):
         return ord(a[0])
-def count(a,b):return a.count(b)    # c     Y
-# def                               # D     Y
-# variable - associated with map    # d     Y
-d=' '
-# else                              # E     Y
-def lower(a):return a.lower()       # e     Y
-# for                               # F     Y
-def _filter(a,b):                   # f     Y
-    return list(filter(a,b))
-# variable - associated with reduce # G     Y
-G=string.ascii_lowercase
-def gte(a,b):                       # g     Y
-    if type(a)==type(set()):
+
+
+# c. int, str, list
+def last(a):
+    if isinstance(a, int):
+        return list(map(lambda d: d, bin(a)[bin(a).index('b')+1:]))
+    return a[-1]
+d = ' '
+
+
+# e. str.
+def lower(a):
+    return a.lower()
+
+
+# f. single purpose.
+def _filter(a, b):
+    return list(filter(a, b))
+G = string.ascii_lowercase
+
+
+# g. All.
+def gte(a, b):
+    if isinstance(a, set):
         return a.issuperset(b)
-    return a>=b
-# variable - associated with reduce # H     Y
-H={}
-def read_file():                    # h     Y
-    a="\n".join(open(input()))
+    return a >= b
+H = {}
+
+
+# h. single purpose.
+def read_file():
+    a = "\n".join(open(input()))
     return a
-# h assigns the text of the user 
-# inputted file to the variable given.
-# if                                # I     Y
-def _round(a,b=None):               # i     Y
+
+
+# i. int, str
+def _round(a, b=None):
     if b is None:
         return float(a)
     if b is 0:
         return int(a)
-    return round(a,b)
-# Autoinitializing variable         # J     Y
-def join(a,b):                      # j     Y
-    return a.join(list(map(lambda N:str(N),b)))
-# Autoinitializing variable         # K     Y
-k=''                                # k     Y
-# len                               # l     Y
-# max                               # M     Y
-def _map(a,b):return list(map(a,b)) # m     Y
-N=None                              # N     Y
-# min                               # n     Y
-def rchoice(a):                     # O     Y
-    if type(a)==type(0):
+    return round(a, b)
+
+
+# j. str.
+def join(a, b):
+    return a.join(list(map(lambda N: str(N), b)))
+k = ''
+
+
+# m. Single purpose.
+def _map(a, b):
+    return list(map(a, b))
+N = None
+
+
+# O. int, str, list
+def rchoice(a):
+    if isinstance(a, int):
         return random.choice(_range(a))
     return random.choice(list(a))
-# order (sorted with key)           # o     Y
-def order(a,b):
-    if type(b)==type(''):
+
+
+# o. Single purpose.
+def order(a, b):
+    if isinstance(a, str):
         return ''.join(sorted(b, key=a))
     return sorted(b, key=a)
-def split(a,b=None):                # P     Y
+
+
+# p. All.
+def _print(a, b=""):
+    print(b, end=a)
+# Q. Unimplemented.
+
+
+# q. All.
+def equal(a, b):
+    return a == b
+
+
+# r. int.
+def _range(a, b=None):
     if b:
-        return a.split(b)
-    else:
-        return a.split()
-def _print(a,b=""):                 # p     Y
-    print(b,end=a)
-def quotient(a,b):return a/b        # Q     Y
-def equal(a,b):return a==b          # q     Y
-# return                            # R     Y
-def _range(a,b=None):               # r     Y
-    if b:
-        return list(range(a,b))
+        return list(range(a, b))
     else:
         return list(range(a))
-# sorted                            # S     Y
-def _sum(a):                        # s     Y
-    if type(a)==type([]):
-        return reduce(lambda b,c:b+c,a)
+
+
+# S. int, str, list.
+def _sum(a):
+    if isinstance(a, list):
+        return reduce(lambda b, c: b+c, a)
     else:
         return int(a)
-# T is associated with filter       # T     Y
-T=10
-def tail(a):                        # t     Y
-    if type(a)==type(0):
+T = 10
+
+
+# t. int, str, list.
+def tail(a):
+    if isinstance(a, int):
         return a-1
     return a[1:]
-def upper(a):return a.upper()       # U     Y
-def reduce(a,b):                    # u     Y
-    acc=b[0]
-    seq=b[1:]
-    while len(seq)>0:
-        h=seq[0]
-        acc=a(acc,h)
-        seq=seq[1:]
+
+
+# U. str.
+def upper(a):
+    return a.upper()
+
+
+# u. single purpose
+def reduce(a, b):
+    acc = b[0]
+    seq = b[1:]
+    while len(seq) > 0:
+        h = seq[0]
+        acc = a(acc, h)
+        seq = seq[1:]
     return acc
+
+
+# V. int, str, list.
 def urange(a):
-    if type(a)==type(0):
+    if isinstance(a, int):
         return list(range(a))
     return list(range(len(a)))
-# eval                              # v     Y
-# while                             # W     Y
-# input                             # w     Y
-def index(a,b):                     # X     Y
+
+
+# X. str, list.
+def index(a, b):
+    if isinstance(a, int):
+        return a/b
     if b in a:
         return a.index(b)
     # replicate functionality from str.find
     else:
         return -1
-# exec(general_parse                # x     Y
-Y=[]                                # Y     Y
-# any                               # y     Y
-Z=0                                 # Z     Y
-def _zip(a,b):return list(zip(a,b)) # z     Y
+Y = []
+Z = 0
 
-no_init_paren='fmou'
-end_statement='BR'
-variables='bdGHkNTYZ'
+
+# z. list.
+def _zip(a):
+    return list(zip(*a))
+
+no_init_paren = 'fmou'
+end_statement = 'BR'
+variables = 'bdGHkNTYZ'
 
 # To do: even preassociated variables deserve to be initialized.
 # Variables cheat sheet:
@@ -394,90 +460,93 @@ variables='bdGHkNTYZ'
 # Y = []
 # Z = 0
 
-c_to_s={
-    'D':(('def ',':'),1),
-    'E':(('else:',),0),
-    'F':(('for ',' in ',':'),2),
-    'I':(('if ',':'),1),
-    'W':(('while ',':'),1),
+c_to_s = {
+    'D': (('def ', ':'), 1),
+    'E': (('else:', ), 0),
+    'F': (('for ', ' in ', ':'), 2),
+    'I': (('if ', ':'), 1),
+    'W': (('while ', ':'), 1),
     }
 # Arbitrary format operators - use for assignment, infix, etc.
 # All surrounding strings, arity
-c_to_i={
-    '~':(('','+=',''),2),
-    '@':(('','[',']'),2),
-    '&':(('(',' and ',')'),2),
-    '|':(('(',' or ',')'),2),
-    '=':(('','=copy(',')'),2),
-    ']':(('[',']'),1),
-    '}':(('(',' in ',')'),2),
-    '?':(('(',' if ',' else ',')'),3),
-    ',':(('(',',',')'),2),
-    ';':(('','.pop()',),1),
-    'a':(('','.append(',')'),2),
-    'B':(('break',),0),
-    'J':(('J=copy(',')'),1),
-    'K':(('K=',''),1),
-    'L':(('def any(b): return ',''),1,),
-    'R':(('return ',''),1),
-    'x':(('exec(general_parse(','))'),1),
+c_to_i = {
+    '~': (('', '+=', ''), 2),
+    '@': (('', '[', ']'), 2),
+    '&': (('(', ' and ', ')'), 2),
+    '|': (('(', ' or ', ')'), 2),
+    '=': (('', '=copy(', ')'), 2),
+    ']': (('[', ']'), 1),
+    '}': (('(', ' in ', ')'), 2),
+    '?': (('(', ' if ', ' else ', ')'), 3),
+    ',': (('(', ',', ')'), 2),
+    ';': (('', '.pop()', ), 1),
+    'a': (('', '.append(', ')'), 2),
+    'B': (('break', ), 0),
+    'J': (('J=copy(', ')'), 1),
+    'K': (('K=', ''), 1),
+    'L': (('def any(b): return ', ''), 1,),
+    'R': (('return ', ''), 1),
+    'x': (('exec(general_parse(', '))'), 1),
     }
 
 # Simple functions only.
 # Extensible is allowed, nothing else complicated is.
 # -1 means extensible
 # name,arity
-c_to_f={
-    '`':('repr',1),
-    '!':('_not',1),
-    '#':('utf32_ascii',1),
-    '%':('mod',2),
-    '^':('pow',2),
-    '*':('times',2),
-    '(':('_tuple',-1),
-    '-':('minus',2),
-    '_':('neg',1),
-    '+':('plus',2),
-    '[':('_list',-1),
-    '{':('set',1),
-    "'":('head',1),
-    ':':('at_slice',3),
-    '<':('lt',2),
-    '>':('gt',2),
-    '/':('div',2),
-    ' ':('',1),
-    '\t':('',1),
-    '\n':('',1),
-    'A':('all',1),
-    'C':('_chr',1),
-    'c':('count',2),
-    'e':('lower',1),
-    'f':('_filter(lambda T:',2),
-    'g':('gte',2),
-    'h':('read_file',0),
-    'i':('_round',2),
-    'j':('join',2),
-    'l':('len',1),
-    'M':('max',1),
-    'm':('_map(lambda d:',2),
-    'O':('rchoice',1),
-    'o':('order(lambda N:',2),
-    'P':('split',2),
-    'p':('_print',2),
-    'Q':('quotient',2),
-    'q':('equal',2),
-    'r':('_range',2),
-    'S':('sorted',1),
-    's':('_sum',1),
-    't':('tail',1),
-    'U':('upper',1),
-    'u':('reduce(lambda G,H:',2),
-    'V':('urange',1),
-    'v':('eval',1),
-    'w':('input',0),
-    'X':('index',2),
-    'y':('any',1),
-    'z':('_zip',2),
+c_to_f = {
+    '`': ('repr', 1),
+    '!': ('_not', 1),
+    '#': ('utf32_ascii', 1),
+    '%': ('mod', 2),
+    '^': ('pow', 2),
+    '*': ('times', 2),
+    '(': ('_tuple', -1),
+    '-': ('minus', 2),
+    '_': ('neg', 1),
+    '+': ('plus', 2),
+    '[': ('_list', -1),
+    '{': ('set', 1),
+    "'": ('head', 1),
+    ':': ('at_slice', 3),
+    '<': ('lt', 2),
+    '>': ('gt', 2),
+    '/': ('div', 2),
+    ' ': ('', 1),
+    '\t': ('', 1),
+    '\n': ('', 1),
+    'A': ('all', 1),
+    'C': ('_chr', 1),
+    'c': ('last', 1),
+    'e': ('lower', 1),
+    'f': ('_filter(lambda T:', 2),
+    'g': ('gte', 2),
+    'h': ('read_file', 0),
+    'i': ('_round', 2),
+    'j': ('join', 2),
+    'l': ('len', 1),
+    'M': ('max', 1),
+    'm': ('_map(lambda d:', 2),
+    'O': ('rchoice', 1),
+    'o': ('order(lambda N:', 2),
+    'p': ('_print', 2),
+    'q': ('equal', 2),
+    'r': ('_range', 2),
+    'S': ('sorted', 1),
+    's': ('_sum', 1),
+    't': ('tail', 1),
+    'U': ('upper', 1),
+    'u': ('reduce(lambda G, H:', 2),
+    'V': ('urange', 1),
+    'v': ('eval', 1),
+    'w': ('input', 0),
+    'X': ('index', 2),
+    'y': ('any', 1),
+    'z': ('_zip', 2),
+    }
+
+replacement = {
+    'P': ('{0},{1}={1},{0}', 2),
+    'Q': ('"{0}"', 1),
     }
 
 # Gives next function header to use - for filter, map, reduce.
@@ -486,46 +555,49 @@ c_to_f={
 # order: N, Z,
 # reduce: (G,H), (N,T)
 
-next_c_to_f={
-    'f':[('_filter(lambda Y:',2), ('_filter(lambda Z:',2),],
-    'm':[('_map(lambda k:',2), ('_map(lambda b:',2),],
-    'o':[('order(lambda Z:',2),],
-    'u':[('reduce(lambda N,T:',2),],
+next_c_to_f = {
+    'f': [('_filter(lambda Y:', 2), ('_filter(lambda Z:', 2), ],
+    'm': [('_map(lambda k:', 2), ('_map(lambda b:', 2), ],
+    'o': [('order(lambda Z:', 2), ],
+    'u': [('reduce(lambda N,T:', 2), ],
     }
 
 # For autoinitializers. One shot, not rotating.
-next_c_to_i={
-    'J':(('J'),0),
-    'K':(('K'),0),
-    'L':(('def all(Z): return ',''),1,),
+next_c_to_i = {
+    'J': (('J'), 0),
+    'K': (('K'), 0),
+    'L': (('def all(Z): return ', ''), 1),
     }
-    
-assert set(c_to_f.keys())&set(c_to_i.keys())==set()
+
+assert set(c_to_f.keys()) & set(c_to_i.keys()) == set()
+
+
 # Run it!
 def general_parse(code):
-    args_list=[]
-    parsed='Not empty'
+    args_list = []
+    parsed = 'Not empty'
     while parsed != '':
-        # Prepend print to any line starting with a function, var or safe infix.
-        if len(code)>0:
+        # Prepend print to any line starting with a function, var, safe infix.
+        if len(code) > 0:
             if ((code[0] not in 'p ' and code[0] in c_to_f) or
-            code[0] in variables or
-            (code[0] in 'JK' and c_to_i[code[0]]==next_c_to_i[code[0]]) or
-            code[0] in "@&|]'?;\".0123456789#,"):
-                code='p"\\n"'+code
-        parsed,code=parse(code)
+                code[0] in variables or
+                code[0] in "@&|]'?;\".0123456789#,Q" or
+                (code[0] in 'JK' and
+                    c_to_i[code[0]] == next_c_to_i[code[0]])):
+                    code = 'p"\\n"'+code
+        parsed, code = parse(code)
         # Necessary for backslash not to infinite loop
-        if code and code[0]=='\\':
-            code=code[1:]
+        if code and code[0] == '\\':
+            code = code[1:]
         args_list.append(parsed)
     # Build the output string.
-    py_code='\n'.join(args_list[:-1])
+    py_code = '\n'.join(args_list[:-1])
     return py_code
 # Check for command line flags.
-# If debug is on, print code, python code, separator. If help is on, print help message.
-if len(sys.argv)>1 and "-h" in sys.argv[1:] or "--help" in sys.argv[1:]:
-    print(
-"""This is the Pyth -> Python compliler and executor.
+# If debug is on, print code, python code, separator.
+# If help is on, print help message.
+if len(sys.argv) > 1 and "-h" in sys.argv[1:] or "--help" in sys.argv[1:]:
+    print("""This is the Pyth -> Python compliler and executor.
 Give file containing Pyth code as final command line argument.
 
 Command line flags:
@@ -533,13 +605,13 @@ Command line flags:
 -d or --debug to show input code, generated python code.
 -h or --help to show this help message.""")
 else:
-    if len(sys.argv)>1 and "-c" in sys.argv[1:] or "--code" in sys.argv[1:]:
-        code=sys.argv[-1]
-        py_code=general_parse(code)
+    if len(sys.argv) > 1 and "-c" in sys.argv[1:] or "--code" in sys.argv[1:]:
+        code = sys.argv[-1]
+        py_code = general_parse(code)
     else:
-        code=list(open(sys.argv[-1]))[0][:-1]
-        py_code=general_parse(code)
-    if len(sys.argv)>1 and "-d" in sys.argv[1:] or "--debug" in sys.argv[1:]:
+        code = list(open(sys.argv[-1]))[0][:-1]
+        py_code = general_parse(code)
+    if len(sys.argv) > 1 and "-d" in sys.argv[1:] or "--debug" in sys.argv[1:]:
         print(code)
         print(py_code)
         print('='*50)
