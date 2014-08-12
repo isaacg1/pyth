@@ -16,188 +16,214 @@
 # uses, once expanded.                                                     #
 ############################################################################
 
-def parse(code,spacing="\n "):
-    assert type(code)==type('')
+
+def parse(code, spacing="\n "):
+    assert isinstance(code, str)
     # If we've reached the end of the string, give up.
-    if len(code)==0:
-        return '',''
+    if len(code) == 0:
+        return '', ''
     # Separate active character from the rest of the code.
-    active_char=code[0]
-    rest_code=code[1:]
+    active_char = code[0]
+    rest_code = code[1:]
     # Deal with numbers
     if active_char in ".0123456789":
-        output=active_char
-        while (len(rest_code)>0
+        output = active_char
+        while (len(rest_code) > 0
                and rest_code[0] in ".0123456789"
-               and (output+rest_code[0]).count(".")<=1):
-            output+=rest_code[0]
-            rest_code=rest_code[1:]
-        return output,rest_code
+               and (output+rest_code[0]).count(".") <= 1):
+            output += rest_code[0]
+            rest_code = rest_code[1:]
+        return output, rest_code
     # String literals
-    if active_char=='"':
-        output=active_char
-        while (len(rest_code)>0
-               and output.count('"')<2):
-            output+=rest_code[0]
-            rest_code=rest_code[1:]
-        if output[-1]!='"':
-            output+='"'
-        return output,rest_code
+    if active_char == '"':
+        output = active_char
+        while (len(rest_code) > 0
+               and output.count('"') < 2):
+            output += rest_code[0]
+            rest_code = rest_code[1:]
+        if output[-1] != '"':
+            output += '"'
+        return output, rest_code
     # Python code literals
-    if active_char=='$':
-        output=''
-        while (len(rest_code)>0
-               and rest_code[0]!='$'):
-            output+=rest_code[0]
-            rest_code=rest_code[1:]
-        return output,rest_code[1:]
-    # End paren is magic.
-    if active_char==')':
-        return '',rest_code
-    # Backslash is more magic.
-    if active_char=='\\':
-        if rest_code=='':
-            return '',''
+    if active_char == '$':
+        output = ''
+        while (len(rest_code) > 0
+               and rest_code[0] != '$'):
+            output += rest_code[0]
+            rest_code = rest_code[1:]
+        return output, rest_code[1:]
+    # End paren is magic (early-end current function/statement).
+    if active_char == ')':
+        return '', rest_code
+    # Backslash is more magic (early-end all active functions/statements).
+    if active_char == '\\':
+        if rest_code == '':
+            return '', ''
         else:
-            return '','\\'+rest_code
+            return '', '\\'+rest_code
     # Designated variables
     if active_char in variables:
-        return active_char,rest_code
+        return active_char, rest_code
     # And for general functions
     global c_to_f
     global next_c_to_f
     if active_char in c_to_f:
-        func_name,arity=c_to_f[active_char]
+        func_name, arity = c_to_f[active_char]
         init_paren = (active_char not in no_init_paren)
         # Swap what variables are used in the map, filter or reduce.
         if active_char in next_c_to_f:
-            temp=c_to_f[active_char]
-            c_to_f[active_char]=next_c_to_f[active_char][0]
-            next_c_to_f[active_char]=next_c_to_f[active_char][1:]+[temp]
+            temp = c_to_f[active_char]
+            c_to_f[active_char] = next_c_to_f[active_char][0]
+            next_c_to_f[active_char] = next_c_to_f[active_char][1:] + [temp]
         # Recurse until terminated by end paren or EOF
         # or received enough arguments
-        args_list=[]
-        parsed='Not empty'
+        args_list = []
+        parsed = 'Not empty'
         while len(args_list) != arity and parsed != '':
-            parsed,rest_code=parse(rest_code)
+            parsed, rest_code = parse(rest_code)
             args_list.append(parsed)
         # Build the output string.
-        py_code=func_name
+        py_code = func_name
         if init_paren:
-            py_code+='('
-        if len(args_list)>0 and args_list[-1]=='':
-            args_list=args_list[:-1]
-        py_code+=','.join(args_list)
-        py_code+=')'
-        return py_code,rest_code
+            py_code += '('
+        if len(args_list) > 0 and args_list[-1] == '':
+            args_list = args_list[:-1]
+        py_code += ','.join(args_list)
+        py_code += ')'
+        return py_code, rest_code
     # General format functions/operators
     global c_to_i
     if active_char in c_to_i:
-        infixes,arity=c_to_i[active_char]
+        infixes, arity = c_to_i[active_char]
         # Make J and K into normal variables, if necessary.
         if active_char in next_c_to_i:
-            c_to_i[active_char]=next_c_to_i[active_char]
-        args_list=[]
-        parsed='Not empty'
+            c_to_i[active_char] = next_c_to_i[active_char]
+        args_list = []
+        parsed = 'Not empty'
         while len(args_list) != arity and parsed != '':
-            parsed,rest_code=parse(rest_code)
+            parsed, rest_code = parse(rest_code)
             args_list.append(parsed)
         # Statements that cannot have anything after them
         if active_char in end_statement:
-            rest_code=")"+rest_code
-        py_code=infixes[0]
+            rest_code = ")" + rest_code
+        py_code = infixes[0]
         for i in range(len(args_list)):
-            py_code+=args_list[i]
-            py_code+=infixes[i+1]
+            py_code += args_list[i]
+            py_code += infixes[i+1]
         return py_code, rest_code
     # Statements:
     if active_char in c_to_s:
         # Handle the initial portion (head)
-        infixes,arity=c_to_s[active_char]
-        args_list=[]
-        parsed='Not empty'
+        infixes, arity = c_to_s[active_char]
+        args_list = []
+        parsed = 'Not empty'
         while len(args_list) != arity and parsed != '':
-            parsed,rest_code=parse(rest_code)
+            parsed, rest_code = parse(rest_code)
             args_list.append(parsed)
-        part_py_code=infixes[0]
+        part_py_code = infixes[0]
         for i in range(len(args_list)):
-            part_py_code+=args_list[i]
-            part_py_code+=infixes[i+1]
+            part_py_code += args_list[i]
+            part_py_code += infixes[i+1]
         # Handle the body - ends object as well.
         assert rest_code != ''
-        args_list=[]
-        parsed='Not empty'
+        args_list = []
+        parsed = 'Not empty'
         while parsed != '':
-            # Prepend print to any line starting with a function, var or safe infix.
-            if len(rest_code)>0:
+            # Prepend print to any line starting with a function, var or
+            # safe infix.
+            if len(rest_code) > 0:
                 if ((rest_code[0] not in 'p ' and rest_code[0] in c_to_f) or
-                rest_code[0] in variables or
-                (rest_code[0] in 'JK' and c_to_i[rest_code[0]]==next_c_to_i[rest_code[0]]) or
-                rest_code[0] in "@&|]'?;\".0123456789#,"):
-                    rest_code='p"\\n"'+rest_code
-            parsed,rest_code=parse(rest_code,spacing+' ')
+                    rest_code[0] in variables or
+                    rest_code[0] in "@&|]'?;\".0123456789#," or
+                    (rest_code[0] in 'JK' and
+                        c_to_i[rest_code[0]] == next_c_to_i[rest_code[0]])):
+                    rest_code = 'p"\\n"' + rest_code
+            parsed, rest_code = parse(rest_code, spacing+' ')
             args_list.append(parsed)
         # Trim the '' away and combine.
-        if args_list[-1]=='':
-            args_list=args_list[:-1]
-        all_pieces=[part_py_code]+args_list
-        return spacing.join(all_pieces),rest_code
+        if args_list[-1] == '':
+            args_list = args_list[:-1]
+        all_pieces = [part_py_code] + args_list
+        return spacing.join(all_pieces), rest_code
     print("Something's wrong.")
-    print("Current char is ",active_char)
-    print("The rest of the code is ",rest_code)
+    print("Current char is ", active_char)
+    print("The rest of the code is ", rest_code)
     raise NotImplementedError
 
 import random
 import copy
 import string
 import sys
-# Function library, descriptions of everything.
-# +=                                # ~     Y - Sets
-# repr                              # `     Y - General
-def _not(a):return not a            # !     Y - General
-# _[_]                              # @     Y - Ints
-def utf32_ascii(a):                 # #
-    if type(a)==type(''):
-        utf_str=a
-        text_num=0
+
+
+# Function library. See later for letter -> function correspondences.
+# All types
+def _not(a):
+    return not a
+
+
+# Slated for removal.
+def utf32_ascii(a):
+    if isinstance(a, str):
+        utf_str = a
+        text_num = 0
         for char in utf_str:
-            text_num*=(2**20+2**16)
-            text_num+=ord(char)
-        out_str=''
-        while text_num>0:
-            next_num=text_num%96
-            next_chr=chr(next_num+31) if next_num else '\n'
-            out_str=next_chr+out_str
-            text_num//=96
+            text_num *= (2**20+2**16)
+            text_num += ord(char)
+        out_str = ''
+        while text_num > 0:
+            next_num = text_num % 96
+            next_chr = chr(next_num+31) if next_num else '\n'
+            out_str = next_chr+out_str
+            text_num //= 96
         return out_str
     else:
-        ascii_str=a[0]
-        text_num=0
+        ascii_str = a[0]
+        text_num = 0
         for char in ascii_str:
-            num=ord(char)
-            text_num*=96
-            if 32<=num<=126:
-                text_num+=num-31
-        out_str=''
-        while text_num>0:
-            next_chr=chr(text_num%(2**20+2**16))
-            out_str=next_chr+out_str
-            text_num//=(2**20+2**16)
+            num = ord(char)
+            text_num *= 96
+            if 32 <= num <= 126:
+                text_num += num-31
+        out_str = ''
+        while text_num > 0:
+            next_chr = chr(text_num % (2**20+2**16))
+            out_str = next_chr+out_str
+            text_num //= (2**20+2**16)
         return out_str
 
-# $ is special - python literal             Y - General
-def mod(a,b):return a%b             # %     Y - Lists, Sets
-# pow                               # ^     Y - non num
-# and                               # &     Y - General
-def times(a,b):return a*b           # *     Y - sets
-def _tuple(*a):return a             # (     Y - general
-# ) is special - end extensible             Y - general
-def minus(a,b):
-    if type(a)==type(set()):
+
+# Useful for num, str. Open to list, set.
+def mod(a, b):
+    return a % b
+
+
+# Useful for num, str, list. Open to set.
+def times(a, b):
+    return a*b
+
+
+# All types
+def _tuple(*a):
+    return a
+
+
+# Useful for num, set. Open to list, str.
+# Possibly remove all occurances of?
+def minus(a, b):
+    if isinstance(a,set):
         return a.difference(b)
-    return a-b                      # -     Y
-def neg(a):                         # _     Y
+    return a-b
+
+
+# Useful for num. Open to str, list, set. 
+def neg(a):
+    if isinstance(a,int):
         return -a
+    else:
+        return a[::-1]
+
+
 def plus(a,b):
     if type(a)==type(set()):
         return a.union(b)
@@ -281,10 +307,6 @@ def join(a,b):                      # j     Y
     return a.join(list(map(lambda N:str(N),b)))
 # Autoinitializing variable         # K     Y
 k=''                                # k     Y
-def lrange(a):                      # L     Y
-    if type(a)==type(0):
-        return list(range(a))
-    return list(range(len(a)))
 # len                               # l     Y
 # max                               # M     Y
 def _map(a,b):return list(map(a,b)) # m     Y
@@ -335,7 +357,10 @@ def reduce(a,b):                    # u     Y
         acc=a(acc,h)
         seq=seq[1:]
     return acc
-def rev(a): return a[::-1]          # V     Y
+def urange(a):
+    if type(a)==type(0):
+        return list(range(a))
+    return list(range(len(a)))
 # eval                              # v     Y
 # while                             # W     Y
 # input                             # w     Y
@@ -393,6 +418,7 @@ c_to_i={
     'B':(('break',),0),
     'J':(('J=copy(',')'),1),
     'K':(('K=',''),1),
+    'L':(('def any(b): return ',''),1,),
     'R':(('return ',''),1),
     'x':(('exec(general_parse(','))'),1),
     }
@@ -431,7 +457,6 @@ c_to_f={
     'h':('read_file',0),
     'i':('_round',2),
     'j':('join',2),
-    'L':('lrange',1),
     'l':('len',1),
     'M':('max',1),
     'm':('_map(lambda d:',2),
@@ -447,10 +472,11 @@ c_to_f={
     't':('tail',1),
     'U':('upper',1),
     'u':('reduce(lambda G,H:',2),
-    'V':('rev',1),
+    'V':('urange',1),
     'v':('eval',1),
     'w':('input',0),
     'X':('index',2),
+    'y':('any',1),
     'z':('_zip',2),
     }
 
@@ -471,6 +497,7 @@ next_c_to_f={
 next_c_to_i={
     'J':(('J'),0),
     'K':(('K'),0),
+    'L':(('def all(Z): return ',''),1,),
     }
     
 assert set(c_to_f.keys())&set(c_to_i.keys())==set()
