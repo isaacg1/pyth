@@ -1,10 +1,5 @@
 #!/usr/bin/python3
 ############################################################################
-#                            Pyth version 1.1.1                            #
-#                          Posted before 8-10-2014                         #
-#                                                                          #
-# Bug fixes in _ and E, added int to S if used on non-list.                #
-#                                                                          #
 # This python program is an interpreter for the pyth programming language. #
 # It is still in development - expect new versions often.                  #
 #                                                                          #
@@ -155,6 +150,7 @@ def parse(code,spacing="\n "):
 import random
 import copy
 import string
+import sys
 # Function library, descriptions of everything.
 # +=                                # ~     Y - Sets
 # repr                              # `     Y - General
@@ -497,9 +493,21 @@ def general_parse(code):
     # Build the output string.
     py_code='\n'.join(args_list[:-1])
     return py_code
+# Check for command line flags.
+# If debug is on, print code, python code, separator. If help is on, print help message.
 code=input()
-print(code)
 py_code=general_parse(code)
-print(py_code)
-print('='*50)
-exec(py_code)
+if len(sys.argv)>1 and "-h" in sys.argv[1:] or "--help" in sys.argv[1:]:
+    print(
+"""This is the Pyth -> Python compliler and executor.
+Give Pyth code as first line of input to use.
+
+Command line arguments:
+-d or --debug to show input code, generated python code.
+-h or --help to show this help message.""")
+else:
+    if len(sys.argv)>1 and "-d" in sys.argv[1:] or "--debug" in sys.argv[1:]:
+        print(code)
+        print(py_code)
+        print('='*50)
+    exec(py_code)
