@@ -3,7 +3,7 @@
 # This python program is an interpreter for the pyth programming language. #
 # It is still in development - expect new versions often.                  #
 #                                                                          #
-# To use, provide pyth code on one line of stdin.                          #
+# To use, provide pyth code as first command line argument.                #
 # Further input on further lines.                                          #
 # Prints out resultant python code for debugging purposes, then runs the   #
 # pyth program.                                                            #
@@ -421,6 +421,7 @@ c_to_f={
     '/':('div',2),
     ' ':('',1),
     '\t':('',1),
+    '\n':('',1),
     'A':('all',1),
     'C':('_chr',1),
     'c':('count',2),
@@ -495,17 +496,22 @@ def general_parse(code):
     return py_code
 # Check for command line flags.
 # If debug is on, print code, python code, separator. If help is on, print help message.
-code=input()
-py_code=general_parse(code)
 if len(sys.argv)>1 and "-h" in sys.argv[1:] or "--help" in sys.argv[1:]:
     print(
 """This is the Pyth -> Python compliler and executor.
-Give Pyth code as first line of input to use.
+Give file containing Pyth code as final command line argument.
 
-Command line arguments:
+Command line flags:
+-c or --code to give code as final command argument, instead of file name.
 -d or --debug to show input code, generated python code.
 -h or --help to show this help message.""")
 else:
+    if len(sys.argv)>1 and "-c" in sys.argv[1:] or "--code" in sys.argv[1:]:
+        code=sys.argv[-1]
+        py_code=general_parse(code)
+    else:
+        code=list(open(sys.argv[-1]))[0][:-1]
+        py_code=general_parse(code)
     if len(sys.argv)>1 and "-d" in sys.argv[1:] or "--debug" in sys.argv[1:]:
         print(code)
         print(py_code)
