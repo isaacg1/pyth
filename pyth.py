@@ -150,7 +150,12 @@ def parse(code, spacing="\n "):
         # Trim the '' away and combine.
         if args_list[-1] == '':
             args_list = args_list[:-1]
-        all_pieces = [part_py_code] + args_list
+        # Special bit for repeat ... until loops.
+        if active_char == 'U':
+            header = spacing[:-1].join(args_list+[part_py_code])
+            all_pieces = [header]+args_list
+        else:
+            all_pieces = [part_py_code] + args_list
         return spacing.join(all_pieces), rest_code
     print("Something's wrong.")
     print("Current char is ", active_char)
@@ -228,6 +233,12 @@ def minus(a, b=None):
         return a.split()
 
 
+# '. single purpose.
+def read_file():
+    a = "\n".join(open(input()))
+    return a
+
+
 # _. All.
 def neg(a):
     if isinstance(a, int):
@@ -261,12 +272,6 @@ def at_slice(a, b, c=None):
     else:
         return a[slice(b)]
 
-
-# '. int, str, list.
-def head(a):
-    if isinstance(a, int):
-        return a+1
-    return a[0]
 
 
 # <. All.
@@ -326,10 +331,11 @@ def gte(a, b):
 H = {}
 
 
-# h. single purpose.
-def read_file():
-    a = "\n".join(open(input()))
-    return a
+# h. int, str, list.
+def head(a):
+    if isinstance(a, int):
+        return a+1
+    return a[0]
 
 
 # i. int, str
@@ -367,6 +373,11 @@ def order(a, b):
     return sorted(b, key=a)
 
 
+# P. str.
+def upper(a):
+    return a.upper()
+
+
 # p. All.
 def _print(a, b=""):
     print(b, end=a)
@@ -400,11 +411,6 @@ def tail(a):
     if isinstance(a, int):
         return a-1
     return a[1:]
-
-
-# U. str.
-def upper(a):
-    return a.upper()
 
 
 # u. single purpose
@@ -465,6 +471,7 @@ c_to_s = {
     'E': (('else:', ), 0),
     'F': (('for ', ' in ', ':'), 2),
     'I': (('if ', ':'), 1),
+    'U': (('while not ', ':'), 1),
     'W': (('while ', ':'), 1),
     }
 # Arbitrary format operators - use for assignment, infix, etc.
@@ -486,6 +493,7 @@ c_to_i = {
     'K': (('K=', ''), 1),
     'L': (('def any(b): return ', ''), 1,),
     'R': (('return ', ''), 1),
+    'Q': (('Q=copy(', ')'), 1),
     'x': (('exec(general_parse(', '))'), 1),
     }
 
@@ -506,7 +514,7 @@ c_to_f = {
     '+': ('plus', 2),
     '[': ('_list', -1),
     '{': ('set', 1),
-    "'": ('head', 1),
+    "'": ('read_file', 0),
     ':': ('at_slice', 3),
     '<': ('lt', 2),
     '>': ('gt', 2),
@@ -520,7 +528,7 @@ c_to_f = {
     'e': ('lower', 1),
     'f': ('_filter(lambda T:', 2),
     'g': ('gte', 2),
-    'h': ('read_file', 0),
+    'h': ('head', 1),
     'i': ('_round', 2),
     'j': ('join', 2),
     'l': ('len', 1),
@@ -529,13 +537,13 @@ c_to_f = {
     'n': ('min', 1),
     'O': ('rchoice', 1),
     'o': ('order(lambda N:', 2),
+    'P': ('upper', 1),
     'p': ('_print', 2),
     'q': ('equal', 2),
     'r': ('_range', 2),
     'S': ('sorted', 1),
     's': ('_sum', 1),
     't': ('tail', 1),
-    'U': ('upper', 1),
     'u': ('reduce(lambda G, H:', 2),
     'V': ('urange', 1),
     'v': ('eval', 1),
@@ -546,8 +554,6 @@ c_to_f = {
     }
 
 replacement = {
-    'P': ('{0},{1}={1},{0}', 2),
-    'Q': ('"{0}"', 1),
     }
 
 # Gives next function header to use - for filter, map, reduce.
@@ -568,6 +574,7 @@ next_c_to_i = {
     'J': (('J'), 0),
     'K': (('K'), 0),
     'L': (('def all(Z): return ', ''), 1),
+    'Q': (('Q'), 0),
     }
 
 assert set(c_to_f.keys()) & set(c_to_i.keys()) == set()
@@ -575,6 +582,10 @@ assert set(c_to_f.keys()) & set(c_to_i.keys()) == set()
 
 # Run it!
 def general_parse(code):
+    # Q is magic. Automatically prepends Qvw to program is present.
+    # First occurance of Q must not be in a string.
+    if "Q" in code and code[:code.index("Q")].count('"') % 2 == 0:
+        code = "Qvw" + code
     args_list = []
     parsed = 'Not empty'
     while parsed != '':
@@ -582,8 +593,8 @@ def general_parse(code):
         if len(code) > 0:
             if ((code[0] not in 'p ' and code[0] in c_to_f) or
                 code[0] in variables or
-                code[0] in "@&|]'?;\".0123456789#,Q" or
-                (code[0] in 'JK' and
+                code[0] in "@&|]'?;\".0123456789#," or
+                (code[0] in 'JKQ' and
                     c_to_i[code[0]] == next_c_to_i[code[0]])):
                     code = 'p"\\n"'+code
         parsed, code = parse(code)
@@ -613,7 +624,9 @@ else:
         code = list(open(sys.argv[-1]))[0][:-1]
         py_code = general_parse(code)
     if len(sys.argv) > 1 and "-d" in sys.argv[1:] or "--debug" in sys.argv[1:]:
+        print('='*50)
         print(code)
+        print('='*50)
         print(py_code)
         print('='*50)
     exec(py_code)
