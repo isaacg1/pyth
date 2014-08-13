@@ -526,6 +526,7 @@ c_to_f = {
     'l': ('len', 1),
     'M': ('max', 1),
     'm': ('_map(lambda d:', 2),
+    'n': ('min', 1),
     'O': ('rchoice', 1),
     'o': ('order(lambda N:', 2),
     'p': ('_print', 2),
