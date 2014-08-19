@@ -111,13 +111,6 @@ def parse(code, spacing="\n "):
             py_code += args_list[i]
             py_code += infixes[i+1]
         return py_code, rest_code
-    if active_char in replacement:
-        number_to_take = replacement[active_char][1]
-        unformatted = replacement[active_char][0]
-        taken = tuple(rest_code[:number_to_take])
-        untaken = rest_code[number_to_take:]
-        formatted = unformatted.format(*taken)
-        return formatted, untaken
     # Statements:
     if active_char in c_to_s:
         # Handle the initial portion (head)
@@ -162,8 +155,9 @@ def parse(code, spacing="\n "):
     print("The rest of the code is ", rest_code)
     raise NotImplementedError
 
-import random
 import copy
+import math
+import random
 import string
 import sys
 
@@ -172,37 +166,6 @@ import sys
 # !. All.
 def _not(a):
     return not a
-
-
-# #. Slated for removal.
-def utf32_ascii(a):
-    if isinstance(a, str):
-        utf_str = a
-        text_num = 0
-        for char in utf_str:
-            text_num *= (2**20+2**16)
-            text_num += ord(char)
-        out_str = ''
-        while text_num > 0:
-            next_num = text_num % 96
-            next_chr = chr(next_num+31) if next_num else '\n'
-            out_str = next_chr+out_str
-            text_num //= 96
-        return out_str
-    else:
-        ascii_str = a[0]
-        text_num = 0
-        for char in ascii_str:
-            num = ord(char)
-            text_num *= 96
-            if 32 <= num <= 126:
-                text_num += num-31
-        out_str = ''
-        while text_num > 0:
-            next_chr = chr(text_num % (2**20+2**16))
-            out_str = next_chr+out_str
-            text_num //= (2**20+2**16)
-        return out_str
 
 
 # %. int, str.
@@ -293,7 +256,29 @@ def div(a, b):
     if isinstance(a, int):
         return a // b
     return a.count(b)
+
+
+# a. All
+def _and(a, b):
+    if isinstance(a, int):
+        return a&b
+    else:
+        intersection = set(a) & set(b)
+        if isinstance(a, str):
+            return str(intersection)
+        if isinstance(a, list):
+            return list(intersection)
+        else:
+            return intersection
 b = "\n"
+
+
+# c. int, str
+def chop(a, b):
+    if isinstance(a, int):
+        return a/b
+    return list(map(lambda d: a[b*d:b*(d+1)], range(math.ceil(len(a)/b))))
+
 
 
 # C. int, str.
@@ -304,17 +289,14 @@ def _chr(a):
         return ord(a[0])
 
 
-# c. int, str, list
-def last(a):
-    if isinstance(a, int):
-        return list(map(lambda d: d, bin(a)[bin(a).index('b')+1:]))
-    return a[-1]
 d = ' '
 
 
-# e. str.
-def lower(a):
-    return a.lower()
+# e. All.
+def end(a):
+    if isinstance(a, int):
+        return a%10
+    return a[-1]
 
 
 # f. single purpose.
@@ -339,12 +321,10 @@ def head(a):
 
 
 # i. int, str
-def _round(a, b=None):
-    if b is None:
+def int_2(a, b=0):
+    if not b:
         return float(a)
-    if b is 0:
-        return int(a)
-    return round(a, b)
+    return int(a, b)
 
 
 # j. str.
@@ -356,8 +336,21 @@ k = ''
 # m. Single purpose.
 def _map(a, b):
     return list(map(a, b))
-N = None
 
+
+# M. str, list.
+def move_slice(a, b, c=None):
+    if not c:
+        return a[slice(0, b)]
+    else:
+        return a[slice(b, b+c)]
+N = ","
+
+
+# n. All.
+def ne(a, b):
+    return a != b
+    
 
 # O. int, str, list
 def rchoice(a):
@@ -373,8 +366,22 @@ def order(a, b):
     return sorted(b, key=a)
 
 
+def isprime(num):
+    return all(num % div != 0 for div in range(2, int(num**.5 +1)))
+
+
 # P. str.
-def upper(a):
+def primes_upper(a):
+    if isinstance(a, int):
+        working = a
+        output = []
+        for num in filter(isprime, range(2, int(a**.5 + 1))):
+            while working%num == 0:
+                output.append(num)
+                working//=num
+        if working != 1:
+            output.append(working)
+        return output
     return a.upper()
 
 
@@ -392,12 +399,15 @@ def equal(a, b):
 # r. int.
 def _range(a, b=None):
     if b:
-        return list(range(a, b))
+        if a < b:
+            return list(range(a, b))
+        else:
+            return list(range(b, a))[::-1]
     else:
         return list(range(a))
 
 
-# S. int, str, list.
+# s. int, str, list.
 def _sum(a):
     if isinstance(a, list):
         return reduce(lambda b, c: b+c, a)
@@ -431,15 +441,17 @@ def urange(a):
     return list(range(len(a)))
 
 
-# X. str, list.
+# x. str, list.
 def index(a, b):
-    if isinstance(a, int):
-        return a/b
     if b in a:
         return a.index(b)
     # replicate functionality from str.find
     else:
         return -1
+
+
+def space_sep(a):
+    return [eval(bit) for bit in a.split()]
 Y = []
 Z = 0
 
@@ -487,14 +499,12 @@ c_to_i = {
     '?': (('(', ' if ', ' else ', ')'), 3),
     ',': (('(', ',', ')'), 2),
     ';': (('', '.pop()', ), 1),
-    'a': (('', '.append(', ')'), 2),
     'B': (('break', ), 0),
     'J': (('J=copy(', ')'), 1),
     'K': (('K=', ''), 1),
     'L': (('def any(b): return ', ''), 1,),
     'R': (('return ', ''), 1),
     'Q': (('Q=copy(', ')'), 1),
-    'x': (('exec(general_parse(', '))'), 1),
     }
 
 # Simple functions only.
@@ -504,7 +514,6 @@ c_to_i = {
 c_to_f = {
     '`': ('repr', 1),
     '!': ('_not', 1),
-    '#': ('utf32_ascii', 1),
     '%': ('mod', 2),
     '^': ('pow', 2),
     '*': ('times', 2),
@@ -522,22 +531,23 @@ c_to_f = {
     ' ': ('', 1),
     '\t': ('', 1),
     '\n': ('', 1),
+    'a': ('_and', 2),
     'A': ('all', 1),
     'C': ('_chr', 1),
-    'c': ('last', 1),
+    'c': ('chop', 2),
     'e': ('lower', 1),
     'f': ('_filter(lambda T:', 2),
     'g': ('gte', 2),
     'h': ('head', 1),
-    'i': ('_round', 2),
+    'i': ('int_2', 2),
     'j': ('join', 2),
     'l': ('len', 1),
-    'M': ('max', 1),
+    'M': ('move_slice', 3),
     'm': ('_map(lambda d:', 2),
-    'n': ('min', 1),
+    'n': ('ne', 2),
     'O': ('rchoice', 1),
     'o': ('order(lambda N:', 2),
-    'P': ('upper', 1),
+    'P': ('primes_upper', 1),
     'p': ('_print', 2),
     'q': ('equal', 2),
     'r': ('_range', 2),
@@ -548,12 +558,13 @@ c_to_f = {
     'V': ('urange', 1),
     'v': ('eval', 1),
     'w': ('input', 0),
-    'X': ('index', 2),
-    'y': ('any', 1),
+    'x': ('index', 2),
+    'y': ('space_sep', 1),
     'z': ('_zip', 2),
     }
 
-replacement = {
+replacements = {
+    'X': 'FNV',
     }
 
 # Gives next function header to use - for filter, map, reduce.
@@ -586,6 +597,9 @@ def general_parse(code):
     # First occurance of Q must not be in a string.
     if "Q" in code and code[:code.index("Q")].count('"') % 2 == 0:
         code = "Qvw" + code
+    # Replace replaements
+    for rep_char in replacements:
+        code = code.replace(rep_char, replacements[rep_char])
     args_list = []
     parsed = 'Not empty'
     while parsed != '':
