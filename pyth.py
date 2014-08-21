@@ -27,31 +27,13 @@ def parse(code, spacing="\n "):
     rest_code = code[1:]
     # Deal with numbers
     if active_char in ".0123456789":
-        output = active_char
-        while (len(rest_code) > 0
-               and rest_code[0] in ".0123456789"
-               and (output+rest_code[0]).count(".") <= 1):
-            output += rest_code[0]
-            rest_code = rest_code[1:]
-        return output, rest_code
+        return num_parse(active_char, rest_code)
     # String literals
     if active_char == '"':
-        output = active_char
-        while (len(rest_code) > 0
-               and output.count('"') < 2):
-            output += rest_code[0]
-            rest_code = rest_code[1:]
-        if output[-1] != '"':
-            output += '"'
-        return output, rest_code
+        return str_parse(active_char, rest_code)
     # Python code literals
     if active_char == '$':
-        output = ''
-        while (len(rest_code) > 0
-               and rest_code[0] != '$'):
-            output += rest_code[0]
-            rest_code = rest_code[1:]
-        return output, rest_code[1:]
+        return python_parse(active_char, rest_code)
     # End paren is magic (early-end current function/statement).
     if active_char == ')':
         return '', rest_code
@@ -64,14 +46,9 @@ def parse(code, spacing="\n "):
     # Designated variables
     if active_char in variables:
         return active_char, rest_code
-
     # Replace replaements
     if active_char in replacements:
-        format_str, format_num = replacements[active_char]
-        format_chars = tuple(rest_code[:format_num])
-        new_code = format_str.format(*format_chars) + rest_code[format_num:]
-        return parse(new_code, spacing)
-
+        return replace_parse(active_char, rest_code)
     # And for general functions
     global c_to_f
     global next_c_to_f
@@ -164,6 +141,40 @@ def parse(code, spacing="\n "):
     print("The rest of the code is ", rest_code)
     raise NotImplementedError
 
+
+def num_parse(active_char, rest_code):
+    output = active_char
+    while len(rest_code) > 0 \
+        and rest_code[0] in ".0123456789" \
+        and (output+rest_code[0]).count(".") <= 1:
+        output += rest_code[0]
+        rest_code = rest_code[1:]
+    return output, rest_code
+
+
+def str_parse(active_char, rest_code):
+   output = active_char
+   while len(rest_code) > 0 and output.count('"') < 2:
+       output += rest_code[0]
+       rest_code = rest_code[1:]
+   if output[-1] != '"':
+       output += '"'
+   return output, rest_code
+
+
+def python_parse(active_char, rest_code):
+        output = ''
+        while (len(rest_code) > 0
+               and rest_code[0] != '$'):
+            output += rest_code[0]
+            rest_code = rest_code[1:]
+        return output, rest_code[1:]
+
+def replace_parse(active_char, rest_code):
+    format_str, format_num = replacements[active_char]
+    format_chars = tuple(rest_code[:format_num])
+    new_code = format_str.format(*format_chars) + rest_code[format_num:]
+    return parse(new_code, spacing)
 import copy
 import math
 import random
@@ -510,7 +521,7 @@ c_to_i = {
     'B': (('break', ), 0),
     'J': (('J=copy(', ')'), 1),
     'K': (('K=', ''), 1),
-    'L': (('def any(b): return ', ''), 1,),
+    'L': (('def space_sep(b): return ', ''), 1,),
     'R': (('return ', ''), 1),
     'Q': (('Q=copy(', ')'), 1),
     'X': (('exec(general_parse(','))'), 1),
