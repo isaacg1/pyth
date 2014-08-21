@@ -14,20 +14,20 @@ $ super-quote       Toggle non-parsing. Direct to python literal.
 * times             Like python, multiplication, replication.
 + plus              Like python, addition, concatenation.
 , pair              2 entry tuple.
-- minus             Subtraction, string split, set difference.
+- minus             Subtraction, str, list, set difference.
 . point             Numeric literals.
 / div               Integer division, str, list count.
 
 0123456789          Numeric literals
 
 : at-slice          Python slice. :abc => a[b:c]
-; pop               Python pop.
+; end-line          End everything. Infinite \.
 < less-than         Less than, proper subset.
 = defined as        Assignment, using deepcopy. Cannot be strung.
 > greater-than      Greater than, proper superset.
 ? ternary           Python ternary. ?abc => a if b else c
 @ at                Index into str, list or dict.
-A all               Python all.
+A replAce           Regex replacements - Aabc replace a with b in c.
 B break             Python break. Implicit ).
 C chr               char -> int, int -> char.
 D def               Python def. Match arity w/ existing function.
@@ -43,25 +43,25 @@ M movement-slice    Slice by offset. Mabc = a[b,b+c]
 N                   Variable. ","
 O randOm-chOice     random.choice(_). Uses range(int).
 P Prime-uPPer       prime factorization on int, cast to upper on str.
-Q quick             Variable. Auutoinitializing to evaluated input.
+Q quick             Variable. Autoinitializing to evaluated input.
 R return            Python return. Impliciit ).
 S sorted            Python sorted.
 T ten               Variable. 10
-U repeat-Until      Repeat until loop. body, test, body, test ...
-V                   Python unary range.
+U unary-range       Python unary range.
+V                   Loop times equal to input. Equivalent to FNU
 W while             Python while.
-X exec n*"..."      Execute repeatedly. Lit. FNV
+X exec              Python exec, but with pyth parsing.
 Y                   Variable. []
 Z zero              Variable. 0
 [ list              List constructor. Unbounded.
-\ escape            End everything. Infinite ).
+\ char-of           Escape character to string.
 ] close-bracket     One element list.
 ^ power             Python pow. (**)
 _ neg               Negation. Str and list reverse.
 ` repr              Python repr.
 a and-2             Bitwise and or setwise and. Returns leading type.
 b lineBreak         Variable. "\n"
-c chop              chop str/list every n elements. Make list. Also \.
+c chop              chop str/list every n elements. Also str.split, fdiv.
 d                   Variable. " "
 e end               %10 or @_1
 f filter            Python 2 filter. implicit lambda, T -> Y -> Z ->
@@ -84,7 +84,7 @@ v eval              Python eval. Often used for str -> int.
 w raw_input         Python 3 input()
 x index             find first occurance. -1 if not found.
 y                   space separated numbers -> list.
-z zip*              Transposes lists. Lit. zip(*_)
+z                   Variable. Autoinitializing to input.
 { set               Python set. Takes str or list.
 | or                Logical or.
 } in                Python in.

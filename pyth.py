@@ -56,14 +56,22 @@ def parse(code, spacing="\n "):
     if active_char == ')':
         return '', rest_code
     # Backslash is more magic (early-end all active functions/statements).
-    if active_char == '\\':
+    if active_char == ';':
         if rest_code == '':
             return '', ''
         else:
-            return '', '\\'+rest_code
+            return '', ';'+rest_code
     # Designated variables
     if active_char in variables:
         return active_char, rest_code
+
+    # Replace replaements
+    if active_char in replacements:
+        format_str, format_num = replacements[active_char]
+        format_chars = tuple(rest_code[:format_num])
+        new_code = format_str.format(*format_chars) + rest_code[format_num:]
+        return parse(new_code, spacing)
+
     # And for general functions
     global c_to_f
     global next_c_to_f
@@ -133,6 +141,7 @@ def parse(code, spacing="\n "):
             # safe infix.
             if len(rest_code) > 0:
                 if ((rest_code[0] not in 'p ' and rest_code[0] in c_to_f) or
+                    rest_code[0] in "\\" or
                     rest_code[0] in variables or
                     rest_code[0] in "@&|]'?;\".0123456789#,Q" or
                     (rest_code[0] in 'JK' and
@@ -158,6 +167,7 @@ def parse(code, spacing="\n "):
 import copy
 import math
 import random
+import re
 import string
 import sys
 
@@ -184,16 +194,16 @@ def _tuple(*a):
 
 
 # -. int, set.
-# Possibly remove all occurances of?
 def minus(a, b=None):
     if isinstance(a, int):
         return a-b
-    if isinstance(a, set):
-        return a.difference(b)
-    if b:
-        return a.split(b)
+    difference = filter(lambda c: c not in b, a)
+    if isinstance(a, str):
+        return ''.join(difference)
+    if isinstance(a, list):
+        return list(difference)
     else:
-        return a.split()
+        return set(difference)
 
 
 # '. single purpose.
@@ -251,7 +261,7 @@ def gt(a, b):
     return a > b
 
 
-# /. int.
+# /. All.
 def div(a, b):
     if isinstance(a, int):
         return a // b
@@ -273,10 +283,14 @@ def _and(a, b):
 b = "\n"
 
 
-# c. int, str
-def chop(a, b):
+# c. All
+def chop(a, b=None):
     if isinstance(a, int):
         return a/b
+    if isinstance(b, str):
+        return a.split(b)
+    if b is None:
+        return a.split()
     return list(map(lambda d: a[b*d:b*(d+1)], range(math.ceil(len(a)/b))))
 
 
@@ -456,15 +470,11 @@ Y = []
 Z = 0
 
 
-# z. list.
-def _zip(a):
-    return list(zip(*a))
-
 no_init_paren = 'fmou'
 end_statement = 'BR'
 variables = 'bdGHkNTYZ'
 
-# To do: even preassociated variables deserve to be initialized.
+# To do: even preassociated variables deserve to be initialiZed.
 # Variables cheat sheet:
 # b = "\n"
 # d is for map, d=' '
@@ -483,7 +493,6 @@ c_to_s = {
     'E': (('else:', ), 0),
     'F': (('for ', ' in ', ':'), 2),
     'I': (('if ', ':'), 1),
-    'U': (('while not ', ':'), 1),
     'W': (('while ', ':'), 1),
     }
 # Arbitrary format operators - use for assignment, infix, etc.
@@ -498,13 +507,14 @@ c_to_i = {
     '}': (('(', ' in ', ')'), 2),
     '?': (('(', ' if ', ' else ', ')'), 3),
     ',': (('(', ',', ')'), 2),
-    ';': (('', '.pop()', ), 1),
     'B': (('break', ), 0),
     'J': (('J=copy(', ')'), 1),
     'K': (('K=', ''), 1),
     'L': (('def any(b): return ', ''), 1,),
     'R': (('return ', ''), 1),
     'Q': (('Q=copy(', ')'), 1),
+    'X': (('exec(general_parse(','))'), 1),
+    'z': (('z=copy(', ')'), 1),
     }
 
 # Simple functions only.
@@ -531,11 +541,11 @@ c_to_f = {
     ' ': ('', 1),
     '\t': ('', 1),
     '\n': ('', 1),
+    'A': ('re.sub', 3),
     'a': ('_and', 2),
-    'A': ('all', 1),
     'C': ('_chr', 1),
     'c': ('chop', 2),
-    'e': ('lower', 1),
+    'e': ('end', 1),
     'f': ('_filter(lambda T:', 2),
     'g': ('gte', 2),
     'h': ('head', 1),
@@ -554,17 +564,17 @@ c_to_f = {
     'S': ('sorted', 1),
     's': ('_sum', 1),
     't': ('tail', 1),
+    'U': ('urange', 1),
     'u': ('reduce(lambda G, H:', 2),
-    'V': ('urange', 1),
     'v': ('eval', 1),
     'w': ('input', 0),
     'x': ('index', 2),
     'y': ('space_sep', 1),
-    'z': ('_zip', 2),
     }
 
 replacements = {
-    'X': 'FNV',
+    '\\': ('"{0}"', 1),
+    'V': ('FNU', 0),
     }
 
 # Gives next function header to use - for filter, map, reduce.
@@ -586,6 +596,13 @@ next_c_to_i = {
     'K': (('K'), 0),
     'L': (('def all(Z): return ', ''), 1),
     'Q': (('Q'), 0),
+    'z': (('z'), 0),
+    }
+
+# Prependers.
+prepend = {
+    'Q': "Qvw",
+    'z': "zw",
     }
 
 assert set(c_to_f.keys()) & set(c_to_i.keys()) == set()
@@ -593,27 +610,30 @@ assert set(c_to_f.keys()) & set(c_to_i.keys()) == set()
 
 # Run it!
 def general_parse(code):
-    # Q is magic. Automatically prepends Qvw to program is present.
-    # First occurance of Q must not be in a string.
-    if "Q" in code and code[:code.index("Q")].count('"') % 2 == 0:
-        code = "Qvw" + code
-    # Replace replaements
-    for rep_char in replacements:
-        code = code.replace(rep_char, replacements[rep_char])
+    # Prependers are magic. Automatically prepend to program if present.
+    # First occurance must not be in a string.
+    for prep_char in prepend:
+        if prep_char in code:
+            first_loc = code.index(prep_char)
+            if first_loc == 0 or \
+                code[:first_loc].count('"') % 2 == 0 and \
+                code[first_loc-1] != "\\":
+                code = prepend[prep_char] + code
     args_list = []
     parsed = 'Not empty'
     while parsed != '':
-        # Prepend print to any line starting with a function, var, safe infix.
+        # Prepend print to any line starting with a function, var or
+        # safe infix.
         if len(code) > 0:
             if ((code[0] not in 'p ' and code[0] in c_to_f) or
                 code[0] in variables or
                 code[0] in "@&|]'?;\".0123456789#," or
-                (code[0] in 'JKQ' and
+                ((code[0] in 'JK' or code[0] in prepend) and
                     c_to_i[code[0]] == next_c_to_i[code[0]])):
                     code = 'p"\\n"'+code
         parsed, code = parse(code)
         # Necessary for backslash not to infinite loop
-        if code and code[0] == '\\':
+        if code and code[0] == ';':
             code = code[1:]
         args_list.append(parsed)
     # Build the output string.
@@ -631,13 +651,19 @@ Command line flags:
 -d or --debug to show input code, generated python code.
 -h or --help to show this help message.""")
 else:
-    if len(sys.argv) > 1 and "-c" in sys.argv[1:] or "--code" in sys.argv[1:]:
+    if len(sys.argv) > 1 and "-c" in sys.argv[1:] \
+        or "--code" in sys.argv[1:] \
+        or "-cd" in sys.argv[1:] \
+        or "-dc" in sys.argv[1:]:
         code = sys.argv[-1]
         py_code = general_parse(code)
     else:
         code = list(open(sys.argv[-1]))[0][:-1]
         py_code = general_parse(code)
-    if len(sys.argv) > 1 and "-d" in sys.argv[1:] or "--debug" in sys.argv[1:]:
+    if len(sys.argv) > 1 and "-d" in sys.argv[1:] \
+    or "--debug" in sys.argv[1:] \
+    or "-cd" in sys.argv[1:] \
+    or "-dc" in sys.argv[1:]:
         print('='*50)
         print(code)
         print('='*50)
