@@ -48,7 +48,7 @@ def parse(code, spacing="\n "):
         return active_char, rest_code
     # Replace replaements
     if active_char in replacements:
-        return replace_parse(active_char, rest_code)
+        return replace_parse(active_char, rest_code, spacing)
     # And for general functions
     global c_to_f
     global next_c_to_f
@@ -170,7 +170,7 @@ def python_parse(active_char, rest_code):
             rest_code = rest_code[1:]
         return output, rest_code[1:]
 
-def replace_parse(active_char, rest_code):
+def replace_parse(active_char, rest_code, spacing):
     format_str, format_num = replacements[active_char]
     format_chars = tuple(rest_code[:format_num])
     new_code = format_str.format(*format_chars) + rest_code[format_num:]
@@ -262,6 +262,8 @@ def at_slice(a, b, c=None):
 def lt(a, b):
     if isinstance(a, set):
         return a.issubset(b) and a != b
+    if not isinstance(a, int) and isinstance(b, int):
+        return a[:b]
     return a < b
 
 
@@ -269,6 +271,8 @@ def lt(a, b):
 def gt(a, b):
     if isinstance(a, set):
         return a.issuperset(b) and a != b
+    if not isinstance(a, int) and isinstance(b, int):
+        return a[b:]
     return a > b
 
 
@@ -334,6 +338,8 @@ G = string.ascii_lowercase
 def gte(a, b):
     if isinstance(a, set):
         return a.issuperset(b)
+    if not isinstance(a, int) and isinstance(b, int):
+        return a[b-1:]
     return a >= b
 H = {}
 
@@ -463,6 +469,8 @@ def reduce(a, b):
 def urange(a):
     if isinstance(a, int):
         return list(range(a))
+    if isinstance(a, tuple) and len(a) == 2:
+        return list(range(a[0], a[1]))
     return list(range(len(a)))
 
 
@@ -521,7 +529,7 @@ c_to_i = {
     'B': (('break', ), 0),
     'J': (('J=copy(', ')'), 1),
     'K': (('K=', ''), 1),
-    'L': (('def space_sep(b): return ', ''), 1,),
+    'L': (('def _sum(b): return ', ''), 1,),
     'R': (('return ', ''), 1),
     'Q': (('Q=copy(', ')'), 1),
     'X': (('exec(general_parse(','))'), 1),
@@ -605,7 +613,7 @@ next_c_to_f = {
 next_c_to_i = {
     'J': (('J'), 0),
     'K': (('K'), 0),
-    'L': (('def all(Z): return ', ''), 1),
+    'L': (('def space_sep(Z): return ', ''), 1),
     'Q': (('Q'), 0),
     'z': (('z'), 0),
     }
