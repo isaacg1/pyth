@@ -14,7 +14,7 @@ $ super-quote       Toggle non-parsing. Direct to python literal.
 * times             Like python, multiplication, replication.
 + plus              Like python, addition, concatenation.
 , pair              2 entry tuple.
-- minus             Subtraction, str, list, set difference.
+- minus             Subtraction, setwise difference. Maintains order.
 . point             Numeric literals.
 / div               Integer division, str, list count.
 
@@ -27,7 +27,7 @@ $ super-quote       Toggle non-parsing. Direct to python literal.
 > greater-than      Greater than, proper superset.
 ? ternary           Python ternary. ?abc => a if b else c
 @ at                Index into str, list or dict.
-A replAce           Regex replacements - Aabc replace a with b in c.
+A assign-pair       Aabcd => =,ab,cd. First 2 arguments must be variables.
 B break             Python break. Implicit ).
 C chr               char -> int, int -> char.
 D def               Python def. Match arity w/ existing function.
@@ -38,8 +38,8 @@ H hash-table        Variable. {}
 I if                Python if.
 J                   Variable. Autoinitializing. J=copy(_).
 K                   Variable. Autoinitializing. K=_. For stringing.
-L lambda            define y(b): return _. A(Z) on second use.
-M movement-slice    Slice by offset. Mabc = a[b,b+c]
+L lambda            define s(b): return _. y(Z) on second use.
+M movement-slice    Mabc = a[b,b+c]. Also re.sub on str, re.search on c=0.
 N                   Variable. ","
 O randOm-chOice     random.choice(_). Uses range(int).
 P Prime-uPPer       prime factorization on int, cast to upper on str.
@@ -68,7 +68,7 @@ f filter            Python 2 filter. implicit lambda, T -> Y -> Z ->
 g grt-or-eq         Python >=. Superset.
 h head              @0, +1.
 i int-2             Interpret string as int base b.
-j join              Python join.
+j join              Python join, or convrt to base. Output in list form.
 k                   Variable. ""
 l len               Python len.
 m map               Python 2 map. implicit lambda, d -> k -> b ->

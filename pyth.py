@@ -205,7 +205,7 @@ def _tuple(*a):
 
 
 # -. int, set.
-def minus(a, b=None):
+def minus(a, b):
     if isinstance(a, int):
         return a-b
     difference = filter(lambda c: c not in b, a)
@@ -360,7 +360,25 @@ def int_2(a, b=0):
 
 # j. str.
 def join(a, b):
+    if isinstance(a, int):
+        return convert_base(a, b)
     return a.join(list(map(lambda N: str(N), b)))
+
+
+def convert_base(arb, base):
+    # Special cases
+    if arb == 0:
+        return [0]
+    if base == 1:
+        return [0]*arb
+    #Main routine
+    base_list = []
+    work = arb
+    while work > 0:
+        base_list.append(work%base)
+        work //= base
+    return base_list[::-1]
+
 k = ''
 
 
@@ -371,7 +389,14 @@ def _map(a, b):
 
 # M. str, list.
 def move_slice(a, b, c=None):
-    if not c:
+    if isinstance(b, str):
+        if c is None:
+            return re.sub(b,'',a)
+        elif c is 0:
+            return not not re.search(b,a)
+        else:
+            return re.sub(b,c,a)
+    if c in None:
         return a[slice(0, b)]
     else:
         return a[slice(b, b+c)]
@@ -560,7 +585,6 @@ c_to_f = {
     ' ': ('', 1),
     '\t': ('', 1),
     '\n': ('', 1),
-    'A': ('re.sub', 3),
     'a': ('_and', 2),
     'C': ('_chr', 1),
     'c': ('chop', 2),
@@ -594,6 +618,7 @@ c_to_f = {
 replacements = {
     '\\': ('"{0}"', 1),
     'V': ('FNU', 0),
+    'A': ('=,{0}{1},', 2),
     }
 
 # Gives next function header to use - for filter, map, reduce.
@@ -646,7 +671,7 @@ def general_parse(code):
         if len(code) > 0:
             if ((code[0] not in 'p ' and code[0] in c_to_f) or
                 code[0] in variables or
-                code[0] in "@&|]'?;\".0123456789#," or
+                code[0] in "@&|]'?\\\".0123456789#," or
                 ((code[0] in 'JK' or code[0] in prepend) and
                     c_to_i[code[0]] == next_c_to_i[code[0]])):
                     code = 'p"\\n"'+code
