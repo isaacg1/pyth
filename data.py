@@ -1,0 +1,140 @@
+no_init_paren = 'fmou'
+end_statement = 'BR'
+variables = 'bdGHkNTYZ'
+
+# Variables cheat sheet:
+# b = "\n"
+# d is for map, d=' '
+# G is for reduce, G=string.ascii_lowercase (abc..xyz)
+# H is for reduce, H = {}
+# k = ''
+# J - Autoinitializer - copies, no stringing.
+# K - Autoinitializer - can be strung (KJw), no copy.
+# N = None, second option variable for map,filter,reduce
+# T is for filter, second variable option for reduce, T=10
+# Y = []
+# Z = 0
+
+c_to_s = {
+    'D': (('def ', ':'), 1),
+    'E': (('else:', ), 0),
+    'F': (('for ', ' in ', ':'), 2),
+    'I': (('if ', ':'), 1),
+    'W': (('while ', ':'), 1),
+    }
+# Arbitrary format operators - use for assignment, infix, etc.
+# All surrounding strings, arity
+c_to_i = {
+    '~': (('', '+=', ''), 2),
+    '@': (('', '[', ']'), 2),
+    '&': (('(', ' and ', ')'), 2),
+    '|': (('(', ' or ', ')'), 2),
+    '=': (('', '=copy(', ')'), 2),
+    ']': (('[', ']'), 1),
+    '}': (('(', ' in ', ')'), 2),
+    '?': (('(', ' if ', ' else ', ')'), 3),
+    ',': (('(', ',', ')'), 2),
+    'B': (('break', ), 0),
+    'J': (('J=copy(', ')'), 1),
+    'K': (('K=', ''), 1),
+    'L': (('def Psum(b): return ', ''), 1,),
+    'R': (('return ', ''), 1),
+    'Q': (('Q=copy(', ')'), 1),
+    'X': (('exec(general_parse(', '))'), 1),
+    'z': (('z=copy(', ')'), 1),
+    }
+
+# Simple functions only.
+# Extensible is allowed, nothing else complicated is.
+# -1 means extensible
+# name,arity
+c_to_f = {
+    '`': ('repr', 1),
+    '!': ('Pnot', 1),
+    '%': ('mod', 2),
+    '^': ('pow', 2),
+    '*': ('times', 2),
+    '(': ('Ptuple', -1),
+    '-': ('minus', 2),
+    '_': ('neg', 1),
+    '+': ('plus', 2),
+    '[': ('Plist', -1),
+    '{': ('set', 1),
+    "'": ('read_file', 0),
+    ':': ('at_slice', 3),
+    '<': ('lt', 2),
+    '>': ('gt', 2),
+    '/': ('div', 2),
+    ' ': ('', 1),
+    '\t': ('', 1),
+    '\n': ('', 1),
+    'a': ('Pand', 2),
+    'C': ('Pchr', 1),
+    'c': ('chop', 2),
+    'e': ('end', 1),
+    'f': ('Pfilter(lambda T:', 2),
+    'g': ('gte', 2),
+    'h': ('head', 1),
+    'i': ('int_2', 2),
+    'j': ('join', 2),
+    'l': ('len', 1),
+    'M': ('move_slice', 3),
+    'm': ('Pmap(lambda d:', 2),
+    'n': ('ne', 2),
+    'O': ('rchoice', 1),
+    'o': ('order(lambda N:', 2),
+    'P': ('primes_upper', 1),
+    'p': ('Pprint', 2),
+    'q': ('equal', 2),
+    'r': ('Prange', 2),
+    'S': ('sorted', 1),
+    's': ('Psum', 1),
+    't': ('tail', 1),
+    'U': ('urange', 1),
+    'u': ('reduce(lambda G, H:', 2),
+    'v': ('eval', 1),
+    'w': ('input', 0),
+    'x': ('index', 2),
+    'y': ('space_sep', 1),
+    }
+
+replacements = {
+    '\\': ('"{0}"', 1),
+    'V': ('FNU', 0),
+    'A': ('=,{0}{1},', 2),
+    }
+
+# Gives next function header to use - for filter, map, reduce.
+# map: d, k, b
+# filter: T, Y, Z
+# order: N, Z,
+# reduce: (G,H), (N,T)
+
+next_c_to_f = {
+    'f': [('Pfilter(lambda Y:', 2), ('Pfilter(lambda Z:', 2), ],
+    'm': [('Pmap(lambda k:', 2), ('Pmap(lambda b:', 2), ],
+    'o': [('order(lambda Z:', 2), ],
+    'u': [('reduce(lambda N,T:', 2), ],
+    }
+
+# For autoinitializers. One shot, not rotating.
+next_c_to_i = {
+    'J': (('J'), 0),
+    'K': (('K'), 0),
+    'L': (('def space_sep(Z): return ', ''), 1),
+    'Q': (('Q'), 0),
+    'z': (('z'), 0),
+    }
+
+# Prependers.
+prepend = {
+    'Q': "Qvw",
+    'z': "zw",
+    }
+
+next_c_to_f = {
+    'f': [('Pfilter(lambda Y:', 2), ('Pfilter(lambda Z:', 2), ],
+    'm': [('Pmap(lambda k:', 2), ('Pmap(lambda b:', 2), ],
+    'o': [('order(lambda Z:', 2), ],
+    'u': [('reduce(lambda N,T:', 2), ],
+    }
