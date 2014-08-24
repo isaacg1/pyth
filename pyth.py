@@ -39,9 +39,8 @@ def general_parse(code):
 
 
 def parse(code, spacing="\n "):
-    assert isinstance(code, str)
     # If we've reached the end of the string, give up.
-    if len(code) == 0:
+    if code == '':
         return '', ''
     # Separate active character from the rest of the code.
     active_char = code[0]

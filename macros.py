@@ -6,7 +6,7 @@ import string
 import sys
 
 
-# Function library. See later for letter -> function correspondences.
+# Function library. See data for letter -> function correspondences.
 # !. All.
 def Pnot(a):
     return not a
@@ -112,9 +112,9 @@ def Pand(a, b):
     else:
         intersection = set(a) & set(b)
         if isinstance(a, str):
-            return str(intersection)
+            return ''.join(sorted(intersection))
         if isinstance(a, list):
-            return list(intersection)
+            return list(sorted(intersection))
         else:
             return intersection
 b = "\n"
