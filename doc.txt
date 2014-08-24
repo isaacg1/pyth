@@ -4,7 +4,7 @@ Char, mnemonic, details. When in doubt, similar to python.
   blank             Suppress print, separator.
 ! not               Logical not.
 " quote             Begins and ends sring literals. Optional at EOL.
-#                   ---Unimplemented---
+#                   Decrement. Lit. _-=1
 $ super-quote       Toggle non-parsing. Direct to python literal.
 % mod               Like pythpn, does mod and string formatting.
 & and               Logical and. (short circuiting)
