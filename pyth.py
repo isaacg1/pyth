@@ -18,11 +18,29 @@
 from extra_parse import *
 from macros import *
 from data import *
+import copy as c
+
+
+# Set reset for the globals.
+global c_to_f
+global next_c_to_f
+global c_to_i
+reset_c_to_f = c.deepcopy(c_to_f)
+reset_next_c_to_f = c.deepcopy(next_c_to_f)
+reset_c_to_i = c.deepcopy(c_to_i)
 
 
 # Run it!
 def general_parse(code):
+    global c_to_f
+    global next_c_to_f
+    global c_to_i
+    # Reset the globals.
+    c_to_f = c.deepcopy(reset_c_to_f)
+    next_c_to_f = c.deepcopy(reset_next_c_to_f)
+    c_to_i = c.deepcopy(reset_c_to_i)
     code = prepend_parse(code)
+    # Parsing
     args_list = []
     parsed = 'Not empty'
     while parsed != '':
@@ -156,12 +174,7 @@ def statement_parse(active_char, rest_code, spacing):
     # Trim the '' away and combine.
     if args_list[-1] == '':
         args_list = args_list[:-1]
-    # Special bit for repeat ... until loops.
-    if active_char == 'U':
-        header = spacing[:-1].join(args_list+[part_py_code])
-        all_pieces = [header]+args_list
-    else:
-        all_pieces = [part_py_code] + args_list
+    all_pieces = [part_py_code] + args_list
     return spacing.join(all_pieces), rest_code
 
 
@@ -206,37 +219,55 @@ if __name__ == '__main__':
     if len(sys.argv) > 1 and \
             "-h" in sys.argv[1:] \
             or "--help" in sys.argv[1:] \
-            or sys.argv[-1] == "pyth.py":
+            or len(sys.argv) == 1:
         print("""This is the Pyth -> Python compliler and executor.
 Give file containing Pyth code as final command line argument.
 
 Command line flags:
--c or --code to give code as final command arg, instead of file name.
--d or --debug to show input code, generated python code.
--h or --help to show this help message.
+-c or --code:   Give code as final command arg, instead of file name.
+-d or --debug   Show input code, generated python code.
+-l or --line    Run each line as a program, instead of just first line.
+                Must not be combined with -c.
+-h or --help    Show this help message.
 
 See opening comment in pyth.py for more info.""")
     else:
-        if len(sys.argv) > 1 and \
-                "-c" in sys.argv[1:] \
-                or "--code" in sys.argv[1:] \
-                or "-cd" in sys.argv[1:] \
-                or "-dc" in sys.argv[1:]:
-                code = sys.argv[-1]
-                py_code = general_parse(code)
+        file_or_string = sys.argv[-1]
+        flags = sys.argv[1:-1]
+        verbose_flags = [flag for flag in flags if flag[:2] == '--']
+        short_flags = [flag for flag in flags if flag[:2] != '--']
+        debug_on = any('d' in flag for flag in short_flags) or \
+            '--debug' in verbose_flags
+        code_on = any('c' in flag for flag in short_flags) or \
+            "--code" in verbose_flags
+        line_on = any('l' in flag for flag in short_flags) or \
+            "-line" in verbose_flags
+        if code_on and line_on:
+            print("Error: cannot handle multiline input from command line.")
         else:
-            code = list(open(sys.argv[-1]))[0][:-1]
-            py_code = general_parse(code)
-        # Debug message
-        if len(sys.argv) > 1 and \
-                "-d" in sys.argv[1:] \
-                or "--debug" in sys.argv[1:] \
-                or "-cd" in sys.argv[1:] \
-                or "-dc" in sys.argv[1:]:
-            print('='*50)
-            print(str(len(code)) + ": " + code)
-            print('='*50)
-            print(py_code)
-            print('='*50)
-        # Run the code.
-        exec(py_code)
+            if code_on:
+                    code = file_or_string
+                    py_code_list = [(code, general_parse(code))]
+            else:
+                code_file = file_or_string
+                if line_on:
+                    code = (line[:-1] for line in list(open(code_file)))
+                    py_code_list = [(code_line, general_parse(code_line))
+                                    or code_line in code]
+                else:
+                    code = list(open(file_or_string))[0][:-1]
+                    py_code_list = [(code, general_parse(code))]
+            # Loop through the code lines - unless -l, only one line.
+            for code_line, py_code_line in py_code_list:
+                # Debug message
+                if debug_on:
+                    if len(py_code_line) > 0:
+                        print('='*50)
+                        print(str(len(code_line)) + ": " + code_line)
+                        print('='*50)
+                        print(py_code_line)
+                    elif len(code_line) > 0:
+                        print('='*50)
+                        print(code_line)
+                # Run the code.
+                exec(py_code_line)
