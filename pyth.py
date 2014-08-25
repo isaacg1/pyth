@@ -226,6 +226,8 @@ Give file containing Pyth code as final command line argument.
 Command line flags:
 -c or --code:   Give code as final command arg, instead of file name.
 -d or --debug   Show input code, generated python code.
+-i or --ignore  Don't print python errors, don't terminate on error.
+                Use with extreme caution.
 -l or --line    Run each line as a program, instead of just first line.
                 Must not be combined with -c.
 -h or --help    Show this help message.
@@ -236,14 +238,16 @@ See opening comment in pyth.py for more info.""")
         flags = sys.argv[1:-1]
         verbose_flags = [flag for flag in flags if flag[:2] == '--']
         short_flags = [flag for flag in flags if flag[:2] != '--']
-        debug_on = any('d' in flag for flag in short_flags) or \
-            '--debug' in verbose_flags
-        code_on = any('c' in flag for flag in short_flags) or \
-            "--code" in verbose_flags
-        line_on = any('l' in flag for flag in short_flags) or \
-            "-line" in verbose_flags
+
+        def flag_on(short_form, long_form):
+            return any(short_form in flag for flag in short_flags) or \
+                long_form in verbose_flags
+        debug_on = flag_on('d', '--debug')
+        code_on = flag_on('c', '--code')
+        line_on = flag_on('l', '--line')
+        ignore_on = flag_on('i', '--ignore')
         if code_on and line_on:
-            print("Error: cannot handle multiline input from command line.")
+            print("Error: multiline input from command line.")
         else:
             if code_on:
                     code = file_or_string
@@ -252,8 +256,8 @@ See opening comment in pyth.py for more info.""")
                 code_file = file_or_string
                 if line_on:
                     code = (line[:-1] for line in list(open(code_file)))
-                    py_code_list = [(code_line, general_parse(code_line))
-                                    or code_line in code]
+                    py_code_list = [(cd_line, general_parse(cd_line))
+                                    for cd_line in code]
                 else:
                     code = list(open(file_or_string))[0][:-1]
                     py_code_list = [(code, general_parse(code))]
@@ -269,5 +273,13 @@ See opening comment in pyth.py for more info.""")
                     elif len(code_line) > 0:
                         print('='*50)
                         print(code_line)
-                # Run the code.
-                exec(py_code_line)
+                if not ignore_on:
+                    # Run the code.
+                    exec(py_code_line)
+                else:
+                    # Ignore all errors
+                    try:
+                        exec(py_code_line)
+                    except:
+                        print('='*50)
+                        print("Runtime error")

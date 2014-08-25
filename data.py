@@ -38,7 +38,7 @@ c_to_i = {
     'B': (('break', ), 0),
     'J': (('J=copy(', ')'), 1),
     'K': (('K=', ''), 1),
-    'L': (('def Psum(b): return ', ''), 1,),
+    'L': (('def primes_upper(b): return ', ''), 1,),
     'R': (('return ', ''), 1),
     'Q': (('Q=copy(', ')'), 1),
     'X': (('exec(general_parse(', '))'), 1),
