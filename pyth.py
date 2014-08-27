@@ -21,7 +21,7 @@ from data import *
 import copy as c
 
 
-# Set reset for the globals.
+# Generate resets for the globals.
 global c_to_f
 global next_c_to_f
 global c_to_i
@@ -47,7 +47,7 @@ def general_parse(code):
         if add_print(code):
             code = 'p"\\n"'+code
         parsed, code = parse(code)
-        # Necessary for backslash not to infinite loop
+        # Finish semicolon parsing
         if code and code[0] == ';':
             code = code[1:]
         args_list.append(parsed)
@@ -57,7 +57,7 @@ def general_parse(code):
 
 
 def parse(code, spacing="\n "):
-    # If we've reached the end of the string, give up.
+    # If we've reached the end of the string, finish up.
     if code == '':
         return '', ''
     # Separate active character from the rest of the code.
@@ -205,7 +205,7 @@ def add_print(code):
     if len(code) > 0:
         if (code[0] not in 'p ' and code[0] in c_to_f) or \
             code[0] in variables or \
-            code[0] in "@&|]'?\\\".0123456789#," or \
+            code[0] in "@&|]'?\\\".0123456789," or \
             ((code[0] in 'JK' or code[0] in prepend) and
                 c_to_i[code[0]] == next_c_to_i[code[0]]):
             return True
