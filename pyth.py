@@ -226,10 +226,13 @@ Give file containing Pyth code as final command line argument.
 Command line flags:
 -c or --code:   Give code as final command arg, instead of file name.
 -d or --debug   Show input code, generated python code.
--i or --ignore  Don't print python errors, don't terminate on error.
-                Use with extreme caution.
 -l or --line    Run each line as a program, instead of just first line.
                 Must not be combined with -c.
+
+-i or --ignore  Don't print python errors, don't terminate on error.
+                Does not catch compilation errors in single-line mode.
+                Use with extreme caution.
+-s or --silent  Ignore silently. No effect without -i
 -h or --help    Show this help message.
 
 See opening comment in pyth.py for more info.""")
@@ -246,6 +249,7 @@ See opening comment in pyth.py for more info.""")
         code_on = flag_on('c', '--code')
         line_on = flag_on('l', '--line')
         ignore_on = flag_on('i', '--ignore')
+        silent = flag_on('s', '--silent')
         if code_on and line_on:
             print("Error: multiline input from command line.")
         else:
@@ -255,9 +259,24 @@ See opening comment in pyth.py for more info.""")
             else:
                 code_file = file_or_string
                 if line_on:
-                    code = (line[:-1] for line in list(open(code_file)))
-                    py_code_list = [(cd_line, general_parse(cd_line))
-                                    for cd_line in code]
+                    code = [line[:-1] for line in list(open(code_file))]
+                    if not ignore_on:
+                        py_code_list = [(cd_line, general_parse(cd_line))
+                                        for cd_line in code]
+                    else:
+                        py_code_list = []
+                        for line_num in range(len(code)):
+                            cd_line = code[line_num]
+                            try:
+                                py_code_list.append(
+                                    (cd_line, general_parse(cd_line)))
+                            # TODO: wrap general_parse functions in
+                            # assertions, change this to
+                            # execpt AssertError ...
+                            except:
+                                if not silent:
+                                    print("Line %d: Compilation error."
+                                          % line_num)
                 else:
                     code = list(open(file_or_string))[0][:-1]
                     py_code_list = [(code, general_parse(code))]
@@ -281,5 +300,6 @@ See opening comment in pyth.py for more info.""")
                     try:
                         exec(py_code_line)
                     except:
-                        print('='*50)
-                        print("Runtime error")
+                        if not silent:
+                            print('='*50)
+                            print("Runtime error")
