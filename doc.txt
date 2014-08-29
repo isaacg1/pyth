@@ -8,7 +8,7 @@ Char, mnemonic, details. When in doubt, similar to python.
 $ super-quote       Toggle non-parsing. Direct to python literal.
 % mod               Like pythpn, does mod and string formatting.
 & and               Logical and. (short circuiting)
-' quote-file        Cat file, return as string.
+' quote-file        Cat file, return as list of lines.
 ( tuple             Tuple constructor. Unbounded.
 ) close-paren       End argument. Ends unboundeds.
 * times             Like python, multiplication, replication.
@@ -38,7 +38,7 @@ H hash-table        Variable. {}
 I if                Python if.
 J                   Variable. Autoinitializing. J=copy(_).
 K                   Variable. Autoinitializing. K=_. For stringing.
-L lambda            define s(b): return _. y(Z) on second use.
+L lambda            define P(b): return _. y(Z) on second use.
 M movement-slice    Mabc = a[b,b+c]. Also re.sub on str, re.search on c=0.
 N                   Variable. ","
 O randOm-chOice     random.choice(_). Uses range(int).
@@ -82,7 +82,7 @@ t tail              _[1:].
 u reduce            Reduce, implicit lambda. G,H -> N,T ->
 v eval              Python eval. Often used for str -> int.
 w raw_input         Python 3 input()
-x index             find first occurance. -1 if not found.
+x index             find first occurance. -1 if not found. bitwise xor.
 y                   space separated numbers -> list.
 z                   Variable. Autoinitializing to input.
 { set               Python set. Takes str or list.

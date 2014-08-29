@@ -42,7 +42,7 @@ def minus(a, b):
 
 # '. single purpose.
 def read_file():
-    a = "\n".join(open(input()))
+    a = [lin[:-1] if lin[-1] == '\n' else lin for lin in (open(input()))]
     return a
 
 
@@ -238,7 +238,7 @@ def rchoice(a):
 
 # o. Single purpose.
 def order(a, b):
-    if isinstance(a, str):
+    if isinstance(b, str):
         return ''.join(sorted(b, key=a))
     return sorted(b, key=a)
 
@@ -321,8 +321,10 @@ def urange(a):
     return list(range(len(a)))
 
 
-# x. str, list.
+# x. int, str, list.
 def index(a, b):
+    if isinstance(a, int):
+        return a ^ b
     if b in a:
         return a.index(b)
     # replicate functionality from str.find
@@ -330,6 +332,7 @@ def index(a, b):
         return -1
 
 
+# y. String.
 def space_sep(a):
     return [eval(bit) for bit in a.split()]
 Y = []
