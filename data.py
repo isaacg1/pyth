@@ -38,7 +38,6 @@ c_to_i = {
     'B': (('break', ), 0),
     'J': (('J=copy(', ')'), 1),
     'K': (('K=', ''), 1),
-    'L': (('def primes_upper(b): return ', ''), 1,),
     'R': (('return ', ''), 1),
     'Q': (('Q=copy(', ')'), 1),
     'X': (('exec(general_parse(', '))'), 1),
@@ -103,6 +102,7 @@ replacements = {
     '\\': ('"{0}"', 1),
     'V': ('FNU', 0),
     'A': ('=,{0}{1},', 2),
+    'L': ('Dyb', 0),
     }
 
 # Gives next function header to use - for filter, map, reduce.

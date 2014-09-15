@@ -221,7 +221,7 @@ def move_slice(a, b, c=None):
         return a[slice(0, b)]
     else:
         return a[slice(b, b+c)]
-N = ","
+N = '"'
 
 
 # n. All.

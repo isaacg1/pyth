@@ -7,4 +7,8 @@ hoePNUQ
 ;List of primes under input
 f!tPTr2Q
 
-Test broken line.
+;Triangle of hash signs size input-1
+VQ*N\#
+
+;Quine
+jN*2]"jN*2]

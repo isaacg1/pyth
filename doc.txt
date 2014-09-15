@@ -38,9 +38,9 @@ H hash-table        Variable. {}
 I if                Python if.
 J                   Variable. Autoinitializing. J=copy(_).
 K                   Variable. Autoinitializing. K=_. For stringing.
-L lambda            define P(b): return _. y(Z) on second use.
+L lambda            define y(b):_.
 M movement-slice    Mabc = a[b,b+c]. Also re.sub on str, re.search on c=0.
-N                   Variable. ","
+N                   Variable. '"'
 O randOm-chOice     random.choice(_). Uses range(int).
 P Prime-uPPer       prime factorization on int, cast to upper on str.
 Q quick             Variable. Autoinitializing to evaluated input.

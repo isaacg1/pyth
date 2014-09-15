@@ -21,24 +21,8 @@ from data import *
 import copy as c
 
 
-# Generate resets for the globals.
-global c_to_f
-global next_c_to_f
-global c_to_i
-reset_c_to_f = c.deepcopy(c_to_f)
-reset_next_c_to_f = c.deepcopy(next_c_to_f)
-reset_c_to_i = c.deepcopy(c_to_i)
-
-
 # Run it!
 def general_parse(code):
-    global c_to_f
-    global next_c_to_f
-    global c_to_i
-    # Reset the globals.
-    c_to_f = c.deepcopy(reset_c_to_f)
-    next_c_to_f = c.deepcopy(reset_next_c_to_f)
-    c_to_i = c.deepcopy(reset_c_to_i)
     code = prepend_parse(code)
     # Parsing
     args_list = []
@@ -226,13 +210,9 @@ Give file containing Pyth code as final command line argument.
 Command line flags:
 -c or --code:   Give code as final command arg, instead of file name.
 -d or --debug   Show input code, generated python code.
--l or --line    Run each line as a program, instead of just first line.
-                Must not be combined with -c.
-
--i or --ignore  Don't print python errors, don't terminate on error.
-                Does not catch compilation errors in single-line mode.
-                Use with extreme caution.
--s or --silent  Ignore silently. No effect without -i
+-l or --line    Run specified runable line. Runable lines are those not
+                starting with ; or ), and not empty. 0-indexed.
+                Specify line with 2nd to last argument.
 -h or --help    Show this help message.
 
 See opening comment in pyth.py for more info.""")
@@ -248,58 +228,32 @@ See opening comment in pyth.py for more info.""")
         debug_on = flag_on('d', '--debug')
         code_on = flag_on('c', '--code')
         line_on = flag_on('l', '--line')
-        ignore_on = flag_on('i', '--ignore')
-        silent = flag_on('s', '--silent')
+        if line_on:
+            line_num = int(sys.argv[-2])
         if code_on and line_on:
             print("Error: multiline input from command line.")
         else:
             if code_on:
                     code = file_or_string
-                    py_code_list = [(code, general_parse(code))]
+                    py_code = (code, general_parse(code))
             else:
                 code_file = file_or_string
                 if line_on:
-                    code = [line[:-1] for line in list(open(code_file))]
-                    if not ignore_on:
-                        py_code_list = [(cd_line, general_parse(cd_line))
-                                        for cd_line in code]
-                    else:
-                        py_code_list = []
-                        for line_num in range(len(code)):
-                            cd_line = code[line_num]
-                            try:
-                                py_code_list.append(
-                                    (cd_line, general_parse(cd_line)))
-                            # TODO: wrap general_parse functions in
-                            # assertions, change this to
-                            # execpt AssertError ...
-                            except:
-                                if not silent:
-                                    print("Line %d: Compilation error."
-                                          % line_num)
+                    code_lines = list(open(file_or_string))
+                    runable_code_lines = [code_line[:-1]
+                                          for code_line in code_lines
+                                          if code_line[0] not in ';)\n']
+                    used_line = runable_code_lines[line_num]
+                    py_code = (used_line, general_parse(used_line))
                 else:
                     code = list(open(file_or_string))[0][:-1]
-                    py_code_list = [(code, general_parse(code))]
-            # Loop through the code lines - unless -l, only one line.
-            for code_line, py_code_line in py_code_list:
-                # Debug message
-                if debug_on:
-                    if len(py_code_line) > 0:
-                        print('='*50)
-                        print(str(len(code_line)) + ": " + code_line)
-                        print('='*50)
-                        print(py_code_line)
-                    elif len(code_line) > 0:
-                        print('='*50)
-                        print(code_line)
-                if not ignore_on:
-                    # Run the code.
-                    exec(py_code_line)
-                else:
-                    # Ignore all errors
-                    try:
-                        exec(py_code_line)
-                    except:
-                        if not silent:
-                            print('='*50)
-                            print("Runtime error")
+                    py_code = (code, general_parse(code))
+            code_line, py_code_line = py_code
+            # Debug message
+            if debug_on:
+                print('='*50)
+                print(str(len(code_line)) + ": " + code_line)
+                print('='*50)
+                print(py_code_line)
+                print('='*50)
+            exec(py_code_line)
