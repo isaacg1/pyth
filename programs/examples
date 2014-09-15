@@ -13,5 +13,5 @@ VQ*N\#
 ;Quine
 jN*2]"jN*2]
 
-;Fibbonacci calculator. Demonstrates memoization.
+;Fibbonacci calculator. Demonstrates memoization on fib(90).
 LR?1<b2+ytby-b2y90
