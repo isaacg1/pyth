@@ -1,91 +1,98 @@
 Pyth documentation 2.0
-Char, mnemonic, details. When in doubt, similar to python.
 
-  blank             Suppress print, separator.
-! not               Logical not.
-" quote             Begins and ends sring literals. Optional at EOL.
-#                   Decrement. Lit. _-=1
-$ super-quote       Toggle non-parsing. Direct to python literal.
-% mod               Like pythpn, does mod and string formatting.
-& and               Logical and. (short circuiting)
-' quote-file        Cat file, return as list of lines.
-( tuple             Tuple constructor. Unbounded.
-) close-paren       End argument. Ends unboundeds.
-* times             Like python, multiplication, replication.
-+ plus              Like python, addition, concatenation.
-, pair              2 entry tuple.
-- minus             Subtraction, setwise difference. Maintains order.
-. point             Numeric literals.
-/ div               Integer division, str, list count.
+Each character is a separate token, except for numbers, 
+strings, and python literals. Written in Polish notation,
+with fixed arities for each operator. Statements are special, 
+allow multiple lines.
+
+
+Char, arity, begins line, mnemonic, details. When in doubt, similar to python.
+
+  1 N blank             Suppress print, separator.
+! 1 N not               Logical not.
+" X N quote             Begins and ends sring literals. Optional at EOL.
+# 1 Y                   Decrement. Lit. _-=1
+$ X N super-quote       Toggle non-parsing. Direct to python literal.
+% 2 N mod               Like pythpn, does mod and string formatting.
+& 2 N and               Logical and. (short circuiting)
+' 0 N quote-file        Cat file, return as list of lines.
+( I N tuple             Tuple constructor. Unbounded.
+) X N close-paren       End argument. Ends unboundeds.
+* 2 N times             Like python, multiplication, replication.
++ 2 N plus              Like python, addition, concatenation.
+, 2 N pair              2 entry tuple.
+- 2 N minus             Subtraction, setwise difference. Maintains order.
+. X N point             Numeric literals.
+/ 2 N div               Integer division, str, list count.
 
 0123456789          Numeric literals
 
-: at-slice          Python slice. :abc => a[b:c]
-; end-line          End everything. Infinite \.
-< less-than         Less than, proper subset.
-= defined as        Assignment, using deepcopy. Cannot be strung.
-> greater-than      Greater than, proper superset.
-? ternary           Python ternary. ?abc => a if b else c
-@ at                Index into str, list or dict.
-A assign-pair       Aabcd => =,ab,cd. First 2 arguments must be variables.
-B break             Python break. Implicit ).
-C chr               char -> int, int -> char.
-D def               Python def. Match arity w/ existing function.
-E else              Python else.
-F for               Python for.
-G strinG.lowercase  Variable. "abcdefghijklmnopqrstuvwxyz"
-H hash-table        Variable. {}
-I if                Python if.
-J                   Variable. Autoinitializing. J=copy(_).
-K                   Variable. Autoinitializing. K=_. For stringing.
-L lambda            define y(b):_.
-M movement-slice    Mabc = a[b,b+c]. Also re.sub on str, re.search on c=0.
-N                   Variable. '"'
-O randOm-chOice     random.choice(_). Uses range(int).
-P Prime-uPPer       prime factorization on int, cast to upper on str.
-Q quick             Variable. Autoinitializing to evaluated input.
-R return            Python return. Impliciit ).
-S sorted            Python sorted.
-T ten               Variable. 10
-U unary-range       Python unary range.
-V                   Loop times equal to input. Equivalent to FNU
-W while             Python while.
-X exec              Python exec, but with pyth parsing.
-Y                   Variable. []
-Z zero              Variable. 0
-[ list              List constructor. Unbounded.
-\ char-of           Escape character to string.
-] close-bracket     One element list.
-^ power             Python pow. (**)
-_ neg               Negation. Str and list reverse.
-` repr              Python repr.
-a and-2             Bitwise and or setwise and. Returns leading type.
-b lineBreak         Variable. "\n"
-c chop              chop str/list every n elements. Also str.split, fdiv.
-d                   Variable. " "
-e end               %10 or @_1
-f filter            Python 2 filter. implicit lambda, T -> Y -> Z ->
-g grt-or-eq         Python >=. Superset.
-h head              @0, +1.
-i int-2             Interpret string as int base b.
-j join              Python join, or convrt to base. Output in list form.
-k                   Variable. ""
-l len               Python len.
-m map               Python 2 map. implicit lambda, d -> k -> b ->
-n not-equal         Python !=.
-o order-by          Python sorted, key=. implicit lambda, N -> Z ->
-p print             Python print, end=. Implicitly called with "\n".
-q equals            Python ==.
-r range             Python 2 range. Reversed if a>b.
-s sum-int           reduce + on list, cast to int on other.
-t tail              _[1:].
-u reduce            Reduce, implicit lambda. G,H -> N,T ->
-v eval              Python eval. Often used for str -> int.
-w raw_input         Python 3 input()
-x index             find first occurance. -1 if not found. bitwise xor.
-y                   space separated numbers -> list.
-z                   Variable. Autoinitializing to input.
-{ set               Python set. Takes str or list.
-| or                Logical or.
-} in                Python in.
-~                   Python +=.
+: 3 N at-slice          Python slice. :abc => a[b:c]
+; X N end-line          End everything. Infinite \.
+< 2 N less-than         Less than, proper subset.
+= 2 Y defined as        Assignment, using deepcopy. Cannot be strung.
+> 2 N greater-than      Greater than, proper superset.
+? 3 N ternary           Python ternary. ?abc => a if b else c
+@ 2 N at                Index into str, list or dict.
+A 4 Y assign-pair       Aabcd => =,ab,cd. First 2 arguments must be variables.
+B 0 Y break             Python break. Implicit ).
+C 1 N chr               char -> int, int -> char.
+D S Y def               Python def. Match arity w/ existing function. Memoized.
+E S Y else              Python else.
+F S Y for               Python for.
+G 0 N strinG.lowercase  Variable. "abcdefghijklmnopqrstuvwxyz"
+H 0 N hash-table        Variable. {}
+I S Y if                Python if.
+J 1 Y                   Variable. Autoinitializing. J=copy(_).
+K 1 Y                   Variable. Autoinitializing. K=_. For stringing.
+L S Y lambda            define y(b):_.
+M 3 N movement-slice    Mabc = a[b,b+c]. Also re.sub on str, re.search on c=0.
+N 0 N                   Variable. '"'
+O 1 N randOm-chOice     random.choice(_). Uses range(int).
+P 1 N Prime-uPPer       prime factorization on int, cast to upper on str.
+Q 0 N quick             Variable. Autoinitializing to evaluated input.
+R 1 Y return            Python return. Impliciit ).
+S 1 N sorted            Python sorted.
+T 0 N ten               Variable. 10
+U 1 N unary-range       Python unary range. Takes 2 tuple, splats it.
+V S Y                   Loop times equal to input. Equivalent to FNU
+W S Y while             Python while.
+X 1 Y exec              Python exec, but with pyth parsing.
+Y 0 N                   Variable. []
+Z 0 N zero              Variable. 0
+[ X N list              List constructor. Unbounded.
+\ X N char-of           Escape character to string.
+] 1 N close-bracket     One element list.
+^ 2 N power             Python pow. (**)
+_ 1 N neg               Negation. Str and list reverse.
+` 1 N repr              Python repr.
+a 2 N and-2             Bitwise and or setwise and. Returns leading type.
+b 0 N lineBreak         Variable. "\n"
+c 2 N chop              chop str/list every n elements. Also str.split, fdiv.
+d 0 N                   Variable. " "
+e 1 N end               %10 or @_1
+f 2 N filter            Python 2 filter. implicit lambda, T -> Y -> Z ->
+g 2 N grt-or-eq         Python >=. Superset.
+h 1 N head              @0, +1.
+i 2 N int-2             Interpret string as int base b.
+j 2 N join              Python join, or convert to base. Output in list form.
+k 0 N                   Variable. ""
+l 1 N len               Python len.
+m 2 N map               Python 2 map. implicit lambda, d -> k -> b ->
+n 2 N not-equal         Python !=.
+o 2 N order-by          Python sorted, key=. implicit lambda, N -> Z ->
+p 2 N print             Python print, end=. Implicitly called with "\n".
+q 2 N equals            Python ==.
+r 2 N range             Python 2 range. Reversed if a>b.
+s 1 N sum-int           reduce + on list, cast to int on other.
+t 1 N tail              _[1:].
+u 2 N reduce            Reduce, implicit lambda. G,H -> N,T ->
+v 1 N eval              Python eval. Often used for str -> int.
+w 1 N raw_input         Python 3 input()
+x 2 N index             find first occurance. -1 if not found. bitwise xor.
+y 1 N                   space separated numbers -> list.
+z 0 N                   Variable. Autoinitializing to input.
+{ 1 N set               Python set. Takes str or list.
+| 2 N or                Logical or.
+} 2 N in                Python in.
+~ 2 Y                   Python +=.

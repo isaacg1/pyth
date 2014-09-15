@@ -137,6 +137,8 @@ def infix_parse(active_char, rest_code):
 def statement_parse(active_char, rest_code, spacing):
     # Handle the initial portion (head)
     infixes, arity = c_to_s[active_char]
+    # Handle newlines in infix segments
+    infixes = [infix.replace("\n", spacing[:-1]) for infix in infixes]
     args_list = []
     parsed = 'Not empty'
     while len(args_list) != arity and parsed != '':

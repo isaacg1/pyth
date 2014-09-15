@@ -16,12 +16,39 @@ variables = 'bdGHkNTYZ'
 # Z = 0
 
 c_to_s = {
-    'D': (('def ', ':'), 1),
+    'D': (('@memoized\ndef ', ':'), 1),
     'E': (('else:', ), 0),
     'F': (('for ', ' in ', ':'), 2),
     'I': (('if ', ':'), 1),
     'W': (('while ', ':'), 1),
     }
+
+# Support for the memoized decorator
+import collections
+
+
+class memoized(object):
+    '''Decorator. Caches a function's return value each time it is called.
+    If called later with the same arguments, the cached value is returned
+    (not reevaluated).
+    '''
+    def __init__(self, func):
+        self.func = func
+        self.cache = {}
+
+    def __call__(self, *args):
+        if not isinstance(args, collections.Hashable):
+            # uncacheable. a list, for instance.
+            # better to not cache than blow up.
+            return self.func(*args)
+        if args in self.cache:
+            return self.cache[args]
+        else:
+            value = self.func(*args)
+            self.cache[args] = value
+            return value
+
+
 # Arbitrary format operators - use for assignment, infix, etc.
 # All surrounding strings, arity
 c_to_i = {
