@@ -6,6 +6,11 @@ import string
 import sys
 
 
+# Type checking - num class
+def isnum(a):
+    return isinstance(a, int) or isinstance(a, float)
+
+
 # Function library. See data for letter -> function correspondences.
 # !. All.
 def Pnot(a):
@@ -29,7 +34,7 @@ def Ptuple(*a):
 
 # -. int, set.
 def minus(a, b):
-    if isinstance(a, int):
+    if isnum(a):
         return a-b
     difference = filter(lambda c: c not in b, a)
     if isinstance(a, str):
@@ -48,7 +53,7 @@ def read_file():
 
 # _. All.
 def neg(a):
-    if isinstance(a, int):
+    if isnum(a):
         return -a
     else:
         return a[::-1]
@@ -100,8 +105,8 @@ def gt(a, b):
 
 # /. All.
 def div(a, b):
-    if isinstance(a, int):
-        return a // b
+    if isnum(a):
+        return int(a // b)
     return a.count(b)
 
 
@@ -122,7 +127,7 @@ b = "\n"
 
 # c. All
 def chop(a, b=None):
-    if isinstance(a, int):
+    if isnum(a):
         return a/b
     if isinstance(b, str):
         return a.split(b)
@@ -144,7 +149,7 @@ d = ' '
 
 # e. All.
 def end(a):
-    if isinstance(a, int):
+    if isnum(a):
         return a % 10
     return a[-1]
 

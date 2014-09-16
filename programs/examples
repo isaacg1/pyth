@@ -15,3 +15,6 @@ jN*2]"jN*2]
 
 ;Fibbonacci calculator. Demonstrates memoization on fib(90).
 LR?1<b2+ytby-b2y90
+
+;Check for repetition
+}z:+zz1_1
