@@ -254,7 +254,7 @@ See opening comment in pyth.py for more info.""")
             # Debug message
             if debug_on:
                 print('='*50)
-                print(str(len(code_line)) + ": " + code_line)
+                print(code_line)
                 print('='*50)
                 print(py_code_line)
                 print('='*50)
