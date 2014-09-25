@@ -11,7 +11,7 @@ Char, arity, begins line, mnemonic, details. When in doubt, similar to python.
   1 N blank             Suppress print, separator.
 ! 1 N not               Logical not.
 " X N quote             Begins and ends sring literals. Optional at EOL.
-# 1 Y                   Decrement. Lit. _-=1
+# S Y                   Loop until exception, then break. Tricky to debug.
 $ X N super-quote       Toggle non-parsing. Direct to python literal.
 % 2 N mod               Like pythpn, does mod and string formatting.
 & 2 N and               Logical and. (short circuiting)

@@ -21,6 +21,7 @@ c_to_s = {
     'F': (('for ', ' in ', ':'), 2),
     'I': (('if ', ':'), 1),
     'W': (('while ', ':'), 1),
+    '#': (('while True:\n try:', '\n except:\n  break'), 0, 1),
     }
 
 # Support for the memoized decorator
@@ -54,7 +55,6 @@ class memoized(object):
 c_to_i = {
     '~': (('', '+=', ''), 2),
     '@': (('', '[', ']'), 2),
-    '#': (('', '-=1'), 1),
     '&': (('(', ' and ', ')'), 2),
     '|': (('(', ' or ', ')'), 2),
     '=': (('', '=copy(', ')'), 2),

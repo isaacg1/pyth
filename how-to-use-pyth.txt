@@ -1,3 +1,48 @@
 How to use pyth:
 
 Compiler/executer:
+
+git clone https://github.com/isaacg1/pyth.git
+(linux)
+
+or go to
+https://github.com/isaacg1/pyth
+and choose download as zip, then extract it.
+(any)
+
+To run programs from the command line from the directory you cloned/extracted to:
+
+python3 pyth.py -c "<code goes here>"
+(linux)
+
+py -3 pyth.py -c "<code goes here>"
+(windows)
+
+Really simple example:
+
++1 1
+
+Returns 2.
+(If it returned 1, check that you used quotes)
+
+This illustrates a basic feature of pyth: Pyth uses Polish notation,
+also known as prefix notation, where functions, operators and statements
+come before their arguments.
+
+It also illustrates the default printing behavior of Pyth: Expressions that
+return a value are printed by default.
+
+Functions:
+Various arities
+1:
+!0
+
+2:
+r3 9
+
+3:
+:"Hello!"2 4
+
+Assignment:
+=Z9*ZZ
+=Z"Hello"~Z" world"

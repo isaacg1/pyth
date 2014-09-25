@@ -136,7 +136,13 @@ def infix_parse(active_char, rest_code):
 
 def statement_parse(active_char, rest_code, spacing):
     # Handle the initial portion (head)
-    infixes, arity = c_to_s[active_char]
+    # addl_spaces denotes the amount of extra spacing needed.
+    if len(c_to_s[active_char]) == 2:
+        infixes, arity = c_to_s[active_char]
+        addl_spaces = ''
+    else:
+        infixes, arity, num_spaces = c_to_s[active_char]
+        addl_spaces = ' '*num_spaces
     # Handle newlines in infix segments
     infixes = [infix.replace("\n", spacing[:-1]) for infix in infixes]
     args_list = []
@@ -155,13 +161,14 @@ def statement_parse(active_char, rest_code, spacing):
     while parsed != '':
         if add_print(rest_code):
             rest_code = 'p"\\n"' + rest_code
-        parsed, rest_code = parse(rest_code, spacing+' ')
+        parsed, rest_code = parse(rest_code, spacing+addl_spaces+' ')
         args_list.append(parsed)
     # Trim the '' away and combine.
     if args_list[-1] == '':
         args_list = args_list[:-1]
-    all_pieces = [part_py_code] + args_list
-    return spacing.join(all_pieces), rest_code
+    # Combine pieces - intro, statement, conclusion.
+    all_pieces = [part_py_code] + args_list + infixes[arity+1:]
+    return (spacing+addl_spaces).join(all_pieces), rest_code
 
 
 def replace_parse(active_char, rest_code, spacing):
