@@ -123,7 +123,7 @@ replacements = {
     '\\': ('"{0}"', 1),
     'V': ('FNU', 0),
     'A': ('=,{0}{1},', 2),
-    'L': ('Dyb', 0),
+    'L': ('DybR', 0),
     }
 
 # Gives next function header to use - for filter, map, reduce.
