@@ -221,7 +221,7 @@ Command line flags:
 -d or --debug   Show input code, generated python code.
 -l or --line    Run specified runable line. Runable lines are those not
                 starting with ; or ), and not empty. 0-indexed.
-                Specify line with 2nd to last argument.
+                Specify line with 2nd to last argument. Fails on Windows.
 -h or --help    Show this help message.
 
 See opening comment in pyth.py for more info.""")
@@ -255,7 +255,9 @@ See opening comment in pyth.py for more info.""")
                     used_line = runable_code_lines[line_num]
                     py_code = (used_line, general_parse(used_line))
                 else:
-                    code = list(open(file_or_string))[0][:-1]
+                    code = list(open(file_or_string))[0]
+                    if code[-1] == "\n":
+                        code = code[:-1]
                     py_code = (code, general_parse(code))
             code_line, py_code_line = py_code
             # Debug message

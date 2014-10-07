@@ -89,7 +89,7 @@ def at_slice(a, b, c=None):
 def lt(a, b):
     if isinstance(a, set):
         return a.issubset(b) and a != b
-    if not isinstance(a, int) and isinstance(b, int):
+    if not isnum(a) and isnum(b):
         return a[:b]
     return a < b
 
@@ -98,7 +98,7 @@ def lt(a, b):
 def gt(a, b):
     if isinstance(a, set):
         return a.issuperset(b) and a != b
-    if not isinstance(a, int) and isinstance(b, int):
+    if not isnum(a) and isnum(b):
         return a[b:]
     return a > b
 
@@ -164,7 +164,7 @@ G = string.ascii_lowercase
 def gte(a, b):
     if isinstance(a, set):
         return a.issuperset(b)
-    if not isinstance(a, int) and isinstance(b, int):
+    if not isnum(a) and isnum(b):
         return a[b-1:]
     return a >= b
 H = {}
@@ -172,7 +172,7 @@ H = {}
 
 # h. int, str, list.
 def head(a):
-    if isinstance(a, int):
+    if isnum(a):
         return a+1
     return a[0]
 
@@ -301,7 +301,7 @@ T = 10
 
 # t. int, str, list.
 def tail(a):
-    if isinstance(a, int):
+    if isnum(a):
         return a-1
     return a[1:]
 
