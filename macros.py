@@ -1,4 +1,5 @@
 import copy
+import itertools
 import math
 import random
 import re
@@ -19,7 +20,24 @@ def Pnot(a):
 
 # %. int, str.
 def mod(a, b):
+    if isinstance(a, int) and not isnum(b):
+        return b[::a]
     return a % b
+
+
+# ^. int, str, list. Uses Psum
+def Ppow(a, b):
+    if isnum(a):
+        return pow(a, b)
+    else:
+        if isinstance(a, str):
+            return [''.join(group) for group in itertools.product(a, repeat=b)]
+        elif isinstance(a, list):
+            return [list(group) for group in itertools.product(a, repeat=b)]
+        elif isinstance(a, set):
+            return [set(group) for group in itertools.product(a, repeat=b)]
+        else:
+            return [group for group in itertools.product(a, repeat=b)]
 
 
 # *. int, str, list.
@@ -59,12 +77,22 @@ def neg(a):
         return a[::-1]
 
 
+# {. All.
+def Pset(a):
+    if isnum(a):
+        return set([a])
+    else:
+        return set(a)
+
+
 # +. All.
 def plus(a, b):
+    if isinstance(a, list) and not isinstance(b, list):
+        return a+[b]
     if isinstance(a, set):
         return a.union(b)
-    if isinstance(b, set):
-        return b.union(a)
+    if isinstance(b, list) and not isinstance(a, list):
+        return [a]+b
     return a+b
 
 
@@ -208,6 +236,13 @@ def convert_base(arb, base):
 k = ''
 
 
+def Plen(a):
+    if isnum(a):
+        return math.log(a, 2)
+    else:
+        return len(a)
+
+
 # m. Single purpose.
 def Pmap(a, b):
     return list(map(a, b))
@@ -292,10 +327,17 @@ def Prange(a, b=None):
 
 # s. int, str, list.
 def Psum(a):
-    if isinstance(a, list):
+    if isinstance(a, list) or isinstance(a, tuple):
         return reduce(lambda b, c: b+c, a)
     else:
         return int(a)
+
+
+def Psorted(a):
+    if isinstance(a, str):
+        return ''.join(sorted(a))
+    else:
+        return sorted(a)
 T = 10
 
 
@@ -317,7 +359,7 @@ def reduce(a, b):
     return acc
 
 
-# V. int, str, list.
+# U. int, str, list.
 def urange(a):
     if isinstance(a, int):
         return list(range(a))

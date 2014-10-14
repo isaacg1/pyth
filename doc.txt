@@ -13,13 +13,13 @@ Char, arity, begins line, mnemonic, details. When in doubt, similar to python.
 " X N quote             Begins and ends sring literals. Optional at EOL.
 # S Y                   Loop until exception, then break. Tricky to debug.
 $ X N super-quote       Toggle non-parsing. Direct to python literal.
-% 2 N mod               Like pythpn, does mod and string formatting.
+% 2 N mod               Mod and string formatting. Also does a[::b].
 & 2 N and               Logical and. (short circuiting)
 ' 0 N quote-file        Cat file, return as list of lines.
 ( I N tuple             Tuple constructor. Unbounded.
 ) X N close-paren       End argument. Ends unboundeds.
 * 2 N times             Like python, multiplication, replication.
-+ 2 N plus              Like python, addition, concatenation.
++ 2 N plus              Addition, concatenation. Append or prepend to list.
 , 2 N pair              2 entry tuple.
 - 2 N minus             Subtraction, setwise difference. Maintains order.
 . X N point             Numeric literals.
@@ -63,7 +63,7 @@ Z 0 N zero              Variable. 0
 [ X N list              List constructor. Unbounded.
 \ X N char-of           Escape character to string.
 ] 1 N close-bracket     One element list.
-^ 2 N power             Python pow. (**)
+^ 2 N power             Python pow, cartesian product with # of repeats.
 _ 1 N neg               Negation. Str and list reverse.
 ` 1 N repr              Python repr.
 a 2 N and-2             Bitwise and or setwise and. Returns leading type.
@@ -77,7 +77,7 @@ h 1 N head              @0, +1.
 i 2 N int-2             Interpret string as int base b.
 j 2 N join              Python join, or convert to base. Output in list form.
 k 0 N                   Variable. ""
-l 1 N len               Python len.
+l 1 N len               Python len. log base 2 on nums.
 m 2 N map               Python 2 map. implicit lambda, d -> k -> b ->
 n 2 N not-equal         Python !=.
 o 2 N order-by          Python sorted, key=. implicit lambda, N -> Z ->
@@ -92,7 +92,7 @@ w 1 N raw_input         Python 3 input()
 x 2 N index             find first occurance. -1 if not found. bitwise xor.
 y 1 N                   space separated numbers -> list.
 z 0 N                   Variable. Autoinitializing to input.
-{ 1 N set               Python set. Takes str or list.
+{ 1 N set               Python set. Makes one element set on num.
 | 2 N or                Logical or.
 } 2 N in                Python in.
 ~ 2 Y                   Python +=.
