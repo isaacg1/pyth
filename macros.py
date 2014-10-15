@@ -349,9 +349,9 @@ def tail(a):
 
 
 # u. single purpose
-def reduce(a, b):
-    acc = b[0]
-    seq = b[1:]
+def reduce(a, b, c):
+    acc = c
+    seq = b
     while len(seq) > 0:
         h = seq[0]
         acc = a(acc, h)
@@ -379,8 +379,19 @@ def index(a, b):
         return -1
 
 
-# y. String.
-def space_sep(a):
-    return [eval(bit) for bit in a.split()]
+# y. string, list.
+def subsets(a):
+    if isnum(a):
+        return itertools.count(a)
+    else:
+        if len(a) == 1:
+            return [[] if not isinstance(a, str) else '', a]
+        else:
+            def to_type(elem):
+                return [elem] if not isinstance(a, str) else elem
+            others = subsets(a[:-1])
+            out = others + list(map(lambda sub: sub + to_type(a[-1]), others))
+            return sorted(out, key=len)
+
 Y = []
 Z = 0

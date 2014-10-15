@@ -86,11 +86,11 @@ q 2 N equals            Python ==.
 r 2 N range             Python 2 range. Reversed if a>b.
 s 1 N sum-int           reduce + on list, cast to int on other.
 t 1 N tail              _[1:].
-u 2 N reduce            Reduce, implicit lambda. G,H -> N,T ->
+u 3 N reduce            Reduce, implicit lambda. 3rd is base case. G,H -> N,T
 v 1 N eval              Python eval. Often used for str -> int.
 w 1 N raw_input         Python 3 input()
 x 2 N index             find first occurance. -1 if not found. bitwise xor.
-y 1 N                   space separated numbers -> list.
+y 1 N                   On num, itertools.count. On seq, powerset.
 z 0 N                   Variable. Autoinitializing to input.
 { 1 N set               Python set. Makes one element set on num.
 | 2 N or                Logical or.

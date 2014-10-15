@@ -112,11 +112,11 @@ c_to_f = {
     's': ('Psum', 1),
     't': ('tail', 1),
     'U': ('urange', 1),
-    'u': ('reduce(lambda G, H:', 2),
+    'u': ('reduce(lambda G, H:', 3),
     'v': ('eval', 1),
     'w': ('input', 0),
     'x': ('index', 2),
-    'y': ('space_sep', 1),
+    'y': ('subsets', 1),
     }
 
 replacements = {
