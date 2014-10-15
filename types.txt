@@ -21,7 +21,7 @@ sXXXX
 tXXXX
 UX XX
 v  X 
-y
+yXXXX
 
 Leaving out float:
 I,S,L
