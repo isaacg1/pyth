@@ -30,7 +30,7 @@ Arity 2
 % X  X  X  X  X  X  
 ^ X        X        X
 * X  X  X  X        X  
-- X           X  X     X  X
+- X  X  X     X  X     X  X
 + X           X     X  X  X
 < X        X  X     X     X
 > X        X  X     X     X

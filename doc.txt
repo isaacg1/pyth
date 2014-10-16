@@ -71,7 +71,7 @@ b 0 N lineBreak         Variable. "\n"
 c 2 N chop              chop str/list every n elements. Also str.split, fdiv.
 d 0 N                   Variable. " "
 e 1 N end               %10 or @_1
-f 2 N filter            Python 2 filter. implicit lambda, T -> Y -> Z ->
+f 2 N filter            Implicit lambda, T -> Y -> Z -> . on num, iter.count
 g 2 N grt-or-eq         Python >=. Superset.
 h 1 N head              @0, +1.
 i 2 N int-2             Interpret string as int base b.
@@ -90,7 +90,7 @@ u 3 N reduce            Reduce, implicit lambda. 3rd is base case. G,H -> N,T
 v 1 N eval              Python eval. Often used for str -> int.
 w 1 N raw_input         Python 3 input()
 x 2 N index             find first occurance. -1 if not found. bitwise xor.
-y 1 N                   On num, itertools.count. On seq, powerset.
+y 1 N                   On num, double. On seq, powerset.
 z 0 N                   Variable. Autoinitializing to input.
 { 1 N set               Python set. Makes one element set on num.
 | 2 N or                Logical or.

@@ -52,8 +52,14 @@ def Ptuple(*a):
 
 # -. int, set.
 def minus(a, b):
-    if isnum(a):
+    if isnum(a) and isnum(b):
         return a-b
+    if isnum(a) and isinstance(b, str):
+        return minus(str(a), b)
+    if isnum(a) and isinstance(b, list):
+        return minus([a], b)
+    if isnum(a) and isinstance(b, set):
+        return minus({a}, b)
     difference = filter(lambda c: c not in b, a)
     if isinstance(a, str):
         return ''.join(difference)
@@ -184,7 +190,10 @@ def end(a):
 
 # f. single purpose.
 def Pfilter(a, b):
-    return list(filter(a, b))
+    if isnum(b):
+        return next(filter(a, itertools.count(b)))
+    else:
+        return list(filter(a, b))
 G = string.ascii_lowercase
 
 
@@ -257,7 +266,7 @@ def move_slice(a, b, c=None):
             return not not re.search(b, a)
         else:
             return re.sub(b, c, a)
-    if c in None:
+    if c is None:
         return a[slice(0, b)]
     else:
         return a[slice(b, b+c)]
@@ -382,7 +391,7 @@ def index(a, b):
 # y. string, list.
 def subsets(a):
     if isnum(a):
-        return itertools.count(a)
+        return a*2
     else:
         if len(a) == 1:
             return [[] if not isinstance(a, str) else '', a]
