@@ -325,6 +325,22 @@ def equal(a, b):
 
 # r. int.
 def Prange(a, b=None):
+    if isinstance(a, str):
+        if not b:
+            return a.lower()
+        if b == 1:
+            return a.upper()
+        if b == 2:
+            return a.swapcase()
+        if b == 3:
+            return a.title()
+        if b == 4:
+            return a.capitalize()
+        if b == 5:
+            return string.capwords(a)
+        if b == 6:
+            return a.strip()
+
     if b:
         if a < b:
             return list(range(a, b))
@@ -337,7 +353,7 @@ def Prange(a, b=None):
 # s. int, str, list.
 def Psum(a):
     if isinstance(a, list) or isinstance(a, tuple):
-        return reduce(lambda b, c: b+c, a)
+        return reduce(lambda b, c: b+c, a[1:], a[0])
     else:
         return int(a)
 

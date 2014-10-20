@@ -15,7 +15,7 @@ eXXXX
 hXXXX
 lXXXX
 OX XX
-PX X 
+PX   
 S  XX
 sXXXX
 tXXXX
@@ -43,7 +43,7 @@ j X           X  X
 n X           X           X
 p          X  X  X
 q X           X           X
-r X
+r X        X
 x X           X     X  X  X
 
 Arity 3
