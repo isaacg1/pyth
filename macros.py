@@ -323,7 +323,7 @@ def equal(a, b):
     return a == b
 
 
-# r. int.
+# r. int, int or str,int.
 def Prange(a, b=None):
     if isinstance(a, str):
         if not b:
@@ -340,7 +340,8 @@ def Prange(a, b=None):
             return string.capwords(a)
         if b == 6:
             return a.strip()
-
+        if b == 7:
+            return [eval(part) for part in a.split()]
     if b:
         if a < b:
             return list(range(a, b))

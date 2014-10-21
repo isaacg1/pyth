@@ -83,7 +83,7 @@ n 2 N not-equal         Python !=.
 o 2 N order-by          Python sorted, key=. implicit lambda, N -> Z ->
 p 2 N print             Python print, end=. Implicitly called with "\n".
 q 2 N equals            Python ==.
-r 2 N range             Python 2 range. Reversed if a>b.
+r 2 N range             Python 2 range. Rev if a>b. Various string processing.
 s 1 N sum-int           reduce + on list, cast to int on other.
 t 1 N tail              _[1:].
 u 3 N reduce            Reduce, implicit lambda. 3rd is base case. G,H -> N,T
