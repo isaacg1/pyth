@@ -49,7 +49,7 @@ L S Y lambda            define y(b):_.
 M 3 N movement-slice    Mabc = a[b,b+c]. Also re.sub on str, re.search on c=0.
 N 0 N                   Variable. '"'
 O 1 N randOm-chOice     random.choice(_). Uses range(int).
-P 1 N Prime-uPPer       prime factorization on int, cast to upper on str.
+P 1 N Prime/Pop         prime factorization on int. All but last on str, list.
 Q 0 N quick             Variable. Autoinitializing to evaluated input.
 R 1 Y return            Python return. Impliciit ).
 S 1 N sorted            Python sorted.

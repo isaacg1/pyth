@@ -296,7 +296,7 @@ def isprime(num):
     return all(num % div != 0 for div in range(2, int(num ** .5 + 1)))
 
 
-# P. str.
+# P. int, str, list.
 def primes_upper(a):
     if isinstance(a, int):
         working = a
@@ -308,7 +308,7 @@ def primes_upper(a):
         if working != 1:
             output.append(working)
         return output
-    return a.upper()
+    return a[:-1]
 
 
 # p. All.
