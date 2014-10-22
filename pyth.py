@@ -19,6 +19,8 @@ from extra_parse import *
 from macros import *
 from data import *
 import copy as c
+import sys
+sys.setrecursionlimit(100000)
 
 
 # Run it!
