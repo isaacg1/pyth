@@ -176,6 +176,7 @@ def Pchr(a):
         return chr(a)
     if isinstance(a, str):
         return ord(a[0])
+    return list(zip(*a))
 
 
 d = ' '
@@ -325,7 +326,7 @@ def equal(a, b):
 
 # r. int, int or str,int.
 def Prange(a, b=None):
-    if isinstance(a, str):
+    if isinstance(a, str) and isinstance(b, int):
         if not b:
             return a.lower()
         if b == 1:
@@ -342,13 +343,14 @@ def Prange(a, b=None):
             return a.strip()
         if b == 7:
             return [eval(part) for part in a.split()]
-    if b:
-        if a < b:
-            return list(range(a, b))
+    if isinstance(a, int):
+        if b:
+            if a < b:
+                return list(range(a, b))
+            else:
+                return list(range(b, a))[::-1]
         else:
-            return list(range(b, a))[::-1]
-    else:
-        return list(range(a))
+            return list(range(a))
 
 
 # s. int, str, list.

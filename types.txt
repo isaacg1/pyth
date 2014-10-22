@@ -10,7 +10,7 @@ Arity 1
 _XXXX
 {XXXX
  XXXX
-CX X 
+CX XX
 eXXXX
 hXXXX
 lXXXX
