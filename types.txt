@@ -48,7 +48,6 @@ x X           X     X  X  X
 
 Arity 3
 :
-M 
 
 Wanted:
 GCD

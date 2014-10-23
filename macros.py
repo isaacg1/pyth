@@ -112,11 +112,13 @@ def Plist(*a):
 
 
 # :. list.
-def at_slice(a, b, c=None):
-    if c:
-        return a[slice(b, c)]
-    else:
-        return a[slice(b)]
+def at_slice(a, b, c):
+    if isinstance(b, str):
+        if not c:
+            return bool(re.search(b, a))
+        else:
+            return re.sub(b, c, a)
+    return a[slice(b, c)]
 
 
 # <. All.
@@ -256,21 +258,6 @@ def Plen(a):
 # m. Single purpose.
 def Pmap(a, b):
     return list(map(a, b))
-
-
-# M. str, list.
-def move_slice(a, b, c=None):
-    if isinstance(b, str):
-        if c is None:
-            return re.sub(b, '', a)
-        elif c is 0:
-            return not not re.search(b, a)
-        else:
-            return re.sub(b, c, a)
-    if c is None:
-        return a[slice(0, b)]
-    else:
-        return a[slice(b, b+c)]
 N = '"'
 
 

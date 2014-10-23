@@ -99,7 +99,6 @@ c_to_f = {
     'i': ('int_2', 2),
     'j': ('join', 2),
     'l': ('Plen', 1),
-    'M': ('move_slice', 3),
     'm': ('Pmap(lambda d:', 2),
     'n': ('ne', 2),
     'O': ('rchoice', 1),
@@ -122,8 +121,9 @@ c_to_f = {
 replacements = {
     '\\': ('"{0}"', 1),
     'V': ('FNU', 0),
-    'A': ('=,{0}{1},', 2),
+    'A': ('=,{0}{1}', 2),
     'L': ('DybR', 0),
+    'M': ('DaGHR', 0),
     }
 
 # Gives next function header to use - for filter, map, reduce.
@@ -143,7 +143,6 @@ next_c_to_f = {
 next_c_to_i = {
     'J': (('J'), 0),
     'K': (('K'), 0),
-    'L': (('def space_sep(Z): return ', ''), 1),
     'Q': (('Q'), 0),
     'z': (('z'), 0),
     }
