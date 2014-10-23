@@ -74,7 +74,7 @@ e 1 N end               %10 or @_1
 f 2 N filter            Implicit lambda, T -> Y -> Z -> . on num, iter.count
 g 2 N grt-or-eq         Python >=. Superset.
 h 1 N head              @0, +1.
-i 2 N int-2             Interpret string as int base b.
+i 2 N int-2             Convert str or list from given base to base 10, or gcd.
 j 2 N join              Python join, or convert to base. Output in list form.
 k 0 N                   Variable. ""
 l 1 N len               Python len. log base 2 on nums.

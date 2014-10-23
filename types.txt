@@ -38,7 +38,7 @@ Arity 2
 a X           X  X     X  X
 c X        X  X     X
 g X        X  X     X     X
-i X        X
+i X        X        X
 j X           X  X
 n X           X           X
 p          X  X  X

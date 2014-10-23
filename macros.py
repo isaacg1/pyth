@@ -1,4 +1,5 @@
 import copy
+import fractions
 import itertools
 import math
 import random
@@ -218,20 +219,34 @@ def head(a):
 
 
 # i. int, str
-def int_2(a, b=0):
-    if not b:
-        return float(a)
-    return int(a, b)
+def base_10(a, b):
+    if isinstance(a, str):
+        return int(a, b)
+    if isinstance(a, list):
+        return to_base_ten(a, b)
+    if isinstance(a, int):
+        return fractions.gcd(a, b)
+
+
+def to_base_ten(arb, base):
+    # Special cases
+    if base == 1:
+        return len(arb)
+    acc = 0
+    for digit in arb:
+        acc *= base
+        acc += digit
+    return acc
 
 
 # j. str.
 def join(a, b):
     if isinstance(a, int):
-        return convert_base(a, b)
+        return from_base_ten(a, b)
     return a.join(list(map(lambda N: str(N), b)))
 
 
-def convert_base(arb, base):
+def from_base_ten(arb, base):
     # Special cases
     if arb == 0:
         return [0]

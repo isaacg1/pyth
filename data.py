@@ -96,7 +96,7 @@ c_to_f = {
     'f': ('Pfilter(lambda T:', 2),
     'g': ('gte', 2),
     'h': ('head', 1),
-    'i': ('int_2', 2),
+    'i': ('base_10', 2),
     'j': ('join', 2),
     'l': ('Plen', 1),
     'm': ('Pmap(lambda d:', 2),
