@@ -1,20 +1,8 @@
-;First N fibbonacci numbers, N is input.
-J1VQAJZ+ZJJZ
-
-;Smoothest number in input range.
-hoePNUQ
-
-;List of primes under input
-f!tPTr2Q
-
-;Triangle of hash signs size input-1
-VQ*N\#
+;First 30 fibbonacci numbers.
+J1V30AJZ,+ZJJZ
 
 ;Quine
 jN*2]"jN*2]
 
-;Fibbonacci calculator. Demonstrates memoization on fib(90).
-LR?1<b2+ytby-b2y90
-
-;Check for repetition
-}z:+zz1_1
+;1000 digits of pi
+u+/*GHhyHy^T^T3r^3T1Z
