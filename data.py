@@ -24,9 +24,6 @@ c_to_s = {
     '#': (('while True:\n try:', '\n except:\n  break'), 0, 1),
     }
 
-# Support for the memoized decorator
-import collections
-
 
 # memoizes function calls, key = repr of input.
 class memoized(object):

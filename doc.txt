@@ -29,9 +29,9 @@ $ X N super-quote       Toggle non-parsing. Direct to python literal.
 
 : 3 N at-slice          Python slice. :abc => a[b:c]
 ; X N end-line          End everything. Infinite \.
-< 2 N less-than         Less than, proper subset.
+< 2 N less-than         Less than, subset, slice. < seq num is seq[:num].
 = 2 Y defined as        Assignment, using deepcopy. Cannot be strung.
-> 2 N greater-than      Greater than, proper superset.
+> 2 N greater-than      Greater than, superset, slice. > seq num is seq[num:].
 ? 3 N ternary           Python ternary. ?abc => a if b else c
 @ 2 N at                Index into str, list or dict.
 A 4 Y assign-pair       Aabcd => =,ab,cd. First 2 arguments must be variables.
