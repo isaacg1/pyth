@@ -23,11 +23,7 @@ import sys
 sys.setrecursionlimit(100000)
 
 
-# Run it!
-def run(python_code):
-    exec(python_code)
-
-
+# Parse it!
 def general_parse(code):
     code = prepend_parse(code)
     # Parsing
@@ -273,4 +269,4 @@ See opening comment in pyth.py for more info.""")
                 print('='*50)
                 print(py_code_line)
                 print('='*50)
-            run(py_code_line)
+            exec(py_code_line)
