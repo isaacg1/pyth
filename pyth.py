@@ -174,6 +174,9 @@ def statement_parse(active_char, rest_code, spacing):
 
 
 def replace_parse(active_char, rest_code, spacing):
+    # Special case for \\
+    if active_char == "\\" and rest_code[0] == "\\":
+        return parse('"\\\\"' + rest_code[1:], spacing)
     format_str, format_num = replacements[active_char]
     format_chars = tuple(rest_code[:format_num])
     new_code = format_str.format(*format_chars) + rest_code[format_num:]
