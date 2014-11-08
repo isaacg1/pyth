@@ -1,0 +1,60 @@
+#!/usr/bin/python3
+import cgi
+import cgitb
+import subprocess
+
+cgitb.enable()
+
+print("Content-type: text/html\n")
+
+print("""
+<html>
+
+<head><title>Pyth Compiler/Executor</title></head>
+
+<body>
+
+  <h3> Pyth Compiler/Executor </h3>""")
+
+form = cgi.FieldStorage()
+code_message = form.getvalue("code", "")
+input_message = form.getvalue("input", "")
+debug_message = form.getvalue("debug", "off")
+
+if debug_message == "on":
+    debug_on = True
+else:
+    debug_on = False
+
+pyth_code = code_message.split("\r\n")[0]
+pyth_process = subprocess.Popen(["/usr/bin/python3", "pyth.py","-cd" if debug_on else "-c", pyth_code],
+			        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+output, errors = pyth_process.communicate(input=bytearray(input_message,'utf-8'))
+if code_message:
+	print("<p>Output:</p>")
+
+print("<pre>")
+print(output.decode(), end='')
+
+if errors:
+    print(errors)
+
+print("""</pre>
+
+  <form id="code_input" method="post" action="index.py">
+    <p><input type="submit" value="Run!" style="background-color: #00FFFF"/></p>
+    <p>Debug on?: <input type="checkbox" name="debug"/></p>
+  </form>
+
+  <p>Code:</p>
+  <textarea name="code" form="code_input" cols="80" rows="10">{0}</textarea>
+
+  <p>Input:</p>
+  <textarea name="input" form="code_input" cols="80" rows="10">{2}</textarea>
+
+  <p>Code length: {1}</p>
+
+</body>
+
+</html>
+""".format(cgi.escape(code_message), len(code_message), cgi.escape(input_message)))
