@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 import cgi
 import cgitb
+import os
 import subprocess
+import time
 
 cgitb.enable()
 
@@ -34,10 +36,17 @@ if code_message:
 	print("<p>Output:</p>")
 
 print("<pre>")
-print(output.decode(), end='')
+for line in output.decode().split('\n'):
+    print(cgi.escape(line))
 
 if errors:
-    print(errors)
+    for line in errors.split('\n'):
+        print(cgi.escape(line))
+
+time_in_secs = os.path.getmtime('./pyth.py')
+time_in_python = time.gmtime(time_in_secs)
+formatted_time = time.strftime("%d %b %Y", time_in_python)
+
 
 print("""</pre>
 
@@ -54,7 +63,9 @@ print("""</pre>
 
   <p>Code length: {1}</p>
 
+  <p>Compiler last updated: {3} GMT</p>
+
 </body>
 
 </html>
-""".format(cgi.escape(code_message), len(code_message), cgi.escape(input_message)))
+""".format(cgi.escape(code_message), len(code_message), cgi.escape(input_message), formatted_time))
