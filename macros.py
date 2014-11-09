@@ -147,18 +147,18 @@ def div(a, b):
     return a.count(b)
 
 
-# a. All
-def Pand(a, b):
-    if isinstance(a, int):
-        return a & b
-    else:
-        intersection = set(a) & set(b)
-        if isinstance(a, str):
-            return ''.join(sorted(intersection))
-        if isinstance(a, list):
-            return list(sorted(intersection))
-        else:
-            return intersection
+## a. All
+#def Pand(a, b):
+#    if isinstance(a, int):
+#        return a & b
+#    else:
+#        intersection = set(a) & set(b)
+#        if isinstance(a, str):
+#            return ''.join(sorted(intersection))
+#        if isinstance(a, list):
+#            return list(sorted(intersection))
+#        else:
+#            return intersection
 b = "\n"
 
 
