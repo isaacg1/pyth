@@ -46,7 +46,7 @@ I S Y if                Python if.
 J 1 Y                   Variable. Autoinitializing. J=copy(_).
 K 1 Y                   Variable. Autoinitializing. K=_. For stringing.
 L S Y lambda            define y(b): return _.
-M 3 N The one after L   define a(G,H): return _.
+M 3 N The one after L   define g(G,H): return _.
 N 0 N                   Variable. '"'
 O 1 N randOm-chOice     random.choice(_). Uses range(int).
 P 1 N Prime/Pop         prime factorization on int. All but last on str, list.

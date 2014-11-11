@@ -120,7 +120,7 @@ replacements = {
     'V': ('FNU', 0),
     'A': ('=,{0}{1}', 2),
     'L': ('DybR', 0),
-    'M': ('DaGHR', 0),
+    'M': ('DgGHR', 0),
     }
 
 # Gives next function header to use - for filter, map, reduce.
