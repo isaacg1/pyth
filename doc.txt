@@ -33,7 +33,7 @@ $ X N super-quote       Toggle non-parsing. Direct to python literal.
 = 2 Y defined as        Assignment, using deepcopy. Cannot be strung.
 > 2 N greater-than      Greater than, superset, slice. > seq num is seq[num:].
 ? 3 N ternary           Python ternary. ?abc => a if b else c
-@ 2 N at                Index into str, list or dict.
+@ 2 N lookup            Lookup from str, list or dict. Modulo wrapping on list, str.
 A 4 Y assign-pair       Aabcd => =,ab,cd. First 2 arguments must be variables.
 B 0 Y break             Python break. Implicit ).
 C 1 N chr               char -> int, int -> char. Zip together list of lists.
@@ -57,7 +57,7 @@ T 0 N ten               Variable. 10
 U 1 N unary-range       Python unary range. Splats 2 tuples. U_=Ul_ on str, list.
 V S Y                   Loop times equal to input. Equivalent to FNU
 W S Y while             Python while.
-X 1 Y exec              Python exec, but with pyth parsing.
+X 1 Y indeXed assign    Indexed assignment, returns updated. Only returns on str, mod-wrap on list.
 Y 0 N                   Variable. []
 Z 0 N zero              Variable. 0
 [ X N list              List constructor. Unbounded.

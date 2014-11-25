@@ -19,6 +19,13 @@ def Pnot(a):
     return not a
 
 
+# @.
+def lookup(a, b):
+    if isinstance(a, dict):
+        return a[b]
+    return a[b % len(a)]
+
+
 # %. int, str.
 def mod(a, b):
     if isinstance(a, int) and not isnum(b):
@@ -115,7 +122,7 @@ def Plist(*a):
 # :. list.
 def at_slice(a, b, c):
     if isinstance(b, str):
-        if not c:
+        if not isinstance(c, str):
             return bool(re.search(b, a))
         else:
             return re.sub(b, c, a)
@@ -396,6 +403,18 @@ def urange(a):
     if isinstance(a, tuple) and len(a) == 2:
         return list(range(a[0], a[1]))
     return list(range(len(a)))
+
+
+# X.
+def assign_at(a, b, c):
+    if isinstance(a, dict):
+        a[b] = c
+        return a
+    if isinstance(a, list):
+        a[b % len(a)] = c
+        return a
+    if isinstance(a, str):
+        return a[:b % len(a)] + str(c) + a[(b % len(a))+1:]
 
 
 # x. int, str, list.

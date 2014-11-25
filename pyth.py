@@ -201,7 +201,7 @@ def prepend_parse(code):
 # safe infix.
 def add_print(code):
     if len(code) > 0:
-        if (code[0] not in 'p ' and code[0] in c_to_f) or \
+        if (code[0] not in 'p X' and code[0] in c_to_f) or \
             code[0] in variables or \
             code[0] in "@&|]}?,\\\".0123456789," or \
             ((code[0] in 'JK' or code[0] in prepend) and

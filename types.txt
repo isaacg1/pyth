@@ -35,7 +35,7 @@ Arity 2
 < X        X  X     X     X
 > X        X  X     X     X
 / X           X     X  X  X
-a X           X  X     X  X
+a                   X  X  X
 c X        X  X     X
 g X        X  X     X     X
 i X        X        X
@@ -48,6 +48,3 @@ x X           X     X  X  X
 
 Arity 3
 :
-
-Wanted:
-GCD
