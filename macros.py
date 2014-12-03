@@ -23,7 +23,17 @@ def Pnot(a):
 def lookup(a, b):
     if isinstance(a, dict):
         return a[b]
-    return a[b % len(a)]
+    else:
+        if isinstance(b, int):
+            return a[b % len(a)]
+        else:
+            intersection = filter(lambda b_elm: b_elm in a, b)
+            if isinstance(a, str):
+                return ''.join(sorted(intersection))
+            if isinstance(a, list):
+                return list(sorted(intersection))
+            else:
+                return intersection
 
 
 # %. int, str.

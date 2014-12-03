@@ -33,7 +33,7 @@ $ X N super-quote       Toggle non-parsing. Direct to python literal.
 = 2 Y defined as        Assignment, using deepcopy. Cannot be strung.
 > 2 N greater-than      Greater than, superset, slice. > seq num is seq[num:].
 ? 3 N ternary           Python ternary. ?abc => a if b else c
-@ 2 N lookup            Lookup from str, list or dict. Modulo wrapping on list, str.
+@ 2 N lookup            Lookup from str, list or dict. Modulo wrapping on list, str. Intersection.
 A 4 Y assign-pair       Aabcd => =,ab,cd. First 2 arguments must be variables.
 B 0 Y break             Python break. Implicit ).
 C 1 N chr               char -> int, int -> char. Zip together list of lists.

@@ -28,6 +28,7 @@ I,S,L
 Arity 2
  II IS IL SI SS SL LI LS LL
 % X  X  X  X  X  X  
+@          X  X  X  X  X  X
 ^ X        X        X
 * X  X  X  X        X  
 - X  X  X     X  X     X  X
