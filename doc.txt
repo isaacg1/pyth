@@ -58,6 +58,7 @@ U 1 N unary-range       Python unary range. Splats 2 tuples. U_=Ul_ on str, list
 V S Y                   Loop times equal to input. Equivalent to FNU
 W S Y while             Python while.
 X 1 Y indeXed assign    Indexed assignment, returns updated. Only returns on str, mod-wrap on list.
+                        On <str><str>_ or <list><list>_, where _ is <str> or <list>, performs translation.
 Y 0 N                   Variable. []
 Z 0 N zero              Variable. 0
 [ X N list              List constructor. Unbounded.

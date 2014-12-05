@@ -417,14 +417,26 @@ def urange(a):
 
 # X.
 def assign_at(a, b, c):
+    # Assign at
     if isinstance(a, dict):
         a[b] = c
         return a
-    if isinstance(a, list):
-        a[b % len(a)] = c
-        return a
-    if isinstance(a, str):
-        return a[:b % len(a)] + str(c) + a[(b % len(a))+1:]
+    if isnum(b):
+        if isinstance(a, list):
+            a[b % len(a)] = c
+            return a
+        if isinstance(a, str):
+            return a[:b % len(a)] + str(c) + a[(b % len(a))+1:]
+    # Translate
+    if isinstance(a, str) and isinstance(b, str) or \
+       isinstance(a, list) and isinstance(b, list):
+        def trans_func(element):
+            return c[b.index(element)] if element in b else element
+        translation = map(lambda element: trans_func, a)
+        if isinstance(c, str):
+            return ''.join(translation)
+        else:
+            return list(translation)
 
 
 # x. int, str, list.
