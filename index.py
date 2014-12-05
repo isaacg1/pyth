@@ -29,7 +29,7 @@ else:
     debug_on = False
 
 pyth_code = code_message.split("\r\n")[0]
-pyth_process = subprocess.Popen(["/usr/bin/python3", "pyth.py","-cd" if debug_on else "-c", pyth_code],
+pyth_process = subprocess.Popen(["/usr/bin/python3", "safe_pyth.py","-cd" if debug_on else "-c", pyth_code],
 			        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 output, errors = pyth_process.communicate(input=bytearray(input_message,'utf-8'))
 if code_message:
@@ -43,7 +43,7 @@ if errors:
     for line in errors.split('\n'):
         print(cgi.escape(line))
 
-time_in_secs = os.path.getmtime('./pyth.py')
+time_in_secs = os.path.getmtime('./safe_pyth.py')
 time_in_python = time.gmtime(time_in_secs)
 formatted_time = time.strftime("%d %b %Y", time_in_python)
 
