@@ -11,6 +11,15 @@ class PythParseError(Exception):
             (self.active_char, len(self.rest_code) + 1)
 
 
+class UnsafeInputError(Exception):
+    def __init__(self, active_char, rest_code):
+        self.active_char = active_char
+        self.rest_code = rest_code
+
+    def __str__(self):
+        return "%s is unsafe, %d from the end." % \
+            (self.active_char, len(self.rest_code) + 1)
+	
 def num_parse(active_char, rest_code):
     output = active_char
     while len(rest_code) > 0 \
