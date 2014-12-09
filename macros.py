@@ -432,7 +432,7 @@ def assign_at(a, b, c):
        isinstance(a, list) and isinstance(b, list):
         def trans_func(element):
             return c[b.index(element)] if element in b else element
-        translation = map(lambda element: trans_func, a)
+        translation = map(trans_func, a)
         if isinstance(c, str):
             return ''.join(translation)
         else:
