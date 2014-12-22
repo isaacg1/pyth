@@ -39,11 +39,11 @@ def restricted_eval(a):
                 return int(thing)
             except ValueError:
                 print("Illegal input to restricted eval.")
-                raise 
+                raise
+
     if "," in a:
         if a[0] == '[':
             pieces = a[1:-1].split(',')
-            print(pieces)
             return list(float_or_int_or_str(piece) for piece in pieces)
         else:
             pieces = a.split(',')
@@ -56,7 +56,7 @@ def restricted_eval(a):
 
 
 c_to_f['v'] = ('restricted_eval', 1)
-            
+
 
 # Parse it!
 def general_parse(code):
@@ -307,24 +307,32 @@ See opening comment in pyth.py for more info.""")
                 print('='*50)
                 print(py_code_line)
                 print('='*50)
-            
-            # to fix most security problems, we will disable the use of unnecessary parts of the python
-            # language which should never be needed for golfing code. (eg, import statements)
-            
-            code_to_remove_tools = "del __builtins__.__dict__['__import__']\n"  # remove import capability
-            code_to_remove_tools += "del sys\n"                                 # remove system tools
-            code_to_remove_tools += "del __builtins__.__dict__['open']\n"       # remove capability to read/write to files
-            
-            # while this is hardly an exaustive list, and while blacklisting in general
-            # should not be used for security, it does solve many security problems.
+
+            # to fix most security problems, we will disable the use of
+            # unnecessary parts of the python
+            # language which should never be needed for golfing code.
+            # (eg, import statements)
+
+            code_to_remove_tools = "del __builtins__.__dict__['__import__']\n"
+            # remove import capability
+            code_to_remove_tools += "del sys\n"
+            # remove system tools
+            code_to_remove_tools += "del __builtins__.__dict__['open']\n"
+            # remove capability to read/write to files
+
+            # while this is hardly an exaustive list,
+            # and while blacklisting in general
+            # should not be used for security, it does
+            # solve many security problems.
             exec(code_to_remove_tools + py_code_line)
             # ^ is still evil.
-            
-            # Honestly, I'd just whitelist your custom functions and discard anything
+
+            # Honestly, I'd just whitelist your custom functions
+            # and discard anything
             # that doesn't match the whitelist of functions.
-            
+
             # Anyway, hope you don't mind me patching things up here.
-            # Email any questions to perpetuallyadapting@gmail.com
-            
-            # PS: Security shouldn't be a black mark to Pyth. I think it's a really neat idea!
-            
+            # Email any questions to
+
+            # PS: Security shouldn't be a black mark to Pyth.
+            # I think it's a really neat idea!
