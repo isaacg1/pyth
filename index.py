@@ -16,7 +16,7 @@ print("""
 
 <body>
 
-  <h3> <ahref="https://github.com/isaacg1/pyth">Pyth</a>
+  <h3> <a href="https://github.com/isaacg1/pyth">Pyth</a>
   Compiler/Executor </h3>""")
 
 form = cgi.FieldStorage()
