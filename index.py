@@ -14,7 +14,7 @@ print("""
 
 <head>
     <title>Pyth Compiler/Executor</title>
-    <link rel="shortcut icon" href="/favicon2.ico" />
+    <link rel="shortcut icon" href="/pyth/favicon2.ico" />
 </head>
 
 <body>
