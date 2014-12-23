@@ -363,13 +363,10 @@ def Prange(a, b=None):
         if b == 7:
             return [eval(part) for part in a.split()]
     if isinstance(a, int):
-        if b:
-            if a < b:
-                return list(range(a, b))
-            else:
-                return list(range(b, a))[::-1]
+        if a < b:
+            return list(range(a, b))
         else:
-            return list(range(a))
+            return list(range(b, a))[::-1]
 
 
 # s. int, str, list.
