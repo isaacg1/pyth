@@ -16,7 +16,8 @@ print("""
 
 <body>
 
-  <h3> Pyth Compiler/Executor </h3>""")
+  <h3> <ahref="https://github.com/isaacg1/pyth">Pyth</a>
+  Compiler/Executor </h3>""")
 
 form = cgi.FieldStorage()
 code_message = form.getvalue("code", "")
@@ -29,11 +30,18 @@ else:
     debug_on = False
 
 pyth_code = code_message.split("\r\n")[0]
-pyth_process = subprocess.Popen(["/usr/bin/python3", "safe_pyth.py","-cd" if debug_on else "-c", pyth_code],
-			        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-output, errors = pyth_process.communicate(input=bytearray(input_message,'utf-8'))
+pyth_process =
+subprocess.Popen(["/usr/bin/python3",
+                  "safe_pyth.py",
+                  "-cd" if debug_on else "-c",
+                  pyth_code],
+                 stdin=subprocess.PIPE,
+                 stdout=subprocess.PIPE,
+                 stderr=subprocess.STDOUT)
+output, errors =
+pyth_process.communicate(input=bytearray(input_message, 'utf-8'))
 if code_message:
-	print("<p>Output:</p>")
+    print("<p>Output:</p>")
 
 print("<pre>")
 for line in output.decode().split('\n'):
@@ -51,8 +59,8 @@ formatted_time = time.strftime("%d %b %Y", time_in_python)
 print("""</pre>
 
   <form id="code_input" method="post" action="index.py">
-    <p><input type="submit" value="Run!" style="background-color: #00FFFF"/></p>
-    <p>Debug on?: <input type="checkbox" name="debug"/></p>
+   <p><input type="submit" value="Run!" style="background-color: #00FFFF"/></p>
+   <p>Debug on?: <input type="checkbox" name="debug"/></p>
   </form>
 
   <p>Code:</p>
@@ -68,4 +76,7 @@ print("""</pre>
 </body>
 
 </html>
-""".format(cgi.escape(code_message), len(code_message), cgi.escape(input_message), formatted_time))
+""".format(cgi.escape(code_message),
+           len(code_message),
+           cgi.escape(input_message),
+           formatted_time))
