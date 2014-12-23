@@ -12,7 +12,10 @@ print("Content-type: text/html\n")
 print("""
 <html>
 
-<head><title>Pyth Compiler/Executor</title></head>
+<head>
+    <title>Pyth Compiler/Executor</title>
+    <link rel="shortcut icon" href="/favicon2.ico" />
+</head>
 
 <body>
 
