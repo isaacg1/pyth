@@ -31,7 +31,7 @@ setrecursionlimit(100000)
 def restricted_eval(a):
     def float_or_int_or_str(thing):
         if '"' in thing or "'" in thing:
-            return thing[1:-1]
+            return thing.strip()[1:-1]
         elif '.' in thing:
             return float(thing)
         else:
@@ -43,16 +43,16 @@ def restricted_eval(a):
 
     if "," in a:
         if a[0] == '[':
-            pieces = a[1:-1].split(',')
+            pieces = a.strip()[1:-1].split(',')
             return list(float_or_int_or_str(piece) for piece in pieces)
         else:
             pieces = a.split(',')
             return tuple(float_or_int_or_str(piece) for piece in pieces)
     else:
         if a[0] == '[':
-            return [float_or_int_or_str(a[1:-1])]
+            return [float_or_int_or_str(a.strip()[1:-1])]
         else:
-            return float_or_int_or_str(a)
+            return float_or_int_or_str(a.strip())
 
 
 c_to_f['v'] = ('restricted_eval', 1)
