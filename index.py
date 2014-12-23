@@ -30,16 +30,16 @@ else:
     debug_on = False
 
 pyth_code = code_message.split("\r\n")[0]
-pyth_process =
-subprocess.Popen(["/usr/bin/python3",
-                  "safe_pyth.py",
-                  "-cd" if debug_on else "-c",
-                  pyth_code],
-                 stdin=subprocess.PIPE,
-                 stdout=subprocess.PIPE,
-                 stderr=subprocess.STDOUT)
-output, errors =
-pyth_process.communicate(input=bytearray(input_message, 'utf-8'))
+pyth_process = \
+    subprocess.Popen(["/usr/bin/python3",
+                      "safe_pyth.py",
+                      "-cd" if debug_on else "-c",
+                      pyth_code],
+                     stdin=subprocess.PIPE,
+                     stdout=subprocess.PIPE,
+                     stderr=subprocess.STDOUT)
+output, errors = \
+    pyth_process.communicate(input=bytearray(input_message, 'utf-8'))
 if code_message:
     print("<p>Output:</p>")
 
