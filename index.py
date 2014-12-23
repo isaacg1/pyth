@@ -63,7 +63,7 @@ print("""</pre>
 
   <form id="code_input" method="post" action="index.py">
    <p><input type="submit" value="Run!" style="background-color: #00FFFF"/></p>
-   <p>Debug on?: <input type="checkbox" name="debug"/></p>
+   <p>Debug on?: <input type="checkbox" name="debug" {4}/></p>
   </form>
 
   <p>Code:</p>
@@ -82,4 +82,5 @@ print("""</pre>
 """.format(cgi.escape(code_message),
            len(code_message),
            cgi.escape(input_message),
-           formatted_time))
+           formatted_time,
+           'checked="checked"' if debug_on else ''))
