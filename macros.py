@@ -301,7 +301,7 @@ def ne(a, b):
 # O. int, str, list
 def rchoice(a):
     if isinstance(a, int):
-        return random.choice(Prange(a))
+        return random.choice(urange(a))
     return random.choice(list(a))
 
 
