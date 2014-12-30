@@ -67,7 +67,7 @@ Z 0 N zero              Variable. 0
 ^ 2 N power             Python pow, cartesian product with # of repeats.
 _ 1 N neg               Negation. Str and list reverse.
 ` 1 N repr              Python repr.
-a 2 N and-2             Bitwise and or setwise and. Returns leading type.
+a 2 N append            Python .append(). First arguement must be a list.
 b 0 N lineBreak         Variable. "\n"
 c 2 N chop              chop str/list every n elements. Also str.split, fdiv.
 d 0 N                   Variable. " "
