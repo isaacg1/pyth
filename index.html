@@ -7,12 +7,22 @@
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js'></script>
     <link rel="shortcut icon" href="/pyth/favicon2.ico" />
     <style>
+	.bottom-row {
+	    float: right;
+	}
+	textarea#code {
+	    margin-bottom: 25px;
+	    margin-top: 15px;
+	}
+	textarea#input {
+	    margin-bottom: 5px;
+	}
 	pre.scroll {
 	    max-height: 20%;
 	    overflow: auto;
 	}
         table.scroll{
-            height: 80%;
+            height: 75%;
             overflow: auto;
         }
         .scroll tbody {
@@ -39,7 +49,8 @@
             overflow: auto;
         }
         .search-bar {
-            margin-bottom: 30px;
+	    margin-top: 25px;
+            margin-bottom: 15px;
             padding-left: 0px;
             margin-left: 0px;
         }
@@ -57,26 +68,26 @@
             
             <div class='col-md-5'>
 		<div id='output'></div>
-                <p><button class='btn btn-primary' onclick='submit_code()'>Run It!</button></p>
-                <p>Debug on?: <input id='debug' type="checkbox" name="debug"/></p>
 
-                <p>Code:</p>
-                <textarea id='code' onkeyup='$("#len").html("Code length: "+this.value.length)' name="code" form="code_input" class='form-control' rows="7"></textarea>
+	        <button class='btn btn-primary' onclick='submit_code()'>Run Program!</button>
+                <textarea id='code' placeholder='Code' onkeyup='$("#len").html("Code length: "+this.value.length)' name="code" form="code_input" class='form-control' rows="7"></textarea>
 
-                <p>Input:</p>
-                <textarea id='input' name="input" form="code_input" class='form-control' rows="7"></textarea>
+                <textarea id='input' name="input" placeholder='Input' form="code_input" class='form-control' rows="7"></textarea>
+
+                <div class='bottom-row'>
+                    Debug on?: <input id='debug' type="checkbox" name="debug"/>
+		</div><br/><br/>
 
                 <p id='len'>Code length: 0</p>
-
                 <p>Compiler last updated: formatted_time GMT</p>
             </div>
             
             <div class='col-md-1'></div>
             
             <div class='col-md-6 docs'>
-                
+                <h4>Pyth Character Reference</h4>
                 <div class='search-bar input-group'>
-                    <input class='form-control' placeholder='Search the Docs' onkeyup='term=this.value;search()'>
+                    <input class='form-control' placeholder='Search the Characters' onkeyup='term=this.value;search()'>
                     <span class='input-group-btn'>
                         <button id='search-by' type='button' class='btn btn-default dropwdown-toggle' data-toggle='dropdown' aria-expanded='false'>
                             Symbol <span class="caret"></span>
@@ -118,7 +129,7 @@
         }
         
         function submit_code() {
-            $.get('index.py', {mode: 2, code: $('#code').val(), input: $('#input').val(), debug: $('#debug').is(':checked')}, function(data) {
+            $.get('index.py', {mode: 2, code: $('#code').val(), input: $('#input').val(), debug: $('#debug').is(':checked')?1:0}, function(data) {
 		$('#output').html(data)
             })
         }

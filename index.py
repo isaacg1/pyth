@@ -23,12 +23,7 @@ elif mode==2:
     resp=""
     code_message = form.getvalue("code", "")
     input_message = form.getvalue("input", "")
-    debug_message = form.getvalue("debug", "off")
-
-    if debug_message == "on":
-        debug_on = True
-    else:
-        debug_on = False
+    debug_on = int(form.getvalue("debug", 0))
 
     pyth_code = code_message.split("\r\n")[0]
     pyth_process = \
