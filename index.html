@@ -57,7 +57,7 @@
         table tbody, table thead {
             display: block;
         }
-        
+
     </style>
 </head>
 
@@ -65,7 +65,7 @@
     <div class='container'>
         <h3> <a href="https://github.com/isaacg1/pyth">Pyth</a> Compiler/Executor </h3><br/>
         <div class='row'>
-            
+
             <div class='col-md-5'>
 		<div id='output'></div>
 
@@ -79,11 +79,11 @@
 		</div><br/><br/>
 
                 <p id='len'>Code length: 0</p>
-                <p>Compiler last updated: formatted_time GMT</p>
+				<p>Compiler last updated: {{formatted_time}} GMT</p>
             </div>
-            
+
             <div class='col-md-1'></div>
-            
+
             <div class='col-md-6 docs'>
                 <h4>Pyth Character Reference</h4>
                 <div class='search-bar input-group'>
@@ -101,7 +101,7 @@
                         </ul>
                     </span>
                 </div>
-                                
+
                     <table class='scroll full table table-hover table-condensed'>
                         <thead>
                             <tr>
@@ -115,25 +115,25 @@
                         </tbody>
                     </table>
             </div>
-            
-        </div>  
+
+        </div>
     </div>
     <script>
         field=0
         term=''
-        
+
         function field_updated(type, display) {
             $('#search-by').html(display+' <span class="caret"></span>')
             field=type
             search()
         }
-        
+
         function submit_code() {
-            $.get('index.py', {mode: 2, code: $('#code').val(), input: $('#input').val(), debug: $('#debug').is(':checked')?1:0}, function(data) {
+            $.get('/', {mode: 2, code: $('#code').val(), input: $('#input').val(), debug: $('#debug').is(':checked')?1:0}, function(data) {
 		$('#output').html(data)
             })
         }
-        
+
         function search() {
             $('#docs tr').each(function(index) {
                 a=this.children[field].innerHTML
@@ -146,8 +146,8 @@
                 }
             })
         }
-        
-        $.get('./index.py', {'mode': 1}, function(data) {
+
+        $.get('/', {'mode': 1}, function(data) {
             data=data.split('\n')
             for (i=0;i<data.length;i++) {
                 data[i]=data[i].replace(' ', '</td><td``class="arity">')
