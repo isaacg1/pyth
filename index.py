@@ -27,7 +27,8 @@ elif mode==2:
 
     pyth_code = code_message.split("\r\n")[0]
     pyth_process = \
-        subprocess.Popen(["/usr/bin/python3",
+        subprocess.Popen(["/usr/bin/env",
+                          "python3",
                           "safe_pyth.py",
                           "-cd" if debug_on else "-c",
                           pyth_code],
