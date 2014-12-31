@@ -1,0 +1,165 @@
+<html>
+
+<head>
+    <title>Pyth Compiler/Executor</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js'></script>
+    <link rel="shortcut icon" href="/pyth/favicon2.ico" />
+    <style>
+	.bottom-row {
+	    float: right;
+	}
+	textarea#code {
+	    margin-bottom: 25px;
+	    margin-top: 15px;
+	}
+	textarea#input {
+	    margin-bottom: 5px;
+	}
+	pre.scroll {
+	    max-height: 20%;
+	    overflow: auto;
+	}
+        table.scroll{
+            height: 75%;
+            overflow: auto;
+        }
+        .scroll tbody {
+            height: 80%;
+            overflow: auto;
+        }
+        .full {
+            width: 100%;
+        }
+        .symbol {
+            width: 15%;
+        }
+        .arity {
+            width: 10%;
+        }
+        .starts {
+            width: 10%;
+        }
+        .desc {
+            width: 25%;
+        }
+        .detail {
+            width: 40%;
+            overflow: auto;
+        }
+        .search-bar {
+	    margin-top: 25px;
+            margin-bottom: 15px;
+            padding-left: 0px;
+            margin-left: 0px;
+        }
+        table tbody, table thead {
+            display: block;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div class='container'>
+        <h3> <a href="https://github.com/isaacg1/pyth">Pyth</a> Compiler/Executor </h3><br/>
+        <div class='row'>
+            
+            <div class='col-md-5'>
+		<div id='output'></div>
+
+	        <button class='btn btn-primary' onclick='submit_code()'>Run Program!</button>
+                <textarea id='code' placeholder='Code' onkeyup='$("#len").html("Code length: "+this.value.length)' name="code" form="code_input" class='form-control' rows="7"></textarea>
+
+                <textarea id='input' name="input" placeholder='Input' form="code_input" class='form-control' rows="7"></textarea>
+
+                <div class='bottom-row'>
+                    Debug on?: <input id='debug' type="checkbox" name="debug"/>
+		</div><br/><br/>
+
+                <p id='len'>Code length: 0</p>
+                <p>Compiler last updated: formatted_time GMT</p>
+            </div>
+            
+            <div class='col-md-1'></div>
+            
+            <div class='col-md-6 docs'>
+                <h4>Pyth Character Reference</h4>
+                <div class='search-bar input-group'>
+                    <input class='form-control' placeholder='Search the Characters' onkeyup='term=this.value;search()'>
+                    <span class='input-group-btn'>
+                        <button id='search-by' type='button' class='btn btn-default dropwdown-toggle' data-toggle='dropdown' aria-expanded='false'>
+                            Symbol <span class="caret"></span>
+                        </button>
+                        <ul class='dropdown-menu dropdown-menu-right' role='menu'>
+                            <li><a href="javascript:field_updated(0, 'Symbol')">Symbol</a></li>
+                            <li><a href="javascript:field_updated(1, 'Arity')">Arity</a></li>
+                            <li><a href="javascript:field_updated(2, 'Starts Line')">Starts Line</a></li>
+                            <li><a href="javascript:field_updated(3, 'Mnemonic')">Mnemonic</a></li>
+                            <li><a href="javascript:field_updated(4, 'Details')">Details</a></li>
+                        </ul>
+                    </span>
+                </div>
+                                
+                    <table class='scroll full table table-hover table-condensed'>
+                        <thead>
+                            <tr>
+                            <th class='symbol'>Symbol</th>
+                            <th class='arity'>Arity</th>
+                            <th class='starts'>Starts</th>
+                            <th class='desc'>Mnemonic</th>
+                            <th class='details'>Details</th>
+                        </thead>
+                        <tbody id='docs'>
+                        </tbody>
+                    </table>
+            </div>
+            
+        </div>  
+    </div>
+    <script>
+        field=0
+        term=''
+        
+        function field_updated(type, display) {
+            $('#search-by').html(display+' <span class="caret"></span>')
+            field=type
+            search()
+        }
+        
+        function submit_code() {
+            $.get('index.py', {mode: 2, code: $('#code').val(), input: $('#input').val(), debug: $('#debug').is(':checked')?1:0}, function(data) {
+		$('#output').html(data)
+            })
+        }
+        
+        function search() {
+            $('#docs tr').each(function(index) {
+                a=this.children[field].innerHTML
+                if (field>0) a=a.toLowerCase()
+                if (~a.indexOf(term.toLowerCase())) {
+                    this.style.display='table-row'
+                }
+                else {
+                    this.style.display='none'
+                }
+            })
+        }
+        
+        $.get('./index.py', {'mode': 1}, function(data) {
+            data=data.split('\n')
+            for (i=0;i<data.length;i++) {
+                data[i]=data[i].replace(' ', '</td><td``class="arity">')
+                data[i]=data[i].replace(' ', '</td><td``class="starts">')
+                data[i]=data[i].replace(' ', '</td><td``class="desc">')
+                data[i]=data[i].replace(' ', '</td><td``class="detail">')
+                data[i]=data[i].replace(/``/g, ' ')
+                data[i]=data[i].replace('blahblah', ' ')
+                $('#docs').append('<tr class="full"><td class="symbol">'+data[i]+'</td></tr>')
+            }
+        })
+    </script>
+</body>
+
+</html>
