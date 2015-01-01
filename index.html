@@ -129,7 +129,7 @@
         }
 
         function submit_code() {
-            $.get('/', {mode: 2, code: $('#code').val(), input: $('#input').val(), debug: $('#debug').is(':checked')?1:0}, function(data) {
+            $.get('/submit', {code: $('#code').val(), input: $('#input').val(), debug: $('#debug').is(':checked')?1:0}, function(data) {
 		$('#output').html(data)
             })
         }
@@ -147,7 +147,7 @@
             })
         }
 
-        $.get('/', {'mode': 1}, function(data) {
+        $.get('/web-docs.txt', function(data) {
             data=data.split('\n')
             for (i=0;i<data.length;i++) {
                 data[i]=data[i].replace(' ', '</td><td``class="arity">')
