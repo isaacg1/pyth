@@ -129,7 +129,7 @@
         }
 
         function submit_code() {
-            $.get('/submit', {code: $('#code').val(), input: $('#input').val(), debug: $('#debug').is(':checked')?1:0}, function(data) {
+            $.post('/submit', {code: $('#code').val(), input: $('#input').val(), debug: $('#debug').is(':checked')?1:0}, function(data) {
 		$('#output').html(data)
             })
         }

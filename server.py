@@ -13,13 +13,13 @@ def root():
 	formatted_time = time.strftime("%d %b %Y", time_in_python)
 	return render_template('index.html', formatted_time=formatted_time)
 
-@app.route('/submit')
+@app.route('/submit', methods=['POST'])
 def submit():
 	resp = ''
 
-	code_message = request.args.get('code', '')
-	input_message = request.args.get('input', '')
-	debug_on = int(request.args.get('debug'), 0)
+	code_message = request.form.get('code', '')
+	input_message = request.form.get('input', '')
+	debug_on = int(request.form.get('debug'), 0)
 
 	pyth_code = code_message.split("\r\n")[0]
 	pyth_process = \
