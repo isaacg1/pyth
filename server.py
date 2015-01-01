@@ -42,5 +42,9 @@ def root():
 
 		return Response(resp)
 
+@app.route('/<path>')
+def other(path):
+	return app.send_static_file(path)
+
 if __name__ == '__main__':
 	app.run(debug=True)
