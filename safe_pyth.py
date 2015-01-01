@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 ############################################################################
 # This python program is an interpreter for the pyth programming language. #
 # It is still in development - expect new versions often.                  #
