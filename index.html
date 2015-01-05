@@ -52,6 +52,9 @@
 			#search-type-menu a {
 				cursor: pointer;
 			}
+			#output-container {
+				display: none;
+			}
 		</style>
 	</head>
 	<body>
@@ -60,7 +63,10 @@
 			<br>
 			<div class="row">
 				<div class="col-md-5">
-					<div id="output"></div>
+					<div id="output-container">
+						Output:
+						<pre class="scroll" id="output"></pre>
+					</div>
 					<button id="run-button" class="btn btn-primary">Run Program!</button>
 					<textarea id="code" placeholder="Code" class="form-control" rows="7"></textarea>
 					<textarea id="input" placeholder="Input" class="form-control" rows="7"></textarea>
@@ -101,7 +107,8 @@
 						input: $('#input').val(),
 						debug: $('#debug').is(':checked')? 1: 0
 					}, function(data) {
-						$('#output').html(data);
+						$('#output').text(data);
+						$('#output-container').show();
 					});
 				});
 
