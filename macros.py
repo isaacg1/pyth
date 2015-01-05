@@ -289,6 +289,8 @@ def Plen(a):
 
 # m. Single purpose.
 def Pmap(a, b):
+    if isinstance(b, int):
+        return list(map(a, range(b)))
     return list(map(a, b))
 N = '"'
 
@@ -335,7 +337,6 @@ def primes_upper(a):
 def Pprint(a, b=""):
     print(b, end=a)
     return 0
-# Q. Unimplemented.
 
 
 # q. All.
@@ -434,6 +435,14 @@ def assign_at(a, b, c):
             return ''.join(translation)
         else:
             return list(translation)
+    # += in a list, X<int><list><any>
+    if isinstance(b, list):
+        b[a % len(b)] += c
+        return b
+    # += in a dict, X<any><dict><any>
+    if isinstance(b, dict):
+        b[a] += c
+        return b
 
 
 # x. int, str, list.

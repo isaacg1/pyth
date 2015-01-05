@@ -8,18 +8,18 @@ allow multiple lines.
 
 Char, arity, begins line, mnemonic, details. When in doubt, similar to python.
 
-  1 N blank             Suppress print, separator.
-! 1 N not               Logical not.
-" X N quote             Begins and ends sring literals. Optional at EOL.
-# S Y                   Loop until exception, then break. Tricky to debug.
-$ X N super-quote       Toggle non-parsing. Direct to python literal.
-% 2 N mod               Mod and string formatting. Also does a[::b].
+  1 N blank             Primarily used to separate numeric literals. Also suppresses printing, which is default on.
+! 1 N not               Logical not. Uses Python's truthy/falsy.
+" X N quote             Begins and ends sring literals. Optional at end of line.
+# S Y                   "While True:" loop. On error, suppresses error and breaks our of loop.
+$ X N super-quote       Begins and ends Python literals. A Python literal is placed directly into the compiled Python output. Counts as one argument for arity purposes.
+% 2 N mod               On integers, modulous. On string, string formatting. %<int><seq> is a modular slice, <seq>[::<int>] in Python.
 & 2 N and               Logical and. (short circuiting)
-' 0 N quote-file        Cat file, return as list of lines.
+' 0 N quote-file        Cat file, return file split on newlines. Take file neame as line of STDIN.
 ( I N tuple             Tuple constructor. Unbounded.
-) X N close-paren       End argument. Ends unboundeds.
+) X N close-paren       Ends functions, statements. Marks last line of statement, last arg. of function.
 * 2 N times             Like python, multiplication, replication.
-+ 2 N plus              Addition, concatenation. Append or prepend to list.
++ 2 N plus              Addition, concatenation. Set union. Append or prepend nonlist to list.
 , 2 N pair              2 entry tuple.
 - 2 N minus             Subtraction, setwise difference. Maintains order.
 . X N point             Numeric literals.
@@ -59,6 +59,7 @@ V S Y                   Loop times equal to input. Equivalent to FNU
 W S Y while             Python while.
 X 1 Y indeXed assign    Indexed assignment, returns updated. Only returns on str, mod-wrap on list.
                         On <str><str>_ or <list><list>_, where _ is <str> or <list>, performs translation.
+                        On <int><list> or <any><dict>, performs indexed +=. 
 Y 0 N                   Variable. []
 Z 0 N zero              Variable. 0
 [ X N list              List constructor. Unbounded.
@@ -79,7 +80,7 @@ i 2 N int-2             Convert str or list from given base to base 10, or gcd.
 j 2 N join              Python join, or convert to base. Output in list form.
 k 0 N                   Variable. ""
 l 1 N len               Python len. log base 2 on nums.
-m 2 N map               Python 2 map. implicit lambda, d -> k -> b ->
+m 2 N map               Python 2 map. Int as second arg -> range(<int>). implicit lambda, d -> k -> b ->
 n 2 N not-equal         Python !=.
 o 2 N order-by          Python sorted, key=. implicit lambda, N -> Z ->
 p 2 N print             Python print, end=. Implicitly called with "\n".
