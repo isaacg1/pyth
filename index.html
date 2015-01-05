@@ -1,165 +1,192 @@
+<!doctype html>
 <html>
+	<head>
+		<title>Pyth Compiler/Executor</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+		<link rel="shortcut icon" href="/favicon2.ico">
+		<style type="text/css">
+			.bottom-row {
+				float: right;
+			}
+			#code {
+				margin-bottom: 25px;
+				margin-top: 15px;
+			}
+			#input {
+				margin-bottom: 5px;
+			}
+			pre.scroll {
+				max-height: 20%;
+				overflow: auto;
+			}
+			#table-container {
+				overflow: auto;
+			}
+			.full {
+				width: 100%;
+			}
+			.Char {
+				width: 15%;
+			}
+			.Arity {
+				width: 10%;
+			}
+			.Starts {
+				width: 10%;
+			}
+			.Mnemonic {
+				width: 25%;
+			}
+			.Details {
+				width: 40%;
+				overflow: auto;
+			}
+			.search-bar {
+				margin-top: 25px;
+				margin-bottom: 15px;
+				padding-left: 0px;
+				margin-left: 0px;
+			}
+			#search-type-menu a {
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h3><a href="https://github.com/isaacg1/pyth">Pyth</a> Compiler/Executor</h3>
+			<br>
+			<div class="row">
+				<div class="col-md-5">
+					<div id="output"></div>
+					<button id="run-button" class="btn btn-primary">Run Program!</button>
+					<textarea id="code" placeholder="Code" class="form-control" rows="7"></textarea>
+					<textarea id="input" placeholder="Input" class="form-control" rows="7"></textarea>
+					<div class='bottom-row'>
+						Debug on?: <input id="debug" type="checkbox" checked>
+					</div>
+					<br>
+					<br>
+					<p>Code length: <span id="length">0</span></p>
+					<p>Compiler last updated: {{formatted_time}} UTC</p>
+				</div>
 
-<head>
-    <title>Pyth Compiler/Executor</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-    <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js'></script>
-    <link rel="shortcut icon" href="/pyth/favicon2.ico" />
-    <style>
-	.bottom-row {
-	    float: right;
-	}
-	textarea#code {
-	    margin-bottom: 25px;
-	    margin-top: 15px;
-	}
-	textarea#input {
-	    margin-bottom: 5px;
-	}
-	pre.scroll {
-	    max-height: 20%;
-	    overflow: auto;
-	}
-        table.scroll{
-            height: 75%;
-            overflow: auto;
-        }
-        .scroll tbody {
-            height: 80%;
-            overflow: auto;
-        }
-        .full {
-            width: 100%;
-        }
-        .symbol {
-            width: 15%;
-        }
-        .arity {
-            width: 10%;
-        }
-        .starts {
-            width: 10%;
-        }
-        .desc {
-            width: 25%;
-        }
-        .detail {
-            width: 40%;
-            overflow: auto;
-        }
-        .search-bar {
-	    margin-top: 25px;
-            margin-bottom: 15px;
-            padding-left: 0px;
-            margin-left: 0px;
-        }
-        table tbody, table thead {
-            display: block;
-        }
+				<div class="col-md-1"></div>
 
-    </style>
-</head>
+				<div class="col-md-6 docs">
+					<h4>Pyth Character Reference</h4>
+					<div class="search-bar input-group">
+						<input id="query" class="form-control" placeholder="Search">
+						<div class="input-group-btn">
+							<button type="button" class="btn btn-default dropwdown-toggle" data-toggle="dropdown" aria-expanded="false">
+								<span id="search-type-name"></span> <span class="caret"></span>
+							</button>
+							<ul id="search-type-menu" class="dropdown-menu dropdown-menu-right" role="menu"></ul>
+						</div>
+					</div>
+					<div id="table-container">
+						<table id="docs-table" class="scroll full table table-hover table-condensed"></table>
+					</div>
+				</div>
 
-<body>
-    <div class='container'>
-        <h3> <a href="https://github.com/isaacg1/pyth">Pyth</a> Compiler/Executor </h3><br/>
-        <div class='row'>
+			</div>
+		</div>
+		<script>
+			$(function() {
+				$('#run-button').click(function() {
+					$.post('/submit', {
+						code: $('#code').val(),
+						input: $('#input').val(),
+						debug: $('#debug').is(':checked')? 1: 0
+					}, function(data) {
+						$('#output').html(data);
+					});
+				});
 
-            <div class='col-md-5'>
-		<div id='output'></div>
+				$('#code').keyup(function(e) {
+					$('#length').text(e.target.value.length);
+				});
 
-	        <button class='btn btn-primary' onclick='submit_code()'>Run Program!</button>
-                <textarea id='code' placeholder='Code' onkeyup='$("#len").html("Code length: "+this.value.length)' name="code" form="code_input" class='form-control' rows="7"></textarea>
+				var docs_cols = ['Char', 'Arity', 'Starts', 'Mnemonic', 'Details'];
+				var search_type;
 
-                <textarea id='input' name="input" placeholder='Input' form="code_input" class='form-control' rows="7"></textarea>
+				function search() {
+					var query = $('#query').val().toLowerCase();
 
-                <div class='bottom-row'>
-                    Debug on?: <input id='debug' type="checkbox" name="debug"/>
-		</div><br/><br/>
+					$('#docs-table tbody tr').each(function() {
+						var $this = $(this);
 
-                <p id='len'>Code length: 0</p>
-				<p>Compiler last updated: {{formatted_time}} GMT</p>
-            </div>
+						var matches = $this.find('td').map(function(i) {
+							return (search_type === -1 || i === search_type) && this.textContent.toLowerCase().indexOf(query) !== -1;
+						}).index(true) !== -1;
 
-            <div class='col-md-1'></div>
+						$this.css('display', matches? '': 'none');
+					});
+				}
 
-            <div class='col-md-6 docs'>
-                <h4>Pyth Character Reference</h4>
-                <div class='search-bar input-group'>
-                    <input class='form-control' placeholder='Search the Characters' onkeyup='term=this.value;search()'>
-                    <span class='input-group-btn'>
-                        <button id='search-by' type='button' class='btn btn-default dropwdown-toggle' data-toggle='dropdown' aria-expanded='false'>
-                            Symbol <span class="caret"></span>
-                        </button>
-                        <ul class='dropdown-menu dropdown-menu-right' role='menu'>
-                            <li><a href="javascript:field_updated(0, 'Symbol')">Symbol</a></li>
-                            <li><a href="javascript:field_updated(1, 'Arity')">Arity</a></li>
-                            <li><a href="javascript:field_updated(2, 'Starts Line')">Starts Line</a></li>
-                            <li><a href="javascript:field_updated(3, 'Mnemonic')">Mnemonic</a></li>
-                            <li><a href="javascript:field_updated(4, 'Details')">Details</a></li>
-                        </ul>
-                    </span>
-                </div>
+				$('#query').keyup(search);
 
-                    <table class='scroll full table table-hover table-condensed'>
-                        <thead>
-                            <tr>
-                            <th class='symbol'>Symbol</th>
-                            <th class='arity'>Arity</th>
-                            <th class='starts'>Starts</th>
-                            <th class='desc'>Mnemonic</th>
-                            <th class='details'>Details</th>
-                        </thead>
-                        <tbody id='docs'>
-                        </tbody>
-                    </table>
-            </div>
+				function change_search_type(e) {
+					var name = e.target.textContent;
+					$('#search-type-name').text(name);
+					search_type = docs_cols.indexOf(name);
+					search();
+				}
 
-        </div>
-    </div>
-    <script>
-        field=0
-        term=''
+				for(var i = -1; i < docs_cols.length; i++) {
+					$('#search-type-menu').append(
+						$('<li>').append(
+							$('<a>').text(i === -1? 'Any': docs_cols[i]).click(change_search_type)
+						)
+					);
+				}
 
-        function field_updated(type, display) {
-            $('#search-by').html(display+' <span class="caret"></span>')
-            field=type
-            search()
-        }
+				$('#search-type-menu > li > a').eq(0).click();
 
-        function submit_code() {
-            $.get('/', {mode: 2, code: $('#code').val(), input: $('#input').val(), debug: $('#debug').is(':checked')?1:0}, function(data) {
-		$('#output').html(data)
-            })
-        }
+				$.get('/web-docs.txt', function(data) {
+					var lines = data.split('\n');
 
-        function search() {
-            $('#docs tr').each(function(index) {
-                a=this.children[field].innerHTML
-                if (field>0) a=a.toLowerCase()
-                if (~a.indexOf(term.toLowerCase())) {
-                    this.style.display='table-row'
-                }
-                else {
-                    this.style.display='none'
-                }
-            })
-        }
+					var table = $('#docs-table');
 
-        $.get('/', {'mode': 1}, function(data) {
-            data=data.split('\n')
-            for (i=0;i<data.length;i++) {
-                data[i]=data[i].replace(' ', '</td><td``class="arity">')
-                data[i]=data[i].replace(' ', '</td><td``class="starts">')
-                data[i]=data[i].replace(' ', '</td><td``class="desc">')
-                data[i]=data[i].replace(' ', '</td><td``class="detail">')
-                data[i]=data[i].replace(/``/g, ' ')
-                data[i]=data[i].replace('blahblah', ' ')
-                $('#docs').append('<tr class="full"><td class="symbol">'+data[i]+'</td></tr>')
-            }
-        })
-    </script>
-</body>
+					var header = $('<thead>').append(
+						$('<tr>').append(docs_cols.map(function(col_name) {
+							return $('<th>').attr('class', col_name).text(col_name);
+						}))
+					);
+
+					var rows = lines.map(function(line) {
+						var words = line.split(' ');
+
+						var details_offset = docs_cols.length - 1;
+
+						var tokens = words.slice(0, details_offset);
+						var details = words.slice(details_offset).join(' ');
+
+						tokens.push(details);
+
+						var cells = tokens.map(function(token, i) {
+							return $('<td>').attr('class', docs_cols[i]).text(token);
+						});
+
+						return $('<tr>').attr('class', 'full').append(cells);
+					});
+
+					table.append(header).append($('<tbody>').append(rows));
+				});
+
+
+				// XXX: This is a hack, I couldn't figure out how to do it with plain css
+				function onresize() {
+					$('#table-container').css('height', window.innerHeight - 250);
+				}
+
+				window.addEventListener('resize', onresize);
+
+				onresize();
+			});
+		</script>
+	</body>
 
 </html>
