@@ -1,4 +1,4 @@
-blahblah 1 N blank Suppress print, separator.
+<space> 1 N blank Suppress print, separator.
 ! 1 N not Logical not.
 " X N quote Begins and ends sring literals. Optional at EOL.
 # S Y exception-loop Loop until exception, then break. Tricky to debug.
