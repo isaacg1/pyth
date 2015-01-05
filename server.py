@@ -36,8 +36,7 @@ def submit():
 		pyth_process.communicate(input=bytearray(input_message, 'utf-8'))
 
 	if code_message:
-		resp += 'Output: \n'
-		resp += '<pre class="scroll">' + output.decode() + (errors if errors else '') + '</pre>'
+		resp += output.decode() + (errors if errors else '')
 
 	return Response(resp)
 
