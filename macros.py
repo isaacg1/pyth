@@ -29,11 +29,9 @@ def lookup(a, b):
         else:
             intersection = filter(lambda b_elm: b_elm in a, b)
             if isinstance(a, str):
-                return ''.join(sorted(intersection))
-            if isinstance(a, list):
-                return list(sorted(intersection))
+                return ''.join(intersection)
             else:
-                return intersection
+                return list(intersection)
 
 
 # %. int, str.
@@ -117,6 +115,10 @@ def plus(a, b):
         return a.union(b)
     if isinstance(b, list) and not isinstance(a, list):
         return [a]+b
+    if isinstance(a, tuple) and not isinstance(b, tuple):
+        return a+(b,)
+    if isinstance(b, tuple) and not isinstance(a, tuple):
+        return b+(a,)
     return a+b
 
 
