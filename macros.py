@@ -6,6 +6,7 @@ import random
 import re
 import string
 import sys
+import collections
 
 
 # Type checking - num class
@@ -58,7 +59,11 @@ def Ppow(a, b):
 
 # *. int, str, list.
 def times(a, b):
-    return a*b
+    if isinstance(a, collections.Iterable) and \
+       isinstance(b, collections.Iterable):
+        return list(itertools.product(a, b))
+    else:
+        return a*b
 
 
 # (. All types
