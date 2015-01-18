@@ -19,43 +19,16 @@
 # Safety changes:
 # Removed imports, sys, open.
 # Disabled $
-# Replaced eval with restricted eval
+# Replaced eval with literal eval
 from extra_parse import *
 from macros import *
 from data import *
 import copy as c
+from ast import literal_eval
 from sys import setrecursionlimit
 setrecursionlimit(100000)
 
-
-def restricted_eval(a):
-    def float_or_int_or_str(thing):
-        if '"' in thing or "'" in thing:
-            return thing.strip()[1:-1]
-        elif '.' in thing:
-            return float(thing)
-        else:
-            try:
-                return int(thing)
-            except ValueError:
-                print("Illegal input to restricted eval.")
-                raise
-
-    if "," in a:
-        if a[0] == '[':
-            pieces = a.strip()[1:-1].split(',')
-            return list(float_or_int_or_str(piece) for piece in pieces)
-        else:
-            pieces = a.split(',')
-            return tuple(float_or_int_or_str(piece) for piece in pieces)
-    else:
-        if a[0] == '[':
-            return [float_or_int_or_str(a.strip()[1:-1])]
-        else:
-            return float_or_int_or_str(a.strip())
-
-
-c_to_f['v'] = ('restricted_eval', 1)
+c_to_f['v'] = ('literal_eval', 1)
 
 
 # Parse it!
