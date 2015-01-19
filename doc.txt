@@ -18,7 +18,7 @@ $ X N super-quote       Begins and ends Python literals. A Python literal is pla
 ' 0 N quote-file        Cat file, return file a list of lines. Take file neame as line of STDIN.
 ( I N tuple             Tuple constructor. Unbounded.
 ) X N close-paren       Ends functions, statements. Marks last line of statement, last arg. of function. Necessary for statements, unbounded functions.
-* 2 N times             Like python, multiplication, replication.
+* 2 N times             Like python, multiplication, replication. Cartesian product on lists, tuples or sets.
 + 2 N plus              Addition, concatenation. Set union. Prepend or append non-list to list.
 , 2 N pair              2 entry tuple.
 - 2 N minus             Subtraction, setwise difference. Maintains order. -<num><seq> coerces number to sequence type. Return type is type of first arg.
