@@ -25,6 +25,8 @@ sys.setrecursionlimit(100000)
 
 # Parse it!
 def general_parse(code):
+    global H
+    H=code
     code = prepend_parse(code)
     # Parsing
     args_list = []
