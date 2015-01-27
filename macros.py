@@ -232,8 +232,6 @@ def gte(a, b):
     if not isnum(a) and isnum(b):
         return a[b-1:]
     return a >= b
-H = {}
-
 
 # h. int, str, list.
 def head(a):
