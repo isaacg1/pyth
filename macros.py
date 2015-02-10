@@ -402,13 +402,25 @@ def tail(a):
 
 # u. single purpose
 def reduce(a, b, c):
-    acc = c
-    seq = b
-    while len(seq) > 0:
-        h = seq[0]
-        acc = a(acc, h)
-        seq = seq[1:]
-    return acc
+    # Reduce
+    if isinstance(b, collections.Iterable):
+        acc = c
+        seq = b
+        while len(seq) > 0:
+            h = seq[0]
+            acc = a(acc, h)
+            seq = seq[1:]
+        return acc
+    # Fixed point / increasing sequence
+    else:
+        counter = 0
+        old_acc = c
+        acc = a(c, counter)
+        while old_acc != acc:
+            counter += 1
+            old_acc = acc
+            acc = a(acc, counter)
+        return acc
 
 
 # U. int, str, list.
