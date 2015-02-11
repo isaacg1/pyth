@@ -480,6 +480,8 @@ def subsets(a):
     if isnum(a):
         return a*2
     else:
+        if len(a) == 0:
+            return [a]
         if len(a) == 1:
             return [[] if not isinstance(a, str) else '', a]
         else:
