@@ -1,9 +1,9 @@
 import copy
 import fractions
-import itertools
-import math
-import random
-import re
+from itertools import *
+from math import *
+from random import *
+from re import *
 import string
 import sys
 import collections
@@ -48,20 +48,20 @@ def Ppow(a, b):
         return pow(a, b)
     else:
         if isinstance(a, str):
-            return [''.join(group) for group in itertools.product(a, repeat=b)]
+            return [''.join(group) for group in product(a, repeat=b)]
         elif isinstance(a, list):
-            return [list(group) for group in itertools.product(a, repeat=b)]
+            return [list(group) for group in product(a, repeat=b)]
         elif isinstance(a, set):
-            return [set(group) for group in itertools.product(a, repeat=b)]
+            return [set(group) for group in product(a, repeat=b)]
         else:
-            return [group for group in itertools.product(a, repeat=b)]
+            return [group for group in product(a, repeat=b)]
 
 
 # *. int, str, list.
 def times(a, b):
     if isinstance(a, collections.Iterable) and \
        isinstance(b, collections.Iterable):
-        return list(itertools.product(a, b))
+        return list(product(a, b))
     else:
         return a*b
 
@@ -140,9 +140,9 @@ def Plist(*a):
 def at_slice(a, b, c):
     if isinstance(b, str):
         if not isinstance(c, str):
-            return bool(re.search(b, a))
+            return bool(search(b, a))
         else:
-            return re.sub(b, c, a)
+            return sub(b, c, a)
     return a[slice(b, c)]
 
 
@@ -194,7 +194,7 @@ def chop(a, b=None):
         return a.split(b)
     if b is None:
         return a.split()
-    return list(map(lambda d: a[b*d:b*(d+1)], range(math.ceil(len(a)/b))))
+    return list(map(lambda d: a[b*d:b*(d+1)], range(ceil(len(a)/b))))
 
 
 # C. int, str.
@@ -219,7 +219,7 @@ def end(a):
 # f. single purpose.
 def Pfilter(a, b):
     if isnum(b):
-        return next(filter(a, itertools.count(b)))
+        return next(filter(a, count(b)))
     else:
         return list(filter(a, b))
 G = string.ascii_lowercase
@@ -289,7 +289,7 @@ k = ''
 
 def Plen(a):
     if isnum(a):
-        return math.log(a, 2)
+        return log(a, 2)
     else:
         return len(a)
 
@@ -310,8 +310,8 @@ def ne(a, b):
 # O. int, str, list
 def rchoice(a):
     if isinstance(a, int):
-        return random.choice(urange(a))
-    return random.choice(list(a))
+        return choice(urange(a))
+    return choice(list(a))
 
 
 # o. Single purpose.
