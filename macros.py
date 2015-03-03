@@ -81,13 +81,27 @@ def minus(a, b):
         return minus([a], b)
     if isnum(a) and isinstance(b, set):
         return minus({a}, b)
+    if isnum(a) and isinstance(b, tuple):
+        return minus((a,), b)
+    if isinstance(a, str) and isnum(b):
+        return minus(a, str(b))
+    if isinstance(a, list) and isnum(b):
+        return minus(a, [b])
+    if isinstance(a, set) and isnum(b):
+        return minus(a, {b})
+    if isinstance(a, tuple) and isnum(b):
+        return minus(a, (b,))
     difference = filter(lambda c: c not in b, a)
     if isinstance(a, str):
         return ''.join(difference)
     if isinstance(a, list):
         return list(difference)
-    else:
+    if isinstance(a, set):
         return set(difference)
+    if isinstance(a, tuple):
+        return tuple(difference)
+    else:
+        return list(difference)
 
 
 # '. single purpose.
