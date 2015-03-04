@@ -394,6 +394,8 @@ def Prange(a, b=None):
 # s. int, str, list.
 def Psum(a):
     if isinstance(a, list) or isinstance(a, tuple):
+        if len(a) == 0:
+            return 0
         return reduce(lambda b, c: b+c, a[1:], a[0])
     else:
         return int(a)
