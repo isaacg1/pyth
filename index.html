@@ -55,6 +55,10 @@
 			#output-container {
 				display: none;
 			}
+			#output {
+				max-height: 200px;
+				overflow: auto;
+			}
 		</style>
 	</head>
 	<body>
@@ -67,13 +71,16 @@
 						Output:
 						<pre class="scroll" id="output"></pre>
 					</div>
-					<button id="run-button" class="btn btn-primary">Run Program!</button>
-					<textarea id="code" placeholder="Code" class="form-control" rows="7"></textarea>
-					<textarea id="input" placeholder="Input" class="form-control" rows="7"></textarea>
-					<div class='bottom-row'>
-						Debug on?: <input id="debug" type="checkbox">
-					</div>
+					<button id="run-button" class="btn btn-primary">Run Program! (Ctrl-Enter)</button>
+					<textarea id="code" placeholder="Code" class="form-control" rows="7">{{ code }}</textarea>
+					<textarea id="input" placeholder="Input" class="form-control" rows="7">{{ input }}</textarea>
 					<br>
+					<div class='bottom-row'>
+						Debug on?: <input id="debug" type="checkbox" {% if debug %} checked {% endif %}>
+					</div><br><br>
+					<div class='bottom-row'>
+						<button class='btn btn-primary' onclick='permalink()'>Permalink</button>
+					</div>
 					<br>
 					<p>Code length: <span id="length">0</span></p>
 					<p>Compiler last updated: {{formatted_time}} UTC</p>
@@ -100,17 +107,26 @@
 			</div>
 		</div>
 		<script>
-			$(function() {
-				$('#run-button').click(function() {
-					$.post('/submit', {
-						code: $('#code').val(),
-						input: $('#input').val(),
-						debug: $('#debug').is(':checked')? 1: 0
-					}, function(data) {
+			function permalink() {
+				params={code: $('#code').val()}
+				if ($('#input').val()) params.input=$('#input').val()
+				if (!$('#debug').is(':checked')) params.debug=0
+				document.location="?"+$.param(params)
+			}
+
+			function submit_code() {
+				$.post('/submit', {
+					code: $('#code').val(),
+					input: $('#input').val(),
+					debug: $('#debug').is(':checked')? 1 : 0
+					},
+					function(data) {
 						$('#output').text(data);
-						$('#output-container').show();
-					});
+						$('#output-container').show()
 				});
+			}
+			$(function() {
+				$('#run-button').click(submit_code);
 
 				$('#code').keyup(function(e) {
 					$('#length').text(e.target.value.length);
@@ -190,8 +206,18 @@
 				}
 
 				window.addEventListener('resize', onresize);
-
+				$('#code').keydown(function (e) {
+   				     if (e.ctrlKey && (e.keyCode==10 || e.keyCode == 13)) {
+                                        submit_code(); 
+				     }
+				});
+				$('#input').keydown(function (e) {
+   				     if (e.ctrlKey && (e.keyCode==10 || e.keyCode == 13)) {
+                                        submit_code(); 
+				     }
+				});
 				onresize();
+				$('#code').focus()
 			});
 		</script>
 	</body>
