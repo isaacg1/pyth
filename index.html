@@ -115,14 +115,15 @@
 			}
 
 			function submit_code() {
-                            $.post('/submit', {
-                                code: $('#code').val(),
-                                input: $('#input').val(),
-                                debug: $('#debug').is(':checked')? 1: 0
-                                        }, function(data) {
-                                                $('#output').text(data);
-                                                $('#output-container').show()
-                            });
+				$.post('/submit', {
+					code: $('#code').val(),
+					input: $('#input').val(),
+					debug: $('#debug').is(':checked')? 1 : 0
+					},
+					function(data) {
+						$('#output').text(data);
+						$('#output-container').show()
+				});
 			}
 			$(function() {
 				$('#run-button').click(submit_code);

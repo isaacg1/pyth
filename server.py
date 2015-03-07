@@ -6,7 +6,7 @@ import subprocess
 
 app = Flask(__name__, template_folder='.', static_folder='.')
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def root():
 	time_in_secs = os.path.getmtime('safe_pyth.py')
 	time_in_python = time.gmtime(time_in_secs)
@@ -45,4 +45,4 @@ def other(path):
 	return app.send_static_file(path)
 
 if __name__ == '__main__':
-	app.run(debug=True, host='0.0.0.0')
+	app.run(debug=True)
