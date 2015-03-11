@@ -105,9 +105,9 @@ def minus(a, b):
 
 
 # '. single purpose.
-def read_file():
-    a = [lin[:-1] if lin[-1] == '\n' else lin for lin in (open(input()))]
-    return a
+def read_file(a):
+    b = [lin[:-1] if lin[-1] == '\n' else lin for lin in (open(a))]
+    return b
 
 
 # _. All.
