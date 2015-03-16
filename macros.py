@@ -324,6 +324,8 @@ def ne(a, b):
 # O. int, str, list
 def rchoice(a):
     if isinstance(a, int):
+        if a == 0:
+            return random.random()
         return random.choice(urange(a))
     return random.choice(list(a))
 
