@@ -289,8 +289,8 @@ See opening comment in pyth.py for more info.""")
                 # language which should never be needed for golfing code.
                 # (eg, import statements)
 
-                code_to_remove_tools =
-                "del __builtins__.__dict__['__import__']\n"
+                code_to_remove_tools =\
+                    "del __builtins__.__dict__['__import__']\n"
                 # remove import capability
                 code_to_remove_tools += "del sys\n"
                 # remove system tools
