@@ -20,8 +20,8 @@ from macros import *
 from data import *
 import copy as c
 import sys
+from ast import literal_eval
 sys.setrecursionlimit(100000)
-
 
 # Parse it!
 def general_parse(code):
@@ -57,7 +57,10 @@ def parse(code, spacing="\n "):
         return str_parse(active_char, rest_code)
     # Python code literals
     if active_char == '$':
-        return python_parse(active_char, rest_code)
+        if safe_mode:
+            raise UnsafeInputError(active_char, rest_code)
+        else:
+            return python_parse(active_char, rest_code)
     # End paren is magic (early-end current function/statement).
     if active_char == ')':
         return '', rest_code
@@ -211,6 +214,8 @@ def add_print(code):
 
 
 if __name__ == '__main__':
+    global safe_mode,c_to_f
+
     # Check for command line flags.
     # If debug is on, print code, python code, separator.
     # If help is on, print help message.
@@ -224,7 +229,9 @@ Give file containing Pyth code as final command line argument.
 Command line flags:
 -c or --code:   Give code as final command arg, instead of file name.
 -d or --debug   Show input code, generated python code.
--l or --line    Run specified runable line. Runable lines are those not
+-s or --safe    Run in safe mode. Safe mode does not permit execution of 
+                arbitrary Python code. Meant for online interpreter.
+-l or --line    Run specified runnable line. Runnable lines are those not
                 starting with ; or ), and not empty. 0-indexed.
                 Specify line with 2nd to last argument. Fails on Windows.
 -h or --help    Show this help message.
@@ -241,6 +248,7 @@ See opening comment in pyth.py for more info.""")
                 long_form in verbose_flags
         debug_on = flag_on('d', '--debug')
         code_on = flag_on('c', '--code')
+        safe_mode = flag_on('s', '--safe')
         line_on = flag_on('l', '--line')
         if line_on:
             line_num = int(sys.argv[-2])
@@ -272,4 +280,37 @@ See opening comment in pyth.py for more info.""")
                 print('='*50)
                 print(py_code_line)
                 print('='*50)
-            exec(py_code_line)
+            if safe_mode:
+                # to fix most security problems, we will disable the use of
+                # unnecessary parts of the python
+                # language which should never be needed for golfing code.
+                # (eg, import statements)
+
+                code_to_remove_tools = "del __builtins__.__dict__['__import__']\n"
+                # remove import capability
+                code_to_remove_tools += "del sys\n"
+                # remove system tools
+                code_to_remove_tools += "del __builtins__.__dict__['open']\n"
+                # remove capability to read/write to files
+
+                # while this is hardly an exaustive list,
+                # and while blacklisting in general
+                # should not be used for security, it does
+                # solve many security problems.
+                exec(code_to_remove_tools + py_code_line)
+                # ^ is still evil.
+
+                # Honestly, I'd just whitelist your custom functions
+                # and discard anything
+                # that doesn't match the whitelist of functions.
+
+                # Anyway, hope you don't mind me patching things up here.
+                # Email any questions to
+
+                # PS: Security shouldn't be a black mark to Pyth.
+                # I think it's a really neat idea!
+                c_to_f['v'] = ('literal_eval', 1)
+
+            else:
+                safe_mode=False
+                exec(py_code_line)

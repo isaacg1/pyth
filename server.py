@@ -25,8 +25,8 @@ def submit():
 	pyth_process = \
 		subprocess.Popen(['/usr/bin/env',
 						  'python3',
-						  'safe_pyth.py',
-						  '-cd' if debug_on else '-c',
+						  'pyth.py',
+						  '-csd' if debug_on else '-cs',
 						  pyth_code],
 						 stdin=subprocess.PIPE,
 						 stdout=subprocess.PIPE,
