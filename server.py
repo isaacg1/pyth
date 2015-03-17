@@ -8,7 +8,7 @@ app = Flask(__name__, template_folder='.', static_folder='.')
 
 @app.route('/')
 def root():
-	time_in_secs = os.path.getmtime('safe_pyth.py')
+	time_in_secs = os.path.getmtime('pyth.py')
 	time_in_python = time.gmtime(time_in_secs)
 	formatted_time = time.strftime("%d %b %Y", time_in_python)
 	return render_template('index.html', formatted_time=formatted_time, code=request.args.get('code', ''), input=request.args.get('input', ''), debug=int(request.args.get('debug', 1)))
@@ -25,8 +25,8 @@ def submit():
 	pyth_process = \
 		subprocess.Popen(['/usr/bin/env',
 						  'python3',
-						  'safe_pyth.py',
-						  '-cd' if debug_on else '-c',
+						  'pyth.py',
+						  '-csd' if debug_on else '-cs',
 						  pyth_code],
 						 stdin=subprocess.PIPE,
 						 stdout=subprocess.PIPE,
