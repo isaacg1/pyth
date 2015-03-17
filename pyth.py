@@ -23,6 +23,7 @@ import sys
 from ast import literal_eval
 sys.setrecursionlimit(100000)
 
+
 # Parse it!
 def general_parse(code):
     code = prepend_parse(code)
@@ -214,7 +215,7 @@ def add_print(code):
 
 
 if __name__ == '__main__':
-    global safe_mode,c_to_f
+    global safe_mode, c_to_f
 
     # Check for command line flags.
     # If debug is on, print code, python code, separator.
@@ -229,7 +230,7 @@ Give file containing Pyth code as final command line argument.
 Command line flags:
 -c or --code:   Give code as final command arg, instead of file name.
 -d or --debug   Show input code, generated python code.
--s or --safe    Run in safe mode. Safe mode does not permit execution of 
+-s or --safe    Run in safe mode. Safe mode does not permit execution of
                 arbitrary Python code. Meant for online interpreter.
 -l or --line    Run specified runnable line. Runnable lines are those not
                 starting with ; or ), and not empty. 0-indexed.
@@ -250,6 +251,8 @@ See opening comment in pyth.py for more info.""")
         code_on = flag_on('c', '--code')
         safe_mode = flag_on('s', '--safe')
         line_on = flag_on('l', '--line')
+        if safe_mode:
+            c_to_f['v'] = ('literal_eval', 1)
         if line_on:
             line_num = int(sys.argv[-2])
         if code_on and line_on:
@@ -286,7 +289,8 @@ See opening comment in pyth.py for more info.""")
                 # language which should never be needed for golfing code.
                 # (eg, import statements)
 
-                code_to_remove_tools = "del __builtins__.__dict__['__import__']\n"
+                code_to_remove_tools =
+                "del __builtins__.__dict__['__import__']\n"
                 # remove import capability
                 code_to_remove_tools += "del sys\n"
                 # remove system tools
@@ -309,8 +313,7 @@ See opening comment in pyth.py for more info.""")
 
                 # PS: Security shouldn't be a black mark to Pyth.
                 # I think it's a really neat idea!
-                c_to_f['v'] = ('literal_eval', 1)
 
             else:
-                safe_mode=False
+                safe_mode = False
                 exec(py_code_line)
