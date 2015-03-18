@@ -79,10 +79,10 @@ def parse(code, spacing="\n "):
         return replace_parse(active_char, rest_code, spacing)
     # And for general functions
     if active_char in c_to_f:
-		#Check for augmented assignment
-        if rest_code[0]=="=":
+        # Check for augmented assignment
+        if rest_code[0] == "=" and not c_to_f[active_char][1] == 0:
             return parse(augmented_assignment_parse(active_char, rest_code))
-		#Just a regular function parse
+        # Just a regular function parse
         return function_parse(active_char, rest_code)
     # General format functions/operators
     if active_char in c_to_i:
@@ -209,7 +209,7 @@ def prepend_parse(code):
 # safe infix.
 def add_print(code):
     if len(code) > 0:
-        if (code[0] not in 'p ' and code[0] in c_to_f and code[1]!="=") or \
+        if (code[0] not in 'p ' and code[0] in c_to_f and code[1] != "=") or \
             code[0] in variables or \
             code[0] in "@&|]}?,\\\".0123456789," or \
             ((code[0] in 'JK' or code[0] in prepend) and
