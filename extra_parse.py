@@ -47,3 +47,6 @@ def python_parse(active_char, rest_code):
             output += rest_code[0]
             rest_code = rest_code[1:]
         return output, rest_code[1:]
+
+def augmented_assignment_parse(active_char, rest_code):
+	return rest_code[:2]+active_char+rest_code[1:]
