@@ -202,7 +202,8 @@ def prepend_parse(code):
             first_loc = code.index(prep_char)
             if first_loc == 0 or \
                     code[:first_loc].count('"') % 2 == 0 and \
-                    code[first_loc-1] != "\\":
+                    (code[first_loc-1] != "\\"
+                        or first_loc >= 2 and code[first_loc-2] == "\\"):
                 out_code = prepend[prep_char] + out_code
     return out_code
 
