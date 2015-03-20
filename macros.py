@@ -208,8 +208,7 @@ def chop(a, b=None):
         return a.split(b)
     if b is None:
         return a.split()
-    return list(map(lambda d: a[b*d:b*(d+1)], range(math.ceil(len(a)/b))))
-
+    return [a[i:i+b] for i in range(0, len(a), b)]
 
 # C. int, str.
 def Pchr(a):
