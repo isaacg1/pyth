@@ -202,14 +202,25 @@ b = "\n"
 
 # c. All
 def chop(a, b=None):
-    if isnum(a):
+    if isnum(a) and isnum(b):
         return a/b
-    if isinstance(b, str):
+    if isinstance(a, str) and isinstance(b, str):
         return a.split(b)
     if b is None:
         return a.split()
-    return list(map(lambda d: a[b*d:b*(d+1)], range(math.ceil(len(a)/b))))
-
+    # iterable, int -> chop a into pieces of length b
+    if isinstance(a, collections.Iterable) and isnum(b):
+        return [a[i:i+b] for i in range(0, len(a), b)]
+    # int, iterable -> split b into a pieces (distributed equally)
+    else:
+        m = len(b) // a # min number of elements
+        r = len(b) % a  # remainding elements
+        begin,end = 0, m + (r > 0)
+        l = []
+        for i in range(a):
+            l.append(b[begin:end])
+            begin,end = end, end + m + (i+ 1 < r)
+        return l
 
 # C. int, str.
 def Pchr(a):

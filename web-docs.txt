@@ -56,7 +56,7 @@ _ 1 N neg Negation. Str and list reverse.
 ` 1 N repr Python repr.
 a 2 N append Python .append(). First arguement must be a list.
 b 0 N line-Break Variable. "\n"
-c 2 N chop chop str/list every n elements. Also str.split, floating point division.
+c 2 N On <str/list><int> chop str/list every n elements. On <int><str/list> split str/list into n pieces (elements are equally distributed). Also str.split, floating point division.chop chop str/list every n elements. Also str.split, floating point division.
 d 0 N d Variable. " "
 e 1 N end %10 or last element.
 f 2 N filter Implicit lambda, T -> Y -> Z -> . on num, iter.count
