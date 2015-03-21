@@ -25,7 +25,7 @@ $ X N super-quote       Begins and ends Python literals. A Python literal is pla
 . X N point             Numeric literals.
 / 2 N div               Floored division. .count() method on containers.
 
-0123456789          	Numeric literals
+0123456789              Numeric literals
 
 : 3 N slice-sub         Python slice. :<seq><int><int> -> <seq>[<int>:<int>]. :<str><str><str> is regex substitution, substitute in a, b for c. :<str><str><oth> is regex search, boolean.
 ; X N end-line          End everything. Infinite ). Best used in statements.
@@ -73,7 +73,7 @@ a 2 N append            Python .append(). First arguement must be a list.
 b 0 N lineBreak         Variable. "\n"
 c 2 N chop              On <str/list><int> chop str/list every n elements. 
                         On <int><str/list> split str/list into n pieces (elements are equally distributed).
-						Also str.split, floating point division.
+                        Also str.split, floating point division.
 d 0 N                   Variable. " "
 e 1 N end               %10 or last element.
 f 2 N filter            Implicit lambda, T -> Y -> Z -> . on num, iter.count
