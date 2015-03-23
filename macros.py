@@ -7,6 +7,7 @@ import re
 import string
 import sys
 import collections
+from ast import literal_eval
 
 
 # Type checking - num class
@@ -213,14 +214,15 @@ def chop(a, b=None):
         return [a[i:i+b] for i in range(0, len(a), b)]
     # int, iterable -> split b into a pieces (distributed equally)
     else:
-        m = len(b) // a # min number of elements
-        r = len(b) % a  # remainding elements
-        begin,end = 0, m + (r > 0)
+        m = len(b) // a  # min number of elements
+        r = len(b) % a   # remainding elements
+        begin, end = 0, m + (r > 0)
         l = []
         for i in range(a):
             l.append(b[begin:end])
-            begin,end = end, end + m + (i+ 1 < r)
+            begin, end = end, end + m + (i + 1 < r)
         return l
+
 
 # C. int, str.
 def Pchr(a):
@@ -396,7 +398,7 @@ def Prange(a, b=None):
         if b == 6:
             return a.strip()
         if b == 7:
-            return [eval(part) for part in a.split()]
+            return [literal_eval(part) for part in a.split()]
     if isinstance(a, int):
         if a < b:
             return list(range(a, b))
