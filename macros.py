@@ -7,11 +7,34 @@ import re
 import string
 import sys
 import collections
+import numbers
 
 
-# Type checking - num class
-def isnum(a):
-    return isinstance(a, int) or isinstance(a, float)
+# Type checking
+def is_num(a):
+    return isinstance(a, numbers.Number)
+
+
+def is_seq(a):
+    return isinstance(a, collections.Sequence)
+
+
+def is_col(a):
+    return isinstance(a, collections.Iterable)
+
+
+# Error handling
+class BadTypeCombinationError(Exception):
+    def __init__(self, *args):
+        self.args = args
+
+    def __str__(self):
+        error_message = ""
+        for i in range(len(self.args)):
+            arg = self.args[i]
+            arg_type = str(type(arg)).split("'")[1]
+            error_message += "\nArg %d: %r, type %s." % (i + 1, arg, arg_type)
+        return error_message
 
 
 # Function library. See data for letter -> function correspondences.
@@ -24,27 +47,31 @@ def Pnot(a):
 def lookup(a, b):
     if isinstance(a, dict):
         return a[b]
-    else:
-        if isinstance(b, int):
-            return a[b % len(a)]
+    if is_seq(a) and isinstance(b, int):
+        return a[b % len(a)]
+    if is_col(a) and is_col(b):
+        intersection = filter(lambda b_elm: b_elm in a, b)
+        if isinstance(a, str):
+            return ''.join(intersection)
+        elif isinstance(a, tuple):
+            return tuple(intersection)
         else:
-            intersection = filter(lambda b_elm: b_elm in a, b)
-            if isinstance(a, str):
-                return ''.join(intersection)
-            else:
-                return list(intersection)
+            return list(intersection)
+    raise BadTypeCombinationError(a, b)
 
 
 # %. int, str.
 def mod(a, b):
-    if isinstance(a, int) and not isnum(b):
+    if isinstance(a, int) and is_seq(b):
         return b[::a]
-    return a % b
+    if is_num(a) and is_num(b) or isinstance(a, str):
+        return a % b
+    raise BadTypeCombinationError(a, b)
 
 
 # ^. int, str, list. Uses Psum
 def Ppow(a, b):
-    if isnum(a):
+    if is_num(a):
         return pow(a, b)
     else:
         if isinstance(a, str):
@@ -73,23 +100,23 @@ def Ptuple(*a):
 
 # -. int, set.
 def minus(a, b):
-    if isnum(a) and isnum(b):
+    if is_num(a) and is_num(b):
         return a-b
-    if isnum(a) and isinstance(b, str):
+    if is_num(a) and isinstance(b, str):
         return minus(str(a), b)
-    if isnum(a) and isinstance(b, list):
+    if is_num(a) and isinstance(b, list):
         return minus([a], b)
-    if isnum(a) and isinstance(b, set):
+    if is_num(a) and isinstance(b, set):
         return minus({a}, b)
-    if isnum(a) and isinstance(b, tuple):
+    if is_num(a) and isinstance(b, tuple):
         return minus((a,), b)
-    if isinstance(a, str) and isnum(b):
+    if isinstance(a, str) and is_num(b):
         return minus(a, str(b))
-    if isinstance(a, list) and isnum(b):
+    if isinstance(a, list) and is_num(b):
         return minus(a, [b])
-    if isinstance(a, set) and isnum(b):
+    if isinstance(a, set) and is_num(b):
         return minus(a, {b})
-    if isinstance(a, tuple) and isnum(b):
+    if isinstance(a, tuple) and is_num(b):
         return minus(a, (b,))
     difference = filter(lambda c: c not in b, a)
     if isinstance(a, str):
@@ -112,7 +139,7 @@ def read_file(a):
 
 # _. All.
 def neg(a):
-    if isnum(a):
+    if is_num(a):
         return -a
     else:
         return a[::-1]
@@ -120,7 +147,7 @@ def neg(a):
 
 # {. All.
 def Pset(a):
-    if isnum(a):
+    if is_num(a):
         return set([a])
     else:
         return set(a)
@@ -164,7 +191,7 @@ def at_slice(a, b, c):
 def lt(a, b):
     if isinstance(a, set):
         return a.issubset(b) and a != b
-    if not isnum(a) and isnum(b):
+    if not is_num(a) and is_num(b):
         return a[:b]
     return a < b
 
@@ -173,14 +200,14 @@ def lt(a, b):
 def gt(a, b):
     if isinstance(a, set):
         return a.issuperset(b) and a != b
-    if not isnum(a) and isnum(b):
+    if not is_num(a) and is_num(b):
         return a[b:]
     return a > b
 
 
 # /. All.
 def div(a, b):
-    if isnum(a):
+    if is_num(a):
         return int(a // b)
     return a.count(b)
 
@@ -202,25 +229,26 @@ b = "\n"
 
 # c. All
 def chop(a, b=None):
-    if isnum(a) and isnum(b):
+    if is_num(a) and is_num(b):
         return a/b
     if isinstance(a, str) and isinstance(b, str):
         return a.split(b)
     if b is None:
         return a.split()
     # iterable, int -> chop a into pieces of length b
-    if isinstance(a, collections.Iterable) and isnum(b):
+    if isinstance(a, collections.Iterable) and is_num(b):
         return [a[i:i+b] for i in range(0, len(a), b)]
     # int, iterable -> split b into a pieces (distributed equally)
     else:
-        m = len(b) // a # min number of elements
-        r = len(b) % a  # remainding elements
-        begin,end = 0, m + (r > 0)
+        m = len(b) // a  # min number of elements
+        r = len(b) % a   # remainding elements
+        begin, end = 0, m + (r > 0)
         l = []
         for i in range(a):
             l.append(b[begin:end])
-            begin,end = end, end + m + (i+ 1 < r)
+            begin, end = end, end + m + (i + 1 < r)
         return l
+
 
 # C. int, str.
 def Pchr(a):
@@ -236,14 +264,14 @@ d = ' '
 
 # e. All.
 def end(a):
-    if isnum(a):
+    if is_num(a):
         return a % 10
     return a[-1]
 
 
 # f. single purpose.
 def Pfilter(a, b):
-    if isnum(b):
+    if is_num(b):
         return next(filter(a, itertools.count(b)))
     else:
         return list(filter(a, b))
@@ -254,7 +282,7 @@ G = string.ascii_lowercase
 def gte(a, b):
     if isinstance(a, set):
         return a.issuperset(b)
-    if not isnum(a) and isnum(b):
+    if not is_num(a) and is_num(b):
         return a[b-1:]
     return a >= b
 H = {}
@@ -262,7 +290,7 @@ H = {}
 
 # h. int, str, list.
 def head(a):
-    if isnum(a):
+    if is_num(a):
         return a+1
     return a[0]
 
@@ -313,7 +341,7 @@ k = ''
 
 
 def Plen(a):
-    if isnum(a):
+    if is_num(a):
         return math.log(a, 2)
     else:
         return len(a)
@@ -424,7 +452,7 @@ T = 10
 
 # t. int, str, list.
 def tail(a):
-    if isnum(a):
+    if is_num(a):
         return a-1
     return a[1:]
 
@@ -467,7 +495,7 @@ def assign_at(a, b, c):
     if isinstance(a, dict):
         a[b] = c
         return a
-    if isnum(b):
+    if is_num(b):
         if isinstance(a, list):
             a[b % len(a)] = c
             return a
@@ -506,7 +534,7 @@ def index(a, b):
 
 # y. string, list.
 def subsets(a):
-    if isnum(a):
+    if is_num(a):
         return a*2
     else:
         if len(a) == 0:
