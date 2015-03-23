@@ -25,11 +25,12 @@ def is_col(a):
 
 # Error handling
 class BadTypeCombinationError(Exception):
-    def __init__(self, *args):
+    def __init__(self, func, *args):
         self.args = args
+        self.func = func
 
     def __str__(self):
-        error_message = ""
+        error_message = "\nError occured in function: %s" % self.func
         for i in range(len(self.args)):
             arg = self.args[i]
             arg_type = str(type(arg)).split("'")[1]
@@ -57,7 +58,7 @@ def lookup(a, b):
             return tuple(intersection)
         else:
             return list(intersection)
-    raise BadTypeCombinationError(a, b)
+    raise BadTypeCombinationError("@", a, b)
 
 
 # %. int, str.
@@ -66,14 +67,14 @@ def mod(a, b):
         return b[::a]
     if is_num(a) and is_num(b) or isinstance(a, str):
         return a % b
-    raise BadTypeCombinationError(a, b)
+    raise BadTypeCombinationError("%", a, b)
 
 
 # ^. int, str, list. Uses Psum
 def Ppow(a, b):
-    if is_num(a):
+    if is_num(a) and is_num(b):
         return pow(a, b)
-    else:
+    if is_col(a) and isinstance(b, int):
         if isinstance(a, str):
             return [''.join(group) for group in itertools.product(a, repeat=b)]
         elif isinstance(a, list):
@@ -82,12 +83,12 @@ def Ppow(a, b):
             return [set(group) for group in itertools.product(a, repeat=b)]
         else:
             return [group for group in itertools.product(a, repeat=b)]
+    raise BadTypeCombinationError("^", a, b)
 
 
 # *. int, str, list.
 def times(a, b):
-    if isinstance(a, collections.Iterable) and \
-       isinstance(b, collections.Iterable):
+    if is_col(a) and is_col(b):
         return list(itertools.product(a, b))
     else:
         return a*b
@@ -102,70 +103,84 @@ def Ptuple(*a):
 def minus(a, b):
     if is_num(a) and is_num(b):
         return a-b
-    if is_num(a) and isinstance(b, str):
-        return minus(str(a), b)
-    if is_num(a) and isinstance(b, list):
-        return minus([a], b)
-    if is_num(a) and isinstance(b, set):
-        return minus({a}, b)
-    if is_num(a) and isinstance(b, tuple):
-        return minus((a,), b)
-    if isinstance(a, str) and is_num(b):
-        return minus(a, str(b))
-    if isinstance(a, list) and is_num(b):
-        return minus(a, [b])
-    if isinstance(a, set) and is_num(b):
-        return minus(a, {b})
-    if isinstance(a, tuple) and is_num(b):
-        return minus(a, (b,))
-    difference = filter(lambda c: c not in b, a)
-    if isinstance(a, str):
-        return ''.join(difference)
-    if isinstance(a, list):
-        return list(difference)
-    if isinstance(a, set):
-        return set(difference)
-    if isinstance(a, tuple):
-        return tuple(difference)
-    else:
-        return list(difference)
+    if is_num(a) and is_col(b):
+        if isinstance(b, str):
+            return minus(str(a), b)
+        if isinstance(b, list):
+            return minus([a], b)
+        if isinstance(b, set):
+            return minus({a}, b)
+        if isinstance(b, tuple):
+            return minus((a,), b)
+    if is_num(b) and is_col(a):
+        if isinstance(a, str):
+            return minus(a, str(b))
+        if isinstance(a, list):
+            return minus(a, [b])
+        if isinstance(a, set):
+            return minus(a, {b})
+        if isinstance(a, tuple):
+            return minus(a, (b,))
+    if is_col(a) and is_col(b):
+        difference = filter(lambda c: c not in b, a)
+        if isinstance(a, str):
+            return ''.join(difference)
+        if isinstance(a, list):
+            return list(difference)
+        if isinstance(a, set):
+            return set(difference)
+        if isinstance(a, tuple):
+            return tuple(difference)
+    raise BadTypeCombinationError("-", a, b)
 
 
-# '. single purpose.
+# '. str.
 def read_file(a):
-    b = [lin[:-1] if lin[-1] == '\n' else lin for lin in (open(a))]
-    return b
+    if isinstance(a, str):
+        b = [lin[:-1] if lin[-1] == '\n' else lin for lin in (open(a))]
+        return b
+    raise BadTypeCombinationError("'", a)
 
 
 # _. All.
 def neg(a):
     if is_num(a):
         return -a
-    else:
+    if is_seq(a):
         return a[::-1]
+    raise BadTypeCombinationError("_", a)
 
 
 # {. All.
 def Pset(a):
     if is_num(a):
         return set([a])
-    else:
+    if is_col(a):
         return set(a)
+    raise BadTypeCombinationError("{", a)
 
 
 # +. All.
 def plus(a, b):
+    if isinstance(a, set):
+        if is_col(b):
+            return a.union(b)
+        else:
+            return a.union({b})
     if isinstance(a, list) and not isinstance(b, list):
         return a+[b]
-    if isinstance(a, set):
-        return a.union(b)
     if isinstance(b, list) and not isinstance(a, list):
         return [a]+b
     if isinstance(a, tuple) and not isinstance(b, tuple):
         return a+(b,)
     if isinstance(b, tuple) and not isinstance(a, tuple):
         return b+(a,)
-    return a+b
+    if is_num(a) and is_num(b) or\
+            isinstance(a, list) and isinstance(b, list) or\
+            isinstance(a, tuple) and isinstance(b, tuple) or\
+            isinstance(a, str) and isinstance(b, str):
+        return a+b
+    raise BadTypeCombinationError("+", a, b)
 
 
 # =. All.
@@ -184,16 +199,23 @@ def at_slice(a, b, c):
             return bool(re.search(b, a))
         else:
             return re.sub(b, c, a)
-    return a[slice(b, c)]
+    if isinstance(b, int) and isinstance(c, int):
+        return a[slice(b, c)]
+    raise BadTypeCombinationError(":", a, b, c)
 
 
 # <. All.
 def lt(a, b):
-    if isinstance(a, set):
+    if isinstance(a, set) and is_col(b):
         return a.issubset(b) and a != b
-    if not is_num(a) and is_num(b):
+    if is_seq(a) and is_num(b):
         return a[:b]
-    return a < b
+    if is_num(a) and is_num(b) or\
+            isinstance(a, list) and isinstance(b, list) or\
+            isinstance(a, tuple) and isinstance(b, tuple) or\
+            isinstance(a, str) and isinstance(b, str):
+        return a < b
+    raise BadTypeCombinationError("<", a, b)
 
 
 # >. All.
