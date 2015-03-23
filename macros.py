@@ -8,6 +8,7 @@ import string
 import sys
 import collections
 import numbers
+from ast import literal_eval
 
 
 # Type checking
@@ -220,32 +221,27 @@ def lt(a, b):
 
 # >. All.
 def gt(a, b):
-    if isinstance(a, set):
+    if isinstance(a, set) and is_col(b):
         return a.issuperset(b) and a != b
-    if not is_num(a) and is_num(b):
+    if is_seq(a) and is_num(b):
         return a[b:]
-    return a > b
+    if is_num(a) and is_num(b) or\
+            isinstance(a, list) and isinstance(b, list) or\
+            isinstance(a, tuple) and isinstance(b, tuple) or\
+            isinstance(a, str) and isinstance(b, str):
+        return a > b
+    raise BadTypeCombinationError(">", a, b)
 
 
 # /. All.
 def div(a, b):
-    if is_num(a):
+    if is_num(a) and is_num(b):
         return int(a // b)
-    return a.count(b)
+    if is_seq(a):
+        return a.count(b)
+    raise BadTypeCombinationError("/", a, b)
 
 
-## a. All
-#def Pand(a, b):
-#    if isinstance(a, int):
-#        return a & b
-#    else:
-#        intersection = set(a) & set(b)
-#        if isinstance(a, str):
-#            return ''.join(sorted(intersection))
-#        if isinstance(a, list):
-#            return list(sorted(intersection))
-#        else:
-#            return intersection
 b = "\n"
 
 
@@ -255,13 +251,13 @@ def chop(a, b=None):
         return a/b
     if isinstance(a, str) and isinstance(b, str):
         return a.split(b)
-    if b is None:
+    if isinstance(a, str) and b is None:
         return a.split()
     # iterable, int -> chop a into pieces of length b
-    if isinstance(a, collections.Iterable) and is_num(b):
+    if is_seq(a) and isinstance(b, int):
         return [a[i:i+b] for i in range(0, len(a), b)]
     # int, iterable -> split b into a pieces (distributed equally)
-    else:
+    if isinstance(a, int) and is_seq(b):
         m = len(b) // a  # min number of elements
         r = len(b) % a   # remainding elements
         begin, end = 0, m + (r > 0)
@@ -270,6 +266,7 @@ def chop(a, b=None):
             l.append(b[begin:end])
             begin, end = end, end + m + (i + 1 < r)
         return l
+    raise BadTypeCombinationError("c", a, b)
 
 
 # C. int, str.
@@ -278,7 +275,9 @@ def Pchr(a):
         return chr(a)
     if isinstance(a, str):
         return ord(a[0])
-    return list(zip(*a))
+    if is_col(a):
+        return list(zip(*a))
+    raise BadTypeCombinationError("C", a)
 
 
 d = ' '
@@ -288,25 +287,33 @@ d = ' '
 def end(a):
     if is_num(a):
         return a % 10
-    return a[-1]
+    if is_seq(a):
+        return a[-1]
+    raise BadTypeCombinationError("e", a)
 
 
 # f. single purpose.
 def Pfilter(a, b):
     if is_num(b):
         return next(filter(a, itertools.count(b)))
-    else:
+    if is_col(b):
         return list(filter(a, b))
+    raise BadTypeCombinationError("f", a, b)
 G = string.ascii_lowercase
 
 
 # g. All.
 def gte(a, b):
-    if isinstance(a, set):
+    if isinstance(a, set) and is_col(b):
         return a.issuperset(b)
-    if not is_num(a) and is_num(b):
+    if is_seq(a) and is_num(b):
         return a[b-1:]
-    return a >= b
+    if is_num(a) and is_num(b) or\
+            isinstance(a, list) and isinstance(b, list) or\
+            isinstance(a, tuple) and isinstance(b, tuple) or\
+            isinstance(a, str) and isinstance(b, str):
+        return a >= b
+    raise BadTypeCombinationError("g", a, b)
 H = {}
 
 
@@ -314,17 +321,20 @@ H = {}
 def head(a):
     if is_num(a):
         return a+1
-    return a[0]
+    if is_seq(a):
+        return a[0]
+    raise BadTypeCombinationError("h", a)
 
 
 # i. int, str
 def base_10(a, b):
-    if isinstance(a, str):
+    if isinstance(a, str) and isinstance(a, int):
         return int(a, b)
-    if isinstance(a, list):
+    if is_seq(a) and is_num(b):
         return to_base_ten(a, b)
-    if isinstance(a, int):
+    if isinstance(a, int) and isinstance(b, int):
         return fractions.gcd(a, b)
+    raise BadTypeCombinationError("i", a, b)
 
 
 def to_base_ten(arb, base):
@@ -340,9 +350,13 @@ def to_base_ten(arb, base):
 
 # j. str.
 def join(a, b):
-    if isinstance(a, int):
+    if isinstance(a, int) and isinstance(b, int):
         return from_base_ten(a, b)
-    return a.join(list(map(lambda N: str(N), b)))
+    if isinstance(a, str) and is_col(b):
+        return a.join(list(map(lambda N: str(N), b)))
+    if is_col(b):
+        return str(a).join(list(map(lambda N: str(N), b)))
+    raise BadTypeCombinationError("j", a, b)
 
 
 def from_base_ten(arb, base):
@@ -365,15 +379,18 @@ k = ''
 def Plen(a):
     if is_num(a):
         return math.log(a, 2)
-    else:
+    if is_col(a):
         return len(a)
+    raise BadTypeCombinationError("l", a)
 
 
 # m. Single purpose.
 def Pmap(a, b):
     if isinstance(b, int):
         return list(map(a, range(b)))
-    return list(map(a, b))
+    if is_col(b):
+        return list(map(a, b))
+    raise BadTypeCombinationError("m", a, b)
 N = '"'
 
 
@@ -388,14 +405,19 @@ def rchoice(a):
         if a == 0:
             return random.random()
         return random.choice(urange(a))
-    return random.choice(list(a))
+    if is_col(a):
+        return random.choice(list(a))
+    raise BadTypeCombinationError("O", a)
 
 
 # o. Single purpose.
 def order(a, b):
-    if isinstance(b, str):
-        return ''.join(sorted(b, key=a))
-    return sorted(b, key=a)
+    if is_col(b):
+        if isinstance(b, str):
+            return ''.join(sorted(b, key=a))
+        else:
+            return sorted(b, key=a)
+    raise BadTypeCombinationError("o", a, b)
 
 
 def isprime(num):
@@ -414,12 +436,17 @@ def primes_upper(a):
         if working != 1:
             output.append(working)
         return output
-    return a[:-1]
+    if is_seq(a):
+        return a[:-1]
+    raise BadTypeCombinationError("P", a)
 
 
 # p. All.
 def Pprint(a, b=""):
-    print(b, end=a)
+    if isinstance(a, str):
+        print(b, end=a)
+    else:
+        print(b, end=str(a))
     return 0
 
 
@@ -446,7 +473,7 @@ def Prange(a, b=None):
         if b == 6:
             return a.strip()
         if b == 7:
-            return [eval(part) for part in a.split()]
+            return [literal_eval(part) for part in a.split()]
     if isinstance(a, int):
         if a < b:
             return list(range(a, b))
