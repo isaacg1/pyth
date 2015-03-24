@@ -1,10 +1,13 @@
-Pyth documentation 3.0
+Pyth documentation 3.1
 
 Each character is a separate token, except for numbers, 
 strings, and python literals. Written in Polish notation,
 with fixed arities for each operator. Statements are special, 
 allow multiple lines.
 
+num = int, float
+seq = str, list, tuple
+col = str, list, tuple, set
 
 Char, arity, begins line, mnemonic, details. When in doubt, similar to python.
 
@@ -88,14 +91,15 @@ n 2 N not-equal         Python !=.
 o 2 N order-by          Python sorted, key=. implicit lambda, N -> Z ->
 p 2 N print             Python print, end=. Implicitly called with "\n".
 q 2 N equals            Python ==.
-r 2 N range             Python 2 range. Rev if a>b. Various string processing.
+r 2 N range             Python 2 range. range(a, b, -1) if a > b. Various string processing.
 s 1 N sum-int           reduce + on list, cast to int on other.
-t 1 N tail              _[1:].
-u 3 N reduce            Reduce, implicit lambda. 3rd is base case. G,H -> N,T. Fixed point operator if 2nd arg is not seq.
+t 1 N tail              _[1:], _-1.
+u 3 N reduce            Reduce, implicit lambda. 3rd is base case. G,H -> N,T.
+                        Fixed point operator if 2nd arg omitted, e.g. u<1st><3rd>).
 v 1 N eval              Python eval. Often used for str -> int.
 w 1 N raw_input         Python 3 input()
 x 2 N index             find first occurance. -1 if not found. bitwise xor.
-y 1 N                   On num, double. On seq, powerset.
+y 1 N                   On num, double. On col, powerset.
 z 0 N                   Variable. Autoinitializing to input.
 { 1 N set               Python set. Makes one element set on num.
 | 2 N or                Logical or. Shortcircuiting.
