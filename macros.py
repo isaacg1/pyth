@@ -456,9 +456,9 @@ def equal(a, b):
 
 
 # r. int, int or str,int.
-def Prange(a, b=None):
+def Prange(a, b):
     if isinstance(a, str) and isinstance(b, int):
-        if not b:
+        if b == 0:
             return a.lower()
         if b == 1:
             return a.upper()
@@ -474,28 +474,31 @@ def Prange(a, b=None):
             return a.strip()
         if b == 7:
             return [literal_eval(part) for part in a.split()]
-    if isinstance(a, int):
+    if isinstance(a, int) and isinstance(b, int):
         if a < b:
             return list(range(a, b))
         else:
-            return list(range(b, a))[::-1]
+            return list(range(a, b, -1))
+    raise BadTypeCombinationError("r", a, b)
 
 
 # s. int, str, list.
 def Psum(a):
-    if isinstance(a, list) or isinstance(a, tuple):
+    if is_col(a) and not isinstance(a, str):
         if len(a) == 0:
             return 0
         return reduce(lambda b, c: b+c, a[1:], a[0])
-    else:
+    if is_num(a) or isinstance(a, str):
         return int(a)
+    raise BadTypeCombinationError("s", a)
 
 
 def Psorted(a):
     if isinstance(a, str):
         return ''.join(sorted(a))
-    else:
+    if is_col(a):
         return sorted(a)
+    raise BadTypeCombinationError("S", a)
 T = 10
 
 
@@ -503,39 +506,45 @@ T = 10
 def tail(a):
     if is_num(a):
         return a-1
-    return a[1:]
+    if is_seq(a):
+        return a[1:]
+    raise BadTypeCombinationError("t", a)
 
 
 # u. single purpose
-def reduce(a, b, c):
-    # Reduce
-    if isinstance(b, collections.Iterable):
-        acc = c
-        seq = b
-        while len(seq) > 0:
-            h = seq[0]
-            acc = a(acc, h)
-            seq = seq[1:]
-        return acc
-    # Fixed point / increasing sequence
-    else:
+def reduce(a, b, c=None):
+    # Fixed point
+    if c is None:
         counter = 0
-        old_acc = c
-        acc = a(c, counter)
+        old_acc = b
+        acc = a(b, counter)
         while old_acc != acc:
             counter += 1
             old_acc = acc
             acc = a(acc, counter)
         return acc
+    # Reduce
+    if is_seq(b) or isinstance(b, int):
+        if isinstance(b, int):
+            seq = range(b)
+        else:
+            seq = b
+        acc = c
+        while len(seq) > 0:
+            h = seq[0]
+            acc = a(acc, h)
+            seq = seq[1:]
+        return acc
+    raise BadTypeCombinationError("u", a, b, c)
 
 
 # U. int, str, list.
 def urange(a):
     if isinstance(a, int):
         return list(range(a))
-    if isinstance(a, tuple) and len(a) == 2:
-        return list(range(a[0], a[1]))
-    return list(range(len(a)))
+    if is_col(a):
+        return list(range(len(a)))
+    raise BadTypeCombinationError("U", a)
 
 
 # X.
@@ -544,58 +553,73 @@ def assign_at(a, b, c):
     if isinstance(a, dict):
         a[b] = c
         return a
-    if is_num(b):
+    if isinstance(b, int):
         if isinstance(a, list):
             a[b % len(a)] = c
             return a
         if isinstance(a, str):
             return a[:b % len(a)] + str(c) + a[(b % len(a))+1:]
+        if isinstance(a, tuple):
+            return a[:b % len(a)] + (c,) + a[(b % len(a))+1:]
     # Translate
-    if isinstance(a, str) and isinstance(b, str) or \
-       isinstance(a, list) and isinstance(b, list):
+    if is_seq(a) and is_seq(b) and is_seq(c):
         def trans_func(element):
             return c[b.index(element)] if element in b else element
         translation = map(trans_func, a)
-        if isinstance(c, str):
+        if isinstance(a, str) and isinstance(c, str):
             return ''.join(translation)
         else:
             return list(translation)
     # += in a list, X<int><list><any>
-    if isinstance(b, list):
+    if isinstance(a, int) and isinstance(b, list):
         b[a % len(b)] += c
         return b
     # += in a dict, X<any><dict><any>
     if isinstance(b, dict):
         b[a] += c
         return b
+    raise BadTypeCombinationError("X", a, b, c)
 
 
 # x. int, str, list.
 def index(a, b):
-    if isinstance(a, int):
+    if isinstance(a, int) and isinstance(b, int):
         return a ^ b
-    if b in a:
-        return a.index(b)
-    # replicate functionality from str.find
-    else:
-        return -1
+    if is_seq(a) and not (isinstance(a, str) and not isinstance(b, str)):
+        if b in a:
+            return a.index(b)
+        # replicate functionality from str.find
+        else:
+            return -1
+    raise BadTypeCombinationError("x", a, b)
 
 
 # y. string, list.
 def subsets(a):
     if is_num(a):
         return a*2
-    else:
+    if isinstance(a, str):
         if len(a) == 0:
             return [a]
         if len(a) == 1:
-            return [[] if not isinstance(a, str) else '', a]
+            return ['', a]
         else:
-            def to_type(elem):
-                return [elem] if not isinstance(a, str) else elem
             others = subsets(a[:-1])
-            out = others + list(map(lambda sub: sub + to_type(a[-1]), others))
+            out = others + list(map(lambda sub: sub + a[-1], others))
             return sorted(out, key=len)
+    if is_seq(a):
+        if len(a) == 0:
+            return [a]
+        if len(a) == 1:
+            return [[], list(a)]
+        else:
+            others = subsets(a[:-1])
+            out = others + list(map(lambda sub: sub + [a[-1]], others))
+            return sorted(out, key=len)
+    if isinstance(a, set):
+        return subsets(sorted(list(a)))
+    raise BadTypeCombinationError("y", a)
+
 
 Y = []
 Z = 0
