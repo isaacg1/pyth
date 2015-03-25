@@ -107,8 +107,8 @@ z  0 N                   Variable. Autoinitializing to input.
 .A 1 N all               Python all(_).
 .a 1 N abs               Python abs(_).
 .B 1 N bin               Binary string representing _. Direct on int, interpreted as UTF-8 on str.
-.c 2 N combinations      itertools.combinations(a, b).
-.C 2 N comb-replacement  itertools.combinations_with_replacement(a, b).
+.c 2 N combinations      Combinations of elements from a of length b.
+.C 2 N comb-replacement  Combinations of elements from a of length b, with replacement.
 .d 1 n dict
 .D 2 N divmod
 .E 1 N any               Python any(_).
