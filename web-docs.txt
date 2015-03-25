@@ -92,6 +92,7 @@ z 0 N z Variable. Autoinitializing to input.
 .d 1 n dict
 .D 2 N divmod
 .E 1 N any Python any(_).
+.e 2 N enumerate map over a enumerate. First arg is lambda, (k, Y) -> (b, Z) ->. k is the number, Y is the sequence.
 .F 2 N format
 .f 1 N float
 .H 1 N hex Hexadecimal string representing _. Direct on int, interpreted as UTF-8 on str.
@@ -100,10 +101,12 @@ z 0 N z Variable. Autoinitializing to input.
 .i 1 N input
 .j 2 N complex
 .l 2 N log Python math.log(a, b).
+.m 1 N multiply product, over a non-str seq. Uses Pyth *.
 .O 1 N oct Octal string representing _. Direct on int, interpreted as UTF-8 on str.
 .p 1 N permutations itertools.permutations(_).
 .P 2 N permutations itertools.permutations(a, b).
 .r 3 N range-step Python range(a, b, c).
+.S 1 N shuffle .S<col> random.shuffle(<col>). str out if str in, otherwise list out. .S(<int>) = .S(range(<int>))
 .s 2 N strip-chars a.strip(b)
 .R 2 N round Python round(a, b).
 .t 2 N trigonometry Collection of trigonometric functions.

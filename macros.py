@@ -84,7 +84,7 @@ def mod(a, b):
     raise BadTypeCombinationError("%", a, b)
 
 
-# ^. int, str, list. Uses Psum
+# ^. int, str, list.
 def Ppow(a, b):
     if is_num(a) and is_num(b):
         return pow(a, b)
@@ -499,7 +499,7 @@ def Psum(a):
     if is_col(a) and not isinstance(a, str):
         if len(a) == 0:
             return 0
-        return reduce(lambda b, c: b+c, a[1:], a[0])
+        return reduce(lambda b, c: plus(b, c), a[1:], a[0])
     if is_num(a) or isinstance(a, str):
         return int(a)
     raise BadTypeCombinationError("s", a)
@@ -633,14 +633,19 @@ def subsets(a):
     raise BadTypeCombinationError("y", a)
 
 
+Y = []
+Z = 0
+
+
 def Phex_multitype(a, func):
     if isinstance(a, str):
         return "0x" + binascii.hexlify(a.encode("utf-8")).decode("utf-8")
-    
+
     if isinstance(a, int):
         return hex(a)
-    
+
     raise BadTypeCombinationError(func, a)
+
 
 # .H. int/str
 def Phex(a):
@@ -673,6 +678,14 @@ def combinations_with_replacement(a, b):
     return itertools_norm(itertools.combinations_with_replacement, a, b)
 
 
+# .e. lambda, seq
+def Penumerate(a, b):
+    if not is_seq(b):
+        raise BadTypeCombinationError(".e", a, b)
+
+    return list(map(lambda enum: a(*enum), enumerate(b)))
+
+
 # .l. num, num
 def log(a, b):
     if not is_num(a) or not is_num(b):
@@ -681,9 +694,18 @@ def log(a, b):
     return math.log(a, b)
 
 
+# .m. col
+def product(a):
+    if is_col(a) and not isinstance(a, str):
+        if len(a) == 0:
+            return 1
+        return reduce(lambda b, c: times(b, c), a[1:], a[0])
+
+
 # .p. seq
 def permutations(a):
-    if not is_seq(a): raise BadTypeCombinationError(".p", a)
+    if not is_seq(a):
+        raise BadTypeCombinationError(".p", a)
     return itertools_norm(itertools.permutations, a, len(a))
 
 
@@ -709,6 +731,27 @@ def stripchars(a, b):
         return a.strip(b)
 
     raise BadTypeCombinationError(".r", a, b)
+
+
+# .S. seq, int
+def shuffle(a):
+    if isinstance(a, list):
+        random.shuffle(a)
+        return a
+    if isinstance(a, str):
+        tmp_list = list(a)
+        random.shuffle(tmp_list)
+        return ''.join(tmp_list)
+    if is_seq(a):
+        tmp_list = list(a)
+        random.shuffle(tmp_list)
+        return tmp_list
+    if isinstance(a, int):
+        tmp_list = list(range(a))
+        random.shuffle(tmp_list)
+        return tmp_list
+
+    raise BadTypeCombinationError('.S', a, b)
 
 
 # .t. num, int
@@ -769,9 +812,3 @@ def rightshift(a, b):
         return a >> b
 
     raise BadTypeCombinationError(".>", a, b)
-
-
-
-
-Y = []
-Z = 0

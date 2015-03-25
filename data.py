@@ -1,4 +1,4 @@
-no_init_paren = 'fmou'
+no_init_paren = ('f', 'm', 'o', 'u', '.e')
 end_statement = 'BR'
 variables = 'bdGHkNTYZ'
 
@@ -121,6 +121,7 @@ c_to_f = {
     '.d': ('dict', 1),
     '.D': ('divmod', 2),
     '.E': ('any', 1),
+    '.e': ('Penumerate(lambda k, Y:', 2),
     '.F': ('format', 2),
     '.f': ('float', 1),
     '.H': ('Phex', 1),
@@ -129,11 +130,13 @@ c_to_f = {
     '.i': ('input', 1),
     '.j': ('complex', 2),
     '.l': ('log', 2),
+    '.m': ('product', 1),
     '.O': ('Poct', 1),
     '.p': ('permutations', 1),
     '.P': ('permutations2', 2),
     '.r': ('Prange3', 3),
     '.R': ('round', 2),
+    '.S': ('shuffle', 1),
     '.s': ('stripchars', 2),
     '.t': ('trig', 2),
     '.^': ('pow', 3),
@@ -156,12 +159,14 @@ replacements = {
 # filter: T, Y, Z
 # order: N, Z,
 # reduce: (G,H), (N,T)
+# enumerate: (k, Y), (b, Z)
 
 next_c_to_f = {
     'f': [('Pfilter(lambda Y:', 2), ('Pfilter(lambda Z:', 2), ],
     'm': [('Pmap(lambda k:', 2), ('Pmap(lambda b:', 2), ],
     'o': [('order(lambda Z:', 2), ],
     'u': [('reduce(lambda N,T:', 2), ],
+    '.e': [('Penumerate(lambda b, Z:', 2), ],
     }
 
 # For autoinitializers. One shot, not rotating.
@@ -176,11 +181,4 @@ next_c_to_i = {
 prepend = {
     'Q': "Qvw",
     'z': "zw",
-    }
-
-next_c_to_f = {
-    'f': [('Pfilter(lambda Y:', 2), ('Pfilter(lambda Z:', 2), ],
-    'm': [('Pmap(lambda k:', 2), ('Pmap(lambda b:', 2), ],
-    'o': [('order(lambda Z:', 2), ],
-    'u': [('reduce(lambda N,T:', 3), ],
     }

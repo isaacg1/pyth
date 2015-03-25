@@ -91,7 +91,7 @@ o  2 N order-by          Python sorted, key=. Implicit lambda, N -> Z ->
 p  2 N print             Python print, end=. Implicitly called with "\n".
 q  2 N equals            Python ==.
 r  2 N range             Python 2 range. range(a, b, -1) if a > b. Various string processing (see below).
-s  1 N sum-int           Reduce + on list, cast to int on other.
+s  1 N sum-int           Reduce Pyth + on non-str seq, cast to int on other.
 t  1 N tail              _[1:], _-1.
 u  3 N reduce            Reduce, implicit lambda. 3rd is base case. G,H -> N,T.
                          Fixed point operator if 2nd arg omitted, e.g. u<1st><3rd>).
@@ -112,6 +112,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .d 1 n dict
 .D 2 N divmod
 .E 1 N any               Python any(_).
+.e 2 N enumerate         map over a enumerate. First arg is lambda, (k, Y) -> (b, Z) ->. k is the number, Y is the sequence.
 .F 2 N format
 .f 1 N float
 .H 1 N hex               Hexadecimal string representing _. Direct on int, interpreted as UTF-8 on str.
@@ -120,11 +121,13 @@ z  0 N                   Variable. Autoinitializing to input.
 .w 1 N prompt            Python input(_).
 .j 2 N complex
 .l 2 N log               Python math.log(a, b).
+.m 1 N multiply          product, over a non-str seq. Uses Pyth *.
 .O 1 N oct               Octal string representing _. Direct on int, interpreted as UTF-8 on str.
 .p 1 N permutations      itertools.permutations(_).
 .P 2 N permutations      itertools.permutations(a, b).
 .r 3 N range-step        Python range(a, b, c).
 .R 2 N round             Python round(a, b).
+.S 1 N shuffle           .S<col> random.shuffle(<col>). .S(<int>) = .S(range(<int>))
 .s 2 N strip-chars       a.strip(b)
 .t 2 N trigonometry      Collection of trigonometric functions. See below.
 .^ 3 N powmod            Python pow(a, b, c).
