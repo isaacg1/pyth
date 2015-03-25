@@ -695,14 +695,6 @@ def permutations2(a, b):
     return itertools_norm(itertools.permutations, a, b)
 
 
-# .r. int, int, int
-def Prange3(a, b, c):
-    if isinstance(a, int) and isinstance(b, int) and isinstance(c, int):
-        return list(range(a, b, c))
-
-    raise BadTypeCombinationError(".r", a, b, c)
-
-
 # .s. str, str
 def stripchars(a, b):
     if isinstance(a, str) and isinstance(b, str):
