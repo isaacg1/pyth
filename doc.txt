@@ -85,12 +85,12 @@ i  2 N int-2             Convert str or list from given base to base 10, or gcd.
 j  2 N join              Python join, or convert to base. Output in list form.
 k  0 N                   Variable. ""
 l  1 N len               Python len. log base 2 on nums.
-m  2 N map               Python 2 map. Int as second arg -> range(<int>). implicit lambda, d -> k -> b ->
+m  2 N map               Python 2 map. Int as second arg -> range(<int>). Implicit lambda, d -> k -> b ->
 n  2 N not-equal         Python !=.
 o  2 N order-by          Python sorted, key=. Implicit lambda, N -> Z ->
 p  2 N print             Python print, end=. Implicitly called with "\n".
 q  2 N equals            Python ==.
-r  2 N range             Python 2 range. range(a, b, -1) if a > b. Various string processing.
+r  2 N range             Python 2 range. range(a, b, -1) if a > b. Various string processing (see below).
 s  1 N sum-int           Reduce + on list, cast to int on other.
 t  1 N tail              _[1:], _-1.
 u  3 N reduce            Reduce, implicit lambda. 3rd is base case. G,H -> N,T.
@@ -129,3 +129,17 @@ z  0 N                   Variable. Autoinitializing to input.
 .& 2 N bitand            Python &.
 .| 2 N bitor             Python |.
 .* 1 N unpack            Python unpacking. Literally translates to *(_) in the output.
+
+
+Various string operations when calling rab with a str and b int:
+
+    b result
+    0 a.lower()
+    1 a.upper()
+    2 a.swapcase()
+    3 a.title()
+    4 a.capitalize()
+    5 string.capwords(a)
+    6 a.strip()
+    7 [literal_eval(part) for part in a.split()]
+
