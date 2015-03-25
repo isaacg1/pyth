@@ -149,6 +149,8 @@ def neg(a):
         return -a
     if is_seq(a):
         return a[::-1]
+    if isinstance(a, dict):
+        return {value: key for key, value in a.items()}
     raise BadTypeCombinationError("_", a)
 
 
