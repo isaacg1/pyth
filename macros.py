@@ -91,8 +91,11 @@ def Ppow(a, b):
 def times(a, b):
     if is_col(a) and is_col(b):
         return list(itertools.product(a, b))
-    else:
+    if is_num(a) and is_num(b) or\
+            isinstance(a, int) and is_seq(b) or\
+            is_seq(a) and isinstance(b, int):
         return a*b
+    raise BadTypeCombinationError("*", a, b)
 
 
 # (. All types
