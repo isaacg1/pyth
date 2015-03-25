@@ -50,15 +50,15 @@ def parse(code, spacing="\n "):
     # Separate active character from the rest of the code.
     active_char = code[0]
     rest_code = code[1:]
+    # Deal with alternate command table
+    if active_char == ".":
+        assert len(rest_code) >= 1
+        if rest_code[0] not in "0123456789":
+            active_char += rest_code[0]
+            rest_code = rest_code[1:]
     # Deal with numbers
     if active_char in "0123456789":
         return num_parse(active_char, rest_code)
-    if active_char == ".":
-        assert len(rest_code) >= 1
-        if rest_code[0] in "0123456789":
-            return num_parse(active_char, rest_code)
-        else:
-            return function_parse(active_char + rest_code[0], rest_code[1:])
     # String literals
     if active_char == '"':
         return str_parse(active_char, rest_code)
@@ -218,6 +218,10 @@ def prepend_parse(code):
 # safe infix.
 def add_print(code):
     if len(code) > 0:
+        # Handle alternate table commands before confusion with numerals.
+        if code[0] == "." and code[:2] in c_to_f:
+            return len(code) == 2 or code[2] != "="
+
         if (code[0] not in 'p '
                 and code[0] in c_to_f
                 and (len(code) == 1 or code[1] != "=")) or \

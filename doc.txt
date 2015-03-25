@@ -105,7 +105,7 @@ z 0 N                   Variable. Autoinitializing to input.
 | 2 N or                Logical or. Shortcircuiting.
 } 2 N in                Python in.
 ~ 1 Y +=                Python +=.
-.A 2 N all
+.A 1 N all
 .a 1 N abs
 .b 1 N bin
 .c 2 N complex
