@@ -626,21 +626,45 @@ def subsets(a):
         return subsets(sorted(list(a)))
     raise BadTypeCombinationError("y", a)
 
-# .H int/str
-def Phex(a):
+
+def Phex_multitype(a, func):
     if isinstance(a, str):
         return "0x" + binascii.hexlify(a.encode("utf-8")).decode("utf-8")
+    
+    if isinstance(a, int):
+        return hex(a)
+    
+    raise BadTypeCombinationError(func, a)
 
-    return hex(a)
+# .H int/str
+def Phex(a):
+    return Phex_multitype(a, ".H")
+
 
 # .B int/str
 def Pbin(a):
-    return bin(int(Phex(a), 16)) # Copy multitype handling from Phex
+    return bin(int(Phex_multitype(a, ".B"), 16))
+
 
 # .O int/str
 def Poct(a):
-    return oct(int(Phex(a), 16)) # Copy multitype handling from Phex
+    return oct(int(Phex_multitype(a, ".O"), 16))
 
+
+# .& int, int
+def bitand(a, b):
+    if isinstance(a, int) and isinstance(b, int):
+        return a & b
+
+    raise BadTypeCombinationError(".&", a, b)
+
+
+# .| int, int
+def bitor(a, b):
+    if isinstance(a, int) and isinstance(b, int):
+        return a | b
+
+    raise BadTypeCombinationError(".|", a, b)
 
 
 

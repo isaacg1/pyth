@@ -112,7 +112,6 @@ c_to_f = {
     'X': ('assign_at', 3),
     'x': ('index', 2),
     'y': ('subsets', 1),
-    '.^': ('pow', 3),
     '.A': ('all', 1),
     '.a': ('abs', 1),
     '.B': ('Pbin', 1),
@@ -130,6 +129,9 @@ c_to_f = {
     '.p': ('general_parse', 1),
     '.R': ('round', 1),
     '.t': ('tuple', 1),
+    '.^': ('pow', 3),
+    '.&': ('bitand', 2),
+    '.|': ('bitor', 2),
     }
 
 replacements = {
