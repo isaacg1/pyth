@@ -83,4 +83,4 @@ z 0 N z Variable. Autoinitializing to input.
 { 1 N set Python set. Makes one element set on num.
 | 2 N or Logical or. Shortcircuiting.
 } 2 N in Python in.
-~ 2 Y += Python +=.
+~ 1 N dict Python dict.
