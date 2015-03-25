@@ -40,6 +40,18 @@ class BadTypeCombinationError(Exception):
         return error_message
 
 
+# Itertools type normalization
+def itertools_norm(func, a, *args, **kwargs):
+    if isinstance(a, str):
+        return ["".join(group) for group in func(a, *args, **kwargs)]
+    if isinstance(a, list):
+        return [list(group) for group in func(a, *args, **kwargs)]
+    if isinstance(a, set):
+        return [set(group) for group in func(a, *args, **kwargs)]
+
+    return [group for group in func(a, *args, **kwargs)]
+
+
 # Function library. See data for letter -> function correspondences.
 # !. All.
 def Pnot(a):
@@ -77,14 +89,8 @@ def Ppow(a, b):
     if is_num(a) and is_num(b):
         return pow(a, b)
     if is_col(a) and isinstance(b, int):
-        if isinstance(a, str):
-            return [''.join(group) for group in itertools.product(a, repeat=b)]
-        elif isinstance(a, list):
-            return [list(group) for group in itertools.product(a, repeat=b)]
-        elif isinstance(a, set):
-            return [set(group) for group in itertools.product(a, repeat=b)]
-        else:
-            return [group for group in itertools.product(a, repeat=b)]
+        return itertools_norm(itertools.product, a, repeat=b)
+
     raise BadTypeCombinationError("^", a, b)
 
 
@@ -636,22 +642,22 @@ def Phex_multitype(a, func):
     
     raise BadTypeCombinationError(func, a)
 
-# .H int/str
+# .H. int/str
 def Phex(a):
     return Phex_multitype(a, ".H")
 
 
-# .B int/str
+# .B. int/str
 def Pbin(a):
     return bin(int(Phex_multitype(a, ".B"), 16))
 
 
-# .O int/str
+# .O. int/str
 def Poct(a):
     return oct(int(Phex_multitype(a, ".O"), 16))
 
 
-# .& int, int
+# .&. int, int
 def bitand(a, b):
     if isinstance(a, int) and isinstance(b, int):
         return a & b
@@ -659,7 +665,7 @@ def bitand(a, b):
     raise BadTypeCombinationError(".&", a, b)
 
 
-# .| int, int
+# .|. int, int
 def bitor(a, b):
     if isinstance(a, int) and isinstance(b, int):
         return a | b
@@ -667,12 +673,44 @@ def bitor(a, b):
     raise BadTypeCombinationError(".|", a, b)
 
 
-# .r int, int, int
+# .r. int, int, int
 def Prange3(a, b, c):
     if isinstance(a, int) and isinstance(b, int) and isinstance(c, int):
         return list(range(a, b, c))
 
     raise BadTypeCombinationError(".r", a, b, c)
+
+
+# .p. iter
+def permutations(a):
+    if isinstance(a, int): raise BadTypeCombinationError(".p", a)
+    return itertools_norm(itertools.permutations, a, len(a))
+
+
+# .P. iter, int
+def permutations2(a, b):
+    if isinstance(a, int) or not isinstance(b, int):
+        raise BadTypeCombinationError(".P", a, b)
+
+    return itertools_norm(itertools.permutations, a, b)
+
+
+# .c. iter, int
+def combinations(a, b):
+    if isinstance(a, int) or not isinstance(b, int):
+        raise BadTypeCombinationError(".c", a, b)
+
+    return itertools_norm(itertools.combinations, a, b)
+
+
+# .C. iter, int
+def combinations_with_replacement(a, b):
+    if isinstance(a, int) or not isinstance(b, int):
+        raise BadTypeCombinationError(".C", a, b)
+
+    return itertools_norm(itertools.combinations_with_replacement, a, b)
+
+
 
 
 Y = []
