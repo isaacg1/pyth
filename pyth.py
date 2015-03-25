@@ -51,8 +51,14 @@ def parse(code, spacing="\n "):
     active_char = code[0]
     rest_code = code[1:]
     # Deal with numbers
-    if active_char in ".0123456789":
+    if active_char in "0123456789":
         return num_parse(active_char, rest_code)
+    if active_char == ".":
+        assert len(rest_code) > 1
+        if rest_code[0] in "0123456789":
+            return num_parse(active_char, rest_code)
+        else:
+            return function_parse(active_char + rest_code[0], rest_code[1:])
     # String literals
     if active_char == '"':
         return str_parse(active_char, rest_code)

@@ -44,6 +44,7 @@ class memoized(object):
 # Arbitrary format operators - use for assignment, infix, etc.
 # All surrounding strings, arity
 c_to_i = {
+    '~': (('', '+=', ''), 2),
     '&': (('(', ' and ', ')'), 2),
     '|': (('(', ' or ', ')'), 2),
     '=': (('', '=copy(', ')'), 2),
@@ -111,7 +112,23 @@ c_to_f = {
     'X': ('assign_at', 3),
     'x': ('index', 2),
     'y': ('subsets', 1),
-    '~': ('dict', 1),
+    '.^': ('pow', 3),
+    '.A': ('all', 1),
+    '.a': ('abs', 1),
+    '.b': ('bin', 1),
+    '.c': ('complex', 2),
+    '.d': ('dict', 1),
+    '.D': ('divmod', 2),
+    '.E': ('any', 1),
+    '.f': ('format', 2),
+    '.H': ('hex', 1),
+    '.h': ('hash', 1),
+    '.I': ('id', 1),
+    '.i': ('input', 1),
+    '.o': ('oct', 1),
+    '.p': ('general_parse', 1),
+    '.R': ('round', 1),
+    '.t': ('tuple', 1),
     }
 
 replacements = {
