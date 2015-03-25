@@ -703,6 +703,14 @@ def Prange3(a, b, c):
     raise BadTypeCombinationError(".r", a, b, c)
 
 
+# .s. str, str
+def stripchars(a, b):
+    if isinstance(a, str) and isinstance(b, str):
+        return a.strip(b)
+
+    raise BadTypeCombinationError(".r", a, b)
+
+
 # .t. num, int
 def trig(a, b):
     if not is_num(a) or not isinstance(b, int):

@@ -104,7 +104,8 @@ z 0 N z Variable. Autoinitializing to input.
 .p 1 N permutations itertools.permutations(_).
 .P 2 N permutations itertools.permutations(a, b).
 .r 3 N range-step Python range(a, b, c).
-.R 1 N round Python round(_).
+.s 2 N strip-chars a.strip(b)
+.R 2 N round Python round(a, b).
 .t 2 N trigonometry Collection of trigonometric functions.
 .^ 3 N powmod Python pow(a, b, c).
 .& 2 N bitand Python &.
