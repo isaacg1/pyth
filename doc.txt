@@ -49,7 +49,7 @@ H 0 N hash-table        Variable. {}
 I S Y if                Python if.
 J 1 Y                   Variable. Autoinitializing. J=copy(_).
 K 1 Y                   Variable. Autoinitializing. K=_. For stringing.
-L S Y lambda            define y(b): return _.
+L 2 Y lambda            define y(b): return _.
 M 3 N The one after L   define g(G,H): return _.
 N 0 N                   Variable. '"'
 O 1 N randOm-chOice     random.choice(_). Uses range(int). O0 = random.random()
@@ -61,7 +61,7 @@ T 0 N ten               Variable. 10
 U 1 N unary-range       Python unary range. Splats 2 tuples. U_=Ul_ on str, list.
 V S Y                   Loop times equal to input. Equivalent to FNU
 W S Y while             Python while.
-X 1 Y indeXed assign    Indexed assignment, returns updated. Only returns on str, mod-wrap on list.
+X 3 Y indeXed assign    Indexed assignment, returns updated. Only returns on str, mod-wrap on list.
                         On <str><str>_ or <list><list>_, where _ is <str> or <list>, performs translation.
                         On <int><list> or <any><dict>, performs indexed +=. 
 Y 0 N                   Variable. []
