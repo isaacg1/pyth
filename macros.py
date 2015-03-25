@@ -8,6 +8,7 @@ import string
 import sys
 import collections
 import numbers
+import binascii
 from ast import literal_eval
 
 
@@ -624,6 +625,23 @@ def subsets(a):
     if isinstance(a, set):
         return subsets(sorted(list(a)))
     raise BadTypeCombinationError("y", a)
+
+# .H int/str
+def Phex(a):
+    if isinstance(a, str):
+        return "0x" + binascii.hexlify(a.encode("utf-8")).decode("utf-8")
+
+    return hex(a)
+
+# .B int/str
+def Pbin(a):
+    return bin(int(Phex(a), 16)) # Copy multitype handling from Phex
+
+# .O int/str
+def Poct(a):
+    return oct(int(Phex(a), 16)) # Copy multitype handling from Phex
+
+
 
 
 Y = []
