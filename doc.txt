@@ -11,114 +11,156 @@ col = str, list, tuple, set
 
 Char, arity, begins line, mnemonic, details. When in doubt, similar to python.
 
-  1 N blank             Primarily used to separate numeric literals. Also suppresses printing, which is default on.
-! 1 N not               Logical not. Uses Python's truthy/falsy.
-" X N quote             Begins and ends sring literals. Optional at end of line.
-# S Y                   "While True:" loop. On error, suppresses error and breaks out of loop.
-$ X N super-quote       Begins and ends Python literals. A Python literal is placed directly into the compiled Python output. Counts as one argument for arity purposes. Disabled online.
-% 2 N mod               On integers, modulous. On string, string formatting. %<int><seq> is a modular slice, <seq>[::<int>] in Python.
-& 2 N and               Logical and. (short circuiting)
-' 1 N quote-file        Cat file, return file a list of lines. File name as input.
-( I N tuple             Tuple constructor. Unbounded.
-) X N close-paren       Ends functions, statements. Marks last line of statement, last arg. of function. Necessary for statements, unbounded functions.
-* 2 N times             Like python, multiplication, replication. Cartesian product on lists, tuples or sets.
-+ 2 N plus              Addition, concatenation. Set union. Prepend or append non-list to list.
-, 2 N pair              2 entry tuple.
-- 2 N minus             Subtraction, setwise difference. Maintains order. -<num><seq> coerces number to sequence type. Return type is type of first arg.
-. X N point             Numeric literals. Secondary function list - see end of doc for details.
-/ 2 N div               Floored division. .count() method on containers.
+0123456789               Numeric literals
 
-0123456789              Numeric literals
-
-: 3 N slice-sub         Python slice. :<seq><int><int> -> <seq>[<int>:<int>]. :<str><str><str> is regex substitution, substitute in a, b for c. :<str><str><oth> is regex search, boolean.
-; X N end-line          End everything. Infinite ). Best used in statements.
-< 2 N less-than         Less than, subset, slice. < seq num is seq[:num].
-= 2 Y defined as        Assignment, using deepcopy. Cannot be strung; e.g. while b=d=1 works in Python, ==bd1 fails in Pyth.
-                        Augmented assignment. T*=2 -> T=20.
-> 2 N greater-than      Greater than, superset, slice. > seq num is seq[num:].
-? 3 N ternary           Python ternary. ?abc => a if b else c
-@ 2 N lookup            Lookup from str, list or dict. Modulo wrapping on list, str. Intersection - specifically, filter second arg on presense in first arg.
-A 3 Y assign-pair       Aabc => a,b = c. First arguments must be variables. c must be a 2-tuple.
-B 0 Y break             Python break. Implicit ).
-C 1 N chr               char -> int, int -> char. Matrix transpose on list of lists, zip(*a) specifically.
-D S Y def               Python def. Match arity w/ existing function. Memoized.
-E S Y else              Python else.
-F S Y for               Python for.
-G 0 N strinG.lowercase  Variable. "abcdefghijklmnopqrstuvwxyz"
-H 0 N hash-table        Variable. {}
-I S Y if                Python if.
-J 1 Y                   Variable. Autoinitializing. J=copy(_).
-K 1 Y                   Variable. Autoinitializing. K=_. For stringing.
-L 2 Y lambda            define y(b): return _.
-M 3 N The one after L   define g(G,H): return _.
-N 0 N                   Variable. '"'
-O 1 N randOm-chOice     random.choice(_). Uses range(int). O0 = random.random()
-P 1 N Prime/Pop         prime factorization on int. All but last on str, list.
-Q 0 N quick             Variable. Autoinitializing to evaluated input.
-R 1 Y return            Python return. Impliciit ).
-S 1 N sorted            Python sorted.
-T 0 N ten               Variable. 10
-U 1 N unary-range       Python unary range. Splats 2 tuples. U_=Ul_ on str, list.
-V S Y                   Loop times equal to input. Equivalent to FNU
-W S Y while             Python while.
-X 3 Y indeXed assign    Indexed assignment, returns updated. Only returns on str, mod-wrap on list.
-                        On <str><str>_ or <list><list>_, where _ is <str> or <list>, performs translation.
-                        On <int><list> or <any><dict>, performs indexed +=. 
-Y 0 N                   Variable. []
-Z 0 N zero              Variable. 0
-[ X N list              List constructor. Unbounded.
-\ X N char-of           Escape character to string.
-] 1 N close-bracket     One element list.
-^ 2 N power             Python pow, cartesian product with # of repeats.
-_ 1 N neg               Negation. Str and list reverse.
-` 1 N repr              Python repr.
-a 2 N append            Python .append(). First arguement must be a list.
-b 0 N lineBreak         Variable. "\n"
-c 2 N chop              On <str/list><int> chop str/list every n elements. 
-                        On <int><str/list> split str/list into n pieces (elements are equally distributed).
-                        Also str.split, floating point division.
-d 0 N                   Variable. " "
-e 1 N end               %10 or last element.
-f 2 N filter            Implicit lambda, T -> Y -> Z -> . on num, iter.count
-g 2 N grt-or-eq         Python >=. Superset. g<seq><int> = seq[int-1:]
-h 1 N head              First element, +1.
-i 2 N int-2             Convert str or list from given base to base 10, or gcd.
-j 2 N join              Python join, or convert to base. Output in list form.
-k 0 N                   Variable. ""
-l 1 N len               Python len. log base 2 on nums.
-m 2 N map               Python 2 map. Int as second arg -> range(<int>). implicit lambda, d -> k -> b ->
-n 2 N not-equal         Python !=.
-o 2 N order-by          Python sorted, key=. implicit lambda, N -> Z ->
-p 2 N print             Python print, end=. Implicitly called with "\n".
-q 2 N equals            Python ==.
-r 2 N range             Python 2 range. range(a, b, -1) if a > b. Various string processing.
-s 1 N sum-int           reduce + on list, cast to int on other.
-t 1 N tail              _[1:], _-1.
-u 3 N reduce            Reduce, implicit lambda. 3rd is base case. G,H -> N,T.
-                        Fixed point operator if 2nd arg omitted, e.g. u<1st><3rd>).
-v 1 N eval              Python eval. Often used for str -> int.
-w 1 N raw_input         Python 3 input()
-x 2 N index             find first occurance. -1 if not found. bitwise xor.
-y 1 N                   On num, double. On col, powerset.
-z 0 N                   Variable. Autoinitializing to input.
-{ 1 N set               Python set. Makes one element set on num.
-| 2 N or                Logical or. Shortcircuiting.
-} 2 N in                Python in.
-~ 1 Y +=                Python +=.
-.A 2 N all
-.a 1 N abs
-.b 1 N bin
-.c 2 N complex
+   1 N blank             Primarily used to separate numeric literals. Also suppresses printing, which is default on.
+!  1 N not               Logical not. Uses Python's truthy/falsy.
+"  X N quote             Begins and ends sring literals. Optional at end of line.
+#  S Y                   "While True:" loop. On error, suppresses error and breaks out of loop.
+$  X N super-quote       Begins and ends Python literals. A Python literal is placed directly into the compiled Python output. Counts as one argument for arity purposes. Disabled online.
+%  2 N mod               On integers, modulous. On string, string formatting. %<int><seq> is a modular slice, <seq>[::<int>] in Python.
+&  2 N and               Logical and. (short circuiting)
+'  1 N quote-file        Cat file, return file a list of lines. File name as input.
+(  I N tuple             Tuple constructor. Unbounded.
+)  X N close-paren       Ends functions, statements. Marks last line of statement, last arg. of function. Necessary for statements, unbounded functions.
+*  2 N times             Like python, multiplication, replication. Cartesian product on lists, tuples or sets.
++  2 N plus              Addition, concatenation. Set union. Prepend or append non-list to list.
+,  2 N pair              2 entry tuple.
+-  2 N minus             Subtraction, setwise difference. Maintains order. -<num><seq> coerces number to sequence type. Return type is type of first arg.
+.  X N point             Numeric literals. Secondary function list - see end of doc for details.
+/  2 N div               Floored division. .count() method on containers.
+:  3 N slice-sub         Python slice. :<seq><int><int> -> <seq>[<int>:<int>]. :<str><str><str> is regex substitution, substitute in a, b for c. :<str><str><oth> is regex search, boolean.
+;  X N end-line          End everything. Infinite ). Best used in statements.
+<  2 N less-than         Less than, subset, slice. < seq num is seq[:num].
+=  2 Y defined as        Assignment, using deepcopy. Cannot be strung; e.g. while b=d=1 works in Python, ==bd1 fails in Pyth.
+                         Augmented assignment. T*=2 -> T=20.
+>  2 N greater-than      Greater than, superset, slice. > seq num is seq[num:].
+?  3 N ternary           Python ternary. ?abc => a if b else c
+@  2 N lookup            Lookup from str, list or dict. Modulo wrapping on list, str. Intersection - specifically, filter second arg on presense in first arg.
+A  3 Y assign-pair       Aabc => a,b = c. First arguments must be variables. c must be a 2-tuple.
+B  0 Y break             Python break. Implicit ).
+C  1 N chr               char -> int, int -> char. Matrix transpose on list of lists, zip(*a) specifically.
+D  S Y def               Python def. Match arity w/ existing function. Memoized.
+E  S Y else              Python else.
+F  S Y for               Python for.
+G  0 N strinG.lowercase  Variable. "abcdefghijklmnopqrstuvwxyz"
+H  0 N hash-table        Variable. {}
+I  S Y if                Python if.
+J  1 Y                   Variable. Autoinitializing. J=copy(_).
+K  1 Y                   Variable. Autoinitializing. K=_. For stringing.
+L  2 Y lambda            define y(b): return _.
+M  3 N The one after L   define g(G,H): return _.
+N  0 N                   Variable. '"'
+O  1 N randOm-chOice     random.choice(_). Uses range(int). O0 = random.random()
+P  1 N Prime/Pop         prime factorization on int. All but last on str, list.
+Q  0 N quick             Variable. Autoinitializing to evaluated input.
+R  1 Y return            Python return. Impliciit ).
+S  1 N sorted            Python sorted.
+T  0 N ten               Variable. 10
+U  1 N unary-range       Python unary range. Splats 2 tuples. U_=Ul_ on str, list.
+V  S Y                   Loop times equal to input. Equivalent to FNU
+W  S Y while             Python while.
+X  3 Y indeXed assign    Indexed assignment, returns updated. Only returns on str, mod-wrap on list.
+                         On <str><str>_ or <list><list>_, where _ is <str> or <list>, performs translation.
+                         On <int><list> or <any><dict>, performs indexed +=. 
+Y  0 N                   Variable. []
+Z  0 N zero              Variable. 0
+[  X N list              List constructor. Unbounded.
+\  X N char-of           Escape character to string.
+]  1 N close-bracket     One element list.
+^  2 N power             Python pow, cartesian product with # of repeats.
+_  1 N neg               Negation. Str and list reverse.
+`  1 N repr              Python repr.
+a  2 N append            Python .append(). First arguement must be a list.
+b  0 N lineBreak         Variable. "\n"
+c  2 N chop              On <str/list><int> chop str/list every n elements. 
+                         On <int><str/list> split str/list into n pieces (elements are equally distributed).
+                         Also str.split, floating point division.
+d  0 N                   Variable. " "
+e  1 N end               %10 or last element.
+f  2 N filter            Implicit lambda, T -> Y -> Z -> . on num, iter.count
+g  2 N grt-or-eq         Python >=. Superset. g<seq><int> = seq[int-1:]
+h  1 N head              First element, +1.
+i  2 N int-2             Convert str or list from given base to base 10, or gcd.
+j  2 N join              Python join, or convert to base. Output in list form.
+k  0 N                   Variable. ""
+l  1 N len               Python len. log base 2 on nums.
+m  2 N map               Python 2 map. Int as second arg -> range(<int>). Implicit lambda, d -> k -> b ->
+n  2 N not-equal         Python !=.
+o  2 N order-by          Python sorted, key=. Implicit lambda, N -> Z ->
+p  2 N print             Python print, end=. Implicitly called with "\n".
+q  2 N equals            Python ==.
+r  2 N range             Python 2 range. range(a, b, -1) if a > b. Various string processing (see below).
+s  1 N sum-int           Reduce + on list, cast to int on other.
+t  1 N tail              _[1:], _-1.
+u  3 N reduce            Reduce, implicit lambda. 3rd is base case. G,H -> N,T.
+                         Fixed point operator if 2nd arg omitted, e.g. u<1st><3rd>).
+v  1 N eval              Python eval. Often used for str -> int.
+w  0 N raw_input         Python 3 input()
+x  2 N index             Find first occurance. -1 if not found. Bitwise xor.
+y  1 N                   On num, double. On col, powerset.
+z  0 N                   Variable. Autoinitializing to input.
+{  1 N set               Python set. Makes one element set on num.
+|  2 N or                Logical or. Shortcircuiting.
+}  2 N in                Python in.
+~  1 Y +=                Python +=.
+.A 1 N all               Python all(_).
+.a 1 N abs               Python abs(_).
+.B 1 N bin               Binary string representing _. Direct on int, interpreted as UTF-8 on str.
+.c 2 N combinations      Combinations of elements from a of length b.
+.C 2 N comb-replacement  Combinations of elements from a of length b, with replacement.
 .d 1 n dict
 .D 2 N divmod
-.E 1 N any
+.E 1 N any               Python any(_).
 .F 2 N format
 .f 1 N float
-.H 1 N hex
+.H 1 N hex               Hexadecimal string representing _. Direct on int, interpreted as UTF-8 on str.
 .h 1 N hash
 .I 1 N id
-.i 1 N input
-.o 1 N oct
-.p 1 N general_parse
-.R 1 N round
-.t 1 N tuple
+.w 1 N prompt            Python input(_).
+.j 2 N complex
+.l 2 N log               Python math.log(a, b).
+.O 1 N oct               Octal string representing _. Direct on int, interpreted as UTF-8 on str.
+.p 1 N permutations      itertools.permutations(_).
+.P 2 N permutations      itertools.permutations(a, b).
+.r 3 N range-step        Python range(a, b, c).
+.R 2 N round             Python round(a, b).
+.s 2 N strip-chars       a.strip(b)
+.t 2 N trigonometry      Collection of trigonometric functions. See below.
+.^ 3 N powmod            Python pow(a, b, c).
+.& 2 N bitand            Python &.
+.| 2 N bitor             Python |.
+.< 2 N leftshift         Leftshift on int, cyclic leftshift on str/list.
+.> 2 N rightshift        Rightshift on int, cyclic rightshift on str/list.
+.* 1 N unpack            Python unpacking. Literally translates to *(_) in the output.
+
+
+Various string operations when calling rab with a str and b int:
+
+    b result
+    0 a.lower()
+    1 a.upper()
+    2 a.swapcase()
+    3 a.title()
+    4 a.capitalize()
+    5 string.capwords(a)
+    6 a.strip()
+    7 [literal_eval(part) for part in a.split()]
+
+Various trigonometric functions when calling .tab:
+
+    b result
+    0 sin(a)
+    1 cos(a)
+    2 tan(a)
+    3 asin(a)
+    4 acos(a)
+    5 atan(a)
+    6 degrees(a)
+    7 radians(a)
+    8 sinh(a)
+    9 cosh(a)
+   10 tanh(a)
+   11 asinh(a)
+   12 acosh(a)
+   13 atanh(a)

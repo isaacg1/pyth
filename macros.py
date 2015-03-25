@@ -8,6 +8,7 @@ import string
 import sys
 import collections
 import numbers
+import binascii
 from ast import literal_eval
 
 
@@ -37,6 +38,18 @@ class BadTypeCombinationError(Exception):
             arg_type = str(type(arg)).split("'")[1]
             error_message += "\nArg %d: %r, type %s." % (i + 1, arg, arg_type)
         return error_message
+
+
+# Itertools type normalization
+def itertools_norm(func, a, *args, **kwargs):
+    if isinstance(a, str):
+        return ["".join(group) for group in func(a, *args, **kwargs)]
+    if isinstance(a, list):
+        return [list(group) for group in func(a, *args, **kwargs)]
+    if isinstance(a, set):
+        return [set(group) for group in func(a, *args, **kwargs)]
+
+    return [group for group in func(a, *args, **kwargs)]
 
 
 # Function library. See data for letter -> function correspondences.
@@ -76,14 +89,8 @@ def Ppow(a, b):
     if is_num(a) and is_num(b):
         return pow(a, b)
     if is_col(a) and isinstance(b, int):
-        if isinstance(a, str):
-            return [''.join(group) for group in itertools.product(a, repeat=b)]
-        elif isinstance(a, list):
-            return [list(group) for group in itertools.product(a, repeat=b)]
-        elif isinstance(a, set):
-            return [set(group) for group in itertools.product(a, repeat=b)]
-        else:
-            return [group for group in itertools.product(a, repeat=b)]
+        return itertools_norm(itertools.product, a, repeat=b)
+
     raise BadTypeCombinationError("^", a, b)
 
 
@@ -624,6 +631,146 @@ def subsets(a):
     if isinstance(a, set):
         return subsets(sorted(list(a)))
     raise BadTypeCombinationError("y", a)
+
+
+def Phex_multitype(a, func):
+    if isinstance(a, str):
+        return "0x" + binascii.hexlify(a.encode("utf-8")).decode("utf-8")
+    
+    if isinstance(a, int):
+        return hex(a)
+    
+    raise BadTypeCombinationError(func, a)
+
+# .H. int/str
+def Phex(a):
+    return Phex_multitype(a, ".H")
+
+
+# .B. int/str
+def Pbin(a):
+    return bin(int(Phex_multitype(a, ".B"), 16))
+
+
+# .O. int/str
+def Poct(a):
+    return oct(int(Phex_multitype(a, ".O"), 16))
+
+
+# .c. seq, int
+def combinations(a, b):
+    if not is_seq(a) or not isinstance(b, int):
+        raise BadTypeCombinationError(".c", a, b)
+
+    return itertools_norm(itertools.combinations, a, b)
+
+
+# .C. iter, int
+def combinations_with_replacement(a, b):
+    if not is_seq(a) or not isinstance(b, int):
+        raise BadTypeCombinationError(".C", a, b)
+
+    return itertools_norm(itertools.combinations_with_replacement, a, b)
+
+
+# .l. num, num
+def log(a, b):
+    if not is_num(a) or not is_num(b):
+        raise BadTypeCombinationError(".l", a, b)
+
+    return math.log(a, b)
+
+
+# .p. seq
+def permutations(a):
+    if not is_seq(a): raise BadTypeCombinationError(".p", a)
+    return itertools_norm(itertools.permutations, a, len(a))
+
+
+# .P. seq, int
+def permutations2(a, b):
+    if not is_seq(a) or not isinstance(b, int):
+        raise BadTypeCombinationError(".P", a, b)
+
+    return itertools_norm(itertools.permutations, a, b)
+
+
+# .r. int, int, int
+def Prange3(a, b, c):
+    if isinstance(a, int) and isinstance(b, int) and isinstance(c, int):
+        return list(range(a, b, c))
+
+    raise BadTypeCombinationError(".r", a, b, c)
+
+
+# .s. str, str
+def stripchars(a, b):
+    if isinstance(a, str) and isinstance(b, str):
+        return a.strip(b)
+
+    raise BadTypeCombinationError(".r", a, b)
+
+
+# .t. num, int
+def trig(a, b):
+    if not is_num(a) or not isinstance(b, int):
+        raise BadTypeCombinationError(".t", a, b, c)
+
+    funcs = [math.sin, math.cos, math.tan,
+             math.asin, math.acos, math.atan,
+             math.degrees, math.radians,
+             math.sinh, math.cosh, math.tanh,
+             math.asinh, math.acosh, math.atanh]
+
+    return funcs[b](a)
+
+
+# .&. int, int
+def bitand(a, b):
+    if isinstance(a, int) and isinstance(b, int):
+        return a & b
+
+    raise BadTypeCombinationError(".&", a, b)
+
+
+# .|. int, int
+def bitor(a, b):
+    if isinstance(a, int) and isinstance(b, int):
+        return a | b
+
+    raise BadTypeCombinationError(".|", a, b)
+
+
+# .<. int/seq, int
+def leftshift(a, b):
+    if not isinstance(b, int):
+        raise BadTypeCombinationError(".<", a, b)
+
+    if is_seq(a):
+        b %= len(a)
+        return a[b:] + a[:b]
+
+    if isinstance(a, int):
+        return a << b
+
+    raise BadTypeCombinationError(".<", a, b)
+
+
+# .>. int/seq, int
+def rightshift(a, b):
+    if not isinstance(b, int):
+        raise BadTypeCombinationError(".>", a, b)
+
+    if is_seq(a):
+        b %= len(a)
+        return a[-b:] + a[:-b]
+
+    if isinstance(a, int):
+        return a >> b
+
+    raise BadTypeCombinationError(".>", a, b)
+
+
 
 
 Y = []

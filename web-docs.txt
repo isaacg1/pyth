@@ -68,36 +68,48 @@ k 0 N k Variable. ""
 l 1 N len Python len. log base 2 on nums.
 m 2 N map Python 2 map. Int as second arg -> range(<int>). implicit lambda, d -> k -> b ->
 n 2 N not-equal Python !=.
-o 2 N order-by Python sorted, key=. implicit lambda, N -> Z ->
+o 2 N order-by Python sorted, key=. Implicit lambda, N -> Z ->
 p 2 N print Python print, end=. Implicitly called with "\n".
 q 2 N equals Python ==.
 r 2 N range Python 2 range. Rev if a>b. Various string processing.
-s 1 N sum reduce + on list, cast to int on other.
+s 1 N sum Reduce + on list, cast to int on other.
 t 1 N tail _[1:]. _-1.
 u 3 N redUce Reduce, implicit lambda. 3rd is base case. G,H -> N,T. Fixed point operator if 2nd arg ommited and ) used, e.g. u<1st><3rd>).
 v 1 N eVal Python eval. Often used for str -> int.
 w 1 N raW_input Python 3 input()
-x 2 N indeX find first occurance. -1 if not found. bitwise xor.
+x 2 N indeX Find first occurance. -1 if not found. Bitwise xor.
 y 1 N powerset On num, double. On seq, powerset.
 z 0 N z Variable. Autoinitializing to input.
 { 1 N set Python set. Makes one element set on num.
 | 2 N or Logical or. Shortcircuiting.
 } 2 N in Python in.
 ~ 1 N += Python +=.
-.A 2 N all
-.a 1 N abs
-.b 1 N bin
-.c 2 N complex
+.A 1 N all Python all(_).
+.a 1 N abs Python abs(_).
+.B 1 N bin Binary string representing _. Direct on int, interpreted as UTF-8 on str.
+.c 2 N combinations Combinations of elements from a of length b.
+.C 2 N comb-replacement Combinations of elements from a of length b, with replacement.
 .d 1 n dict
 .D 2 N divmod
-.E 1 N any
+.E 1 N any Python any(_).
 .F 2 N format
 .f 1 N float
-.H 1 N hex
+.H 1 N hex Hexadecimal string representing _. Direct on int, interpreted as UTF-8 on str.
 .h 1 N hash
 .I 1 N id
 .i 1 N input
-.o 1 N oct
-.p 1 N general_parse
-.R 1 N round
-.t 1 N tuple
+.j 2 N complex
+.l 2 N log Python math.log(a, b).
+.O 1 N oct Octal string representing _. Direct on int, interpreted as UTF-8 on str.
+.p 1 N permutations itertools.permutations(_).
+.P 2 N permutations itertools.permutations(a, b).
+.r 3 N range-step Python range(a, b, c).
+.s 2 N strip-chars a.strip(b)
+.R 2 N round Python round(a, b).
+.t 2 N trigonometry Collection of trigonometric functions.
+.^ 3 N powmod Python pow(a, b, c).
+.& 2 N bitand Python &.
+.| 2 N bitor Python |.
+.< 2 N leftshift Leftshift on int, cyclic leftshift on str/list.
+.> 2 N rightshift Rightshift on int, cyclic rightshift on str/list.
+.* 1 N unpack Python unpacking. Literally translates to *(_) in the output.
