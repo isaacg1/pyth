@@ -128,15 +128,18 @@ c_to_f = {
     '.I': ('id', 1),
     '.i': ('input', 1),
     '.j': ('complex', 2),
+    '.l': ('log', 2),
     '.O': ('Poct', 1),
     '.p': ('permutations', 1),
     '.P': ('permutations2', 2),
     '.r': ('Prange3', 3),
     '.R': ('round', 1),
-    '.t': ('tuple', 1),
+    '.t': ('trig', 2),
     '.^': ('pow', 3),
     '.&': ('bitand', 2),
     '.|': ('bitor', 2),
+    '.<': ('leftshift', 2),
+    '.>': ('rightshift', 2),
     }
 
 replacements = {

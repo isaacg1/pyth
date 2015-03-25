@@ -119,15 +119,18 @@ z  0 N                   Variable. Autoinitializing to input.
 .I 1 N id
 .i 1 N input
 .j 2 N complex
+.l 2 N log               Python math.log(a, b).
 .O 1 N oct               Octal string representing _. Direct on int, interpreted as UTF-8 on str.
 .p 1 N permutations      itertools.permutations(_).
 .P 2 N permutations      itertools.permutations(a, b).
 .r 3 N range-step        Python range(a, b, c).
 .R 1 N round             Python round(_).
-.t 1 N tuple
+.t 2 N trigonometry      Collection of trigonometric functions. See below.
 .^ 3 N powmod            Python pow(a, b, c).
 .& 2 N bitand            Python &.
 .| 2 N bitor             Python |.
+.< 2 N leftshift         Leftshift on int, cyclic leftshift on str/list.
+.> 2 N rightshift        Rightshift on int, cyclic rightshift on str/list.
 .* 1 N unpack            Python unpacking. Literally translates to *(_) in the output.
 
 
@@ -143,3 +146,20 @@ Various string operations when calling rab with a str and b int:
     6 a.strip()
     7 [literal_eval(part) for part in a.split()]
 
+Various trigonometric functions when calling .tab:
+
+    b result
+    0 sin(a)
+    1 cos(a)
+    2 tan(a)
+    3 asin(a)
+    4 acos(a)
+    5 atan(a)
+    6 degrees(a)
+    7 radians(a)
+    8 sinh(a)
+    9 cosh(a)
+   10 tanh(a)
+   11 asinh(a)
+   12 acosh(a)
+   13 atanh(a)

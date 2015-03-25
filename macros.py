@@ -657,6 +657,66 @@ def Poct(a):
     return oct(int(Phex_multitype(a, ".O"), 16))
 
 
+# .c. seq, int
+def combinations(a, b):
+    if not is_seq(a) or not isinstance(b, int):
+        raise BadTypeCombinationError(".c", a, b)
+
+    return itertools_norm(itertools.combinations, a, b)
+
+
+# .C. iter, int
+def combinations_with_replacement(a, b):
+    if not is_seq(a) or not isinstance(b, int):
+        raise BadTypeCombinationError(".C", a, b)
+
+    return itertools_norm(itertools.combinations_with_replacement, a, b)
+
+
+# .l. num, num
+def log(a, b):
+    if not is_num(a) or not is_num(b):
+        raise BadTypeCombinationError(".l", a, b)
+
+    return math.log(a, b)
+
+
+# .p. seq
+def permutations(a):
+    if not is_seq(a): raise BadTypeCombinationError(".p", a)
+    return itertools_norm(itertools.permutations, a, len(a))
+
+
+# .P. seq, int
+def permutations2(a, b):
+    if not is_seq(a) or not isinstance(b, int):
+        raise BadTypeCombinationError(".P", a, b)
+
+    return itertools_norm(itertools.permutations, a, b)
+
+
+# .r. int, int, int
+def Prange3(a, b, c):
+    if isinstance(a, int) and isinstance(b, int) and isinstance(c, int):
+        return list(range(a, b, c))
+
+    raise BadTypeCombinationError(".r", a, b, c)
+
+
+# .t. num, int
+def trig(a, b):
+    if not is_num(a) or not isinstance(b, int):
+        raise BadTypeCombinationError(".t", a, b, c)
+
+    funcs = [math.sin, math.cos, math.tan,
+             math.asin, math.acos, math.atan,
+             math.degrees, math.radians,
+             math.sinh, math.cosh, math.tanh,
+             math.asinh, math.acosh, math.atanh]
+
+    return funcs[b](a)
+
+
 # .&. int, int
 def bitand(a, b):
     if isinstance(a, int) and isinstance(b, int):
@@ -673,42 +733,34 @@ def bitor(a, b):
     raise BadTypeCombinationError(".|", a, b)
 
 
-# .r. int, int, int
-def Prange3(a, b, c):
-    if isinstance(a, int) and isinstance(b, int) and isinstance(c, int):
-        return list(range(a, b, c))
+# .<. int/seq, int
+def leftshift(a, b):
+    if not isinstance(b, int):
+        raise BadTypeCombinationError(".<", a, b)
 
-    raise BadTypeCombinationError(".r", a, b, c)
+    if is_seq(a):
+        b %= len(a)
+        return a[b:] + a[:b]
 
+    if isinstance(a, int):
+        return a << b
 
-# .p. iter
-def permutations(a):
-    if isinstance(a, int): raise BadTypeCombinationError(".p", a)
-    return itertools_norm(itertools.permutations, a, len(a))
-
-
-# .P. iter, int
-def permutations2(a, b):
-    if isinstance(a, int) or not isinstance(b, int):
-        raise BadTypeCombinationError(".P", a, b)
-
-    return itertools_norm(itertools.permutations, a, b)
+    raise BadTypeCombinationError(".<", a, b)
 
 
-# .c. iter, int
-def combinations(a, b):
-    if isinstance(a, int) or not isinstance(b, int):
-        raise BadTypeCombinationError(".c", a, b)
+# .>. int/seq, int
+def rightshift(a, b):
+    if not isinstance(b, int):
+        raise BadTypeCombinationError(".>", a, b)
 
-    return itertools_norm(itertools.combinations, a, b)
+    if is_seq(a):
+        b %= len(a)
+        return a[-b:] + a[:-b]
 
+    if isinstance(a, int):
+        return a >> b
 
-# .C. iter, int
-def combinations_with_replacement(a, b):
-    if isinstance(a, int) or not isinstance(b, int):
-        raise BadTypeCombinationError(".C", a, b)
-
-    return itertools_norm(itertools.combinations_with_replacement, a, b)
+    raise BadTypeCombinationError(".>", a, b)
 
 
 
