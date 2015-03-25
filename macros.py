@@ -667,6 +667,13 @@ def bitor(a, b):
     raise BadTypeCombinationError(".|", a, b)
 
 
+# .r int, int, int
+def Prange3(a, b, c):
+    if isinstance(a, int) and isinstance(b, int) and isinstance(c, int):
+        return list(range(a, b, c))
+
+    raise BadTypeCombinationError(".r", a, b, c)
+
 
 Y = []
 Z = 0
