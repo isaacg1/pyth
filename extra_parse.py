@@ -33,10 +33,26 @@ def num_parse(active_char, rest_code):
 
 def str_parse(active_char, rest_code):
     output = active_char
-    while len(rest_code) > 0 and output.count('"') < 2:
-        output += rest_code[0]
-        rest_code = rest_code[1:]
-    if output[-1] != '"' or len(output) <= 1:
+    found_end = False
+    while len(rest_code) > 0 and not found_end:
+        if rest_code[0] == '\\' and len(rest_code) == 1:
+            output += rest_code + '\\'
+            rest_code = ''
+            break
+        if rest_code[0] == '\\' and rest_code[1] in ('"', '\\'):
+            output += rest_code[:2]
+            rest_code = rest_code[2:]
+        elif rest_code[0] == '\\' and rest_code[1] == '\n':
+            rest_code = rest_code[2:]
+        elif rest_code[0] == '\n':
+            output += '\\n'
+            rest_code = rest_code[1:]
+        else:
+            output += rest_code[0]
+            rest_code = rest_code[1:]
+            if output[-1] == '"':
+                found_end = True
+    if not found_end:
         output += '"'
     return output, rest_code
 
