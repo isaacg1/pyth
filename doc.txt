@@ -137,6 +137,8 @@ z  0 N                   Variable. Autoinitializing to input.
 .< 2 N leftshift         Leftshift on int, cyclic leftshift on str/list.
 .> 2 N rightshift        Rightshift on int, cyclic rightshift on str/list.
 .* 1 N unpack            Python unpacking. Literally translates to *(_) in the output.
+.) 1 N pop               Remove and return last element of a list. Symbol from Golfscript.
+.( 2 N pop2              Remove and return indexed element of a list.
 ._ 1 N sign              Use on num. 1 if positive, -1 if negative, 0 otherwise.
 
 
