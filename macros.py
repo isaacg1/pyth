@@ -694,12 +694,28 @@ def log(a, b):
     return math.log(a, b)
 
 
-# .m. col
-def product(a):
-    if is_col(a) and not isinstance(a, str):
-        if len(a) == 0:
-            return 1
-        return reduce(lambda b, c: times(b, c), a[1:], a[0])
+# .m. func, seq or int
+def minimal(a, b):
+    if isinstance(b, int):
+        seq = range(b)
+    elif is_col(b):
+        seq = b
+    else:
+        raise BadTypeCombinationError(".m", a, b)
+    minimum = min(map(a, seq))
+    return list(filter(lambda elem: a(elem) == minimum, seq))
+
+
+# .M. func, seq or int
+def maximal(a, b):
+    if isinstance(b, int):
+        seq = range(b)
+    elif is_col(b):
+        seq = b
+    else:
+        raise BadTypeCombinationError(".m", a, b)
+    maximum = max(map(a, seq))
+    return list(filter(lambda elem: a(elem) == maximum, seq))
 
 
 # .p. seq
@@ -758,6 +774,14 @@ def trig(a, b):
              math.asinh, math.acosh, math.atanh]
 
     return funcs[b](a)
+
+
+# .x. col
+def product(a):
+    if is_col(a) and not isinstance(a, str):
+        if len(a) == 0:
+            return 1
+        return reduce(lambda b, c: times(b, c), a[1:], a[0])
 
 
 # .&. int, int

@@ -101,7 +101,8 @@ z 0 N z Variable. Autoinitializing to input.
 .i 1 N input
 .j 2 N complex
 .l 2 N log Python math.log(a, b).
-.m 1 N multiply product, over a non-str seq. Uses Pyth *.
+.m 2 N minimal Filter 2nd arg on elements which give minimal value when 1st arg is aplied. First arg is lambda, b ->
+.M 2 N maximal Filter 2nd arg on elements which give maximal value when 1st arg is aplied. First arg is lambda, Z ->
 .O 1 N oct Octal string representing _. Direct on int, interpreted as UTF-8 on str.
 .p 1 N permutations itertools.permutations(_).
 .P 2 N permutations itertools.permutations(a, b).
@@ -109,6 +110,7 @@ z 0 N z Variable. Autoinitializing to input.
 .s 2 N strip-chars a.strip(b)
 .R 2 N round Python round(a, b).
 .t 2 N trigonometry Collection of trigonometric functions.
+.x 1 N multiply product, over a non-str seq. Uses Pyth *.
 .^ 3 N powmod Python pow(a, b, c).
 .& 2 N bitand Python &.
 .| 2 N bitor Python |.

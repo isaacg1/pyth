@@ -1,4 +1,4 @@
-no_init_paren = ('f', 'm', 'o', 'u', '.e')
+no_init_paren = ('f', 'm', 'o', 'u', '.e', '.m', '.M')
 end_statement = 'BR'
 variables = 'bdGHkNTYZ'
 
@@ -130,7 +130,8 @@ c_to_f = {
     '.i': ('input', 1),
     '.j': ('complex', 2),
     '.l': ('log', 2),
-    '.m': ('product', 1),
+    '.m': ('minimal(lambda b:', 2),
+    '.M': ('maximal(lambda Z:', 2),
     '.O': ('Poct', 1),
     '.p': ('permutations', 1),
     '.P': ('permutations2', 2),
@@ -138,6 +139,7 @@ c_to_f = {
     '.S': ('shuffle', 1),
     '.s': ('stripchars', 2),
     '.t': ('trig', 2),
+    '.x': ('product', 1),
     '.^': ('pow', 3),
     '.&': ('bitand', 2),
     '.|': ('bitor', 2),
