@@ -713,7 +713,7 @@ def maximal(a, b):
     elif is_col(b):
         seq = b
     else:
-        raise BadTypeCombinationError(".m", a, b)
+        raise BadTypeCombinationError(".M", a, b)
     maximum = max(map(a, seq))
     return list(filter(lambda elem: a(elem) == maximum, seq))
 
@@ -828,3 +828,16 @@ def rightshift(a, b):
         return a >> b
 
     raise BadTypeCombinationError(".>", a, b)
+
+
+# ._. int
+def sign(a):
+    if not is_num(a):
+        raise BadTypeCombinationError("._", a)
+
+    if a < 0:
+        return -1
+    if a > 0:
+        return 1
+    else:
+        return 0

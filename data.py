@@ -145,6 +145,7 @@ c_to_f = {
     '.|': ('bitor', 2),
     '.<': ('leftshift', 2),
     '.>': ('rightshift', 2),
+    '._': ('sign', 1),
     }
 
 replacements = {
