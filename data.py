@@ -134,7 +134,6 @@ c_to_f = {
     '.O': ('Poct', 1),
     '.p': ('permutations', 1),
     '.P': ('permutations2', 2),
-    '.r': ('Prange3', 3),
     '.R': ('round', 2),
     '.S': ('shuffle', 1),
     '.s': ('stripchars', 2),

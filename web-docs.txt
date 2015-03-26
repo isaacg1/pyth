@@ -105,7 +105,6 @@ z 0 N z Variable. Autoinitializing to input.
 .O 1 N oct Octal string representing _. Direct on int, interpreted as UTF-8 on str.
 .p 1 N permutations itertools.permutations(_).
 .P 2 N permutations itertools.permutations(a, b).
-.r 3 N range-step Python range(a, b, c).
 .S 1 N shuffle .S<col> random.shuffle(<col>). str out if str in, otherwise list out. .S(<int>) = .S(range(<int>))
 .s 2 N strip-chars a.strip(b)
 .R 2 N round Python round(a, b).
