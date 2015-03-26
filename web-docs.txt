@@ -84,21 +84,20 @@ z 0 N z Variable. Autoinitializing to input.
 | 2 N or Logical or. Shortcircuiting.
 } 2 N in Python in.
 ~ 1 N += Python +=.
-.A 1 N all Python all(_).
 .a 1 N abs Python abs(_).
+.A 1 N all Python all(_).
 .B 1 N bin Binary string representing _. Direct on int, interpreted as UTF-8 on str.
 .c 2 N combinations Combinations of elements from a of length b.
 .C 2 N comb-replacement Combinations of elements from a of length b, with replacement.
 .d 1 n dict
 .D 2 N divmod
-.E 1 N any Python any(_).
 .e 2 N enumerate map over a enumerate. First arg is lambda, (k, Y) -> (b, Z) ->. k is the number, Y is the sequence.
-.F 2 N format
+.E 1 N any Python any(_).
 .f 1 N float
-.H 1 N hex Hexadecimal string representing _. Direct on int, interpreted as UTF-8 on str.
+.F 2 N format
 .h 1 N hash
+.H 1 N hex Hexadecimal string representing _. Direct on int, interpreted as UTF-8 on str.
 .I 1 N id
-.i 1 N input
 .j 2 N complex
 .l 2 N log Python math.log(a, b).
 .m 2 N minimal Filter 2nd arg on elements which give minimal value when 1st arg is aplied. First arg is lambda, b ->
@@ -106,10 +105,12 @@ z 0 N z Variable. Autoinitializing to input.
 .O 1 N oct Octal string representing _. Direct on int, interpreted as UTF-8 on str.
 .p 1 N permutations itertools.permutations(_).
 .P 2 N permutations itertools.permutations(a, b).
-.S 1 N shuffle .S<col> random.shuffle(<col>). str out if str in, otherwise list out. .S(<int>) = .S(range(<int>))
 .s 2 N strip-chars a.strip(b)
+.S 1 N shuffle .S<col> random.shuffle(<col>). str out if str in, otherwise list out. .S(<int>) = .S(range(<int>))
 .R 2 N round Python round(a, b).
 .t 2 N trigonometry Collection of trigonometric functions.
+.u 1 N unpack-close Shorthand for .*_).
+.w 1 N prompt Python input(_).
 .x 1 N multiply product, over a non-str seq. Uses Pyth *.
 .^ 3 N powmod Python pow(a, b, c).
 .& 2 N bitand Python &.
