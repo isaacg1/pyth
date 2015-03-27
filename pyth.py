@@ -281,7 +281,7 @@ def preprocess_multiline(code_lines):
 
         # Deal with indentation.
         for _ in range(indent_level + 1):
-        # Allow an increase of at lost one indent level per line.
+            # Allow an increase of at lost one indent level per line.
             if line.startswith("\t"):
                 line = line[1:]
             elif line.startswith(" " * indent):
