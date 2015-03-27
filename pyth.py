@@ -239,7 +239,7 @@ def preprocess_multiline(code_lines):
     code_lines = [line.rstrip("\n") for line in code_lines]
 
     # Deal with comments starting with ; and metacommands.
-    indent = 4
+    indent = 2
     i = 0
     end_found = False
     while i < len(code_lines):
