@@ -202,15 +202,25 @@ def replace_parse(active_char, rest_code, spacing):
 # Prependers are magic. Automatically prepend to program if present.
 # First occurance must not be in a string.
 def prepend_parse(code):
+    def not_escaped(code_part):
+        code_part = list(code_part)
+        count = 0
+        while code_part and code_part.pop() == '\\':
+            count += 1
+        return count % 2 == 0
+
     out_code = code
+
     for prep_char in sorted(prepend):
-        if prep_char in code:
-            first_loc = code.index(prep_char)
-            if first_loc == 0 or \
-                    code[:first_loc].count('"') % 2 == 0 and \
-                    (code[first_loc-1] != "\\"
-                        or first_loc >= 2 and code[first_loc-2] == "\\"):
+        quot_marks = 0
+        for i, c in enumerate(code):
+            if c == '"' and (quot_marks % 2 == 0 or not_escaped(code[:i])):
+                quot_marks += 1
+            elif c == prep_char and quot_marks % 2 == 0 and \
+                    not_escaped(code[:i]):
                 out_code = prepend[prep_char] + out_code
+                break
+
     return out_code
 
 
@@ -271,7 +281,7 @@ def preprocess_multiline(code_lines):
 
         # Deal with indentation.
         for _ in range(indent_level + 1):
-        # Allow an increase of at lost one indent level per line.
+            # Allow an increase of at lost one indent level per line.
             if line.startswith("\t"):
                 line = line[1:]
             elif line.startswith(" " * indent):
