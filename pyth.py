@@ -270,12 +270,14 @@ def preprocess_multiline(code_lines):
         new_indent_level = 0
 
         # Deal with indentation.
-        for _ in range(indent_level + 1): # Allow an increase of maximum one indent level per line.
+        for _ in range(indent_level + 1):
+        # Allow an increase of at lost one indent level per line.
             if line.startswith("\t"):
                 line = line[1:]
             elif line.startswith(" " * indent):
                 line = line[indent:]
-            else: break
+            else:
+                break
 
             new_indent_level += 1
 
@@ -289,7 +291,7 @@ def preprocess_multiline(code_lines):
                 if c == "\"":
                     in_string = False
                 elif c == "\\":
-                    i += 1 # Nothing after a backslash can close the string, skip.
+                    i += 1  # Nothing after a backslash can close the string.
 
             elif c == " ":
                 consecutive_spaces += 1
@@ -298,7 +300,7 @@ def preprocess_multiline(code_lines):
                 in_string = True
             elif c == "\\":
                 consecutive_spaces = 0
-                i += 1 # Skip one-character string.
+                i += 1  # Skip one-character string.
             else:
                 consecutive_spaces = 0
 
@@ -308,22 +310,21 @@ def preprocess_multiline(code_lines):
 
             i += 1
 
-        # If this line was non-empty after stripping inline comments, set the new indent level to
-        # this line, otherwise keep the old indent level.
+        # If this line was non-empty after stripping inline comments, set the
+        # new indent level to this line, otherwise keep the old indent level.
         if line.strip():
             indent_level = new_indent_level
 
-        # Strip trailing whitespace, unless the line ends with an uneven amount of backslashes, then
+        # Strip trailing whitespace, unless the line ends with
+        # an uneven amount of backslashes, then
         # keep one trailing whitespace if present.
         stripped_line = line.rstrip()
-        if (stripped_line.count("\\") - stripped_line.rstrip("\\").count("\\")) % 2 == 1:
+        if (len(stripped_line) - len(stripped_line.rstrip("\\"))) % 2 == 1:
             stripped_line = line[:len(stripped_line) + 1]
 
         code_lines[linenr] = stripped_line
 
     return "".join(code_lines)
-
-
 
 
 if __name__ == '__main__':
@@ -395,7 +396,7 @@ See opening comment in pyth.py for more info.""")
                 print('{:=^50}'.format(' ' + str(len(code)) + ' chars '))
                 print(code)
                 print('='*50)
-            
+
             py_code_line = general_parse(code)
 
             if debug_on:
