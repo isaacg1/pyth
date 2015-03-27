@@ -233,6 +233,99 @@ def add_print(code):
     return False
 
 
+# Preprocessor for multi-line mode.
+def preprocess_multiline(code_lines):
+    # Reading a file keeps trailing newlines, remove them.
+    code_lines = [line.rstrip("\n") for line in code_lines]
+
+    # Deal with comments starting with ; and metacommands.
+    indent = 4
+    i = 0
+    end_found = False
+    while i < len(code_lines):
+        code_line = code_lines[i].lstrip()
+        if code_line.startswith(";"):
+            meta_line = code_line[1:].strip()
+            code_lines.pop(i)
+
+            if meta_line.startswith("indent"):
+                try:
+                    indent = int(meta_line.split()[1])
+                except:
+                    print("Error: expected number after indent meta-command")
+                    sys.exit(1)
+
+            elif meta_line.startswith("end"):
+                code_lines = code_lines[:i]
+                end_found = True
+
+        elif end_found:
+            code_lines.pop(i)
+
+        else:
+            i += 1
+
+    indent_level = 0
+    for linenr, line in enumerate(code_lines):
+        new_indent_level = 0
+
+        # Deal with indentation.
+        for _ in range(indent_level + 1): # Allow an increase of maximum one indent level per line.
+            if line.startswith("\t"):
+                line = line[1:]
+            elif line.startswith(" " * indent):
+                line = line[indent:]
+            else: break
+
+            new_indent_level += 1
+
+        # Detect in-line comments.
+        in_string = False
+        consecutive_spaces = 0
+        i = 0
+        while i < len(line):
+            c = line[i]
+            if in_string:
+                if c == "\"":
+                    in_string = False
+                elif c == "\\":
+                    i += 1 # Nothing after a backslash can close the string, skip.
+
+            elif c == " ":
+                consecutive_spaces += 1
+            elif c == "\"":
+                consecutive_spaces = 0
+                in_string = True
+            elif c == "\\":
+                consecutive_spaces = 0
+                i += 1 # Skip one-character string.
+            else:
+                consecutive_spaces = 0
+
+            if consecutive_spaces == 2:
+                line = line[:i-1]
+                break
+
+            i += 1
+
+        # If this line was non-empty after stripping inline comments, set the new indent level to
+        # this line, otherwise keep the old indent level.
+        if line.strip():
+            indent_level = new_indent_level
+
+        # Strip trailing whitespace, unless the line ends with an uneven amount of backslashes, then
+        # keep one trailing whitespace if present.
+        stripped_line = line.rstrip()
+        if (stripped_line.count("\\") - stripped_line.rstrip("\\").count("\\")) % 2 == 1:
+            stripped_line = line[:len(stripped_line) + 1]
+
+        code_lines[linenr] = stripped_line
+
+    return "".join(code_lines)
+
+
+
+
 if __name__ == '__main__':
     global safe_mode, c_to_f
 
@@ -255,6 +348,7 @@ Command line flags:
                 starting with ; or ), and not empty. 0-indexed.
                 Specify line with 2nd to last argument. Fails on Windows.
 -h or --help    Show this help message.
+-m or --multi   Enable multi-line mode.
 
 See opening comment in pyth.py for more info.""")
     else:
@@ -270,16 +364,16 @@ See opening comment in pyth.py for more info.""")
         code_on = flag_on('c', '--code')
         safe_mode = flag_on('s', '--safe')
         line_on = flag_on('l', '--line')
+        multiline_on = flag_on('m', '--multiline')
         if safe_mode:
             c_to_f['v'] = ('literal_eval', 1)
         if line_on:
             line_num = int(sys.argv[-2])
-        if code_on and line_on:
+        if code_on and (line_on or multiline_on):
             print("Error: multiline input from command line.")
         else:
             if code_on:
-                    code = file_or_string
-                    py_code = (code, general_parse(code))
+                code = file_or_string
             else:
                 code_file = file_or_string
                 if line_on:
@@ -287,21 +381,27 @@ See opening comment in pyth.py for more info.""")
                     runable_code_lines = [code_line[:-1]
                                           for code_line in code_lines
                                           if code_line[0] not in ';)\n']
-                    used_line = runable_code_lines[line_num]
-                    py_code = (used_line, general_parse(used_line))
+                    code = runable_code_lines[line_num]
+                elif multiline_on:
+                    code_lines = list(open(file_or_string))
+                    code = preprocess_multiline(code_lines)
                 else:
                     code = list(open(file_or_string))[0]
                     if code[-1] == "\n":
                         code = code[:-1]
-                    py_code = (code, general_parse(code))
-            code_line, py_code_line = py_code
+
             # Debug message
             if debug_on:
+                print('{:=^50}'.format(' ' + str(len(code)) + ' chars '))
+                print(code)
                 print('='*50)
-                print(code_line)
-                print('='*50)
+            
+            py_code_line = general_parse(code)
+
+            if debug_on:
                 print(py_code_line)
                 print('='*50)
+
             if safe_mode:
                 # to fix most security problems, we will disable the use of
                 # unnecessary parts of the python
