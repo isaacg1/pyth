@@ -387,8 +387,14 @@ See opening comment in pyth.py for more info.""")
                     code_lines = list(open(file_or_string))
                     code = preprocess_multiline(code_lines)
                 else:
-                    code = list(open(file_or_string))[0]
-                    if code[-1] == "\n":
+                    end_marker = '; end\n'
+                    code_list = list(open(file_or_string))
+                    if end_marker in code_list:
+                        end_line = code_list.index(end_marker)
+                        code = ''.join(code_list[:end_line])
+                    else:
+                        code = ''.join(list(open(file_or_string)))
+                    if len(code) > 0 and code[-1] == '\n':
                         code = code[:-1]
 
             # Debug message
