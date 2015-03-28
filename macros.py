@@ -165,7 +165,7 @@ def neg(a):
 
 
 # {. All.
-def Pset(a):
+def Pset(a=set()):
     if is_num(a):
         return set([a])
     if is_col(a):
