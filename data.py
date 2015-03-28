@@ -151,6 +151,7 @@ c_to_f = {
     '.<': ('leftshift', 2),
     '.>': ('rightshift', 2),
     '._': ('sign', 1),
+    '.:': ('substrings', 2),
     }
 
 replacements = {

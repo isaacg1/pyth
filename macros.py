@@ -885,3 +885,23 @@ def sign(a):
         return 1
     else:
         return 0
+
+
+# .:, int/seq, int
+def substrings(a, b):
+    if is_seq(a):
+        seq = a
+    elif isinstance(a, int):
+        seq = list(range(a))
+    else:
+        raise BadTypeCombinationError(".:", a, b)
+    if isinstance(b, int):
+        step = b
+    if isinstance(b, float):
+        step = int(b * len(seq))
+    elif is_col(b):
+        step = len(b)
+    else:
+        raise BadTypeCombinationError(".:", a, b)
+    return [seq[start:start+step] for start in range(len(seq)-step+1)]
+
