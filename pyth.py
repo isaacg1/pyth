@@ -191,8 +191,8 @@ def statement_parse(active_char, rest_code, spacing):
 
 def replace_parse(active_char, rest_code, spacing):
     # Special case for \\
-    if active_char == "\\" and rest_code[0] == "\\":
-        return parse('"\\\\"' + rest_code[1:], spacing)
+    if active_char == "\\" and rest_code[0] in "\"\\":
+        return parse('"\\' + rest_code[0] + '"' + rest_code[1:], spacing)
     format_str, format_num = replacements[active_char]
     format_chars = tuple(rest_code[:format_num])
     new_code = format_str.format(*format_chars) + rest_code[format_num:]
@@ -200,11 +200,12 @@ def replace_parse(active_char, rest_code, spacing):
 
 
 # Prependers are magic. Automatically prepend to program if present.
-# First occurance must not be in a string.
 def prepend_parse(code):
     def not_escaped(code_part):
         code_part = list(code_part)
         count = 0
+        if code_part and code_part[-1] == '.':
+            count = 1
         while code_part and code_part.pop() == '\\':
             count += 1
         return count % 2 == 0
@@ -214,7 +215,7 @@ def prepend_parse(code):
     for prep_char in sorted(prepend):
         quot_marks = 0
         for i, c in enumerate(code):
-            if c == '"' and (quot_marks % 2 == 0 or not_escaped(code[:i])):
+            if c == '"' and not_escaped(code[:i]):
                 quot_marks += 1
             elif c == prep_char and quot_marks % 2 == 0 and \
                     not_escaped(code[:i]):
