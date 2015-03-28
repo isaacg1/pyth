@@ -63,7 +63,7 @@ V  S Y                   Loop times equal to input. Equivalent to FNU
 W  S Y while             Python while.
 X  3 Y indeXed assign    Indexed assignment, returns updated. Only returns on str, mod-wrap on list.
                          On <str><str>_ or <list><list>_, where _ is <str> or <list>, performs translation.
-                         On <int><list> or <any><dict>, performs indexed +=. 
+                         On <int><list> or <any><dict>, performs indexed +=. Assigns if key not in dict.
 Y  0 N                   Variable. []
 Z  0 N zero              Variable. 0
 [  X N list              List constructor. Unbounded.

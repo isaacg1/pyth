@@ -606,7 +606,10 @@ def assign_at(a, b, c):
         return b
     # += in a dict, X<any><dict><any>
     if isinstance(b, dict):
-        b[a] += c
+        if a in b:
+            b[a] += c
+        else:
+            b[a] = c
         return b
     raise BadTypeCombinationError("X", a, b, c)
 
