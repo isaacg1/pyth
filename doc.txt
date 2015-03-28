@@ -72,7 +72,9 @@ Z  0 N zero              Variable. 0
 ^  2 N power             Python pow, cartesian product with # of repeats.
 _  1 N neg               Negation. Str and list reverse.
 `  1 N repr              Python repr.
-a  2 N append            Python .append(). First arguement must be a list.
+a  2 N append            Python .append(), .add(). First arguement must be a list or set.
+                         Returns resultant list or string as well as modifiying input.
+                         On non-hashable additions to set, casts to tuple.
 b  0 N lineBreak         Variable. "\n"
 c  2 N chop              On <str/list><int> chop str/list every n elements. 
                          On <int><str/list> split str/list into n pieces (elements are equally distributed).

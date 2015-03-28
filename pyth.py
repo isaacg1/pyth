@@ -233,7 +233,7 @@ def add_print(code):
         if code[0] == "." and code[:2] in c_to_f:
             return len(code) == 2 or code[2] != "="
 
-        if (code[0] not in 'p '
+        if (code[0] not in 'p a'
                 and code[0] in c_to_f
                 and (len(code) == 1 or code[1] != "=")) or \
             code[0] in variables or \

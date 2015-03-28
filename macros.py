@@ -24,6 +24,8 @@ def is_seq(a):
 def is_col(a):
     return isinstance(a, collections.Iterable)
 
+def is_hash(a):
+    return isinstance(a, collections.Hashable)
 
 # Error handling
 class BadTypeCombinationError(Exception):
@@ -253,6 +255,20 @@ def div(a, b):
         return a.count(b)
     raise BadTypeCombinationError("/", a, b)
 
+
+# a. List, Set.
+def append(a, b):
+    if isinstance(a, list):
+        a.append(b)
+        return a
+    if isinstance(a, set):
+        if is_hash(b):
+            a.add(b)
+            return a
+        else:
+            a.add(tuple(b))
+            return a
+    raise BadTypeCombinationError("a", a, b)
 
 b = "\n"
 
