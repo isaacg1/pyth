@@ -761,12 +761,34 @@ def eval_all_input():
     return list(map(eval_trim_line, sys.stdin))
 
 
+# .r. seq
+def run_length_encoding(a):
+    if is_seq(a):
+        if len(a) == 0:
+            return []
+        rle = []
+        running_count = 1
+        current_elem = a[0]
+        for elem in a[1:]:
+            if elem == current_elem:
+                running_count += 1
+            else:
+                rle.append([current_elem, running_count])
+                current_elem = elem
+                running_count = 1
+        rle.append([elem, running_count])
+        return rle
+    if is_col(a):
+        return run_length_encoding(sorted(a))
+
+    raise BadTypeCombinationError(".r", a)
+
 # .s. str, str
 def stripchars(a, b):
     if isinstance(a, str) and isinstance(b, str):
         return a.strip(b)
 
-    raise BadTypeCombinationError(".r", a, b)
+    raise BadTypeCombinationError(".s", a, b)
 
 
 # .S. seq, int
@@ -897,7 +919,7 @@ def substrings(a, b):
         raise BadTypeCombinationError(".:", a, b)
     if isinstance(b, int):
         step = b
-    if isinstance(b, float):
+    elif isinstance(b, float):
         step = int(b * len(seq))
     elif is_col(b):
         step = len(b)

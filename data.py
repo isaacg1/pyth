@@ -135,6 +135,7 @@ c_to_f = {
     '.p': ('permutations', 1),
     '.P': ('permutations2', 2),
     '.Q': ('eval_all_input', 0),
+    '.r': ('run_length_encoding', 1),
     '.R': ('round', 2),
     '.S': ('shuffle', 1),
     '.s': ('stripchars', 2),

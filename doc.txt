@@ -129,6 +129,8 @@ z  0 N                   Variable. Autoinitializing to input.
 .p 1 N permutations      itertools.permutations(_).
 .P 2 N permutations      itertools.permutations(a, b).
 .Q 0 N eval-all-input    Take all of stdin, return as list of evaluated (literal_eval) lines.
+.r 1 N rle               On seq, performs run length encoding, in the form [[elem, count], [elem, count] ...].
+                         On set, sorts then calls.
 .R 2 N round             Python round(a, b).
 .s 2 N strip-chars       a.strip(b)
 .S 1 N shuffle           .S<col> random.shuffle(<col>). .S(<int>) = .S(range(<int>))
