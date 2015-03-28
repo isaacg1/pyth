@@ -106,13 +106,15 @@ z 0 N z Variable. Autoinitializing to input.
 .O 1 N oct Octal string representing _. Direct on int, interpreted as UTF-8 on str.
 .p 1 N permutations itertools.permutations(_).
 .P 2 N permutations itertools.permutations(a, b).
+.Q 0 N eval-all-input Take all of stdin, return as list of evaluated (literal_eval) lines.
+.R 2 N round Python round(a, b).
 .s 2 N strip-chars a.strip(b)
 .S 1 N shuffle .S<col> random.shuffle(<col>). str out if str in, otherwise list out. .S(<int>) = .S(range(<int>))
-.R 2 N round Python round(a, b).
 .t 2 N trigonometry Collection of trigonometric functions.
 .u 1 N unpack-close Shorthand for .*_).
 .w 1 N prompt Python input(_).
 .x 1 N multiply product, over a non-str seq. Uses Pyth *.
+.z 0 N all-input Take all of stdin, return as list of lines.
 .^ 3 N powmod Python pow(a, b, c).
 .& 2 N bitand Python &.
 .| 2 N bitor Python |.
