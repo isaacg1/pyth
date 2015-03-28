@@ -28,7 +28,7 @@ def num_parse(active_char, rest_code):
             and (output+rest_code[0]).count(".") <= 1:
         output += rest_code[0]
         rest_code = rest_code[1:]
-    if output[-1] == ".":
+    if output[-1] == "." and len(rest_code) > 0 and rest_code[0] not in ' \n':
         output = output[:-1]
         rest_code = "." + rest_code
     return output, rest_code
