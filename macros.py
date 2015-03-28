@@ -70,8 +70,10 @@ def lookup(a, b):
         intersection = filter(lambda b_elm: b_elm in a, b)
         if isinstance(a, str):
             return ''.join(intersection)
-        elif isinstance(a, tuple):
+        if isinstance(a, tuple):
             return tuple(intersection)
+        if isinstance(a, set):
+            return set(intersection)
         else:
             return list(intersection)
     raise BadTypeCombinationError("@", a, b)
@@ -826,6 +828,15 @@ def bitand(a, b):
 def bitor(a, b):
     if isinstance(a, int) and isinstance(b, int):
         return a | b
+    if is_col(a) and is_col(b):
+        union = set(a) | set(b)
+        if isinstance(a, list):
+            return list(union)
+        if isinstance(a, str):
+            return str(union)
+        if isinstance(a, tuple):
+            return tuple(union)
+        return union
 
     raise BadTypeCombinationError(".|", a, b)
 

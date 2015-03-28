@@ -138,8 +138,8 @@ z  0 N                   Variable. Autoinitializing to input.
 .x 1 N group-x           product, over a non-str seq. Uses Pyth *.
 .z 0 N all-input         Take all of stdin, return as list of lines.
 .^ 3 N powmod            Python pow(a, b, c).
-.& 2 N bitand            Python &.
-.| 2 N bitor             Python |.
+.& 2 N bitand            Python bitwise &.
+.| 2 N bitor             Python |. Bitwise or on ints, setwise union on collections. Casts to 1st arg type.
 .< 2 N leftshift         Leftshift on int, cyclic leftshift on str/list.
 .> 2 N rightshift        Rightshift on int, cyclic rightshift on str/list.
 .* 1 N unpack            Python unpacking. Literally translates to *(_) in the output.
