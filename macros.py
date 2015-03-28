@@ -897,7 +897,7 @@ def substrings(a, b):
         raise BadTypeCombinationError(".:", a, b)
     if isinstance(b, int):
         step = b
-    if isinstance(b, float):
+    elif isinstance(b, float):
         step = int(b * len(seq))
     elif is_col(b):
         step = len(b)
