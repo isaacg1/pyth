@@ -733,6 +733,13 @@ def permutations2(a, b):
     return itertools_norm(itertools.permutations, a, b)
 
 
+# .Q. N/A
+def eval_all_input():
+    def eval_trim_line(line):
+        return literal_eval(line[:-1])
+    return list(map(eval_trim_line, sys.stdin))
+
+
 # .s. str, str
 def stripchars(a, b):
     if isinstance(a, str) and isinstance(b, str):
@@ -782,6 +789,13 @@ def product(a):
         if len(a) == 0:
             return 1
         return reduce(lambda b, c: times(b, c), a[1:], a[0])
+
+
+# .z. N/A
+def all_input():
+    def trim_line(line):
+        return line[:-1]
+    return list(map(trim_line, sys.stdin))
 
 
 # .&. int, int

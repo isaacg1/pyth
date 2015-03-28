@@ -191,8 +191,8 @@ def statement_parse(active_char, rest_code, spacing):
 
 def replace_parse(active_char, rest_code, spacing):
     # Special case for \\
-    if active_char == "\\" and rest_code[0] == "\\":
-        return parse('"\\\\"' + rest_code[1:], spacing)
+    if active_char == "\\" and rest_code[0] in "\"\\":
+        return parse('"\\' + rest_code[0] + '"' + rest_code[1:], spacing)
     format_str, format_num = replacements[active_char]
     format_chars = tuple(rest_code[:format_num])
     new_code = format_str.format(*format_chars) + rest_code[format_num:]
@@ -200,17 +200,28 @@ def replace_parse(active_char, rest_code, spacing):
 
 
 # Prependers are magic. Automatically prepend to program if present.
-# First occurance must not be in a string.
 def prepend_parse(code):
+    def not_escaped(code_part):
+        code_part = list(code_part)
+        count = 0
+        if code_part and code_part[-1] == '.':
+            count = 1
+        while code_part and code_part.pop() == '\\':
+            count += 1
+        return count % 2 == 0
+
     out_code = code
+
     for prep_char in sorted(prepend):
-        if prep_char in code:
-            first_loc = code.index(prep_char)
-            if first_loc == 0 or \
-                    code[:first_loc].count('"') % 2 == 0 and \
-                    (code[first_loc-1] != "\\"
-                        or first_loc >= 2 and code[first_loc-2] == "\\"):
+        quot_marks = 0
+        for i, c in enumerate(code):
+            if c == '"' and not_escaped(code[:i]):
+                quot_marks += 1
+            elif c == prep_char and quot_marks % 2 == 0 and \
+                    not_escaped(code[:i]):
                 out_code = prepend[prep_char] + out_code
+                break
+
     return out_code
 
 
@@ -271,7 +282,7 @@ def preprocess_multiline(code_lines):
 
         # Deal with indentation.
         for _ in range(indent_level + 1):
-        # Allow an increase of at lost one indent level per line.
+            # Allow an increase of at lost one indent level per line.
             if line.startswith("\t"):
                 line = line[1:]
             elif line.startswith(" " * indent):
@@ -387,8 +398,14 @@ See opening comment in pyth.py for more info.""")
                     code_lines = list(open(file_or_string))
                     code = preprocess_multiline(code_lines)
                 else:
-                    code = list(open(file_or_string))[0]
-                    if code[-1] == "\n":
+                    end_marker = '; end\n'
+                    code_list = list(open(file_or_string))
+                    if end_marker in code_list:
+                        end_line = code_list.index(end_marker)
+                        code = ''.join(code_list[:end_line])
+                    else:
+                        code = ''.join(list(open(file_or_string)))
+                    if len(code) > 0 and code[-1] == '\n':
                         code = code[:-1]
 
             # Debug message
