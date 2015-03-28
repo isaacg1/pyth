@@ -103,6 +103,7 @@ z 0 N z Variable. Autoinitializing to input.
 .l 2 N log Python math.log(a, b).
 .m 2 N minimal Filter 2nd arg on elements which give minimal value when 1st arg is aplied. First arg is lambda, b ->
 .M 2 N maximal Filter 2nd arg on elements which give maximal value when 1st arg is aplied. First arg is lambda, Z ->
+.N 1 Y the-one-after-M def :(N, T, Y): return _.
 .O 1 N oct Octal string representing _. Direct on int, interpreted as UTF-8 on str.
 .p 1 N permutations itertools.permutations(_).
 .P 2 N permutations itertools.permutations(a, b).

@@ -49,8 +49,8 @@ H  0 N hash-table        Variable. {}
 I  S Y if                Python if.
 J  1 Y                   Variable. Autoinitializing. J=copy(_).
 K  1 Y                   Variable. Autoinitializing. K=_. For stringing.
-L  2 Y lambda            define y(b): return _.
-M  3 N The one after L   define g(G,H): return _.
+L  1 Y lambda            define y(b): return _.
+M  1 Y The one after L   define g(G,H): return _.
 N  0 N                   Variable. '"'
 O  1 N randOm-chOice     random.choice(_). Uses range(int). O0 = random.random()
 P  1 N Prime/Pop         prime factorization on int. All but last on str, list.
@@ -127,6 +127,7 @@ z  0 N                   Variable. Autoinitializing to input.
                          First arg is lambda, b ->
 .M 2 N maximal           Filter 2nd arg on elements which give maximal value when 1st arg is aplied.
                          First arg is lambda, Z ->
+.N 1 Y The one after M   def :(N, T, Y): return _.
 .O 1 N oct               Octal string representing _. Direct on int, interpreted as UTF-8 on str.
 .p 1 N permutations      itertools.permutations(_).
 .P 2 N permutations      itertools.permutations(a, b).

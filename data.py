@@ -156,6 +156,7 @@ replacements = {
     'A': ('=,{0}{1}', 2),
     'L': ('DybR', 0),
     'M': ('DgGHR', 0),
+    '.N': ('D:NTYR', 0),
     }
 
 # Gives next function header to use - for filter, map, reduce.
