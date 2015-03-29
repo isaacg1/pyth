@@ -608,6 +608,7 @@ def assign_at(a, b, c):
         return b
     # += in a dict, X<any><dict><any>
     if isinstance(b, dict):
+        if is_seq(b): b = tuple(b)
         if a in b:
             b[a] += c
         else:
