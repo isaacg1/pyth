@@ -719,20 +719,20 @@ def Pformat(a, b):
 
 # .i. complex functions
 def Pcomp_func(a, b):
-	if not b:
-		return a.real
-	
-	if b==1:
-		return a.imag
-	
-	if b==2:
-		return a.conjugate()
-	
-	if b==3:
-		return cmath.phase(a)
-	
-	if b==4:
-		return cmath.polar(a)
+    if not b:
+        return a.real
+    
+    if b==1:
+        return a.imag
+    
+    if b==2:
+        return a.conjugate()
+    
+    if b==3:
+        return cmath.phase(a)
+    
+    if b==4:
+        return cmath.polar(a)
 
 # .l. num, num
 def log(a, b):
@@ -959,4 +959,4 @@ def substrings(a, b):
 
 # .`. root
 def Proot(a, b):
-	return a**(1/b)
+    return a**(1/b)
