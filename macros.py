@@ -1,6 +1,7 @@
 import copy
 import fractions
 import itertools
+import cmath
 import math
 import random
 import re
@@ -709,6 +710,29 @@ def Penumerate(a, b):
 
     return list(map(lambda enum: a(*enum), enumerate(b)))
 
+# .F. format
+def Pformat(a, b):
+    if is_seq(b):
+        return a.format(*b)
+    
+    return a.format(b)
+
+# .i. complex functions
+def Pcomp_func(a, b):
+	if not b:
+		return a.real
+	
+	if b==1:
+		return a.imag
+	
+	if b==2:
+		return a.conjugate()
+	
+	if b==3:
+		return cmath.phase(a)
+	
+	if b==4:
+		return cmath.polar(a)
 
 # .l. num, num
 def log(a, b):
@@ -756,11 +780,9 @@ def permutations2(a, b):
 
     return itertools_norm(itertools.permutations, a, b)
 
-
 # .q. N\A
 def Pexit():
     sys.exit(0)
-
 
 # .Q. N/A
 def eval_all_input():
@@ -935,3 +957,6 @@ def substrings(a, b):
         raise BadTypeCombinationError(".:", a, b)
     return [seq[start:start+step] for start in range(len(seq)-step+1)]
 
+# .`. root
+def Proot(a, b):
+	return a**(1/b)
