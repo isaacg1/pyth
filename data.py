@@ -126,8 +126,12 @@ c_to_f = {
     '.E': ('any', 1),
     '.e': ('Penumerate(lambda k, Y:', 2),
     '.f': ('float', 1),
+    '.F': ('Pformat', 2),
     '.H': ('Phex', 1),
     '.h': ('hash', 1),
+    '.I': ('id', 1),
+    '.i': ('Pcomp_func', 2),
+    '.j': ('complex', 2),
     '.l': ('log', 2),
     '.m': ('minimal(lambda b:', 2),
     '.M': ('maximal(lambda Z:', 2),
@@ -150,6 +154,8 @@ c_to_f = {
     '.>': ('rightshift', 2),
     '._': ('sign', 1),
     '.:': ('substrings', 2),
+    '.~': ('math.sqrt', 1),
+    '.`': ('Proot', 2),
     }
 
 replacements = {
