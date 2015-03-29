@@ -63,6 +63,7 @@ def Pnot(a):
 # @.
 def lookup(a, b):
     if isinstance(a, dict):
+        if is_seq(b): b = tuple(b)
         return a[b]
     if is_seq(a) and isinstance(b, int):
         return a[b % len(a)]
@@ -581,6 +582,7 @@ def urange(a):
 def assign_at(a, b, c):
     # Assign at
     if isinstance(a, dict):
+        if is_seq(b): b = tuple(b)
         a[b] = c
         return a
     if isinstance(b, int):
