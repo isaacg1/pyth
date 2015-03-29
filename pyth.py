@@ -231,7 +231,7 @@ def add_print(code):
     if len(code) > 0:
         # Handle alternate table commands before confusion with numerals.
         if code[0] == ".":
-            if code[:2] in c_to_f:
+            if code[:2] in c_to_f and not code[:2] == '.q':
                 return len(code) == 2 or code[2] != "="
             if code[:2] in variables:
                 return True

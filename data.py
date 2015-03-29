@@ -134,6 +134,7 @@ c_to_f = {
     '.O': ('Poct', 1),
     '.p': ('permutations', 1),
     '.P': ('permutations2', 2),
+    '.q': ('Pexit', 0),
     '.Q': ('eval_all_input', 0),
     '.r': ('run_length_encoding', 1),
     '.R': ('round', 2),

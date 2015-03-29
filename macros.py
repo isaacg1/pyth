@@ -757,6 +757,11 @@ def permutations2(a, b):
     return itertools_norm(itertools.permutations, a, b)
 
 
+# .q. N\A
+def Pexit():
+    sys.exit(0)
+
+
 # .Q. N/A
 def eval_all_input():
     def eval_trim_line(line):
