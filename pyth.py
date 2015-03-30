@@ -20,6 +20,8 @@ from macros import *
 from data import *
 import copy as c
 import sys
+import io
+import traceback
 from ast import literal_eval
 sys.setrecursionlimit(100000)
 
@@ -341,6 +343,32 @@ def preprocess_multiline(code_lines):
         code_lines[linenr] = stripped_line
 
     return "".join(code_lines)
+
+
+def run_code(code, inp):
+    global safe_mode
+
+    old_stdout, old_stdin = sys.stdout, sys.stdin
+
+    sys.stdout = io.StringIO()
+    sys.stdin = io.StringIO(inp)
+
+    error = None
+
+    try:
+        safe_mode = False
+        exec(general_parse(code))
+    except SystemExit:
+        pass
+    except Exception as e:
+        error = e
+
+    result = sys.stdout.getvalue()
+
+    sys.stdout = old_stdout
+    sys.stdin = old_stdin
+
+    return result, error
 
 
 if __name__ == '__main__':
