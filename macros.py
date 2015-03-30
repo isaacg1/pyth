@@ -63,6 +63,8 @@ def Pnot(a):
 
 # @.
 def lookup(a, b):
+    if is_num(a) and is_num(b):
+        return a ** (1 / b)
     if isinstance(a, dict):
         if is_seq(b): b = tuple(b)
         return a[b]
