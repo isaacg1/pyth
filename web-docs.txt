@@ -95,6 +95,7 @@ z 0 N z Variable. Autoinitializing to input.
 .e 2 N enumerate map over a enumerate. First arg is lambda, (k, Y) -> (b, Z) ->. k is the number, Y is the sequence.
 .E 1 N any Python any(_).
 .f 1 N float
+.F 2 N format a.format(b) - if b is a non-string sequence, it will be unpacked.
 .h 1 N hash
 .H 1 N hex Hexadecimal string representing _. Direct on int, interpreted as UTF-8 on str.
 .l 2 N log Python math.log(a, b).
