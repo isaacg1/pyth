@@ -843,8 +843,10 @@ def trig(a, b):
 
 # .w. write
 def Pwrite(a, b="foo.txt"):
-    with open(b, 'w') as f:
-        f.write("\n".join(map(str, a)) if is_seq(a) and not isinstance(a, str) else str(a))
+    if not isinstance(b, str):
+        raise BadTypeCombinationError(".w", a, b)
+    with open(b, 'a') as f:
+        f.write(("\n".join(map(str, a)) if is_seq(a) and not isinstance(a, str) else str(a))+"\n")
 
 # .x. col
 def product(a):
