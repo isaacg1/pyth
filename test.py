@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import pyth
 import subprocess
 
 # The idea here is to test each type as input to each function.
@@ -6,52 +7,40 @@ import subprocess
 
 test_cases = [
     # Test \n
-    ('1\n1', b'1\n1\n'),
+    ('1\n1', '1\n1\n'),
     # Test ' '
-    ('1 1', b'1\n'),
+    ('1 1', '1\n'),
     # Test !
-    ('!0', b'True\n'),
-    ('!0.', b'True\n'),
-    ('!"', b'True\n'),
-    ('![', b'True\n'),
-    ('!(', b'True\n'),
-    ('!{', b'True\n'),
-    ('!.d[', b'True\n'),
+    ('!0', 'True\n'),
+    ('!0.', 'True\n'),
+    ('!"', 'True\n'),
+    ('![', 'True\n'),
+    ('!(', 'True\n'),
+    ('!{', 'True\n'),
+    ('!.d[', 'True\n'),
     # Test "
-    ('"a', b'a\n'),
-    ('"a"', b'a\n'),
-    ('"\\', b'\\\n'),
-    ('"\\"', b'"\n'),
-    ('"\\""', b'"\n'),
-    ('"\\\\', b'\\\n'),
-    ('''"
-''', b'\n\n'),
+    ('"a', 'a\n'),
+    ('"a"', 'a\n'),
+    ('"\\', '\\\n'),
+    ('"\\"', '"\n'),
+    ('"\\""', '"\n'),
+    ('"\\\\', '\\\n'),
+    ('"\n', '\n\n'),
     # Test #
-    ('#1B1)1', b'1\n1\n'),
-    ('#1/1 0 2)2', b'1\n2\n'),
-    ('#/2-2Z~Z1', b'1\n2\n'),
+    ('#1B1)1', '1\n1\n'),
+    ('#1/1 0 2)2', '1\n2\n'),
+    ('#/2-2Z~Z1', '1\n2\n'),
     # Test $
-    ('$Z="Hello."$Z', b'Hello.\n'),
+    ('$Z="Hello."$Z', 'Hello.\n'),
     ]
 
 
 def test(pyth_code, expected_output, input_message=''):
-    pyth_process = \
-        subprocess.Popen(['/usr/bin/env',
-                          'python3',
-                          'pyth.py',
-                          '-c',
-                          pyth_code],
-                         stdin=subprocess.PIPE,
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.STDOUT)
+    output, error = pyth.run_code(pyth_code, input_message)
 
-    output, errors = \
-        pyth_process.communicate(input=bytearray(input_message, 'utf-8'))
-
-    if errors:
+    if error:
         raise NameError("Error thrown by %s on input %s:\n%s" %\
-            (pyth_code, input_message, errors))
+            (pyth_code, input_message, error))
     if output != expected_output:
         raise NameError("Bad output by %s on input %s."
                         "\nExpected: %r.\nReceived: %r" %\
