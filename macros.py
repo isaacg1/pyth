@@ -841,6 +841,10 @@ def trig(a, b):
 
     return funcs[b](a)
 
+# .w. write
+def Pwrite(a, b="foo.txt"):
+    with open(b, 'w') as f:
+        f.write("\n".join(map(str, a)) if is_seq(a) and not isinstance(a, str) else str(a))
 
 # .x. col
 def product(a):

@@ -142,6 +142,7 @@ c_to_f = {
     '.S': ('shuffle', 1),
     '.s': ('stripchars', 2),
     '.t': ('trig', 2),
+    '.w': ('Pwrite', 2),
     '.x': ('product', 1),
     '.z': ('all_input', 0),
     '.^': ('pow', 3),
