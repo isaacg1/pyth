@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 import subprocess
 
+# The idea here is to test each type as input to each function.
+# num, float, str, list, tuple, set, dict
 
 test_cases = [
     # Test \n
@@ -8,7 +10,28 @@ test_cases = [
     # Test ' '
     ('1 1', b'1\n'),
     # Test !
-    ('!Y', b'True\n'),
+    ('!0', b'True\n'),
+    ('!0.', b'True\n'),
+    ('!"', b'True\n'),
+    ('![', b'True\n'),
+    ('!(', b'True\n'),
+    ('!{', b'True\n'),
+    ('!.d[', b'True\n'),
+    # Test "
+    ('"a', b'a\n'),
+    ('"a"', b'a\n'),
+    ('"\\', b'\\\n'),
+    ('"\\"', b'"\n'),
+    ('"\\""', b'"\n'),
+    ('"\\\\', b'\\\n'),
+    ('''"
+''', b'\n\n'),
+    # Test #
+    ('#1B1)1', b'1\n1\n'),
+    ('#1/1 0 2)2', b'1\n2\n'),
+    ('#/2-2Z~Z1', b'1\n2\n'),
+    # Test $
+    ('$Z="Hello."$Z', b'Hello.\n'),
     ]
 
 
