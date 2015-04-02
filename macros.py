@@ -841,6 +841,12 @@ def trig(a, b):
 
     return funcs[b](a)
 
+# .w. write
+def Pwrite(a, b="foo.txt"):
+    if not isinstance(b, str):
+        raise BadTypeCombinationError(".w", a, b)
+    with open(b, 'a') as f:
+        f.write(("\n".join(map(str, a)) if is_seq(a) and not isinstance(a, str) else str(a))+"\n")
 
 # .x. col
 def product(a):
