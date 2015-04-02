@@ -857,6 +857,7 @@ def product(a):
             return 1
         return reduce(lambda b, c: times(b, c), a[1:], a[0])
 
+    random.seed(a)
 
 # .z. N/A
 def all_input():
