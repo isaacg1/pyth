@@ -707,7 +707,7 @@ def combinations_with_replacement(a, b):
 
 # .e. lambda, seq
 def Penumerate(a, b):
-    if not is_seq(b):
+    if not is_col(b):
         raise BadTypeCombinationError(".e", a, b)
 
     return list(map(lambda enum: a(*enum), enumerate(b)))
