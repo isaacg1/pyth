@@ -856,8 +856,11 @@ def product(a):
         if len(a) == 0:
             return 1
         return reduce(lambda b, c: times(b, c), a[1:], a[0])
+    
+    if is_num(a):
+        return random.seed(a)
 
-    random.seed(a)
+    raise BadTypeCombinationError(".x", a)
 
 # .z. N/A
 def all_input():

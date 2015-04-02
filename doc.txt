@@ -139,7 +139,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .S 1 N shuffle           .S<col> random.shuffle(<col>). .S(<int>) = .S(range(<int>))
 .t 2 N trigonometry      Collection of trigonometric functions. See below.
 .u 1 N unpack-close      Shorthand for .*_).
-.x 1 N group-x           product, over a non-str seq. Uses Pyth *.
+.x 1 N group-x           product, over a non-str seq. Uses Pyth *. With num is random.seed.
 .z 0 N all-input         Take all of stdin, return as list of lines.
 .^ 3 N powmod            Python pow(a, b, c).
 .& 2 N bitand            Python bitwise &.
