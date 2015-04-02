@@ -710,6 +710,8 @@ def Penumerate(a, b):
     if not is_seq(b):
         raise BadTypeCombinationError(".e", a, b)
 
+    return list(map(lambda enum: a(*enum), enumerate(b)))
+
 # .F. format
 def Pformat(a, b):
     if not isinstance(a, str):
