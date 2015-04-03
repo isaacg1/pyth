@@ -215,13 +215,40 @@ def Plist(*a):
 
 # :. list.
 def at_slice(a, b, c):
-    if isinstance(b, str):
+    if isinstance(a, str) and isinstance(b, str):
         if not isinstance(c, str):
             return bool(re.search(b, a))
         else:
             return re.sub(b, c, a)
     if isinstance(b, int) and isinstance(c, int):
         return a[slice(b, c)]
+
+    # There is no nice ABC for this check.
+    if hasattr(a, "__getitem__") and is_col(b):
+        if is_col(c):
+            c = itertools.cycle(c)
+        else:
+            c = itertools.repeat(c)
+        
+        if isinstance(a, str) or isinstance(a, tuple):
+            indexable = list(a)
+        else:
+            indexable = a
+
+        for index in b:
+            if isinstance(a, str):
+                indexable[index] = str(next(c))
+            else:
+                indexable[index] = next(c)
+
+        if isinstance(a, tuple):
+            return tuple(indexable)
+
+        if isinstance(a, str):
+            return "".join(indexable)
+
+        return indexable
+
     raise BadTypeCombinationError(":", a, b, c)
 
 
