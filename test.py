@@ -32,7 +32,12 @@ test_cases = [
     ('#/2-2Z~Z1', '1\n2\n'),
     # Test $
     ('$Z="Hello."$Z', 'Hello.\n'),
-    ]
+    # Test :
+    (':"abcde",0 3]"lol"', 'lolbclole\n'),
+    (':"####$$$$"%2U8\\x', 'x#x#x$x$\n'),
+    (':U10r4 7 8', '[0, 1, 2, 3, 8, 8, 8, 7, 8, 9]\n'),
+]
+
 
 
 def test(pyth_code, expected_output, input_message=''):

@@ -30,7 +30,9 @@ $  X N super-quote       Begins and ends Python literals. A Python literal is pl
 -  2 N minus             Subtraction, setwise difference. Maintains order. -<num><seq> coerces number to sequence type. Return type is type of first arg.
 .  X N point             Numeric literals. Secondary function list - see end of doc for details.
 /  2 N div               Floored division. .count() method on containers.
-:  3 N slice-sub         Python slice. :<seq><int><int> -> <seq>[<int>:<int>]. :<str><str><str> is regex substitution, substitute in a, b for c. :<str><str><oth> is regex search, boolean.
+:  3 N slice-sub         Python slice. :<seq><int><int> -> <seq>[<int>:<int>].
+                         :<str><str><str> is regex substitution, substitute in a, b for c. :<str><str><oth> is regex search, boolean.
+                         :<idx><col><any> is indexed substitution. For every index in b an element is taken from c (cycling when exhausted), and assigned to a at that index.
 ;  X N end-line          End everything. Infinite ). Best used in statements.
 <  2 N less-than         Less than, subset, slice. < seq num is seq[:num].
 =  2 Y defined as        Assignment, using deepcopy. Cannot be strung; e.g. while b=d=1 works in Python, ==bd1 fails in Pyth.
