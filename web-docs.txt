@@ -5,7 +5,7 @@
 # S Y infinite-loop "While True:" loop. On error, suppresses error and breaks out of loop.
 $ X N super-quote Begins and ends Python literals. A Python literal is placed directly into the compiled Python output. Counts as one argument for arity purposes. Disabled online.
 % 2 N mod On integers, modulous. On string, string formatting. %<int><seq> is a modular slice, <seq>[::<int>] in Python.
-& 2 N and Logical and. (short circuiting)
+& 2 N Python's and-operator (short circuiting). &ab returns a, if it evaluates to a falsy value otherwise b.
 ' 1 N quote-file Cat file, return file a list of lines. File name as input.
 ( I N tuple Tuple constructor. Unbounded.
 ) X N close-paren Ends functions, statements. Marks last line of statement, last arg. of function. Necessary for statements, unbounded functions.
