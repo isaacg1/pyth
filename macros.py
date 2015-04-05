@@ -914,7 +914,7 @@ def bitor(a, b):
         if isinstance(a, list):
             return list(union)
         if isinstance(a, str):
-            return str(union)
+            return ''.join(union)
         if isinstance(a, tuple):
             return tuple(union)
         return union
