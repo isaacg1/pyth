@@ -638,7 +638,7 @@ def assign_at(a, b, c):
         return b
     # += in a dict, X<any><dict><any>
     if isinstance(b, dict):
-        if is_seq(b): b = tuple(b)
+        if is_seq(a): a = tuple(a)
         if a in b:
             b[a] += c
         else:
@@ -914,7 +914,7 @@ def bitor(a, b):
         if isinstance(a, list):
             return list(union)
         if isinstance(a, str):
-            return str(union)
+            return ''.join(union)
         if isinstance(a, tuple):
             return tuple(union)
         return union
