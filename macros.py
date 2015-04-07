@@ -1,6 +1,7 @@
 import copy
 import fractions
 import itertools
+import functools
 import cmath
 import math
 import random
@@ -807,9 +808,10 @@ def Pexit():
     sys.exit(0)
 
 # .Q. N/A
+@functools.lru_cache(1)
 def eval_all_input():
     def eval_trim_line(line):
-        return literal_eval(line[:-1])
+        return literal_eval(line.rstrip("\n"))
     return list(map(eval_trim_line, sys.stdin))
 
 
@@ -897,6 +899,7 @@ def product(a):
     raise BadTypeCombinationError(".x", a)
 
 # .z. N/A
+@functools.lru_cache(1)
 def all_input():
     def trim_line(line):
         return line.rstrip("\n")
