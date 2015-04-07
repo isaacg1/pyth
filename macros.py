@@ -893,7 +893,7 @@ def product(a):
 # .z. N/A
 def all_input():
     def trim_line(line):
-        return line[:-1]
+        return line.rstrip("\n")
     return list(map(trim_line, sys.stdin))
 
 
