@@ -783,10 +783,10 @@ def maximal(a, b):
 
 # .n. mathematical constants
 def Pnumbers(a):
-    if a<5:
+    if a<5 and isinstance(a, int):
         return [math.pi, math.e, 2**.5, (1+5**0.5)/2, float("inf")][a]
     
-    raise BadTypeCombinationError(".N", a)
+    raise BadTypeCombinationError(".n", a)
 
 # .p. seq
 def permutations(a):
