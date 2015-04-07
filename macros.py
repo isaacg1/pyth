@@ -783,8 +783,8 @@ def maximal(a, b):
 
 # .n. mathematical constants
 def Pnumbers(a):
-    if a<5 and isinstance(a, int):
-        return [math.pi, math.e, 2**.5, (1+5**0.5)/2, float("inf")][a]
+    if a < 7 and isinstance(a, int):
+        return [math.pi, math.e, 2**.5, (1+5**0.5)/2, float("inf"), -float("inf"), float("nan")][a]
     
     raise BadTypeCombinationError(".n", a)
 
