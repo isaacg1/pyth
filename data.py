@@ -132,6 +132,7 @@ c_to_f = {
     '.l': ('log', 2),
     '.m': ('minimal(lambda b:', 2),
     '.M': ('maximal(lambda Z:', 2),
+    '.n': ('Pnumbers', 1),
     '.O': ('Poct', 1),
     '.p': ('permutations', 1),
     '.P': ('permutations2', 2),

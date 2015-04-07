@@ -751,7 +751,7 @@ def Pformat(a, b):
 
 
 # .l. num, num
-def log(a, b):
+def log(a, b=math.e):
     if not is_num(a) or not is_num(b):
         raise BadTypeCombinationError(".l", a, b)
 
@@ -781,6 +781,12 @@ def maximal(a, b):
     maximum = max(map(a, seq))
     return list(filter(lambda elem: a(elem) == maximum, seq))
 
+# .n. mathematical constants
+def Pnumbers(a):
+    if a<5 and isinstance(a, int):
+        return [math.pi, math.e, 2**.5, (1+5**0.5)/2, float("inf")][a]
+    
+    raise BadTypeCombinationError(".n", a)
 
 # .p. seq
 def permutations(a):
