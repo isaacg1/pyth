@@ -130,6 +130,10 @@ def function_parse(active_char, rest_code):
         args_list = args_list[:-1]
     py_code += ','.join(args_list)
     py_code += ')'
+    if active_char in next_c_to_f:
+        temp = next_c_to_f[active_char][-1]
+        next_c_to_f[active_char] = [c_to_f[active_char]] + next_c_to_f[active_char][:-1]
+        c_to_f[active_char] = temp
     return py_code, rest_code
 
 
