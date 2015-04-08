@@ -1,6 +1,8 @@
 import copy
 import fractions
 import itertools
+import functools
+import cmath
 import math
 import random
 import re
@@ -24,6 +26,8 @@ def is_seq(a):
 def is_col(a):
     return isinstance(a, collections.Iterable)
 
+def is_hash(a):
+    return isinstance(a, collections.Hashable)
 
 # Error handling
 class BadTypeCombinationError(Exception):
@@ -60,7 +64,10 @@ def Pnot(a):
 
 # @.
 def lookup(a, b):
+    if is_num(a) and is_num(b):
+        return a ** (1 / b)
     if isinstance(a, dict):
+        if is_seq(b): b = tuple(b)
         return a[b]
     if is_seq(a) and isinstance(b, int):
         return a[b % len(a)]
@@ -68,8 +75,10 @@ def lookup(a, b):
         intersection = filter(lambda b_elm: b_elm in a, b)
         if isinstance(a, str):
             return ''.join(intersection)
-        elif isinstance(a, tuple):
+        if isinstance(a, tuple):
             return tuple(intersection)
+        if isinstance(a, set):
+            return set(intersection)
         else:
             return list(intersection)
     raise BadTypeCombinationError("@", a, b)
@@ -165,7 +174,7 @@ def neg(a):
 
 
 # {. All.
-def Pset(a):
+def Pset(a=set()):
     if is_num(a):
         return set([a])
     if is_col(a):
@@ -207,13 +216,40 @@ def Plist(*a):
 
 # :. list.
 def at_slice(a, b, c):
-    if isinstance(b, str):
+    if isinstance(a, str) and isinstance(b, str):
         if not isinstance(c, str):
             return bool(re.search(b, a))
         else:
             return re.sub(b, c, a)
     if isinstance(b, int) and isinstance(c, int):
         return a[slice(b, c)]
+
+    # There is no nice ABC for this check.
+    if hasattr(a, "__getitem__") and is_col(b):
+        if is_col(c):
+            c = itertools.cycle(c)
+        else:
+            c = itertools.repeat(c)
+        
+        if isinstance(a, str) or isinstance(a, tuple):
+            indexable = list(a)
+        else:
+            indexable = a
+
+        for index in b:
+            if isinstance(a, str):
+                indexable[index] = str(next(c))
+            else:
+                indexable[index] = next(c)
+
+        if isinstance(a, tuple):
+            return tuple(indexable)
+
+        if isinstance(a, str):
+            return "".join(indexable)
+
+        return indexable
+
     raise BadTypeCombinationError(":", a, b, c)
 
 
@@ -253,6 +289,20 @@ def div(a, b):
         return a.count(b)
     raise BadTypeCombinationError("/", a, b)
 
+
+# a. List, Set.
+def append(a, b):
+    if isinstance(a, list):
+        a.append(b)
+        return a
+    if isinstance(a, set):
+        if is_hash(b):
+            a.add(b)
+            return a
+        else:
+            a.add(tuple(b))
+            return a
+    raise BadTypeCombinationError("a", a, b)
 
 b = "\n"
 
@@ -563,6 +613,7 @@ def urange(a):
 def assign_at(a, b, c):
     # Assign at
     if isinstance(a, dict):
+        if is_seq(b): b = tuple(b)
         a[b] = c
         return a
     if isinstance(b, int):
@@ -588,7 +639,11 @@ def assign_at(a, b, c):
         return b
     # += in a dict, X<any><dict><any>
     if isinstance(b, dict):
-        b[a] += c
+        if is_seq(a): a = tuple(a)
+        if a in b:
+            b[a] += c
+        else:
+            b[a] = c
         return b
     raise BadTypeCombinationError("X", a, b, c)
 
@@ -680,14 +735,24 @@ def combinations_with_replacement(a, b):
 
 # .e. lambda, seq
 def Penumerate(a, b):
-    if not is_seq(b):
-        raise BadTypeCombinationError(".e", a, b)
+    if is_col(b):
+        return list(map(lambda arg: a(*arg), enumerate(b)))
 
-    return list(map(lambda enum: a(*enum), enumerate(b)))
+    raise BadTypeCombinationError(".e", a, b)
+
+
+# .F. format
+def Pformat(a, b):
+    if not isinstance(a, str):
+        raise BadTypeCombinationError("F", a, b)
+    if is_seq(b) and not isinstance(b, str):
+        return a.format(*b)
+    
+    return a.format(b)
 
 
 # .l. num, num
-def log(a, b):
+def log(a, b=math.e):
     if not is_num(a) or not is_num(b):
         raise BadTypeCombinationError(".l", a, b)
 
@@ -717,6 +782,12 @@ def maximal(a, b):
     maximum = max(map(a, seq))
     return list(filter(lambda elem: a(elem) == maximum, seq))
 
+# .n. mathematical constants
+def Pnumbers(a):
+    if a < 7 and isinstance(a, int):
+        return [math.pi, math.e, 2**.5, (1+5**0.5)/2, float("inf"), -float("inf"), float("nan")][a]
+    
+    raise BadTypeCombinationError(".n", a)
 
 # .p. seq
 def permutations(a):
@@ -732,20 +803,46 @@ def permutations2(a, b):
 
     return itertools_norm(itertools.permutations, a, b)
 
+# .q. N\A
+def Pexit():
+    sys.exit(0)
 
 # .Q. N/A
+@functools.lru_cache(1)
 def eval_all_input():
     def eval_trim_line(line):
-        return literal_eval(line[:-1])
+        return literal_eval(line.rstrip("\n"))
     return list(map(eval_trim_line, sys.stdin))
 
+
+# .r. seq
+def run_length_encoding(a):
+    if is_seq(a):
+        if len(a) == 0:
+            return []
+        rle = []
+        running_count = 1
+        current_elem = a[0]
+        for elem in a[1:]:
+            if elem == current_elem:
+                running_count += 1
+            else:
+                rle.append([current_elem, running_count])
+                current_elem = elem
+                running_count = 1
+        rle.append([elem, running_count])
+        return rle
+    if is_col(a):
+        return run_length_encoding(sorted(a))
+
+    raise BadTypeCombinationError(".r", a)
 
 # .s. str, str
 def stripchars(a, b):
     if isinstance(a, str) and isinstance(b, str):
         return a.strip(b)
 
-    raise BadTypeCombinationError(".r", a, b)
+    raise BadTypeCombinationError(".s", a, b)
 
 
 # .S. seq, int
@@ -782,6 +879,12 @@ def trig(a, b):
 
     return funcs[b](a)
 
+# .w. write
+def Pwrite(a, b="foo.txt"):
+    if not isinstance(b, str):
+        raise BadTypeCombinationError(".w", a, b)
+    with open(b, 'a') as f:
+        f.write(("\n".join(map(str, a)) if is_seq(a) and not isinstance(a, str) else str(a))+"\n")
 
 # .x. col
 def product(a):
@@ -789,12 +892,17 @@ def product(a):
         if len(a) == 0:
             return 1
         return reduce(lambda b, c: times(b, c), a[1:], a[0])
+    
+    if is_num(a):
+        return random.seed(a)
 
+    raise BadTypeCombinationError(".x", a)
 
 # .z. N/A
+@functools.lru_cache(1)
 def all_input():
     def trim_line(line):
-        return line[:-1]
+        return line.rstrip("\n")
     return list(map(trim_line, sys.stdin))
 
 
@@ -810,6 +918,15 @@ def bitand(a, b):
 def bitor(a, b):
     if isinstance(a, int) and isinstance(b, int):
         return a | b
+    if is_col(a) and is_col(b):
+        union = set(a) | set(b)
+        if isinstance(a, list):
+            return list(union)
+        if isinstance(a, str):
+            return ''.join(union)
+        if isinstance(a, tuple):
+            return tuple(union)
+        return union
 
     raise BadTypeCombinationError(".|", a, b)
 
@@ -855,3 +972,22 @@ def sign(a):
         return 1
     else:
         return 0
+
+
+# .:, int/seq, int
+def substrings(a, b):
+    if is_seq(a):
+        seq = a
+    elif isinstance(a, int):
+        seq = list(range(a))
+    else:
+        raise BadTypeCombinationError(".:", a, b)
+    if isinstance(b, int):
+        step = b
+    elif isinstance(b, float):
+        step = int(b * len(seq))
+    elif is_col(b):
+        step = len(b)
+    else:
+        raise BadTypeCombinationError(".:", a, b)
+    return [seq[start:start+step] for start in range(len(seq)-step+1)]

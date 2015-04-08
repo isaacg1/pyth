@@ -21,7 +21,7 @@ c_to_s = {
     'F': (('for ', ' in ', ':'), 2),
     'I': (('if ', ':'), 1),
     'W': (('while ', ':'), 1),
-    '#': (('while True:\n try:', '\n except:\n  break'), 0, 1),
+    '#': (('while True:\n try:', '\n except Exception:\n  break'), 0, 1),
     }
 
 
@@ -52,7 +52,6 @@ c_to_i = {
     '}':  (('(', ' in ', ')'), 2),
     '?':  (('(', ' if ', ' else ', ')'), 3),
     ',':  (('(', ',', ')'), 2),
-    'a':  (('', '.append(', ')'), 2),
     'B':  (('break', ), 0),
     'J':  (('J=copy(', ')'), 1),
     'K':  (('K=', ''), 1),
@@ -89,6 +88,7 @@ c_to_f = {
     '/': ('div', 2),
     ' ': ('', 1),
     '\n': ('', 1),
+    'a': ('append', 2),
     'C': ('Pchr', 1),
     'c': ('chop', 2),
     'e': ('end', 1),
@@ -125,24 +125,25 @@ c_to_f = {
     '.D': ('divmod', 2),
     '.E': ('any', 1),
     '.e': ('Penumerate(lambda k, Y:', 2),
-    '.F': ('format', 2),
     '.f': ('float', 1),
+    '.F': ('Pformat', 2),
     '.H': ('Phex', 1),
     '.h': ('hash', 1),
-    '.I': ('id', 1),
-    '.j': ('complex', 2),
     '.l': ('log', 2),
     '.m': ('minimal(lambda b:', 2),
     '.M': ('maximal(lambda Z:', 2),
+    '.n': ('Pnumbers', 1),
     '.O': ('Poct', 1),
     '.p': ('permutations', 1),
     '.P': ('permutations2', 2),
+    '.q': ('Pexit', 0),
     '.Q': ('eval_all_input', 0),
+    '.r': ('run_length_encoding', 1),
     '.R': ('round', 2),
     '.S': ('shuffle', 1),
     '.s': ('stripchars', 2),
     '.t': ('trig', 2),
-    '.w': ('input', 1),
+    '.w': ('Pwrite', 2),
     '.x': ('product', 1),
     '.z': ('all_input', 0),
     '.^': ('pow', 3),
@@ -151,6 +152,7 @@ c_to_f = {
     '.<': ('leftshift', 2),
     '.>': ('rightshift', 2),
     '._': ('sign', 1),
+    '.:': ('substrings', 2),
     }
 
 replacements = {
@@ -159,6 +161,7 @@ replacements = {
     'A': ('=,{0}{1}', 2),
     'L': ('DybR', 0),
     'M': ('DgGHR', 0),
+    '.N': ('D:NTYR', 0),
     }
 
 # Gives next function header to use - for filter, map, reduce.

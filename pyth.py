@@ -20,6 +20,8 @@ from macros import *
 from data import *
 import copy as c
 import sys
+import io
+import traceback
 from ast import literal_eval
 sys.setrecursionlimit(100000)
 
@@ -128,6 +130,10 @@ def function_parse(active_char, rest_code):
         args_list = args_list[:-1]
     py_code += ','.join(args_list)
     py_code += ')'
+    if active_char in next_c_to_f:
+        temp = next_c_to_f[active_char][-1]
+        next_c_to_f[active_char] = [c_to_f[active_char]] + next_c_to_f[active_char][:-1]
+        c_to_f[active_char] = temp
     return py_code, rest_code
 
 
@@ -230,10 +236,15 @@ def prepend_parse(code):
 def add_print(code):
     if len(code) > 0:
         # Handle alternate table commands before confusion with numerals.
-        if code[0] == "." and code[:2] in c_to_f:
-            return len(code) == 2 or code[2] != "="
+        if code[0] == ".":
+            if code[:2] in c_to_f and not code[:2] == '.q':
+                return len(code) == 2 or code[2] != "="
+            if code[:2] in variables:
+                return True
+            if code[1] not in '0123456789':
+                return False
 
-        if (code[0] not in 'p '
+        if (code[0] not in 'p a'
                 and code[0] in c_to_f
                 and (len(code) == 1 or code[1] != "=")) or \
             code[0] in variables or \
@@ -336,6 +347,32 @@ def preprocess_multiline(code_lines):
         code_lines[linenr] = stripped_line
 
     return "".join(code_lines)
+
+
+def run_code(code, inp):
+    global safe_mode
+
+    old_stdout, old_stdin = sys.stdout, sys.stdin
+
+    sys.stdout = io.StringIO()
+    sys.stdin = io.StringIO(inp)
+
+    error = None
+
+    try:
+        safe_mode = False
+        exec(general_parse(code))
+    except SystemExit:
+        pass
+    except Exception as e:
+        error = e
+
+    result = sys.stdout.getvalue()
+
+    sys.stdout = old_stdout
+    sys.stdin = old_stdin
+
+    return result, error
 
 
 if __name__ == '__main__':

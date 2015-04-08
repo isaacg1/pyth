@@ -1,6 +1,6 @@
 Pyth
 ====
 
-Pyth, an extremely conscise language.
+Pyth, an extremely concise language.
 
 [Try it here.](https://pyth.herokuapp.com/)
