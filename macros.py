@@ -221,7 +221,7 @@ def at_slice(a, b, c):
             return bool(re.search(b, a))
         else:
             return re.sub(b, c, a)
-    if isinstance(b, int) and isinstance(c, int):
+    if isinstance(b, int) and (isinstance(c, int) or c==None):
         return a[slice(b, c)]
 
     # There is no nice ABC for this check.
