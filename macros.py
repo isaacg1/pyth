@@ -11,6 +11,7 @@ import sys
 import collections
 import numbers
 import binascii
+import hashlib
 from ast import literal_eval
 
 
@@ -18,10 +19,8 @@ from ast import literal_eval
 def is_num(a):
     return isinstance(a, numbers.Number)
 
-
 def is_seq(a):
     return isinstance(a, collections.Sequence)
-
 
 def is_col(a):
     return isinstance(a, collections.Iterable)
@@ -690,6 +689,30 @@ def subsets(a):
 
 Y = []
 Z = 0
+
+def hash_repr(a):
+    if isinstance(a, bool):
+        return a and "1" or "0"
+
+    if isinstance(a, str) or is_num(a):
+        return repr(a)
+    
+    if isinstance(a, list) or isinstance(a, tuple):
+        return "[{}]".format(", ".join(hash_repr(l) for l in a))
+
+    if isinstance(a, set):
+        return "[{}]".format(", ".join(hash_repr(l) for l in sorted(a)))
+
+    if isinstance(a, dict):
+        elements = ["({}, {})".format(hash_repr(k), hash_repr(a[k])) for k in sorted(a)]
+        return "[{}]".format(", ".join(elements))
+
+    raise BadTypeCombinationError(".h", a)
+
+# .h. any
+def Phash(a):
+    return hash_repr(a)
+    return int(hashlib.sha256(hash_repr(a).encode("utf-8")).hexdigest(), 16)
 
 
 def Phex_multitype(a, func):
