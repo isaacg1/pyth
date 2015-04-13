@@ -711,7 +711,6 @@ def hash_repr(a):
 
 # .h. any
 def Phash(a):
-    return hash_repr(a)
     return int(hashlib.sha256(hash_repr(a).encode("utf-8")).hexdigest(), 16)
 
 
