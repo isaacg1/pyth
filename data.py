@@ -128,7 +128,7 @@ c_to_f = {
     '.f': ('float', 1),
     '.F': ('Pformat', 2),
     '.H': ('Phex', 1),
-    '.h': ('hash', 1),
+    '.h': ('Phash', 1),
     '.l': ('log', 2),
     '.m': ('minimal(lambda b:', 2),
     '.M': ('maximal(lambda Z:', 2),
