@@ -124,5 +124,6 @@ z 0 N z Variable. Autoinitializing to input.
 .* 1 N unpack Python unpacking. Literally translates to *(_) in the output.
 .) 1 N pop Remove and return last element of a list. Symbol from Golfscript.
 .( 2 N pop2 Remove and return indexed element of a list.
+.- 2 N remove Multiset difference. Remove the leftmost instance of each element in 2nd argument from 1st argument. .-<seq><col>
 ._ 1 N sign Use on num. 1 if positive, -1 if negative, 0 otherwise.
 .: 2 N substring On :<seq><int> return all substrings of <seq> of length <int>. Cast <int> to range, cast <col> by length. Float 2nd arg gives that ratio of the length of the seq substrings.

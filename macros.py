@@ -974,6 +974,24 @@ def sign(a):
         return 0
 
 
+# .-. seq, seq
+def remove(a, b):
+    if not is_seq(a) or not is_col(b):
+        raise BadTypeCombinationError(".-", a, b)
+
+    seq = list(a)
+    to_remove = list(b)
+    for elem in to_remove:
+        if elem in seq:
+            del seq[seq.index(elem)]
+
+    if isinstance(a, str):
+        return ''.join(seq)
+    if isinstance(a, tuple):
+        return tuple(seq)
+    else:
+        return seq
+
 # .:, int/seq, int
 def substrings(a, b):
     if is_seq(a):
