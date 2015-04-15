@@ -210,7 +210,7 @@ def prepend_parse(code):
     def not_escaped(code_part):
         code_part = list(code_part)
         count = 0
-        if code_part and code_part[-1] == '.':
+        if code_part and code_part[-1] == '.' and quot_marks % 2 == 0:
             count = 1
         while code_part and code_part.pop() == '\\':
             count += 1
