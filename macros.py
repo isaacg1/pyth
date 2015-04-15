@@ -726,17 +726,17 @@ def Phex_multitype(a, func):
 
 # .H. int/str
 def Phex(a):
-    return Phex_multitype(a, ".H")
+    return Phex_multitype(a, ".H")[2:]
 
 
 # .B. int/str
 def Pbin(a):
-    return bin(int(Phex_multitype(a, ".B"), 16))
+    return bin(int(Phex_multitype(a, ".B"), 16))[2:]
 
 
 # .O. int/str
 def Poct(a):
-    return oct(int(Phex_multitype(a, ".O"), 16))
+    return oct(int(Phex_multitype(a, ".O"), 16))[2:]
 
 
 # .c. seq, int
