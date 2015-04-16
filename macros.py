@@ -288,6 +288,13 @@ def div(a, b):
         return a.count(b)
     raise BadTypeCombinationError("/", a, b)
 
+# &. And
+def Pand(a, b):
+	return a and b
+
+# |. Or
+def Por(a, b):
+	return a or b
 
 # a. List, Set.
 def append(a, b):
@@ -584,7 +591,13 @@ def reduce(a, b, c=None):
             old_acc = acc
             acc = a(acc, counter)
         return acc
+    
     # Reduce
+    
+    #Check for special fold case
+    if b==float('inf'):
+        b,c=c,c[0]
+    
     if is_seq(b) or isinstance(b, int):
         if isinstance(b, int):
             seq = range(b)
