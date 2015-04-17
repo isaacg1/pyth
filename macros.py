@@ -487,6 +487,8 @@ def isprime(num):
 # P. int, str, list.
 def primes_upper(a):
     if isinstance(a, int):
+        if a < 2:
+            return []
         working = a
         output = []
         for num in filter(isprime, range(2, int(a**.5 + 1))):
