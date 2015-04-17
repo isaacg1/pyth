@@ -288,14 +288,6 @@ def div(a, b):
         return a.count(b)
     raise BadTypeCombinationError("/", a, b)
 
-# &. And
-def Pand(a, b):
-	return a and b
-
-# |. Or
-def Por(a, b):
-	return a or b
-
 # a. List, Set.
 def append(a, b):
     if isinstance(a, list):
