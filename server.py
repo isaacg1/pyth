@@ -11,7 +11,7 @@ def root():
 	time_in_secs = os.path.getmtime('pyth.py')
 	time_in_python = time.gmtime(time_in_secs)
 	formatted_time = time.strftime("%d %b %Y", time_in_python)
-	return render_template('index.html', formatted_time=formatted_time, code=request.args.get('code', ''), input=request.args.get('input', ''), debug=int(request.args.get('debug', 1)))
+	return render_template('index.html', formatted_time=formatted_time, code=request.args.get('code', ''), input=request.args.get('input', ''), debug=int(request.args.get('debug', 0)))
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -21,7 +21,7 @@ def submit():
 	input_message = request.form.get('input', '')
 	debug_on = int(request.form.get('debug'), 0)
 
-	pyth_code = code_message.split("\r\n")[0]
+	pyth_code = '\n'.join(code_message.split("\r\n"))
 	pyth_process = \
 		subprocess.Popen(['/usr/bin/env',
 						  'python3',
