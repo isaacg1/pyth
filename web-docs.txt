@@ -28,7 +28,7 @@ B 0 Y break Python break. Implicit ).
 C 1 N chr char -> int, int -> char. Matrix transpose on list of lists, zip(*a) specifically.
 D S Y def Python def. Match arity w/ existing function. Memoized.
 E S Y else Python else.
-F S Y for Python for.
+F S Y for Python for. Also is fold operator. <binary>F = u<binary>GH.
 G 0 N strinG.lowercase Variable. "abcdefghijklmnopqrstuvwxyz"
 H 0 N hash-table Variable. {}
 I S Y if Python if.
