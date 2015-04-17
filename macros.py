@@ -388,7 +388,7 @@ def head(a):
 
 # i. int, str
 def base_10(a, b):
-    if isinstance(a, str) and isinstance(a, int):
+    if isinstance(a, str) and isinstance(b, int):
         return int(a, b)
     if is_seq(a) and is_num(b):
         return to_base_ten(a, b)
