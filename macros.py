@@ -588,7 +588,7 @@ def reduce(a, b, c=None):
     
     #Check for special fold case
     if b==float('inf'):
-        b,c=c,c[0]
+        b,c=c[1:],c[0]
     
     if is_seq(b) or isinstance(b, int):
         if isinstance(b, int):
