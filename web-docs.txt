@@ -4,7 +4,7 @@
 " X N quote Begins and ends string literals. Optional at end of line.
 # S Y infinite-loop "While True:" loop. On error, suppresses error and breaks out of loop.
 $ X N super-quote Begins and ends Python literals. A Python literal is placed directly into the compiled Python output. Counts as one argument for arity purposes. Disabled online.
-% 2 N mod On integers, modulous. On string, string formatting. %<int><seq> is a modular slice, <seq>[::<int>] in Python.
+% 2 N mod On integers, modulus. On string, string formatting. %<int><seq> is a modular slice, <seq>[::<int>] in Python.
 & 2 N Python's and-operator (short circuiting). &ab returns a, if it evaluates to a falsy value otherwise b.
 ' 1 N quote-file Cat file, return file a list of lines. File name as input.
 ( I N tuple Tuple constructor. Unbounded.
@@ -22,7 +22,7 @@ $ X N super-quote Begins and ends Python literals. A Python literal is placed di
 = 2 Y defined as Assignment, using deepcopy. Cannot be strung; e.g. while b=d=1 works in Python, ==bd1 fails in Pyth. Augmented assignment. T*=2 -> T=20.
 > 2 N greater-than Greater than, superset, slice. > seq num is seq[num:].
 ? 3 N ternary Python ternary. ?abc => a if b else c
-@ 2 N lookup Lookup from str, list or dict. Modulo wrapping on list, str. On seq, seq, intersection. Specifically, filter second arg on presense in first arg. On num, num, bth root of a.
+@ 2 N lookup Lookup from str, list or dict. Modulo wrapping on list, str. On seq, seq, intersection. Specifically, filter second arg on presence in first arg. On num, num, bth root of a.
 A 3 Y assign-pair Aabc => a,b = c. First arguments must be variables. c must be a 2-tuple.
 B 0 Y break Python break. Implicit ).
 C 1 N chr char -> int, int -> char. Matrix transpose on list of lists, zip(*a) specifically.
@@ -40,13 +40,13 @@ N 0 N N Variable. '"'
 O 1 N randOm-chOice random.choice(_). Uses range(int). O0 = random.random()
 P 1 N Prime/Pop prime factorization on int. All but last on str, list.
 Q 0 N quick Variable. Autoinitializing to evaluated input.
-R 1 Y return Python return. Impliciit ).
+R 1 Y return Python return. Implicit ).
 S 1 N sorted Python sorted.
 T 0 N ten Variable. 10
 U 1 N unary-range Python unary range. Splats 2 tuples. U_=Ul_ on str, list.
 V S Y eval-loop Loop times equal to input. Equivalent to FNU
 W S Y while Python while.
-X 3 Y indeXed assign Indexed assignment, returns updated. Only returns on str, mod-wrap on list. On <str><str>_ or <list><list>_, where _ is <str> or <list>, performs translation. On <int><list> or <any><dict>, performs indexed +=. Assigns if key not in dict.
+X 3 Y indeXed assign Indexed assignment, returns updated. Only returns on str, mod-wrap on list. On <seq><seq><seq> performs translation, uses reversed of 2nd arg, if 3rd is omitted. On <int><list> or <any><dict>, performs indexed +=. Assigns if key not in dict.
 Y 0 N Y Variable. []
 Z 0 N zero Variable. 0
 [ X N list List constructor. Unbounded.
@@ -55,7 +55,7 @@ Z 0 N zero Variable. 0
 ^ 2 N power Python pow, cartesian product with # of repeats.
 _ 1 N neg Negation. Str and list reverse.
 ` 1 N repr Python repr.
-a  2 N append Python .append(), .add(). First arguement must be a list or set. Returns resultant list or string as well as modifiying input. On non-hashable additions to set, casts to tuple.
+a  2 N append Python .append(), .add(). First arguement must be a list or set. Returns resultant list or string as well as modifying input. On non-hashable additions to set, casts to tuple.
 b 0 N line-Break Variable. "\n"
 c 2 N chop On <str/list><int> chop str/list every n elements. On <int><str/list> split str/list into n pieces (elements are equally distributed). On <str><str>, str.split. On <num><num> floating point division.
 d 0 N d Variable. " "
@@ -75,10 +75,10 @@ q 2 N equals Python ==.
 r 2 N range Python 2 range. Rev if a>b. Various string processing.
 s 1 N sum Reduce + on list, cast to int on other.
 t 1 N tail _[1:]. _-1.
-u 3 N redUce Reduce, implicit lambda. 3rd is base case. G,H -> N,T. Fixed point operator if 2nd arg ommited and ) used, e.g. u<1st><3rd>).
+u 3 N redUce Reduce, implicit lambda. 3rd is base case. G,H -> N,T. Fixed point operator if 2nd arg omitted and ) used, e.g. u<1st><3rd>).
 v 1 N eVal Python eval. Often used for str -> int.
 w 1 N raW_input Python 3 input()
-x 2 N indeX Find first occurance. -1 if not found. Bitwise xor.
+x 2 N indeX Find first occurrence. -1 if not found. Bitwise xor.
 y 1 N powerset On num, double. On seq, powerset.
 z 0 N z Variable. Autoinitializing to input.
 { 1 N set Python set. Makes one element set on num.
@@ -99,8 +99,8 @@ z 0 N z Variable. Autoinitializing to input.
 .h 1 N hash
 .H 1 N hex Hexadecimal string representing _. Direct on int, interpreted as UTF-8 on str. No '0x'.
 .l 2 N log Python math.log(a, b). Default for b is natural log.
-.m 2 N minimal Filter 2nd arg on elements which give minimal value when 1st arg is aplied. First arg is lambda, b ->
-.M 2 N maximal Filter 2nd arg on elements which give maximal value when 1st arg is aplied. First arg is lambda, Z ->
+.m 2 N minimal Filter 2nd arg on elements which give minimal value when 1st arg is applied. First arg is lambda, b ->
+.M 2 N maximal Filter 2nd arg on elements which give maximal value when 1st arg is applied. First arg is lambda, Z ->
 .n 1 N Numbers List of mathematical constants: pi, e, sqrt(2), phi, infinity
 .N 1 Y the-one-after-M def :(N, T, Y): return _.
 .O 1 N oct Octal string representing _. Direct on int, interpreted as UTF-8 on str. No '0o'.

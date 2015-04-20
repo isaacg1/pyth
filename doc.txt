@@ -23,7 +23,7 @@ Char, arity, begins line, mnemonic, details. When in doubt, similar to python.
 "  X N quote             Begins and ends string literals. Optional at end of line.
 #  S Y                   "While True:" loop. On error, suppresses error and breaks out of loop.
 $  X N super-quote       Begins and ends Python literals. A Python literal is placed directly into the compiled Python output. Counts as one argument for arity purposes. Disabled online.
-%  2 N mod               On integers, modulous. On string, string formatting. %<int><seq> is a modular slice, <seq>[::<int>] in Python.
+%  2 N mod               On integers, modulus. On string, string formatting. %<int><seq> is a modular slice, <seq>[::<int>] in Python.
 &  2 N and               Python's and-operator (short circuiting). &ab returns a, if it evaluates to a falsy value otherwise b.
 '  1 N quote-file        Cat file, return file a list of lines. File name as input.
 (  I N tuple             Tuple constructor. Unbounded.
@@ -44,7 +44,7 @@ $  X N super-quote       Begins and ends Python literals. A Python literal is pl
 >  2 N greater-than      Greater than, superset, slice. > seq num is seq[num:].
 ?  3 N ternary           Python ternary. ?abc => a if b else c
 @  2 N lookup            Lookup from str, list or dict. Modulo wrapping on list, str. On seq, seq, intersection.
-                         Specifically, filter second arg on presense in first arg. On num, num, bth root of a.
+                         Specifically, filter second arg on presence in first arg. On num, num, bth root of a.
 A  3 Y assign-pair       Aabc => a,b = c. First arguments must be variables. c must be a 2-tuple.
 B  0 Y break             Python break. Implicit ).
 C  1 N chr               char -> int, int -> char. Matrix transpose on list of lists, zip(*a) specifically.
@@ -62,7 +62,7 @@ N  0 N                   Variable. '"'
 O  1 N randOm-chOice     random.choice(_). Uses range(int). O0 = random.random()
 P  1 N Prime/Pop         prime factorization on int. All but last on str, list.
 Q  0 N quick             Variable. Autoinitializing to evaluated input.
-R  1 Y return            Python return. Impliciit ).
+R  1 Y return            Python return. Implicit ).
 S  1 N sorted            Python sorted.
 T  0 N ten               Variable. 10
 U  1 N unary-range       Python unary range. Splats 2 tuples. U_=Ul_ on str, list.
@@ -79,8 +79,8 @@ Z  0 N zero              Variable. 0
 ^  2 N power             Python pow, cartesian product with # of repeats.
 _  1 N neg               Negation. Str and list reverse.
 `  1 N repr              Python repr.
-a  2 N append            Python .append(), .add(). First arguement must be a list or set.
-                         Returns resultant list or string as well as modifiying input.
+a  2 N append            Python .append(), .add(). First argument must be a list or set.
+                         Returns resultant list or string as well as modifying input.
                          On non-hashable additions to set, casts to tuple.
 b  0 N lineBreak         Variable. "\n"
 c  2 N chop              On <str/list><int> chop str/list every n elements. 
@@ -107,7 +107,7 @@ u  3 N reduce            Reduce, implicit lambda. 3rd is base case. G,H -> N,T.
                          Fixed point operator if 2nd arg omitted, e.g. u<1st><3rd>).
 v  1 N eval              Python eval. Often used for str -> int.
 w  0 N raw_input         Python 3 input()
-x  2 N index             Find first occurance. -1 if not found. Bitwise xor.
+x  2 N index             Find first occurrence. -1 if not found. Bitwise xor.
 y  1 N                   On num, double. On col, powerset.
 z  0 N                   Variable. Autoinitializing to input.
 {  1 N set               Python set. Makes one element set on num.
@@ -128,9 +128,9 @@ z  0 N                   Variable. Autoinitializing to input.
 .h 1 N hash
 .H 1 N hex               Hexadecimal string representing _. Direct on int, interpreted as UTF-8 on str. No '0x'.
 .l 2 N log               Python math.log(a, b). Default for b is natural log.
-.m 2 N minimal           Filter 2nd arg on elements which give minimal value when 1st arg is aplied.
+.m 2 N minimal           Filter 2nd arg on elements which give minimal value when 1st arg is applied.
                          First arg is lambda, b ->
-.M 2 N maximal           Filter 2nd arg on elements which give maximal value when 1st arg is aplied.
+.M 2 N maximal           Filter 2nd arg on elements which give maximal value when 1st arg is applied.
                          First arg is lambda, Z ->
 .n 1 N Numbers           List of mathematical constants: pi, e, sqrt(2), phi, infinity
 .N 1 Y The one after M   def :(N, T, Y): return _.
