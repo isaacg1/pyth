@@ -863,7 +863,7 @@ def run_length_encoding(a):
                 rle.append([current_elem, running_count])
                 current_elem = elem
                 running_count = 1
-        rle.append([elem, running_count])
+        rle.append([current_elem, running_count])
         return rle
     if is_col(a):
         return run_length_encoding(sorted(a))
