@@ -617,7 +617,7 @@ def urange(a):
 
 
 # X.
-def assign_at(a, b, c):
+def assign_at(a, b, c=None):
     # Assign at
     if isinstance(a, dict):
         if isinstance(b, list):
@@ -633,6 +633,8 @@ def assign_at(a, b, c):
         if isinstance(a, tuple):
             return a[:b % len(a)] + (c,) + a[(b % len(a))+1:]
     # Translate
+    if is_seq(a) and is_seq(b):
+        c = b[::-1]
     if is_seq(a) and is_seq(b) and is_seq(c):
         def trans_func(element):
             return c[b.index(element)] if element in b else element
@@ -701,7 +703,7 @@ Z = 0
 
 def hash_repr(a):
     if isinstance(a, bool):
-        return a and "1" or "0"
+        return "1" if a else "0"
 
     if isinstance(a, str) or is_num(a):
         return repr(a)
@@ -846,27 +848,28 @@ def eval_all_input():
     return list(map(eval_trim_line, sys.stdin))
 
 
-# .r. seq
-def run_length_encoding(a):
-    if is_seq(a):
-        if len(a) == 0:
-            return []
-        rle = []
-        running_count = 1
-        current_elem = a[0]
-        for elem in a[1:]:
-            if elem == current_elem:
-                running_count += 1
+# .r seq, int / col, seq
+def rotate(a, b):
+    if is_seq(a) and isinstance(b, int):
+        return a[b % len(a):] + a[:b % len(a)]
+
+    if is_col(a) and is_seq(b):
+        def trans_func(elem):
+            if elem in b:
+                elem_index = b.index(elem)
+                return b[(elem_index + 1) % len(b)]
             else:
-                rle.append([current_elem, running_count])
-                current_elem = elem
-                running_count = 1
-        rle.append([elem, running_count])
-        return rle
-    if is_col(a):
-        return run_length_encoding(sorted(a))
+                return elem
+        trans_a = map(trans_func, a)
+        if isinstance(a, str):
+            return ''.join(trans_a)
+        if isinstance(a, set):
+            return set(trans_a)
+        return list(trans_a)
 
     raise BadTypeCombinationError(".r", a)
+
+
 
 # .s. str, str
 def stripchars(a, b):
