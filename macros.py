@@ -873,9 +873,6 @@ def eval_all_input():
 
 # .r seq, int / col, seq
 def rotate(a, b):
-    if is_seq(a) and isinstance(b, int):
-        return a[b % len(a):] + a[:b % len(a)]
-
     if is_col(a) and is_seq(b):
         def trans_func(elem):
             if elem in b:
