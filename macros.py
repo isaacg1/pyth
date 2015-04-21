@@ -617,7 +617,7 @@ def urange(a):
 
 
 # X.
-def assign_at(a, b, c):
+def assign_at(a, b, c=None):
     # Assign at
     if isinstance(a, dict):
         if isinstance(b, list):
@@ -633,7 +633,9 @@ def assign_at(a, b, c):
         if isinstance(a, tuple):
             return a[:b % len(a)] + (c,) + a[(b % len(a))+1:]
     # Translate
-    if is_seq(a) and is_seq(b) and is_seq(c):
+    if is_seq(a) and is_seq(b) and (not c or is_seq(c)):
+        if not c:
+            c = b[::-1]
         def trans_func(element):
             return c[b.index(element)] if element in b else element
         translation = map(trans_func, a)
