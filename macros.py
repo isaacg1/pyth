@@ -88,6 +88,8 @@ def lookup(a, b):
 def mod(a, b):
     if isinstance(a, int) and is_seq(b):
         return b[::a]
+    if isinstance(a, complex) and is_num(b):
+        return (a.real % b) + (a.imag % b) * 1j
     if is_num(a) and is_num(b) or isinstance(a, str):
         return a % b
     raise BadTypeCombinationError("%", a, b)
@@ -259,6 +261,8 @@ def lt(a, b):
         return a.issubset(b) and a != b
     if is_seq(a) and is_num(b):
         return a[:b]
+    if isinstance(a, complex) or isinstance(b, complex):
+        return abs(a) < abs(b)
     if is_num(a) and is_num(b) or\
             isinstance(a, list) and isinstance(b, list) or\
             isinstance(a, tuple) and isinstance(b, tuple) or\
@@ -273,6 +277,8 @@ def gt(a, b):
         return a.issuperset(b) and a != b
     if is_seq(a) and is_num(b):
         return a[b:]
+    if isinstance(a, complex) or isinstance(b, complex):
+        return abs(a) > abs(b)
     if is_num(a) and is_num(b) or\
             isinstance(a, list) and isinstance(b, list) or\
             isinstance(a, tuple) and isinstance(b, tuple) or\
@@ -334,6 +340,8 @@ def chop(a, b=None):
 def Pchr(a):
     if isinstance(a, int):
         return chr(a)
+    if is_num(a):
+        return a.real - a.imag * 1j
     if isinstance(a, str):
         return ord(a[0])
     if is_col(a):
@@ -346,6 +354,8 @@ d = ' '
 
 # e. All.
 def end(a):
+    if isinstance(a, complex):
+        return a.imag
     if is_num(a):
         return a % 10
     if is_seq(a):
@@ -499,6 +509,8 @@ def primes_upper(a):
         if working != 1:
             output.append(working)
         return output
+    if is_num(a):
+        return cmath.phase(a)
     if is_seq(a):
         return a[:-1]
     raise BadTypeCombinationError("P", a)
@@ -551,6 +563,8 @@ def Psum(a):
         if len(a) == 0:
             return 0
         return reduce(lambda b, c: plus(b, c), a[1:], a[0])
+    if isinstance(a, complex):
+        return a.real
     if is_num(a) or isinstance(a, str):
         return int(a)
     raise BadTypeCombinationError("s", a)
@@ -777,17 +791,26 @@ def Penumerate(a, b):
 # .F. format
 def Pformat(a, b):
     if not isinstance(a, str):
-        raise BadTypeCombinationError("F", a, b)
+        raise BadTypeCombinationError(".F", a, b)
     if is_seq(b) and not isinstance(b, str):
         return a.format(*b)
     
     return a.format(b)
 
 
+# .j. int, int
+def Pcomplex(a=0, b=1):
+    if not is_num(a) and is_num(b):
+        raise BadTypeCombinationError(".j", a, b)
+    return a + b*complex(0, 1)
+
+
 # .l. num, num
 def log(a, b=math.e):
     if not is_num(a) or not is_num(b):
         raise BadTypeCombinationError(".l", a, b)
+    if a < 0:
+        return cmath.log(a, b)
 
     return math.log(a, b)
 

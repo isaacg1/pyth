@@ -23,7 +23,7 @@ Char, arity, begins line, mnemonic, details. When in doubt, similar to python.
 "  X N quote             Begins and ends string literals. Optional at end of line.
 #  S Y                   "While True:" loop. On error, suppresses error and breaks out of loop.
 $  X N super-quote       Begins and ends Python literals. A Python literal is placed directly into the compiled Python output. Counts as one argument for arity purposes. Disabled online.
-%  2 N mod               On integers, modulus. On string, string formatting. %<int><seq> is a modular slice, <seq>[::<int>] in Python.
+%  2 N mod               On integers, modulus. On complex, mod real and imag separately. On string, string formatting. %<int><seq> is a modular slice, <seq>[::<int>] in Python.
 &  2 N and               Python's and-operator (short circuiting). &ab returns a, if it evaluates to a falsy value otherwise b.
 '  1 N quote-file        Cat file, return file a list of lines. File name as input.
 (  I N tuple             Tuple constructor. Unbounded.
@@ -38,16 +38,16 @@ $  X N super-quote       Begins and ends Python literals. A Python literal is pl
                          :<str><str><str> is regex substitution, substitute in a, b for c. :<str><str><oth> is regex search, boolean.
                          :<idx><col><any> is indexed substitution. For every index in b an element is taken from c (cycling when exhausted), and assigned to a at that index.
 ;  X N end-line          End everything. Infinite ). Best used in statements.
-<  2 N less-than         Less than, subset, slice. < seq num is seq[:num].
+<  2 N less-than         Less than, subset, slice. < seq num is seq[:num]. Compare by magnitude on complex.
 =  2 Y defined as        Assignment, using deep copy. Cannot be strung; e.g. while b=d=1 works in Python, ==bd1 fails in Pyth.
                          Augmented assignment. T*=2 -> T=20.
->  2 N greater-than      Greater than, superset, slice. > seq num is seq[num:].
+>  2 N greater-than      Greater than, superset, slice. > seq num is seq[num:]. Compare by magnitude on complex.
 ?  3 N ternary           Python ternary. ?abc => a if b else c
 @  2 N lookup            Lookup from str, list or dict. Modulo wrapping on list, str. On seq, seq, intersection.
                          Specifically, filter second arg on presence in first arg. On num, num, bth root of a.
 A  3 Y assign-pair       Aabc => a,b = c. First arguments must be variables. c must be a 2-tuple.
 B  0 Y break             Python break. Implicit ).
-C  1 N chr               char -> int, int -> char. Matrix transpose on list of lists, zip(*a) specifically.
+C  1 N chr               char -> int, int -> char. Matrix transpose on list of lists, zip(*a) specifically. Conjugate on complex.
 D  S Y def               Python def. Match arity w/ existing function. Memoized.
 E  S Y else              Python else.
 F  S Y for               Python for. Also is fold operator. <binary>F = u<binary>GH.
@@ -60,7 +60,7 @@ L  1 Y lambda            define y(b): return _.
 M  1 Y The one after L   define g(G,H): return _.
 N  0 N                   Variable. '"'
 O  1 N randOm-chOice     random.choice(_). Uses range(int). O0 = random.random()
-P  1 N Prime/Pop         prime factorization on int. All but last on str, list.
+P  1 N Prime/Pop         prime factorization on int. All but last on str, list. Phase on complex.
 Q  0 N quick             Variable. Autoinitializing to evaluated input.
 R  1 Y return            Python return. Implicit ).
 S  1 N sorted            Python sorted.
@@ -87,7 +87,7 @@ c  2 N chop              On <str/list><int> chop str/list every n elements.
                          On <int><str/list> split str/list into n pieces (elements are equally distributed).
                          Also str.split, floating point division.
 d  0 N                   Variable. " "
-e  1 N end               %10 or last element.
+e  1 N end               %10 or last element. Imaginary part on complex.
 f  2 N filter            Implicit lambda, T -> Y -> Z -> . on num, iter.count
 g  2 N grt-or-eq         Python >=. Superset. g<seq><int> = seq[int-1:]
 h  1 N head              First element, +1.
@@ -101,7 +101,7 @@ o  2 N order-by          Python sorted, key=. Implicit lambda, N -> Z ->
 p  2 N print             Python print, end=. Implicitly called with "\n".
 q  2 N equals            Python ==.
 r  2 N range             Python 2 range. range(a, b, -1) if a > b. Various string processing (see below).
-s  1 N sum-int           Reduce Pyth + on non-str seq, cast to int on other.
+s  1 N sum-int           Reduce Pyth + on non-str seq, cast to int on other. Real part on complex.
 t  1 N tail              _[1:], _-1.
 u  3 N reduce            Reduce, implicit lambda. 3rd is base case. G,H -> N,T.
                          Fixed point operator if 2nd arg omitted, e.g. u<1st><3rd>).
@@ -127,6 +127,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .F 2 N format            a.format(b) - if b is a non-string sequence, it will be unpacked.
 .h 1 N hash
 .H 1 N hex               Hexadecimal string representing _. Direct on int, interpreted as UTF-8 on str. No '0x'.
+.j 2 N complex           Complex number constructor. .jab = a + bj. .j) = 1j.
 .l 2 N log               Python math.log(a, b). Default for b is natural log.
 .m 2 N minimal           Filter 2nd arg on elements which give minimal value when 1st arg is applied.
                          First arg is lambda, b ->
