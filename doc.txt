@@ -39,7 +39,7 @@ $  X N super-quote       Begins and ends Python literals. A Python literal is pl
                          :<idx><col><any> is indexed substitution. For every index in b an element is taken from c (cycling when exhausted), and assigned to a at that index.
 ;  X N end-line          End everything. Infinite ). Best used in statements.
 <  2 N less-than         Less than, subset, slice. < seq num is seq[:num].
-=  2 Y defined as        Assignment, using deepcopy. Cannot be strung; e.g. while b=d=1 works in Python, ==bd1 fails in Pyth.
+=  2 Y defined as        Assignment, using deep copy. Cannot be strung; e.g. while b=d=1 works in Python, ==bd1 fails in Pyth.
                          Augmented assignment. T*=2 -> T=20.
 >  2 N greater-than      Greater than, superset, slice. > seq num is seq[num:].
 ?  3 N ternary           Python ternary. ?abc => a if b else c
@@ -76,7 +76,7 @@ Z  0 N zero              Variable. 0
 [  X N list              List constructor. Unbounded.
 \  X N char-of           Escape character to string.
 ]  1 N close-bracket     One element list.
-^  2 N power             Python pow, cartesian product with # of repeats.
+^  2 N power             Python pow, Cartesian product with # of repeats.
 _  1 N neg               Negation. Str and list reverse.
 `  1 N repr              Python repr.
 a  2 N append            Python .append(), .add(). First argument must be a list or set.
@@ -111,7 +111,7 @@ x  2 N index             Find first occurrence. -1 if not found. Bitwise xor.
 y  1 N                   On num, double. On col, powerset.
 z  0 N                   Variable. Autoinitializing to input.
 {  1 N set               Python set. Makes one element set on num.
-|  2 N or                Logical or. Shortcircuiting.
+|  2 N or                Logical or. Short-circuiting.
 }  2 N in                Python in.
 ~  1 Y +=                Python +=.
 .a 1 N abs               Python abs(_).
@@ -138,16 +138,16 @@ z  0 N                   Variable. Autoinitializing to input.
 .p 1 N permutations      itertools.permutations(_).
 .P 2 N permutations      itertools.permutations(a, b).
 .q 0 Y quit              sys.exit(0). Exits the program immediately, except within #, where it breaks but does not exit.
-.Q 0 N eval-all-input    Take all of stdin, return as list of evaluated (literal_eval) lines.
-.r 1 N rle               On seq, performs run length encoding, in the form [[elem, count], [elem, count] ...].
-                         On set, sorts then calls.
+.Q 0 N eval-all-input    Take all of STDIN, return as list of evaluated (literal_eval) lines.
+.r 2 N rotate            On <seq><int>, rotate sequence by <int>.
+                         On <col><seq>, perform a translation on <col> which maps each element of <seq> to its successor.
 .R 2 N round             Python round(a, b).
 .s 2 N strip-chars       a.strip(b)
 .S 1 N shuffle           .S<col> random.shuffle(<col>). .S(<int>) = .S(range(<int>))
 .t 2 N trigonometry      Collection of trigonometric functions. See below.
 .u 1 N unpack-close      Shorthand for .*_).
 .x 1 N group-x           product, over a non-str seq. Uses Pyth *. With num is random.seed.
-.z 0 N all-input         Take all of stdin, return as list of lines.
+.z 0 N all-input         Take all of STDIN, return as list of lines.
 .^ 3 N powmod            Python pow(a, b, c).
 .& 2 N bitand            Python bitwise &.
 .| 2 N bitor             Python |. Bitwise or on ints, setwise union on collections. Casts to 1st arg type.

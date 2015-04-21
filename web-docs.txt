@@ -109,7 +109,7 @@ z 0 N z Variable. Autoinitializing to input.
 .q 0 Y quit sys.exit(0). Exits the program immediately, except within #, where it breaks but does not exit.
 .Q 0 N eval-all-input Take all of stdin, return as list of evaluated (literal_eval) lines.
 .R 2 N round Python round(a, b).
-.r 1 N rle On seq, performs run length encoding, in the form [[elem, count], [elem, count] ...]. On set, sorts then calls.
+.r 2 N rotate On <seq><int>, rotate sequence by <int>. On <col><seq>, perform a translation on <col> which maps each element of <seq> to its successor.
 .s 2 N strip-chars a.strip(b)
 .S 1 N shuffle .S<col> random.shuffle(<col>). str out if str in, otherwise list out. .S(<int>) = .S(range(<int>))
 .t 2 N trigonometry Collection of trigonometric functions.
