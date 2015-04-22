@@ -186,7 +186,7 @@ next_c_to_f = {
     'f': [('Pfilter(lambda Y:', 2), ('Pfilter(lambda Z:', 2), ],
     'm': [('Pmap(lambda k:', 2), ('Pmap(lambda b:', 2), ],
     'o': [('order(lambda Z:', 2), ],
-    'u': [('reduce(lambda N, T:', 2), ],
+    'u': [('reduce(lambda N, T:', 3), ],
     '.e': [('Penumerate(lambda b, Z:', 2), ],
     }
 
