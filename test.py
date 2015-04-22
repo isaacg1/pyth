@@ -80,8 +80,10 @@ test_cases = [
     ('*[1 2 3)2', '[1, 2, 3, 1, 2, 3]\n'),
     ('*2,Z1', '(0, 1, 0, 1)\n'),
     ('*U3U2', '[(0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1)]\n'),
-    ('*"abc"U2', "[('a', 0), ('a', 1), ('b', 0), ('b', 1), ('c', 0), ('c', 1)]\n"),
-    ('*"abc",0 1', "[('a', 0), ('a', 1), ('b', 0), ('b', 1), ('c', 0), ('c', 1)]\n"),
+    ('*"abc"U2',
+        "[('a', 0), ('a', 1), ('b', 0), ('b', 1), ('c', 0), ('c', 1)]\n"),
+    ('*"abc",0 1',
+        "[('a', 0), ('a', 1), ('b', 0), ('b', 1), ('c', 0), ('c', 1)]\n"),
     ('*"ab""cd', "[('a', 'c'), ('a', 'd'), ('b', 'c'), ('b', 'd')]\n"),
     # Test :
     (':"abcde",0 3]"lol"', 'lolbclole\n'),
@@ -122,12 +124,12 @@ def test(pyth_code, expected_output, input_message=''):
     output, error = pyth.run_code(pyth_code, input_message)
 
     if error:
-        raise NameError("Error thrown by %s on input %s:\n%s" %\
-            (pyth_code, input_message, error))
+        raise NameError("Error thrown by %s on input %s:\n%s" %
+                        (pyth_code, input_message, error))
     if output != expected_output:
         raise NameError("Bad output by %s on input %s."
-                        "\nExpected: %r.\nReceived: %r" %\
-            (pyth_code, input_message, expected_output, output))
+                        "\nExpected: %r.\nReceived: %r" %
+                        (pyth_code, input_message, expected_output, output))
 
 if __name__ == '__main__':
     for test_case in test_cases:

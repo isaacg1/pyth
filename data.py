@@ -46,7 +46,7 @@ class memoized(object):
 c_to_i = {
     '~':  (('', '+=', ''), 2),
     '=':  (('', '=copy(', ')'), 2),
-	'&':  (('(', ' and ', ')'), 2),
+    '&':  (('(', ' and ', ')'), 2),
     '|':  (('(', ' or ', ')'), 2),
     ']':  (('[', ']'), 1),
     '}':  (('(', ' in ', ')'), 2),
@@ -171,8 +171,9 @@ replacements = {
 #<binary>F: Fold operator
 
 syntax_sugar = {
-    '=' : (lambda c, r: r[:2]+c+r[1:], lambda n: n),
-    'F' : (lambda c,r: "u"+c + c_to_f['u'][0][14:18:3] + ".n4"+r[1:], lambda n: n==2)
+    '=': (lambda c, r: r[:2] + c+r[1:], lambda n: n),
+    'F': (lambda c, r: "u" + c + c_to_f['u'][0][14:18:3] + ".n4 "+r[1:],
+          lambda n: n == 2)
 }
 
 # Gives next function header to use - for filter, map, reduce.

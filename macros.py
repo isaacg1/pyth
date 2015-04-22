@@ -19,14 +19,18 @@ from ast import literal_eval
 def is_num(a):
     return isinstance(a, numbers.Number)
 
+
 def is_seq(a):
     return isinstance(a, collections.Sequence)
+
 
 def is_col(a):
     return isinstance(a, collections.Iterable)
 
+
 def is_hash(a):
     return isinstance(a, collections.Hashable)
+
 
 # Error handling
 class BadTypeCombinationError(Exception):
@@ -223,7 +227,7 @@ def at_slice(a, b, c):
             return bool(re.search(b, a))
         else:
             return re.sub(b, c, a)
-    if isinstance(b, int) and (isinstance(c, int) or c==None):
+    if isinstance(b, int) and (isinstance(c, int) or c is None):
         return a[slice(b, c)]
 
     # There is no nice ABC for this check.
@@ -232,7 +236,7 @@ def at_slice(a, b, c):
             c = itertools.cycle(c)
         else:
             c = itertools.repeat(c)
-        
+
         if isinstance(a, str) or isinstance(a, tuple):
             indexable = list(a)
         else:
@@ -294,6 +298,7 @@ def div(a, b):
     if is_seq(a):
         return a.count(b)
     raise BadTypeCombinationError("/", a, b)
+
 
 # a. List, Set.
 def append(a, b):
@@ -600,13 +605,13 @@ def reduce(a, b, c=None):
             old_acc = acc
             acc = a(acc, counter)
         return acc
-    
+
     # Reduce
-    
+
     #Check for special fold case
-    if b==float('inf'):
-        b,c=c[1:],c[0]
-    
+    if b == float('inf'):
+        b, c = c[1:], c[0]
+
     if is_seq(b) or isinstance(b, int):
         if isinstance(b, int):
             seq = range(b)
@@ -650,6 +655,7 @@ def assign_at(a, b, c=None):
     if is_seq(a) and is_seq(b) and (c is None or is_seq(c)):
         if c is None:
             c = b[::-1]
+
         def trans_func(element):
             return c[b.index(element)] if element in b else element
         translation = map(trans_func, a)
@@ -663,7 +669,8 @@ def assign_at(a, b, c=None):
         return b
     # += in a dict, X<any><dict><any>
     if isinstance(b, dict):
-        if is_seq(a): a = tuple(a)
+        if isinstance(a, list):
+            a = tuple(a)
         if a in b:
             b[a] += c
         else:
@@ -715,13 +722,14 @@ def subsets(a):
 Y = []
 Z = 0
 
+
 def hash_repr(a):
     if isinstance(a, bool):
         return "1" if a else "0"
 
     if isinstance(a, str) or is_num(a):
         return repr(a)
-    
+
     if isinstance(a, list) or isinstance(a, tuple):
         return "[{}]".format(", ".join(hash_repr(l) for l in a))
 
@@ -729,10 +737,12 @@ def hash_repr(a):
         return "[{}]".format(", ".join(hash_repr(l) for l in sorted(a)))
 
     if isinstance(a, dict):
-        elements = ["({}, {})".format(hash_repr(k), hash_repr(a[k])) for k in sorted(a)]
+        elements = ["({}, {})".format(hash_repr(k), hash_repr(a[k]))
+                    for k in sorted(a)]
         return "[{}]".format(", ".join(elements))
 
     raise BadTypeCombinationError(".h", a)
+
 
 # .h. any
 def Phash(a):
@@ -794,7 +804,7 @@ def Pformat(a, b):
         raise BadTypeCombinationError(".F", a, b)
     if is_seq(b) and not isinstance(b, str):
         return a.format(*b)
-    
+
     return a.format(b)
 
 
@@ -838,12 +848,20 @@ def maximal(a, b):
     maximum = max(map(a, seq))
     return list(filter(lambda elem: a(elem) == maximum, seq))
 
+
 # .n. mathematical constants
 def Pnumbers(a):
     if a < 7 and isinstance(a, int):
-        return [math.pi, math.e, 2**.5, (1+5**0.5)/2, float("inf"), -float("inf"), float("nan")][a]
-    
+        return [math.pi,
+                math.e,
+                2**.5,
+                (1+5**0.5)/2,
+                float("inf"),
+                -float("inf"),
+                float("nan")][a]
+
     raise BadTypeCombinationError(".n", a)
+
 
 # .p. seq
 def permutations(a):
@@ -859,9 +877,11 @@ def permutations2(a, b):
 
     return itertools_norm(itertools.permutations, a, b)
 
+
 # .q. N\A
 def Pexit():
     sys.exit(0)
+
 
 # .Q. N/A
 @functools.lru_cache(1)
@@ -888,7 +908,6 @@ def rotate(a, b):
         return list(trans_a)
 
     raise BadTypeCombinationError(".r", a)
-
 
 
 # .s. str, str
@@ -933,12 +952,15 @@ def trig(a, b):
 
     return funcs[b](a)
 
+
 # .w. write
 def Pwrite(a, b="foo.txt"):
     if not isinstance(b, str):
         raise BadTypeCombinationError(".w", a, b)
     with open(b, 'a') as f:
-        f.write(("\n".join(map(str, a)) if is_seq(a) and not isinstance(a, str) else str(a))+"\n")
+        f.write(("\n".join(map(str, a)) if is_seq(a) and not isinstance(a, str)
+                else str(a))+"\n")
+
 
 # .x. col
 def product(a):
@@ -946,11 +968,12 @@ def product(a):
         if len(a) == 0:
             return 1
         return reduce(lambda b, c: times(b, c), a[1:], a[0])
-    
+
     if is_num(a):
         return random.seed(a)
 
     raise BadTypeCombinationError(".x", a)
+
 
 # .z. N/A
 @functools.lru_cache(1)
@@ -1045,6 +1068,7 @@ def remove(a, b):
         return tuple(seq)
     else:
         return seq
+
 
 # .:, int/seq, int
 def substrings(a, b):
