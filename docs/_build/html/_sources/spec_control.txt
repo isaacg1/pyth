@@ -1,0 +1,217 @@
+6. The Language Specification - Control Flow
+********************************************
+
+This section of the language specifications deals with control flow. It contains the keywords and the operators that affect which parts of the programs are run.
+
+6.1. "#" - Exception Loop
+=========================
+
+**Arity: Unbounded**
+
+This is the only form of error handling available in Pyth. It runs an infinite while loop until an error is reached, then breaks out of the loop.
+
+Ex::
+
+	==================================================
+	#/100.T=T-T1
+	==================================================
+	while True:
+	 try:
+	  Pprint("\n",div(100.,T))
+	  T=copy(minus(T,1))
+	  
+	 except:
+	  break
+	==================================================
+	10
+	11
+	12
+	14
+	16
+	20
+	25
+	33
+	50
+	100
+
+6.2. ")" - Close Parenthesis
+============================
+
+This ends one unbounded arity. Control flow like ``if`` or ``for`` all open up an unbounded arity and this closes one of them. Also works on tuple ad list constructors.
+
+Ex::
+
+	==================================================
+	I>5T"Hello")"Bye"
+	==================================================
+	if gt(5,T):
+	 Pprint("\n","Hello")
+	Pprint("\n","Bye")
+	==================================================
+	Bye
+
+6.3. ";" - End Statement
+========================
+
+This is effectively an infinite amount of close parenthesis. This closes how many ever aritys are needed to start completely afresh. This is the replacement for multiple lines in Pyth.
+
+Ex::
+
+	==================================================
+	V5I>5T"Hello";"Bye"
+	==================================================
+	for N in urange(5):
+	 if gt(5,T):
+	  Pprint("\n","Hello")
+	Pprint("\n","Bye")
+	==================================================
+	Bye
+
+6.4. "B" - Break
+================
+
+This translates into the break keyword in Python. It is used to break out of both for and while loops (and also the infinite error loop). Pyth does not have a continue statement. Break automatically puts a close parenthesis after itself.
+
+Ex::
+
+	==================================================
+	#ZI>ZTB~Z1
+	==================================================
+	while True:
+	 try:
+	  Pprint("\n",Z)
+	  if gt(Z,T):
+	   break
+	  Z+=1
+	  
+	 except:
+	  break
+	==================================================
+	0
+	1
+	2
+	3
+	4
+	5
+	6
+	7
+	8
+	9
+	10
+	11
+
+6.5. "E" - The Else Statement
+=============================
+
+**Arity: Unbounded**
+
+This is the else part of the if-else construct. It is pretty self explanatory and works like it would in any programing langaue. This can also be used as part of a `for-else or while-else <https://docs.python.org/2/tutorial/controlflow.html#break-and-continue-statements-and-else-clauses-on-loops>`_ construct. The If still needs a close parenthesis after it.
+
+Ex::
+
+	==================================================
+	I>5T"It's greater")E"It's less than"
+	==================================================
+	if gt(5,T):
+	 Pprint("\n","It's greater")
+	else:
+	 Pprint("\n","It's less than")
+	==================================================
+	It's less than
+
+6.6. "F" - The For Loop
+=======================
+
+**Arity: Variable, Sequence, Unbounded**
+
+This is the ubiquitous for loop. It works like it does in Python, with it looping through a sequence.
+
+Ex::
+
+	==================================================
+	FNU5N
+	==================================================
+	for N in urange(5):
+	 Pprint("\n",N)
+	==================================================
+	0
+	1
+	2
+	3
+	4
+
+6.7. "I" - The If Statement
+===========================
+
+**Arity: Boolean, Unbounded**
+
+This is the If statement from Python. If the first argument is truthy, it executes the code, else it does nothing. Requires a close paren unless it is the last piece of code.
+
+Ex::
+
+	==================================================
+	I>5T"The Universe Has Exploded"
+	==================================================
+	if gt(5,T):
+	 Pprint("\n","The Universe Has Exploded")
+	==================================================
+
+6.8. "V" - Unary-Range-Loop
+===========================
+
+**Arity: Integer, Unbounded**
+
+It is the shortest way to do a for loop. It takes an integer and translates it self to ``FNU``. This makes it execute the following code that many times, with ``N`` being the loop variable.
+
+Ex::
+
+	==================================================
+	VT*NN
+	==================================================
+	for N in urange(T):
+	 Pprint("\n",times(N,N))
+	==================================================
+	0
+	1
+	4
+	9
+	16
+	25
+	36
+	49
+	64
+	81
+
+6.9. "W" - While Loop
+=====================
+
+**Arity: Boolean, Unbounded**
+
+This the while loop construct from Python. It executes the following code until the condition becomes False.
+
+Ex::
+
+	==================================================
+	W<lYT~Y]5;Y
+	==================================================
+	while lt(Plen(Y),T):
+	 Y+=[5]
+	Pprint("\n",Y)
+	==================================================
+	[5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+
+6.10. "?" - Ternary Operator
+============================
+
+**Arity: Expression, Boolean, Expression**
+
+This is the ternary operator from Python. It is a compressed version of the If-Else construct. ``?abc`` is equivelant to the Python ``a if b else c`` which evaluates to ``a`` if ``b`` is truthy else evaluates to ``c``.
+
+Ex::
+
+	==================================================
+	?5q1ZT
+	==================================================
+	Pprint("\n",(5 if equal(1,Z) else T))
+	==================================================
+	10

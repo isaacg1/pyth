@@ -1,0 +1,415 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>8. The Language Specification - Comparisons &mdash; Pyth 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Pyth 1.0 documentation" href="index.html"/>
+        <link rel="next" title="9. The Language Specification - Sequences" href="spec_seq.html"/>
+        <link rel="prev" title="7. The Language Specification - Arithmetic" href="spec_math.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> Pyth</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">1. Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#how-to-start-programming-in-pyth">1.1. How to Start Programming in Pyth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#hello-world">1.2. Hello World!</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="details.html">2. More Details About Pyth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="details.html#pyth-uses-prefix-notation">2.1. Pyth Uses Prefix Notation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="details.html#pyth-has-many-many-operators">2.2. Pyth Has Many, Many Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="details.html#all-operators-in-pyth-have-a-fixed-arity">2.3. All Operators in Pyth Have a Fixed Arity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="details.html#operators-mean-different-things-in-different-contexts">2.4. Operators Mean Different Things in Different Contexts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="details.html#the-pyth-code-is-compiled-to-python-code-then-run">2.5. The Pyth Code is Compiled to Python Code Then Run</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="simple-programs.html">3. Some Simple Programs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simple-programs.html#factorial">3.1. Factorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simple-programs.html#the-first-n-fibonacci-numbers">3.2. The First n Fibonacci numbers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="simple-programs2.html">4. Some Simple Programs - Part II</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simple-programs2.html#prime">Prime</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spec_vars.html">5. The Language Specification - Variables</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#g-the-alphabet">5.1. &#8220;G&#8221; - The Alphabet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#h-empty-dictionary">5.2. &#8220;H&#8221; - Empty Dictionary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#j-auto-assignment-with-copy">5.3. &#8220;J&#8221; - Auto-Assignment With Copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#k-auto-assignment">5.4. &#8220;K&#8221; - Auto-Assignment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#n-double-quote">5.5. &#8220;N&#8221; - Double Quote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#q-evaluated-input">5.6. &#8220;Q&#8221; - Evaluated Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#t-ten">5.7. &#8220;T&#8221; - Ten</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#y-empty-list">5.8. &#8220;Y&#8221; - Empty List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#z-zero">5.9. &#8220;Z&#8221; - Zero</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#b-line-break">5.10. &#8220;b&#8221; - Line Break</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#d-space">5.11. &#8220;d&#8221; - Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#k-empty-string">5.12. &#8220;k&#8221; - Empty String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#z-raw-input">5.13. &#8220;z&#8221; - Raw Input</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spec_control.html">6. The Language Specification - Control Flow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#exception-loop">6.1. &#8220;#&#8221; - Exception Loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#close-parenthesis">6.2. &#8221;)&#8221; - Close Parenthesis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#end-statement">6.3. &#8221;;&#8221; - End Statement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#b-break">6.4. &#8220;B&#8221; - Break</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#e-the-else-statement">6.5. &#8220;E&#8221; - The Else Statement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#f-the-for-loop">6.6. &#8220;F&#8221; - The For Loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#i-the-if-statement">6.7. &#8220;I&#8221; - The If Statement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#v-unary-range-loop">6.8. &#8220;V&#8221; - Unary-Range-Loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#w-while-loop">6.9. &#8220;W&#8221; - While Loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#ternary-operator">6.10. &#8221;?&#8221; - Ternary Operator</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spec_math.html">7. The Language Specification - Arithmetic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#addition">7.1. &#8220;+&#8221; - Addition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#multiplication">7.2. &#8220;*&#8221; - Multiplication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#subtraction">7.3. &#8220;-&#8221; - Subtraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#division">7.4. &#8220;/&#8221; - Division</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#modulus">7.5. &#8220;%&#8221; - Modulus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#exponentiation">7.6. &#8220;^&#8221; - Exponentiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#unary-negation">7.7. &#8220;_&#8221; - Unary Negation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#addition-augmented-assignment">7.8. &#8220;~&#8221; - Addition Augmented Assignment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#logical-and">7.9. &#8220;&amp; - Logical And</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#logical-or">7.10. &#8220;|&#8221; - Logical Or</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#p-prime-factorization">7.11. &#8220;P&#8221; - Prime Factorization</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">8. The Language Specification - Comparisons</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#is-less-than">8.1. &#8220;&lt;&#8221; - Is Less Than</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#q-is-equal-to">8.2. &#8220;q&#8221; - Is Equal To</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#is-greater-than">8.3. &#8220;&gt;&#8221; - Is Greater Than</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#n-not-equal-to">8.4. &#8220;n&#8221; - Not Equal To</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#g-is-greater-than-or-equal-to">8.5. &#8220;g&#8221; - Is Greater Than or Equal To</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contains">8.6. &#8220;}&#8221; - Contains</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spec_seq.html">9. The Language Specification - Sequences</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#string-literal">9.1. &#8221; - String Literal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#list-constructor">9.2. &#8220;[&#8221; - List Constructor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#tuple-contructor">9.3. &#8220;(&#8221; - Tuple Contructor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#set-constructor">9.4. &#8220;{&#8221; - Set Constructor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#string-escape">9.5. &#8220;\&#8221; - String Escape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#one-element-list">9.6. &#8220;]&#8221; - One Element List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#couple-constructor">9.7. &#8221;,&#8221; - Couple Constructor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#a-append">9.8. &#8220;a&#8221; - Append</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#c-chop">9.9. &#8220;c&#8221; - Chop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#e-end">9.10. &#8220;e&#8221; - End</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#head">9.11. Head</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#j-join">9.12. &#8220;j&#8221; - Join</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Pyth</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>8. The Language Specification - Comparisons</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/spec_comp.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="the-language-specification-comparisons">
+<h1>8. The Language Specification - Comparisons<a class="headerlink" href="#the-language-specification-comparisons" title="Permalink to this headline">¶</a></h1>
+<p>This section contains a list of comparison operators. They all take two arguments and return a boolean value depending on the relationship between the two arguments.</p>
+<div class="section" id="is-less-than">
+<h2>8.1. &#8220;&lt;&#8221; - Is Less Than<a class="headerlink" href="#is-less-than" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<div class="section" id="any-a-same-type-b-less-than">
+<h3>8.1.1. Any a, Same Type b: Less Than<a class="headerlink" href="#any-a-same-type-b-less-than" title="Permalink to this headline">¶</a></h3>
+<p>If a and b are of the same type, checks if <tt class="docutils literal"><span class="pre">a</span></tt> is less than <tt class="docutils literal"><span class="pre">b</span></tt> by whatever way that type is compared (e.g. Numbers by size, strings lexicographically).</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+&lt;5T&lt;T5
+==================================================
+Pprint("\n",lt(5,T))
+Pprint("\n",lt(T,5))
+==================================================
+True
+False</pre>
+</div>
+</div>
+<div class="section" id="seq-a-int-b-slice-till">
+<h3>8.1.2. Seq a, Int b: Slice Till<a class="headerlink" href="#seq-a-int-b-slice-till" title="Permalink to this headline">¶</a></h3>
+<p>Takes a slice of sequence <tt class="docutils literal"><span class="pre">a</span></tt> until index <tt class="docutils literal"><span class="pre">b</span></tt>. This is equivalent to the Python statement <tt class="docutils literal"><span class="pre">a[:b]</span></tt>. The slice is inclusive of the element at index <tt class="docutils literal"><span class="pre">b</span></tt></p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+&gt;"abcdefgh"5
+==================================================
+Pprint("\n",gt("abcdefgh",5))
+==================================================
+fgh</pre>
+</div>
+</div>
+<div class="section" id="set-a-set-b-is-subset">
+<h3>8.1.3. Set a, Set b: Is Subset<a class="headerlink" href="#set-a-set-b-is-subset" title="Permalink to this headline">¶</a></h3>
+<p>Checks if set <tt class="docutils literal"><span class="pre">a</span></tt> is a subset of set <tt class="docutils literal"><span class="pre">b</span></tt>. This means that it checks if set <tt class="docutils literal"><span class="pre">b</span></tt> contains all the elements of set <tt class="docutils literal"><span class="pre">a</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+&lt;{[1 2){[1 2 3)
+==================================================
+Pprint("\n",lt(Pset(Plist(1,(2))),Pset(Plist(1,(2),(3)))))
+==================================================
+True</pre>
+</div>
+</div>
+</div>
+<div class="section" id="q-is-equal-to">
+<h2>8.2. &#8220;q&#8221; - Is Equal To<a class="headerlink" href="#q-is-equal-to" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<p>This checks if the two values are equal to each other. This is the same as the Python <tt class="docutils literal"><span class="pre">==</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+qT5qTT
+==================================================
+Pprint("\n",equal(T,5))
+Pprint("\n",equal(T,T))
+==================================================
+False
+True</pre>
+</div>
+</div>
+<div class="section" id="is-greater-than">
+<h2>8.3. &#8220;&gt;&#8221; - Is Greater Than<a class="headerlink" href="#is-greater-than" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<div class="section" id="any-a-same-type-b-greater-than">
+<h3>8.3.1 Any a, Same Type b: Greater Than<a class="headerlink" href="#any-a-same-type-b-greater-than" title="Permalink to this headline">¶</a></h3>
+<p>This checks if <tt class="docutils literal"><span class="pre">a</span></tt> is greater than <tt class="docutils literal"><span class="pre">b</span></tt>. Uses the same type of comparisons as <tt class="docutils literal"><span class="pre">&lt;</span></tt></p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+&gt;5T&gt;T5
+==================================================
+Pprint("\n",gt(5,T))
+Pprint("\n",gt(T,5))
+==================================================
+False
+True</pre>
+</div>
+</div>
+<div class="section" id="seq-a-int-b-slice-from">
+<h3>8.3.2 Seq a, Int b: Slice From<a class="headerlink" href="#seq-a-int-b-slice-from" title="Permalink to this headline">¶</a></h3>
+<p>This takes a slice of sequence <tt class="docutils literal"><span class="pre">a</span></tt> from index <tt class="docutils literal"><span class="pre">b</span></tt> onwards till the end. This is equivalent to the Python <tt class="docutils literal"><span class="pre">a[b:]</span></tt>. The slice is not inclusive of the element at index <tt class="docutils literal"><span class="pre">b</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>&lt;"abcdefgh"5
+==================================================
+Pprint("\n",lt("abcdefgh",5))
+==================================================
+abcde</pre>
+</div>
+</div>
+<div class="section" id="set-a-set-b-is-superset">
+<h3>8.3.3. Set a, Set b: Is Superset<a class="headerlink" href="#set-a-set-b-is-superset" title="Permalink to this headline">¶</a></h3>
+<p>Checks is set <tt class="docutils literal"><span class="pre">a</span></tt> is a superset of set <tt class="docutils literal"><span class="pre">b</span></tt>. This means that it checks if set <tt class="docutils literal"><span class="pre">a</span></tt> contains all the elements of set <tt class="docutils literal"><span class="pre">b</span></tt>. This does not return True if the two sets are equal.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+&gt;{[1 2 3){[1 2)
+==================================================
+Pprint("\n",gt(Pset(Plist(1,(2),(3))),Pset(Plist(1,(2)))))
+==================================================
+True</pre>
+</div>
+</div>
+</div>
+<div class="section" id="n-not-equal-to">
+<h2>8.4. &#8220;n&#8221; - Not Equal To<a class="headerlink" href="#n-not-equal-to" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<p>Checks if the two elements are not equal to each other. This is equivalent to Python&#8217;s &#8221;!=&#8221;.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+nT5nTT
+==================================================
+Pprint("\n",ne(T,5))
+Pprint("\n",ne(T,T))
+==================================================
+True
+False</pre>
+</div>
+</div>
+<div class="section" id="g-is-greater-than-or-equal-to">
+<h2>8.5. &#8220;g&#8221; - Is Greater Than or Equal To<a class="headerlink" href="#g-is-greater-than-or-equal-to" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<div class="section" id="any-a-same-type-b-greater-than-or-equal-to">
+<h3>8.5.1. Any a, Same Type b: Greater Than or Equal To<a class="headerlink" href="#any-a-same-type-b-greater-than-or-equal-to" title="Permalink to this headline">¶</a></h3>
+<p>Checks if <tt class="docutils literal"><span class="pre">a</span></tt> is greater than or equal to <tt class="docutils literal"><span class="pre">b</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+gT5gTTg5T
+==================================================
+Pprint("\n",gte(T,5))
+Pprint("\n",gte(T,T))
+Pprint("\n",gte(5,T))
+==================================================
+True
+True
+False</pre>
+</div>
+</div>
+<div class="section" id="set-a-set-b-superset-or-equal">
+<h3>8.5.2. Set a, Set b: Superset or Equal<a class="headerlink" href="#set-a-set-b-superset-or-equal" title="Permalink to this headline">¶</a></h3>
+<p>Checks if set <tt class="docutils literal"><span class="pre">a</span></tt> is a superset of set <tt class="docutils literal"><span class="pre">b</span></tt> or equal to set <tt class="docutils literal"><span class="pre">b</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+g{[1 2 3){[2 3)g{[1 2 3){[1 2 3)
+==================================================
+Pprint("\n",gte(Pset(Plist(1,(2),(3))),Pset(Plist(2,(3)))))
+Pprint("\n",gte(Pset(Plist(1,(2),(3))),Pset(Plist(1,(2),(3)))))
+==================================================
+True
+True</pre>
+</div>
+</div>
+</div>
+<div class="section" id="contains">
+<h2>8.6. &#8220;}&#8221; - Contains<a class="headerlink" href="#contains" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<p>Checks if the second argument, a sequence, contains the first argument. Is equivalent to the Python <tt class="docutils literal"><span class="pre">in</span></tt> operator.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+}\a"abc"
+==================================================
+Pprint("\n",("a" in "abc"))
+==================================================
+True</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="spec_seq.html" class="btn btn-neutral float-right" title="9. The Language Specification - Sequences"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="spec_math.html" class="btn btn-neutral" title="7. The Language Specification - Arithmetic"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Isaacg1.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,355 @@
+3. Some Simple Programs
+***********************
+
+The best way to learn Pyth is to dive head-first into it by writing some programs. We will be writing simple algorithmic exercises. 
+
+3.1. Factorial
+==============
+
+An easy problem that will get you into thinking the correct way is computing factorials and all the different ways to do it. We will trying simple loops, the recursive approach, and the ``reduce`` function. Let's try it the obvious, straightforward way first. But how do we get input in Pyth?
+
+3.1.1. Input in Pyth
+--------------------
+
+There are many ways to get input in Pyth. The obvious one that handles all cases is the ``w`` function which acts exactly like Python's ``raw_input``. In fact, it compiles to that. The preferred way over this is the variable ``z`` which is preinitialised to the input and is easier to use multiple times unlike ``w``. But both it and ``w`` are string representations of the input and need to be evaluated with the ``v`` function. Hence, the most common input method is to use the ``Q`` variable which is preinitialised to the *evaluated* input so it can be used outright. Try using it::
+
+	input: 5
+	
+	==================================================
+	*2Q
+	==================================================
+	Q=copy(literal_eval(input()))
+	Pprint("\n",times(2,Q))
+	==================================================
+	10
+
+See? Easy.
+
+Note: The parser checks if ``Q`` or ``z`` are used in the program and adds a line setting them to the input if they are used, as you can see from the debug output above.
+
+3.1.2. For Loops In Pyth
+------------------------
+
+Pyth has many of the control flow options available by Python, including ``for`` loops, which is what we will be using here. They are done by the ``F`` command and takes the name of a variable, the list to loop on, and then an infinite amount of code only bounded by a parenthesis or semicolon. Let's try looping from zero through ten::
+
+	
+	==================================================
+	FNrZTN
+	==================================================
+	for N in Prange(1,T):
+	 Pprint("\n",N)
+	==================================================
+	0
+	1
+	2
+	3
+	4
+	5
+	6
+	7
+	8
+	9
+
+Notice that:
+
+#. The range function is ``r``.
+#. It is, like Python, not inclusive of the end value (We'll have to fix that).
+#. Printing is implicit so we just had to name ``N`` and it was surrounded by a ``Pprint`` call.
+#. ``Z`` is preinitialised to ``0``
+
+Oops! We forgot that like Python, range does not include the end value. We can do +1T, but Pyth's head function, ``h``, also functions as an increment. Let's try that again::
+
+	==================================================
+	FNrZhTN
+	==================================================
+	for N in Prange(Z,head(T)):
+	 Pprint("\n",N)
+	==================================================
+	0
+	1
+	2
+	3
+	4
+	5
+	6
+	7
+	8
+	9
+	10
+
+But we can make it shorter still. The ``U`` function, or "unary-range" is like Python's range with only one argument. It'll save one character by removing the need for the ``Z``::
+
+	==================================================
+	FNUhTN
+	==================================================
+	for N in urange(head(T)):
+	 Pprint("\n",N)
+	==================================================
+	0
+	1
+	2
+	3
+	4
+	5
+	6
+	7
+	8
+	9
+	10
+
+And even shorter. The ``V`` keyword is the "unary-range-loop" which does the looping through the one argument range. It uses N as the loop variable::
+
+	==================================================
+	VhTN
+	==================================================
+	for N in urange(head(T)):
+	 Pprint("\n",N)
+	==================================================
+	0
+	1
+	2
+	3
+	4
+	5
+	6
+	7
+	8
+	9
+	10
+
+Notice the debug output for the last two were exactly the same. In fact, during preprocessing, the parser expands all occurrences of ``V`` to ``FNU``.
+
+Now we should be able to write an iterative factorial.
+
+3.1.3. The Iterative Factorial
+------------------------------
+
+First, let's loop from one to the input. It should be easy, but we can't use ``V`` since we have to use range to strart from ``1``, not ``0``. Remember also to increment the input::
+
+	input: 5
+	
+	==================================================
+	FNr1hQN
+	==================================================
+	Q=copy(literal_eval(input()))
+	for N in Prange(1,head(Q)):
+	 Pprint("\n",N)
+	==================================================
+	1
+	2
+	3
+	4
+	5
+
+Now, we have to have our variable that holds the answer. Pyth has an assignment operator which works pretty much as you'd expect::
+
+	==================================================
+	=N5N
+	==================================================
+	N=copy(5)
+	Pprint("\n",N)
+	==================================================
+	5
+
+But if you only need one variable, it's better to use ``K`` or ``J``  which don't need an equals sign to be assigned to::
+
+	==================================================
+	K5K
+	==================================================
+	K=5
+	Pprint("\n",K)
+	==================================================
+	5
+
+Applying that to our factorial::
+
+	==================================================
+	K1FNr1hQ=K*KN
+	==================================================
+	Q=copy(literal_eval(input()))
+	K=1
+	for N in Prange(1,head(Q)):
+	 K=copy(times(K,N))
+	==================================================
+
+Now we just have to print our answer which should be easy since it is implicit::
+
+	input: 5
+
+	==================================================
+	K1FNr1hQ=K*KNK
+	==================================================
+	Q=copy(literal_eval(input()))
+	K=1
+	for N in Prange(1,head(Q)):
+	 K=copy(times(K,N))
+	 Pprint("\n",K)
+	==================================================
+	1
+	2
+	6
+	24
+	120
+
+Yikes! We forgot that a ``for`` loop's influence is infinite so the printing happens every time the loop runs. We can use a parenthesis since we only have to end one control flow, but it is better practice to use a semicolon::
+
+	input: 5
+	
+	==================================================
+	K1FNr1hQ=K*KN;K
+	==================================================
+	Q=copy(literal_eval(input()))
+	K=1
+	for N in Prange(1,head(Q)):
+	 K=copy(times(K,N))
+	Pprint("\n",K)
+	==================================================
+	120
+
+It works!
+
+3.1.4. Lambdas in Pyth
+----------------------
+
+Just like Python, Pyth has lambdas. However, they are named. They replace an existing function that is usually unused. The one var lambda, the powerset function, and the two var the greater-than-or-equal to. The one var lambda uses the ``L`` keyword, and two var the ``M``. They both take one statement of code. Here is a demonstration of a triple function::
+
+	==================================================
+	L*3b
+	==================================================
+	@memoized
+	def subsets(b):
+	 return times(3,b)
+	==================================================
+
+And here's me calling it::
+
+	==================================================
+	L*3by12
+	==================================================
+	@memoized
+	def subsets(b):
+	 return times(3,b)
+	Pprint("\n",subsets(12))
+	==================================================
+	36
+
+Note: Lambdas are automatically `memoized <http://en.wikipedia.org/wiki/Memoization>`_ in Pyth.
+
+3.1.5. The Recursive Factorial
+------------------------------
+
+The recursive factorial is a common solution. It works by taking the factorial of the number lower than it, recursively, until you get to zero, which returns 1. Let's first define our factorial function's base case of zero and have it return -1 otherwise. It'll need two arguments, one for the number, the other for the running product::
+
+	==================================================
+	M?!1GH
+	==================================================
+	@memoized
+	def gte(G,H):
+	 return (Pnot(1) if G else H)
+	==================================================
+
+Notice:
+
+#. The two var lambda uses G and H as the arguments.
+#. The ternary operator ``?abc`` evaluates to ``a if b else c``.
+
+Now let's complete the factorial function::
+
+	==================================================
+	M?*Gg-G1HGH
+	==================================================
+	@memoized
+	def gte(G,H):
+	 return (times(G,gte(minus(G,1),H)) if G else H)
+	==================================================
+
+Pretty simple. Now we have to take input and run the function::
+
+	input: 5
+	
+	==================================================
+	M?*Gg-G1HGHgQ1
+	==================================================
+	Q=copy(literal_eval(input()))
+	@memoized
+	def gte(G,H):
+	 return (times(G,gte(minus(G,1),H)) if G else H)
+	Pprint("\n",gte(Q,1))
+	==================================================
+	120
+
+The important part is that you call the two var lambda with the g function which was originally the greater than or equal to. We also used 1 as the start for the running product.
+
+Only one more factorial example...
+
+3.1.6. Factorials With Reduce
+-----------------------------
+
+The best way to do it, the way most people would do it, would be to use the reduce function. The ``u`` operator works exactly like Python's reduce, except for an implicit lambda so you can just write code without a lambda deceleration. All a factorial is a reduction by the product operator on the range from 1 through n. This makes it very easy. The reduce function takes a statement of code, the sequence to iterate on, and a base case::
+
+	input: 5
+	
+	==================================================
+	u*GHr1hQ1
+	==================================================
+	Q=copy(literal_eval(input()))
+	Pprint("\n",reduce(lambda G, H:times(G,H),Prange(1,head(Q)),1))
+	==================================================
+	120
+
+3.2. The First n Fibonacci numbers
+==================================
+
+The `Fibonacci sequence <http://en.wikipedia.org/wiki/Fibonacci_number>`_ is another subject of many programming problems. We will solve the simplest, finding the first n of them. The Fibonacci sequence is a recursive sequence where each number is the sum of the last two. It starts with 0 and 1. We'll just set the seed values and then loop through how many ever times needed, applying the rule. We will need a temp variable to store the previous value in the exchange::
+
+	input: 10
+	
+	==================================================
+	KZJ1VQK=dK=KJ=J+dJ
+	==================================================
+	Q=copy(literal_eval(input()))
+	K=Z
+	J=copy(1)
+	for N in urange(Q):
+	 Pprint("\n",K)
+	 d=copy(K)
+	 K=copy(J)
+	 J=copy(plus(d,J))
+	==================================================
+	0
+	1
+	1
+	2
+	3
+	5
+	8
+	13
+	21
+	34
+
+Pretty easy. But this can be shortened with the double-assignment operator, ``A``. This has an arity of 4 and takes two variable names, and then a tuple of two values. We use the ``,`` two element tuple creation operator to make the tuple::
+
+	input: 10
+
+	==================================================
+	KZJ1VQKAKJ,J+KJ
+	==================================================
+	Q=copy(literal_eval(input()))
+	K=Z
+	J=copy(1)
+	for N in urange(Q):
+	 Pprint("\n",K)
+	 (K,J)=copy((J,plus(K,J)))
+	==================================================
+	0
+	1
+	1
+	2
+	3
+	5
+	8
+	13
+	21
+	34
+
+We will examine some more exercises in the next chapter.

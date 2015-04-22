@@ -1,0 +1,6 @@
+5. The Language Specification - Variables
+*****************************************
+
+The next few chapters will be formal specifications about the language. Each chapter will have listings in alphabetical order. This chapter is about the preinitialised variables in Pyth.
+
+5.1.
