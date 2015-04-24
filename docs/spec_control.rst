@@ -1,9 +1,9 @@
-6. The Language Specification - Control Flow
+8. The Language Specification - Control Flow
 ********************************************
 
 This section of the language specifications deals with control flow. It contains the keywords and the operators that affect which parts of the programs are run.
 
-6.1. "#" - Exception Loop
+8.1. "#" - Exception Loop
 =========================
 
 **Arity: Unbounded**
@@ -34,7 +34,7 @@ Ex::
 	50
 	100
 
-6.2. ")" - Close Parenthesis
+8.2. ")" - Close Parenthesis
 ============================
 
 This ends one function or statement. Control flow like ``if`` or ``for`` all open up an unbounded arity and this closes one of them. Also useful for tuple and list constructors.
@@ -52,10 +52,10 @@ Ex::
     Bye
     [0, 1, 2, 3, 4]
 
-6.3. ";" - End Statement
+8.3. ";" - End Statement
 ========================
 
-This is effectively an infinite amount of close parenthesis. This closes how many ever aritys are needed to start completely afresh. This is the replacement for multiple lines in Pyth.
+This is effectively an infinite amount of close parenthesis. This closes how many ever arities are needed to start completely afresh.
 
 Ex::
 
@@ -69,7 +69,7 @@ Ex::
     ==================================================
     Bye
 
-6.4. "B" - Break
+8.4. "B" - Break
 ================
 
 This translates into the break keyword in Python. It is used to break out of both for and while loops (and also the infinite error loop). Pyth does not have a continue statement. Break automatically puts a close parenthesis after itself.
@@ -102,12 +102,12 @@ Ex::
 	10
 	11
 
-6.5. "E" - The Else Statement
+8.5. "E" - The Else Statement
 =============================
 
 **Arity: Unbounded**
 
-This is the else part of the if-else construct. It is pretty self explanatory and works like it would in any programing langaue. This can also be used as part of a `for-else or while-else <https://docs.python.org/2/tutorial/controlflow.html#break-and-continue-statements-and-else-clauses-on-loops>`_ construct. The If still needs a close parenthesis after it.
+This is the else part of the if-else construct. It is pretty self explanatory and works like it would in any programing language. This can also be used as part of a `for-else or while-else <https://docs.python.org/2/tutorial/controlflow.html#break-and-continue-statements-and-else-clauses-on-loops>`_ construct. The If still needs a close parenthesis after it.
 
 Ex::
 
@@ -121,7 +121,7 @@ Ex::
 	==================================================
 	It's less than
 
-6.6. "F" - The For Loop
+8.6. "F" - The For Loop
 =======================
 
 **Arity: Variable, Sequence, Unbounded**
@@ -142,12 +142,12 @@ Ex::
 	3
 	4
 
-6.7. "I" - The If Statement
+8.7. "I" - The If Statement
 ===========================
 
 **Arity: Boolean, Unbounded**
 
-This is the If statement from Python. If the first argument is truthy, it executes the code, else it does nothing. Requires a close paren unless it is the last piece of code.
+This is the If statement from Python. If the first argument is truthy, it executes the code, else it does nothing.
 
 Ex::
 
@@ -158,12 +158,12 @@ Ex::
 	 Pprint("\n","The Universe Has Exploded")
 	==================================================
 
-6.8. "V" - Unary-Range-Loop
+8.8. "V" - Unary-Range-Loop
 ===========================
 
 **Arity: Integer, Unbounded**
 
-It is the shortest way to do a for loop. It is equivalent to the characters ``FNU``. This makes it execute the following code a number of times equal to the input, with ``N`` being the loop variable.
+It is the shortest way to do a for loop. It is equivalent to the characters ``FNU``. This makes it execute the following code a number of times equal to the input, with ``N`` being the loop variable. If a sequence is given as input, it is converted to an integer via its length.
 
 Ex::
 
@@ -184,7 +184,7 @@ Ex::
 	64
 	81
 
-6.9. "W" - While Loop
+8.9. "W" - While Loop
 =====================
 
 **Arity: Boolean, Unbounded**
@@ -201,3 +201,58 @@ Ex::
 	Pprint("\n",Y)
 	==================================================
 	[5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+
+8.10. & - Logical And
+=====================
+
+**Arity: 2**
+
+This the logical ``and`` operator. It returns the first falsy value of its inputs, or the last value if all are truthy. It is shortcircuiting, just like Python's ``and``.
+
+Ex::
+
+	==================================================
+	&Z1&1T
+	==================================================
+	Pprint("\n",(Z and 1))
+	Pprint("\n",(1 and T))
+	==================================================
+	0
+	10
+
+8.11. "|" - Logical Or
+=====================
+
+**Arity: 2**
+
+This is the logical ``or`` operator. It returns the first truthy value of the input, or the last value if all are falsy. It is shortcircuiting, just like Python's ``or``.
+
+Ex::
+
+	==================================================
+	|Z1|ZZ
+	==================================================
+	Pprint("\n",(Z or 1))
+	Pprint("\n",(Z or Z))
+	==================================================
+	1
+	0
+
+8.12. "?" - Logical If Else
+===========================
+
+**Arity: 3**
+
+This is Pyth's ternary. Unlike most languages, but like Python, the conditional is the second input. The first input is executed and returned if the conditional is truthy, and the third input is executed and returned if the conditional is falsy.  It is shortcircuiting, just like Python's ``if else``.
+
+Ex::
+
+    ==================== 8 chars =====================
+    ?1T3?1Z3
+    ==================================================
+    Pprint("\n",(1 if T else 3))
+    Pprint("\n",(1 if Z else 3))
+    ==================================================
+    1
+    3
+

@@ -1,4 +1,4 @@
-7. The Language Specification - Arithmetic
+9. The Language Specification - Arithmetic
 ******************************************
 
 This is the first glimpse in the specification you are getting of multi-use functions. They will be organized as subsections under each section. Each subsection will be labelled by the type of arguments it receives. Here are the possible types of arguments::
@@ -13,12 +13,12 @@ This is the first glimpse in the specification you are getting of multi-use func
     Any: Anything
 
 
-7.1. "+" - Addition
+9.1. "+" - Addition
 ===================
 
 **Arity: 2**
 
-7.1.1. Num a, Num b: Addition
+9.1.1. Num a, Num b: Addition
 -----------------------------------
 
 This simply returns the sum of the two numbers.
@@ -32,7 +32,7 @@ Ex::
 	==================================================
 	4
 
-7.1.2. Seq a, Any b: Concatenation
+9.1.2. Seq a, Any b: Concatenation
 ----------------------------------
 
 If the ``b`` is also a sequence of the same type as ``a``, it returns the concatenation of the two sequences.
@@ -57,12 +57,12 @@ Ex::
 	==================================================
 	[1, 2, 3, 4]
 
-7.2. "*" - Multiplication
+9.2. "*" - Multiplication
 =========================
 
 **Arity: 2**
 
-7.2.1. Num a, Num b: Multiplication
+9.2.1. Num a, Num b: Multiplication
 -----------------------------------
 
 This returns the product of the two numbers.
@@ -76,7 +76,7 @@ Ex::
 	==================================================
 	20
 
-7.2.2. Seq a, Int b: Repetition
+9.2.2. Seq a, Int b: Repetition
 -------------------------------
 
 This function repeats sequence ``a``, ``b`` times. This is the same as repetition in Python.
@@ -90,7 +90,7 @@ Ex::
 	==================================================
 	abcabcabcabcabc
 
-7.2.3. Seq a, Seq b: Cartesian Product
+9.2.3. Seq a, Seq b: Cartesian Product
 --------------------------------------
 
 Calculates the `Cartesian Product <http://en.wikipedia.org/wiki/Cartesian_product>`_ of the two sequences. They have to be of the same type. This means that it generates all the possible ways that you can select one value from both sequences.
@@ -104,12 +104,12 @@ Ex::
 	==================================================
 	[('a', '1'), ('a', '2'), ('a', '3'), ('b', '1'), ('b', '2'), ('b', '3'), ('c', '1'), ('c', '2'), ('c', '3')]
 
-7.3. "-" - Subtraction
+9.3. "-" - Subtraction
 ======================
 
 **Arity: 2**
 
-7.3.1. Num a, Num b: Subtraction
+9.3.1. Num a, Num b: Subtraction
 --------------------------------
 
 Computes the difference of ``a`` from ``b``.
@@ -123,7 +123,7 @@ Ex::
 	==================================================
 	6
 
-7.3.2. Col a, Col b: Setwise Difference
+9.3.2. Col a, Col b: Setwise Difference
 ---------------------------------------
 
 Computes the setwise difference of ``a`` from ``b``. This means it returns a collection with the elements in ``a`` that are not in ``b``, using the type of ``a``. It preserves the order of ``a``.
@@ -137,12 +137,12 @@ Ex::
     ==================================================
     [1, 3]
 
-7.4. "/" - Division
+9.4. "/" - Division
 ===================
 
 **Arity: 2**
 
-7.4.1. Num a, Num b: Division
+9.4.1. Num a, Num b: Division
 -----------------------------
 
 Returns ``a`` divided by ``b``. Uses integer division which means it truncates the fractional part of the answer.
@@ -156,7 +156,7 @@ Ex::
 	==================================================
 	2
 
-7.4.2. Seq a, any b: Count Occurrences
+9.4.2. Seq a, any b: Count Occurrences
 --------------------------------------
 
 Returns the number of times element b appeared in sequence a.
@@ -170,12 +170,12 @@ Ex::
 	==================================================
 	2
 
-7.5. "%" - Modulus
+9.5. "%" - Modulus
 ==================
 
 **Arity: 2**
 
-7.5.1. Num a, Num b: Modulus
+9.5.1. Num a, Num b: Modulus
 ----------------------------
 
 Returns the remainder when ``a`` is integer divided by ``b``.
@@ -189,10 +189,10 @@ Ex::
 	==================================================
 	1
 
-7.5.2. String a, Any b: String Formatting
+9.5.2. String a, Any b: String Formatting
 -----------------------------------------
 
-This applies Python's string formatting that normally occurs with ``%``. Requires ``%s`` or any of th other within the string,, just like in Python.
+This applies Python's string formatting that normally occurs with ``%``. Requires ``%s`` or any of the other within the string,, just like in Python.
 
 Ex::
 
@@ -203,7 +203,7 @@ Ex::
 	==================================================
 	a: 2
 
-7.5.3. Int a, Seq b: Extended Slicing
+9.5.3. Int a, Seq b: Extended Slicing
 -------------------------------------
 
 Pyth's slicing operator does not support extended slicing, so this operator has the effect of doing ``b[::a]``. This means that it will pick every ``a`` elements of ``b``.
@@ -217,12 +217,12 @@ Ex::
 	==================================================
 	Hlo
 
-7.6. "^" - Exponentiation
+9.6. "^" - Exponentiation
 =========================
 
 **Arity: 2**
 
-7.6.1. Num a, Num b: Exponentiation
+9.6.1. Num a, Num b: Exponentiation
 -----------------------------------
 
 This raises the ``a`` to the power of ``b``. Like Python, it allows rational exponents.
@@ -236,7 +236,7 @@ Ex::
 	==================================================
 	16
 
-7.6.2. Seq a, Int b: Cartesian Product With Repeats
+9.6.2. Seq a, Int b: Cartesian Product With Repeats
 ---------------------------------------------------
 
 Finds the Cartesian Product of ``b`` copies of sequence ``a``. This means that it finds all possible sequences with length ``b`` that contain only elements from sequence ``a``.
@@ -250,12 +250,12 @@ Ex::
 	==================================================
 	['aaa', 'aab', 'aac', 'aba', 'abb', 'abc', 'aca', 'acb', 'acc', 'baa', 'bab', 'bac', 'bba', 'bbb', 'bbc', 'bca', 'bcb', 'bcc', 'caa', 'cab', 'cac', 'cba', 'cbb', 'cbc', 'cca', 'ccb', 'ccc']
 
-7.7. "_" - Unary Negation
+9.7. "_" - Unary Negation
 =========================
 
 **Arity: 1**
 
-7.7.1. Num a: Negation
+9.7.1. Num a: Negation
 ----------------------
 
 Returns the additive inverse of ``a`` or ``-a``. There are no negative number literals in Pyth, this is how you define negatives in Pyth.
@@ -269,7 +269,7 @@ Ex::
 	==================================================
 	-25
 
-7.7.2. Seq a: Reversal
+9.7.2. Seq a: Reversal
 ----------------------
 
 Returns ``a`` in reversed order. This is equivalent to the alien smiley face, ``[::-1]`` in Python.
@@ -283,49 +283,28 @@ Ex::
 	==================================================
 	cba
 
+9.7.3. Dict a: Invert
+---------------------
 
-7.9. & - Logical And
-=====================
-
-**Arity: 2**
-
-This the logical ``and`` operator. It returns a truthy value of the type if both of the values are truthy and a falsey otherwise otherwise. The specifics of which value is returned is the same as Python.
+Returns ``a`` with its keys and values swapped.
 
 Ex::
 
-	==================================================
-	&Z1&1T
-	==================================================
-	Pprint("\n",(Z and 1))
-	Pprint("\n",(1 and T))
-	==================================================
-	0
-	10
+    ==================== 7 chars =====================
+    XH1\a_H
+    ==================================================
+    Pprint("\n",assign_at(H,1,"a"))
+    Pprint("\n",neg(H))
+    ==================================================
+    {1: 'a'}
+    {'a': 1}
 
-7.10. "|" - Logical Or
-=====================
-
-**Arity: 2**
-
-This is the logical ``or`` operator. It returns a truthy value of the type if either or them are truthy and a falsey value if both are falsey. Like the ``&`` operator, the specifics of the returned values are the same as in Python.
-
-Ex::
-
-	==================================================
-	|Z1|ZZ
-	==================================================
-	Pprint("\n",(Z or 1))
-	Pprint("\n",(Z or Z))
-	==================================================
-	1
-	0
-
-7.11. "P" - Prime Factorization
+9.8. "P" - Prime Factorization
 ===============================
 
 **Arity: 1**
 
-7.11.1. Int a: Prime Factorization
+9.8.1. Int a: Prime Factorization
 ----------------------------------
 
 Returns the `prime factorization of <http://en.wikipedia.org/wiki/Integer_factorization>`_ ``a``. Returns it as a list and multiplicities are just repeated.
@@ -339,7 +318,7 @@ Ex::
 	==================================================
 	[2, 2, 3]
 
-7.11.2. Seq a: All But Last
+9.8.2. Seq a: All But Last
 ---------------------------
 
 Returns all but the last element of ``a``. This is equivalent to the Python ``[:-1]``

@@ -14,6 +14,11 @@ Contents:
    simple-programs2
    docs
    adding
+   spec_vars
+   spec_control
+   spec_math
+   spec_comp
+   spec_seq
 
 Indices and tables
 ==================

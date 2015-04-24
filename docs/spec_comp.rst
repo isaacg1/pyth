@@ -1,14 +1,14 @@
-8. The Language Specification - Comparisons
+10. The Language Specification - Comparisons
 *******************************************
 
 This section contains a list of comparison operators. They all take two arguments and return a boolean value depending on the relationship between the two arguments.
 
-8.1. "<" - Is Less Than
+10.1. "<" - Is Less Than
 =======================
 
 **Arity: 2**
 
-8.1.1. Any a, Same Type b: Less Than
+10.1.1. Any a, Same Type b: Less Than
 ------------------------------------
 
 If a and b are of the same type, checks if ``a`` is less than ``b`` by whatever way that type is compared (e.g. Numbers by size, strings lexicographically).
@@ -24,7 +24,7 @@ Ex::
 	True
 	False
 
-8.1.2. Seq a, Int b: Slice Till
+10.1.2. Seq a, Int b: Slice Till
 -------------------------------
 
 Takes a slice of sequence ``a`` until index ``b``. This is equivalent to the Python statement ``a[:b]``. The slice is inclusive of the element at index ``b``
@@ -38,7 +38,7 @@ Ex::
 	==================================================
 	fgh
 
-8.1.3. Set a, Set b: Is Subset
+10.1.3. Set a, Set b: Is Subset
 ------------------------------
 
 Checks if set ``a`` is a subset of set ``b``. This means that it checks if set ``b`` contains all the elements of set ``a``.
@@ -52,7 +52,7 @@ Ex::
 	==================================================
 	True
 
-8.2. "q" - Is Equal To
+10.2. "q" - Is Equal To
 ======================
 
 **Arity: 2**
@@ -70,12 +70,12 @@ Ex::
 	False
 	True
 
-8.3. ">" - Is Greater Than
+10.3. ">" - Is Greater Than
 ==========================
 
 **Arity: 2**
 
-8.3.1 Any a, Same Type b: Greater Than
+10.3.1 Any a, Same Type b: Greater Than
 --------------------------------------
 
 This checks if ``a`` is greater than ``b``. Uses the same type of comparisons as ``<``
@@ -91,7 +91,7 @@ Ex::
 	False
 	True
 
-8.3.2 Seq a, Int b: Slice From
+10.3.2 Seq a, Int b: Slice From
 ------------------------------
 
 This takes a slice of sequence ``a`` from index ``b`` onwards till the end. This is equivalent to the Python ``a[b:]``. The slice is not inclusive of the element at index ``b``.
@@ -104,7 +104,7 @@ Ex::
 	==================================================
 	abcde
 
-8.3.3. Set a, Set b: Is Superset
+10.3.3. Set a, Set b: Is Superset
 --------------------------------
 
 Checks is set ``a`` is a superset of set ``b``. This means that it checks if set ``a`` contains all the elements of set ``b``. This does not return True if the two sets are equal.
@@ -118,7 +118,7 @@ Ex::
 	==================================================
 	True
 
-8.4. "n" - Not Equal To
+10.4. "n" - Not Equal To
 =======================
 
 **Arity: 2**
@@ -136,12 +136,12 @@ Ex::
 	True
 	False
 
-8.5. "g" - Is Greater Than or Equal To
+10.5. "g" - Is Greater Than or Equal To
 ======================================
 
 **Arity: 2**
 
-8.5.1. Any a, Same Type b: Greater Than or Equal To
+10.5.1. Any a, Same Type b: Greater Than or Equal To
 ---------------------------------------------------
 
 Checks if ``a`` is greater than or equal to ``b``.
@@ -159,7 +159,21 @@ Ex::
 	True
 	False
 
-8.5.2. Set a, Set b: Superset or Equal
+10.5.2. Seq a, Int b: Slice From, 1-indexed
+=========================================
+
+This takes a slice of ``a``, from the element ``b-1``. It is equivalent to ``a[b-1:]``.
+
+Ex::
+
+    ==================== 3 chars =====================
+    gG5
+    ==================================================
+    Pprint("\n",gte(G,5))
+    ==================================================
+    efghijklmnopqrstuvwxyz
+
+10.5.3. Set a, Set b: Superset or Equal
 --------------------------------------
 
 Checks if set ``a`` is a superset of set ``b`` or equal to set ``b``.
@@ -175,12 +189,12 @@ Ex::
 	True
 	True
 
-8.6. "}" - Contains
+10.6. "}" - Contains
 ===================
 
 **Arity: 2**
 
-Checks if the second argument, a sequence, contains the first argument. Is equivalent to the Python ``in`` operator. 
+Checks if the second argument, a collection, contains the first argument. Is equivalent to the Python ``in`` operator. 
 
 Ex::
 
