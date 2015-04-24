@@ -184,7 +184,10 @@ def Pset(a=set()):
     if is_num(a):
         return set([a])
     if is_col(a):
-        return set(a)
+        try:
+            return set(a)
+        except TypeError as e:
+            return set(map(tuple, a))
     raise BadTypeCombinationError("{", a)
 
 
