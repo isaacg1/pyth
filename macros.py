@@ -56,6 +56,14 @@ def itertools_norm(func, a, *args, **kwargs):
     return [group for group in func(a, *args, **kwargs)]
 
 
+# If argument is a number, turn it into a range.
+def num_to_range(arg):
+    if is_num(arg):
+        return range(int(arg))
+
+    return arg
+
+
 # Function library. See data for letter -> function correspondences.
 # !. All.
 def Pnot(a):
