@@ -59,6 +59,14 @@ def itertools_norm(func, a, *args, **kwargs):
     return [group for group in func(a, *args, **kwargs)]
 
 
+# If argument is a number, turn it into a range.
+def num_to_range(arg):
+    if is_num(arg):
+        return range(int(arg))
+
+    return arg
+
+
 # Function library. See data for letter -> function correspondences.
 # !. All.
 def Pnot(a):
@@ -613,6 +621,7 @@ def reduce(a, b, c=None):
 
     #Check for special fold case
     if b == float('inf'):
+        c = num_to_range(c)
         b, c = c[1:], c[0]
 
     if is_seq(b) or isinstance(b, int):

@@ -18,7 +18,7 @@ variables = 'bdGHkNTYZ'
 c_to_s = {
     'D': (('@memoized\ndef ', ':'), 1),
     'E': (('else:', ), 0),
-    'F': (('for ', ' in ', ':'), 2),
+    'F': (('for ', ' in num_to_range(', '):'), 2),
     'I': (('if ', ':'), 1),
     'W': (('while ', ':'), 1),
     '#': (('while True:\n try:', '\n except Exception:\n  break'), 0, 1),
