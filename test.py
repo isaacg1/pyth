@@ -80,27 +80,56 @@ test_cases = [
     ('*[1 2 3)2', '[1, 2, 3, 1, 2, 3]\n'),
     ('*2,Z1', '(0, 1, 0, 1)\n'),
     ('*U3U2', '[(0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1)]\n'),
-    ('*"abc"U2', "[('a', 0), ('a', 1), ('b', 0), ('b', 1), ('c', 0), ('c', 1)]\n"),
-    ('*"abc",0 1', "[('a', 0), ('a', 1), ('b', 0), ('b', 1), ('c', 0), ('c', 1)]\n"),
+    ('*"abc"U2',
+        "[('a', 0), ('a', 1), ('b', 0), ('b', 1), ('c', 0), ('c', 1)]\n"),
+    ('*"abc",0 1',
+        "[('a', 0), ('a', 1), ('b', 0), ('b', 1), ('c', 0), ('c', 1)]\n"),
     ('*"ab""cd', "[('a', 'c'), ('a', 'd'), ('b', 'c'), ('b', 'd')]\n"),
     # Test :
     (':"abcde",0 3]"lol"', 'lolbclole\n'),
     (':"####$$$$"%2U8\\x', 'x#x#x$x$\n'),
     (':U10r4 7 8', '[0, 1, 2, 3, 8, 8, 8, 7, 8, 9]\n'),
+    # Test X
+    ('XUT5Z', '[0, 1, 2, 3, 4, 0, 6, 7, 8, 9]\n'),
+    ('=YUT XY5Z', ''),
+    ('=YUT XY15ZY', '[0, 1, 2, 3, 4, 0, 6, 7, 8, 9]\n'),
+    ('X5UT5', '[0, 1, 2, 3, 4, 10, 6, 7, 8, 9]\n'),
+    ('X"abc"1"d', 'adc\n'),
+    ('X*2U5]1]2', '[0, 2, 2, 3, 4, 0, 2, 2, 3, 4]\n'),
+    ('X"abcdef""ace""bdf', 'bbddff\n'),
+    ('X"<></\\><>""</\\>', '><>\\/<><\n'),
+    # Test .j
+    ('.j', '1j\n'),
+    ('.j1', '(1+1j)\n'),
+    ('.j3_2', '(3-2j)\n'),
+    ('+.j2 1.j', '(2+2j)\n'),
+    ('-.j4 2.j', '(4+1j)\n'),
+    ('*.j3_2.j', '(2+3j)\n'),
+    ('^.j1_1 2', '-2j\n'),
+    ('_.j1_1', '(-1+1j)\n'),
+    ('c.j2_6 2', '(1-3j)\n'),
+    ('@.jZ2 2', '(1.0000000000000002+1j)\n'),
+    ('%.j5 3 2', '(1+1j)\n'),
+    ('.a.j1 1', '1.4142135623730951\n'),
+    ('C.j', '-1j\n'),
+    ('P.j', '1.5707963267948966\n'),
+    ('s.j.5.8', '0.5\n'),
+    ('e.j.5.8', '0.8\n'),
+    ('>.j.5.5.j', 'False\n'),
+    ('<.j.5.5.j', 'True\n'),
 ]
-
 
 
 def test(pyth_code, expected_output, input_message=''):
     output, error = pyth.run_code(pyth_code, input_message)
 
     if error:
-        raise NameError("Error thrown by %s on input %s:\n%s" %\
-            (pyth_code, input_message, error))
+        raise NameError("Error thrown by %s on input %s:\n%s" %
+                        (pyth_code, input_message, error))
     if output != expected_output:
         raise NameError("Bad output by %s on input %s."
-                        "\nExpected: %r.\nReceived: %r" %\
-            (pyth_code, input_message, expected_output, output))
+                        "\nExpected: %r.\nReceived: %r" %
+                        (pyth_code, input_message, expected_output, output))
 
 if __name__ == '__main__':
     for test_case in test_cases:

@@ -45,9 +45,9 @@ class memoized(object):
 # All surrounding strings, arity
 c_to_i = {
     '~':  (('', '+=', ''), 2),
+    '=':  (('', '=copy(', ')'), 2),
     '&':  (('(', ' and ', ')'), 2),
     '|':  (('(', ' or ', ')'), 2),
-    '=':  (('', '=copy(', ')'), 2),
     ']':  (('[', ']'), 1),
     '}':  (('(', ' in ', ')'), 2),
     '?':  (('(', ' if ', ' else ', ')'), 3),
@@ -128,7 +128,8 @@ c_to_f = {
     '.f': ('float', 1),
     '.F': ('Pformat', 2),
     '.H': ('Phex', 1),
-    '.h': ('hash', 1),
+    '.h': ('Phash', 1),
+    '.j': ('Pcomplex', 2),
     '.l': ('log', 2),
     '.m': ('minimal(lambda b:', 2),
     '.M': ('maximal(lambda Z:', 2),
@@ -138,7 +139,7 @@ c_to_f = {
     '.P': ('permutations2', 2),
     '.q': ('Pexit', 0),
     '.Q': ('eval_all_input', 0),
-    '.r': ('run_length_encoding', 1),
+    '.r': ('rotate', 2),
     '.R': ('round', 2),
     '.S': ('shuffle', 1),
     '.s': ('stripchars', 2),
@@ -152,6 +153,7 @@ c_to_f = {
     '.<': ('leftshift', 2),
     '.>': ('rightshift', 2),
     '._': ('sign', 1),
+    '.-': ('remove', 2),
     '.:': ('substrings', 2),
     }
 
@@ -164,6 +166,16 @@ replacements = {
     '.N': ('D:NTYR', 0),
     }
 
+#Provides parsing functions and arity conditions for syntactical sugar
+#<non-zero>=: Augmented assignment
+#<binary>F: Fold operator
+
+syntax_sugar = {
+    '=': (lambda c, r: r[:2] + c+r[1:], lambda n: n),
+    'F': (lambda c, r: "u" + c + c_to_f['u'][0][14:18:3] + ".n4 "+r[1:],
+          lambda n: n == 2)
+}
+
 # Gives next function header to use - for filter, map, reduce.
 # map: d, k, b
 # filter: T, Y, Z
@@ -175,7 +187,7 @@ next_c_to_f = {
     'f': [('Pfilter(lambda Y:', 2), ('Pfilter(lambda Z:', 2), ],
     'm': [('Pmap(lambda k:', 2), ('Pmap(lambda b:', 2), ],
     'o': [('order(lambda Z:', 2), ],
-    'u': [('reduce(lambda N,T:', 2), ],
+    'u': [('reduce(lambda N, T:', 3), ],
     '.e': [('Penumerate(lambda b, Z:', 2), ],
     }
 

@@ -1,0 +1,819 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>9. The Language Specification - Sequences &mdash; Pyth 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Pyth 1.0 documentation" href="index.html"/>
+        <link rel="prev" title="8. The Language Specification - Comparisons" href="spec_comp.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> Pyth</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">1. Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#how-to-start-programming-in-pyth">1.1. How to Start Programming in Pyth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#hello-world">1.2. Hello World!</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="details.html">2. More Details About Pyth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="details.html#pyth-uses-prefix-notation">2.1. Pyth Uses Prefix Notation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="details.html#pyth-has-many-many-operators">2.2. Pyth Has Many, Many Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="details.html#all-operators-in-pyth-have-a-fixed-arity">2.3. All Operators in Pyth Have a Fixed Arity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="details.html#operators-mean-different-things-in-different-contexts">2.4. Operators Mean Different Things in Different Contexts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="details.html#the-pyth-code-is-compiled-to-python-code-then-run">2.5. The Pyth Code is Compiled to Python Code Then Run</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="simple-programs.html">3. Some Simple Programs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simple-programs.html#factorial">3.1. Factorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simple-programs.html#the-first-n-fibonacci-numbers">3.2. The First n Fibonacci numbers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="simple-programs2.html">4. Some Simple Programs - Part II</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simple-programs2.html#prime">Prime</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spec_vars.html">5. The Language Specification - Variables</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#g-the-alphabet">5.1. &#8220;G&#8221; - The Alphabet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#h-empty-dictionary">5.2. &#8220;H&#8221; - Empty Dictionary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#j-auto-assignment-with-copy">5.3. &#8220;J&#8221; - Auto-Assignment With Copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#k-auto-assignment">5.4. &#8220;K&#8221; - Auto-Assignment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#n-double-quote">5.5. &#8220;N&#8221; - Double Quote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#q-evaluated-input">5.6. &#8220;Q&#8221; - Evaluated Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#t-ten">5.7. &#8220;T&#8221; - Ten</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#y-empty-list">5.8. &#8220;Y&#8221; - Empty List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#z-zero">5.9. &#8220;Z&#8221; - Zero</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#b-line-break">5.10. &#8220;b&#8221; - Line Break</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#d-space">5.11. &#8220;d&#8221; - Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#k-empty-string">5.12. &#8220;k&#8221; - Empty String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#z-raw-input">5.13. &#8220;z&#8221; - Raw Input</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spec_control.html">6. The Language Specification - Control Flow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#exception-loop">6.1. &#8220;#&#8221; - Exception Loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#close-parenthesis">6.2. &#8221;)&#8221; - Close Parenthesis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#end-statement">6.3. &#8221;;&#8221; - End Statement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#b-break">6.4. &#8220;B&#8221; - Break</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#e-the-else-statement">6.5. &#8220;E&#8221; - The Else Statement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#f-the-for-loop">6.6. &#8220;F&#8221; - The For Loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#i-the-if-statement">6.7. &#8220;I&#8221; - The If Statement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#v-unary-range-loop">6.8. &#8220;V&#8221; - Unary-Range-Loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#w-while-loop">6.9. &#8220;W&#8221; - While Loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#ternary-operator">6.10. &#8221;?&#8221; - Ternary Operator</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spec_math.html">7. The Language Specification - Arithmetic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#addition">7.1. &#8220;+&#8221; - Addition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#multiplication">7.2. &#8220;*&#8221; - Multiplication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#subtraction">7.3. &#8220;-&#8221; - Subtraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#division">7.4. &#8220;/&#8221; - Division</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#modulus">7.5. &#8220;%&#8221; - Modulus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#exponentiation">7.6. &#8220;^&#8221; - Exponentiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#unary-negation">7.7. &#8220;_&#8221; - Unary Negation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#addition-augmented-assignment">7.8. &#8220;~&#8221; - Addition Augmented Assignment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#logical-and">7.9. &#8220;&amp; - Logical And</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#logical-or">7.10. &#8220;|&#8221; - Logical Or</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_math.html#p-prime-factorization">7.11. &#8220;P&#8221; - Prime Factorization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spec_comp.html">8. The Language Specification - Comparisons</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spec_comp.html#is-less-than">8.1. &#8220;&lt;&#8221; - Is Less Than</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_comp.html#q-is-equal-to">8.2. &#8220;q&#8221; - Is Equal To</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_comp.html#is-greater-than">8.3. &#8220;&gt;&#8221; - Is Greater Than</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_comp.html#n-not-equal-to">8.4. &#8220;n&#8221; - Not Equal To</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_comp.html#g-is-greater-than-or-equal-to">8.5. &#8220;g&#8221; - Is Greater Than or Equal To</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_comp.html#contains">8.6. &#8220;}&#8221; - Contains</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">9. The Language Specification - Sequences</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#string-literal">9.1. &#8221; - String Literal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#list-constructor">9.2. &#8220;[&#8221; - List Constructor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tuple-contructor">9.3. &#8220;(&#8221; - Tuple Contructor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#set-constructor">9.4. &#8220;{&#8221; - Set Constructor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#string-escape">9.5. &#8220;\&#8221; - String Escape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#one-element-list">9.6. &#8220;]&#8221; - One Element List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#couple-constructor">9.7. &#8221;,&#8221; - Couple Constructor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-append">9.8. &#8220;a&#8221; - Append</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#c-chop">9.9. &#8220;c&#8221; - Chop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#e-end">9.10. &#8220;e&#8221; - End</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#h-head">9.11. &#8220;h&#8221; - Head</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#j-join">9.12. &#8220;j&#8221; - Join</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#l-length">9.13. &#8220;l&#8221; - Length</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#r-range">9.14. &#8220;r&#8221; - Range</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#s-sum">9.15. &#8220;s&#8221; - Sum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#t-tail">9.16. &#8220;t&#8221; - Tail</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#x-index">9.17. &#8220;x&#8221; - Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#y-powerset">9.18. &#8220;y&#8221; - Powerset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#s-sorted">9.19. &#8220;S&#8221; - Sorted</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#u-unary-range">9.20. &#8220;U&#8221; - Unary Range</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#x-update-mutable">9.21. &#8220;X&#8221; - Update Mutable</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Pyth</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>9. The Language Specification - Sequences</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/spec_seq.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="the-language-specification-sequences">
+<h1>9. The Language Specification - Sequences<a class="headerlink" href="#the-language-specification-sequences" title="Permalink to this headline">¶</a></h1>
+<p>This chapter of the specification deals with sequences. These are strings, arrays, tuples, etc. This chapter contains both sequence constructors and functions and operators that work on them.</p>
+<div class="section" id="string-literal">
+<h2>9.1. &#8221; - String Literal<a class="headerlink" href="#string-literal" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: Unbounded</strong></p>
+<p>Starts a string literal. Stops parsing until it reaches a matching quote or EOF.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+"abc""def
+==================================================
+Pprint("\n","abc")
+Pprint("\n","def")
+==================================================
+abc
+def</pre>
+</div>
+</div>
+<div class="section" id="list-constructor">
+<h2>9.2. &#8220;[&#8221; - List Constructor<a class="headerlink" href="#list-constructor" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: Unbounded</strong></p>
+<p>This starts a list definition. Elements are space-separated since the comma is the couple-constructor. Is ended like any other unbounded arity, with a <tt class="docutils literal"><span class="pre">)</span></tt>. Lists are mutable.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+[1 2 3)
+==================================================
+Pprint("\n",Plist(1,(2),(3)))
+==================================================
+[1, 2, 3]</pre>
+</div>
+</div>
+<div class="section" id="tuple-contructor">
+<h2>9.3. &#8220;(&#8221; - Tuple Contructor<a class="headerlink" href="#tuple-contructor" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: Unbounded</strong></p>
+<p>This starts a tuple definition. It works in the same way as the list constructor. Unlike lists, tuples are immutable.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+(1 2 3)
+==================================================
+Pprint("\n",Ptuple(1,(2),(3)))
+==================================================
+(1, 2, 3)</pre>
+</div>
+</div>
+<div class="section" id="set-constructor">
+<h2>9.4. &#8220;{&#8221; - Set Constructor<a class="headerlink" href="#set-constructor" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 1</strong></p>
+<p>This is the Python set constructor <tt class="docutils literal"><span class="pre">set()</span></tt>. It takes a sequence and makes a set out of it. An important consequence for golfing is that all duplicates are removed when a set is created. On numbers it makes a one element set containing the number.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+{[1 2 3){T
+==================================================
+Pprint("\n",Pset(Plist(1,(2),(3))))
+Pprint("\n",Pset(T))
+==================================================
+{1, 2, 3}
+{10}</pre>
+</div>
+</div>
+<div class="section" id="string-escape">
+<h2>9.5. &#8220;\&#8221; - String Escape<a class="headerlink" href="#string-escape" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: One Character</strong></p>
+<p>Creates a one character string containing the next character in the program.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+\a
+==================================================
+Pprint("\n","a")
+==================================================
+a</pre>
+</div>
+</div>
+<div class="section" id="one-element-list">
+<h2>9.6. &#8220;]&#8221; - One Element List<a class="headerlink" href="#one-element-list" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 1</strong></p>
+<p>Makes a list containing only one element.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+]5
+==================================================
+Pprint("\n",[5])
+==================================================
+[5]</pre>
+</div>
+</div>
+<div class="section" id="couple-constructor">
+<h2>9.7. &#8221;,&#8221; - Couple Constructor<a class="headerlink" href="#couple-constructor" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<p>A couple is a tuple containing only two elements. This creates one containing the arguments passed to it. This is useful for <tt class="docutils literal"><span class="pre">A</span></tt>, the double assignment operator.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+,5T
+==================================================
+Pprint("\n",(5,T))
+==================================================
+(5, 10)</pre>
+</div>
+</div>
+<div class="section" id="a-append">
+<h2>9.8. &#8220;a&#8221; - Append<a class="headerlink" href="#a-append" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<p>Appends the second argument to the first arguement, a sequence.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+aY5Y
+==================================================
+Y.append(5)
+Pprint("\n",Y)
+==================================================
+[5]</pre>
+</div>
+</div>
+<div class="section" id="c-chop">
+<h2>9.9. &#8220;c&#8221; - Chop<a class="headerlink" href="#c-chop" title="Permalink to this headline">¶</a></h2>
+<p><em>Arity: 2*</em></p>
+<div class="section" id="seq-a-int-b-chop">
+<h3>9.9.1. Seq a, Int b: Chop<a class="headerlink" href="#seq-a-int-b-chop" title="Permalink to this headline">¶</a></h3>
+<p>Splits sequence <tt class="docutils literal"><span class="pre">a</span></tt> every <tt class="docutils literal"><span class="pre">b</span></tt> elements.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+cG2
+==================================================
+Pprint("\n",chop(G,2))
+==================================================
+['ab', 'cd', 'ef', 'gh', 'ij', 'kl', 'mn', 'op', 'qr', 'st', 'uv', 'wx', 'yz']</pre>
+</div>
+</div>
+<div class="section" id="str-a-str-b-string-split">
+<h3>9.9.2. Str a, Str b: String Split<a class="headerlink" href="#str-a-str-b-string-split" title="Permalink to this headline">¶</a></h3>
+<p>Splits string <tt class="docutils literal"><span class="pre">a</span></tt> by occurrences of string <tt class="docutils literal"><span class="pre">b</span></tt>. Uses <tt class="docutils literal"><span class="pre">string.split()</span></tt>. If <tt class="docutils literal"><span class="pre">b</span></tt> is <tt class="docutils literal"><span class="pre">None</span></tt> (default value) it splits by whitespace.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+c"kjclkshfglasjfljdlakjaflkajflkajfalkjgaf"\a
+==================================================
+Pprint("\n",chop("kjclkshfglasjfljdlakjaflkajflkajfalkjgaf","a"))
+==================================================
+['kjclkshfgl', 'sjfljdl', 'kj', 'flk', 'jflk', 'jf', 'lkjg', 'f']</pre>
+</div>
+</div>
+<div class="section" id="num-a-num-b-float-division">
+<h3>9.9.3. Num a, Num b: Float Division<a class="headerlink" href="#num-a-num-b-float-division" title="Permalink to this headline">¶</a></h3>
+<p>Computes true division on the arguments. Does not truncate the result.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+cT4
+==================================================
+Pprint("\n",chop(T,4))
+==================================================
+2.5</pre>
+</div>
+</div>
+</div>
+<div class="section" id="e-end">
+<h2>9.10. &#8220;e&#8221; - End<a class="headerlink" href="#e-end" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 1</strong></p>
+<div class="section" id="seq-a-end">
+<h3>9.10.1. Seq a: End<a class="headerlink" href="#seq-a-end" title="Permalink to this headline">¶</a></h3>
+<p>Returns the last element of sequence <tt class="docutils literal"><span class="pre">a</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+e"abc"
+==================================================
+Pprint("\n",end("abc"))
+==================================================
+c</pre>
+</div>
+</div>
+<div class="section" id="num-a-modulus-by-ten">
+<h3>9.10.2. Num a: Modulus By Ten<a class="headerlink" href="#num-a-modulus-by-ten" title="Permalink to this headline">¶</a></h3>
+<p>Returns <tt class="docutils literal"><span class="pre">a%10</span></tt> which is the remainder when <tt class="docutils literal"><span class="pre">a</span></tt> is divided by <tt class="docutils literal"><span class="pre">10</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+e25
+==================================================
+Pprint("\n",end(25))
+==================================================
+5</pre>
+</div>
+</div>
+</div>
+<div class="section" id="h-head">
+<h2>9.11. &#8220;h&#8221; - Head<a class="headerlink" href="#h-head" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 1</strong></p>
+<div class="section" id="seq-a-head">
+<h3>9.11.1. Seq a: Head<a class="headerlink" href="#seq-a-head" title="Permalink to this headline">¶</a></h3>
+<p>Returns the first element of sequence <tt class="docutils literal"><span class="pre">a</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+h"abc"
+==================================================
+Pprint("\n",head("abc"))
+==================================================
+a</pre>
+</div>
+</div>
+<div class="section" id="num-a-increment">
+<h3>9.11.2. Num a: Increment<a class="headerlink" href="#num-a-increment" title="Permalink to this headline">¶</a></h3>
+<p>Returns <tt class="docutils literal"><span class="pre">a+1</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+h5
+==================================================
+Pprint("\n",head(5))
+==================================================
+6</pre>
+</div>
+</div>
+</div>
+<div class="section" id="j-join">
+<h2>9.12. &#8220;j&#8221; - Join<a class="headerlink" href="#j-join" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<div class="section" id="str-a-seq-b-join">
+<h3>9.12.1. Str a, Seq b: Join<a class="headerlink" href="#str-a-seq-b-join" title="Permalink to this headline">¶</a></h3>
+<p>This works the same as the Python <tt class="docutils literal"><span class="pre">string.join()</span></tt>. It takes sequence b and concatenates all of its elements, separated by string a.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+jdUT
+==================================================
+Pprint("\n",join(d,urange(T)))
+==================================================
+0 1 2 3 4 5 6 7 8 9</pre>
+</div>
+</div>
+<div class="section" id="int-a-int-b-base-conversion">
+<h3>9.12.2. Int a, Int b: Base Conversion<a class="headerlink" href="#int-a-int-b-base-conversion" title="Permalink to this headline">¶</a></h3>
+<p>This takes the integer a, and converts it into base b. It however, outputs the result in a list of digits.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+jT2
+==================================================
+Pprint("\n",join(T,2))
+==================================================
+[1, 0, 1, 0]</pre>
+</div>
+</div>
+</div>
+<div class="section" id="l-length">
+<h2>9.13. &#8220;l&#8221; - Length<a class="headerlink" href="#l-length" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 1</strong></p>
+<div class="section" id="seq-a-length">
+<h3>9.13.1. Seq a: Length<a class="headerlink" href="#seq-a-length" title="Permalink to this headline">¶</a></h3>
+<p>Returns the length of sequence a. Uses Python <tt class="docutils literal"><span class="pre">len()</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+lG
+==================================================
+Pprint("\n",Plen(G))
+==================================================
+26</pre>
+</div>
+</div>
+<div class="section" id="num-a-log-base-2">
+<h3>9.13.2. Num a: Log Base 2<a class="headerlink" href="#num-a-log-base-2" title="Permalink to this headline">¶</a></h3>
+<p>Calculates the logarithm in base two of a.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+lT
+==================================================
+Pprint("\n",Plen(T))
+==================================================
+3.3219280948873626</pre>
+</div>
+</div>
+</div>
+<div class="section" id="r-range">
+<h2>9.14. &#8220;r&#8221; - Range<a class="headerlink" href="#r-range" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<div class="section" id="int-a-int-b-range">
+<h3>9.14.1. Int a, Int b: Range<a class="headerlink" href="#int-a-int-b-range" title="Permalink to this headline">¶</a></h3>
+<p>Returns a list containing the integers over the range <tt class="docutils literal"><span class="pre">[a,</span> <span class="pre">b)</span></tt>. Like Python, it is inclusive of <tt class="docutils literal"><span class="pre">a</span></tt> but not of <tt class="docutils literal"><span class="pre">b</span></tt></p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+r5T
+==================================================
+Pprint("\n",Prange(5,T))
+==================================================
+[5, 6, 7, 8, 9]</pre>
+</div>
+</div>
+<div class="section" id="str-a-int-b-string-processing">
+<h3>9.14.2. Str a, Int b: String Processing<a class="headerlink" href="#str-a-int-b-string-processing" title="Permalink to this headline">¶</a></h3>
+<p>Pyth&#8217;s Range function contains a lot of string processing functions. It processes the input string <tt class="docutils literal"><span class="pre">a</span></tt> in various ways depending on the option provided by integer <tt class="docutils literal"><span class="pre">b</span></tt>.</p>
+<div class="section" id="option-0-lowercase">
+<h4>9.14.2.1. Option 0: Lowercase<a class="headerlink" href="#option-0-lowercase" title="Permalink to this headline">¶</a></h4>
+<p>Returns the string with all letters lower-cased. Uses <tt class="docutils literal"><span class="pre">str.lower()</span></tt> from Python.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+r"HEEElllloooooooBYE"Z
+==================================================
+Pprint("\n",Prange("HEEElllloooooooBYE",Z))
+==================================================
+heeellllooooooobye</pre>
+</div>
+</div>
+<div class="section" id="option-1-uppercase">
+<h4>9.14.2.2. Option 1: Uppercase<a class="headerlink" href="#option-1-uppercase" title="Permalink to this headline">¶</a></h4>
+<p>Returns the string with all letters upper-cased. Uses <tt class="docutils literal"><span class="pre">str.upper()</span></tt> from Python.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+r"HEEElllloooooooBYE"1
+==================================================
+Pprint("\n",Prange("HEEElllloooooooBYE",1))
+==================================================
+HEEELLLLOOOOOOOBYE</pre>
+</div>
+</div>
+<div class="section" id="option-2-swapcase">
+<h4>9.14.2.3. Option 2: Swapcase<a class="headerlink" href="#option-2-swapcase" title="Permalink to this headline">¶</a></h4>
+<p>Returns the string with all the cases switched (i.e. all upper-cased become lower-cased and vice versa). Uses <tt class="docutils literal"><span class="pre">str.swapcase()</span></tt> from Python.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+r"HEEElllloooooooBYE"2
+==================================================
+Pprint("\n",Prange("HEEElllloooooooBYE",2))
+==================================================
+heeeLLLLOOOOOOObye</pre>
+</div>
+</div>
+<div class="section" id="option-3-title-case">
+<h4>9.14.2.4. Option 3: Title Case<a class="headerlink" href="#option-3-title-case" title="Permalink to this headline">¶</a></h4>
+<p>Splits the string up by all occurrences of non-alphabetical characters and capitalizes the first letter of all tokens. Internally it is <tt class="docutils literal"><span class="pre">str.title()</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+r"the philosopher's stone"3
+==================================================
+Pprint("\n",Prange("the philosopher's stone",3))
+==================================================
+The Philosopher'S Stone</pre>
+</div>
+</div>
+<div class="section" id="option-4-capitalize">
+<h4>9.14.2.5. Option 4: Capitalize:<a class="headerlink" href="#option-4-capitalize" title="Permalink to this headline">¶</a></h4>
+<p>Returns the string so that the first letter of the string is capitalized and all others are lower-cased. Uses <tt class="docutils literal"><span class="pre">str.capitalize()</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+r"the Philosopher's stone"4
+==================================================
+Pprint("\n",Prange("the Philosopher's stone",4))
+==================================================
+The philosopher's stone</pre>
+</div>
+</div>
+<div class="section" id="option-5-capwords">
+<h4>9.14.2.6. Option 5: Capwords<a class="headerlink" href="#option-5-capwords" title="Permalink to this headline">¶</a></h4>
+<p>This is almost the same as Option # 3 in that it tokenizes and capitalizes the first letter of each token in the string. However, it does not capitalize by all non-alphabetical but only by spaces. Uses the <tt class="docutils literal"><span class="pre">capwords()</span></tt> function from the <tt class="docutils literal"><span class="pre">string`</span></tt> module.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+r"the philosopher's stone"5
+==================================================
+Pprint("\n",Prange("the philosopher's stone",5))
+==================================================
+The Philosopher's Stone</pre>
+</div>
+</div>
+<div class="section" id="option-6-strip">
+<h4>9.14.2.7. Option 6: Strip<a class="headerlink" href="#option-6-strip" title="Permalink to this headline">¶</a></h4>
+<p>This removes all whitespace from the beginning and end of the string. Note that it leaves all whitespace in the middle of the string untouched. Uses <tt class="docutils literal"><span class="pre">str.strip()</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
++r"          the philosopher's stone       "5G
+==================================================
+Pprint("\n",plus(Prange("          the philosopher's stone       ",5),G))
+==================================================
+The Philosopher's Stoneabcdefghijklmnopqrstuvwxyz</pre>
+</div>
+</div>
+<div class="section" id="option-7-evaluate-tokens">
+<h4>9.14.2.8. Option 7: Evaluate Tokens<a class="headerlink" href="#option-7-evaluate-tokens" title="Permalink to this headline">¶</a></h4>
+<p>This tokenizes the string by whitespace, then evaluates each token into a Python object.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+sr"1 2 3 4 5 6 7 8 9 10"7
+==================================================
+Pprint("\n",Psum(Prange("1 2 3 4 5 6 7 8 9 10",7)))
+==================================================
+55</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="s-sum">
+<h2>9.15. &#8220;s&#8221; - Sum<a class="headerlink" href="#s-sum" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 1</strong></p>
+<div class="section" id="seq-a-sum">
+<h3>9.15.1. Seq a: Sum<a class="headerlink" href="#seq-a-sum" title="Permalink to this headline">¶</a></h3>
+<p>This sums the numbers in the sequence. The base case for an empty list is <tt class="docutils literal"><span class="pre">0</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+sUT
+==================================================
+Pprint("\n",Psum(urange(T)))
+==================================================
+45</pre>
+</div>
+</div>
+<div class="section" id="str-a-int">
+<h3>9.15.2. Str a: Int<a class="headerlink" href="#str-a-int" title="Permalink to this headline">¶</a></h3>
+<p>This converts string <tt class="docutils literal"><span class="pre">a</span></tt> into an integer. Uses Python&#8217;s <tt class="docutils literal"><span class="pre">int()</span></tt> built-in.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+s"123
+==================================================
+Pprint("\n",Psum("123"))
+==================================================
+123</pre>
+</div>
+</div>
+</div>
+<div class="section" id="t-tail">
+<h2>9.16. &#8220;t&#8221; - Tail<a class="headerlink" href="#t-tail" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 1</strong></p>
+<div class="section" id="seq-a-tail">
+<h3>9.16.1. Seq a: Tail<a class="headerlink" href="#seq-a-tail" title="Permalink to this headline">¶</a></h3>
+<p>Returns all but the first element of the sequence. Equivelant to the slice <tt class="docutils literal"><span class="pre">a[1:]</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+tG
+==================================================
+Pprint("\n",tail(G))
+==================================================
+bcdefghijklmnopqrstuvwxyz</pre>
+</div>
+</div>
+<div class="section" id="num-a-decrement">
+<h3>9.16.2. Num a: Decrement<a class="headerlink" href="#num-a-decrement" title="Permalink to this headline">¶</a></h3>
+<p>Returns <tt class="docutils literal"><span class="pre">a-1</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+tT
+==================================================
+Pprint("\n",tail(T))
+==================================================
+9</pre>
+</div>
+</div>
+</div>
+<div class="section" id="x-index">
+<h2>9.17. &#8220;x&#8221; - Index<a class="headerlink" href="#x-index" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<div class="section" id="seq-a-element-b-index-of">
+<h3>9.17.1. Seq a, Element b: Index Of<a class="headerlink" href="#seq-a-element-b-index-of" title="Permalink to this headline">¶</a></h3>
+<p>Returns the position of the first occurrence of element b within sequence a. Returns <tt class="docutils literal"><span class="pre">-1</span></tt> if it is not found.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+xG\f
+==================================================
+Pprint("\n",index(G,"f"))
+==================================================
+5</pre>
+</div>
+</div>
+<div class="section" id="int-a-int-b-xor">
+<h3>9.18.1. Int a, Int b: XOR<a class="headerlink" href="#int-a-int-b-xor" title="Permalink to this headline">¶</a></h3>
+<p>Computes the <a class="reference external" href="http://en.wikipedia.org/wiki/Bitwise_operation#XOR">bitwise XOR</a> of <tt class="docutils literal"><span class="pre">a</span></tt> and <tt class="docutils literal"><span class="pre">b</span></tt>. Same as Python <tt class="docutils literal"><span class="pre">a^b</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+xT2
+==================================================
+Pprint("\n",index(T,2))
+==================================================
+8</pre>
+</div>
+</div>
+</div>
+<div class="section" id="y-powerset">
+<h2>9.18. &#8220;y&#8221; - Powerset<a class="headerlink" href="#y-powerset" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 1</strong></p>
+<div class="section" id="seq-a-powerset">
+<h3>9.18.1. Seq a: Powerset<a class="headerlink" href="#seq-a-powerset" title="Permalink to this headline">¶</a></h3>
+<p>Returns the <a class="reference external" href="http://en.wikipedia.org/wiki/Power_set">powerset</a> of sequence a. The powerset is the set of all possible sets using the elements of sequence a.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+yU3
+==================================================
+Pprint("\n",subsets(urange(3)))
+==================================================
+[[], [0], [1], [2], [0, 1], [0, 2], [1, 2], [0, 1, 2]]</pre>
+</div>
+</div>
+<div class="section" id="num-a-double">
+<h3>9.18.2. Num a: Double<a class="headerlink" href="#num-a-double" title="Permalink to this headline">¶</a></h3>
+<p>Returns <tt class="docutils literal"><span class="pre">a*2</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+yT
+==================================================
+Pprint("\n",subsets(T))
+==================================================
+20</pre>
+</div>
+</div>
+</div>
+<div class="section" id="s-sorted">
+<h2>9.19. &#8220;S&#8221; - Sorted<a class="headerlink" href="#s-sorted" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 1</strong></p>
+<p>Returns the input, except sorted. The same as python <tt class="docutils literal"><span class="pre">sorted()</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+S"asjdasljls"
+==================================================
+Pprint("\n",Psorted("asjdasljls"))
+==================================================
+aadjjllsss</pre>
+</div>
+</div>
+<div class="section" id="u-unary-range">
+<h2>9.20. &#8220;U&#8221; - Unary Range<a class="headerlink" href="#u-unary-range" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 1</strong></p>
+<div class="section" id="int-a-unary-range">
+<h3>9.20.1. Int a: Unary Range<a class="headerlink" href="#int-a-unary-range" title="Permalink to this headline">¶</a></h3>
+<p>Returns all the integers in the range <tt class="docutils literal"><span class="pre">[0,</span> <span class="pre">a)</span></tt>.It is the same as <tt class="docutils literal"><span class="pre">r</span></tt> with first parameter being <tt class="docutils literal"><span class="pre">0</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+UT
+==================================================
+Pprint("\n",urange(T))
+==================================================
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</pre>
+</div>
+</div>
+<div class="section" id="len-2-tuple-a-splat-range">
+<h3>9.20.2. Len 2 Tuple a: Splat Range<a class="headerlink" href="#len-2-tuple-a-splat-range" title="Permalink to this headline">¶</a></h3>
+<p>This &#8220;splats&#8221; the tuple on to the range function. This means that it does the range <tt class="docutils literal"><span class="pre">[a[0],</span> <span class="pre">a[1])</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+U,5T
+==================================================
+Pprint("\n",urange((5,T)))
+==================================================
+[5, 6, 7, 8, 9]</pre>
+</div>
+</div>
+<div class="section" id="seq-a-len-unary-range">
+<h3>9.20.3. Seq a: Len Unary Range<a class="headerlink" href="#seq-a-len-unary-range" title="Permalink to this headline">¶</a></h3>
+<p>Does the same as normal unary range, except it uses <tt class="docutils literal"><span class="pre">len(a)</span></tt> as the parameter.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+UG
+==================================================
+Pprint("\n",urange(G))
+==================================================
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]</pre>
+</div>
+</div>
+</div>
+<div class="section" id="x-update-mutable">
+<h2>9.21. &#8220;X&#8221; - Update Mutable<a class="headerlink" href="#x-update-mutable" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 3</strong></p>
+<div class="section" id="seq-a-index-b-value-c-update-mutable">
+<h3>9.21.2. Seq a, Index b, Value c: Update Mutable<a class="headerlink" href="#seq-a-index-b-value-c-update-mutable" title="Permalink to this headline">¶</a></h3>
+<p>This updates the mutable sequence (list or dict) by assigning the value at index b to value c. This is equivalent to the Python <tt class="docutils literal"><span class="pre">a[b]=c</span></tt>. This both updates the mutable and returns the updated.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+XUT5Z
+==================================================
+Pprint("\n",assign_at(urange(T),5,Z))
+==================================================
+[0, 1, 2, 3, 4, 0, 6, 7, 8, 9]</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="spec_comp.html" class="btn btn-neutral" title="8. The Language Specification - Comparisons"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Isaacg1.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

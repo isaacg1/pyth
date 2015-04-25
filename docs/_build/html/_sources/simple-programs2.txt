@@ -1,0 +1,9 @@
+4. Some Simple Programs - Part II
+*********************************
+
+aasd
+
+Prime
+=====
+
+A common toy problem given to programmers is the task of finding all the prime numbers under some positive integer ``N``. Writing a solution to this problem and then attempting to golf it will demonstrate many of Pyth's features in a natural way. So let's get started. A prime number is a number whose only factors are one and itself. There are many ways to check if a number is prime or not, involving looping through all numbers less than its square root, but since Pyth is meant to be used for golfing and not algorithmic exercises, we can use one of Pyth's operators, the prime factorization operator.

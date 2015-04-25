@@ -87,11 +87,11 @@ def parse(code, spacing="\n "):
         return replace_parse(active_char, rest_code, spacing)
     # And for general functions
     if active_char in c_to_f:
-        # Check for augmented assignment
-        if not len(rest_code) == 0\
-                and rest_code[0] == "="\
-                and not c_to_f[active_char][1] == 0:
-            return parse(augmented_assignment_parse(active_char, rest_code))
+        # Check for syntactic sugar
+        if not len(rest_code) == 0 and rest_code[0] in syntax_sugar:
+                sugar = syntax_sugar[rest_code[0]]
+                if sugar[-1](c_to_f[active_char][1]):  # Passes arity test
+                    return parse(sugar[0](active_char, rest_code))
         # Just a regular function parse
         return function_parse(active_char, rest_code)
     # General format functions/operators
@@ -132,7 +132,8 @@ def function_parse(active_char, rest_code):
     py_code += ')'
     if active_char in next_c_to_f:
         temp = next_c_to_f[active_char][-1]
-        next_c_to_f[active_char] = [c_to_f[active_char]] + next_c_to_f[active_char][:-1]
+        next_c_to_f[active_char] =\
+            [c_to_f[active_char]] + next_c_to_f[active_char][:-1]
         c_to_f[active_char] = temp
     return py_code, rest_code
 
@@ -210,7 +211,7 @@ def prepend_parse(code):
     def not_escaped(code_part):
         code_part = list(code_part)
         count = 0
-        if code_part and code_part[-1] == '.':
+        if code_part and code_part[-1] == '.' and quot_marks % 2 == 0:
             count = 1
         while code_part and code_part.pop() == '\\':
             count += 1

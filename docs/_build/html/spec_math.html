@@ -1,0 +1,565 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>7. The Language Specification - Arithmetic &mdash; Pyth 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Pyth 1.0 documentation" href="index.html"/>
+        <link rel="next" title="8. The Language Specification - Comparisons" href="spec_comp.html"/>
+        <link rel="prev" title="6. The Language Specification - Control Flow" href="spec_control.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> Pyth</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">1. Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#how-to-start-programming-in-pyth">1.1. How to Start Programming in Pyth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#hello-world">1.2. Hello World!</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="details.html">2. More Details About Pyth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="details.html#pyth-uses-prefix-notation">2.1. Pyth Uses Prefix Notation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="details.html#pyth-has-many-many-operators">2.2. Pyth Has Many, Many Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="details.html#all-operators-in-pyth-have-a-fixed-arity">2.3. All Operators in Pyth Have a Fixed Arity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="details.html#operators-mean-different-things-in-different-contexts">2.4. Operators Mean Different Things in Different Contexts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="details.html#the-pyth-code-is-compiled-to-python-code-then-run">2.5. The Pyth Code is Compiled to Python Code Then Run</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="simple-programs.html">3. Some Simple Programs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simple-programs.html#factorial">3.1. Factorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simple-programs.html#the-first-n-fibonacci-numbers">3.2. The First n Fibonacci numbers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="simple-programs2.html">4. Some Simple Programs - Part II</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simple-programs2.html#prime">Prime</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spec_vars.html">5. The Language Specification - Variables</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#g-the-alphabet">5.1. &#8220;G&#8221; - The Alphabet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#h-empty-dictionary">5.2. &#8220;H&#8221; - Empty Dictionary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#j-auto-assignment-with-copy">5.3. &#8220;J&#8221; - Auto-Assignment With Copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#k-auto-assignment">5.4. &#8220;K&#8221; - Auto-Assignment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#n-double-quote">5.5. &#8220;N&#8221; - Double Quote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#q-evaluated-input">5.6. &#8220;Q&#8221; - Evaluated Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#t-ten">5.7. &#8220;T&#8221; - Ten</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#y-empty-list">5.8. &#8220;Y&#8221; - Empty List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#z-zero">5.9. &#8220;Z&#8221; - Zero</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#b-line-break">5.10. &#8220;b&#8221; - Line Break</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#d-space">5.11. &#8220;d&#8221; - Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#k-empty-string">5.12. &#8220;k&#8221; - Empty String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_vars.html#z-raw-input">5.13. &#8220;z&#8221; - Raw Input</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spec_control.html">6. The Language Specification - Control Flow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#exception-loop">6.1. &#8220;#&#8221; - Exception Loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#close-parenthesis">6.2. &#8221;)&#8221; - Close Parenthesis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#end-statement">6.3. &#8221;;&#8221; - End Statement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#b-break">6.4. &#8220;B&#8221; - Break</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#e-the-else-statement">6.5. &#8220;E&#8221; - The Else Statement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#f-the-for-loop">6.6. &#8220;F&#8221; - The For Loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#i-the-if-statement">6.7. &#8220;I&#8221; - The If Statement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#v-unary-range-loop">6.8. &#8220;V&#8221; - Unary-Range-Loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#w-while-loop">6.9. &#8220;W&#8221; - While Loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_control.html#ternary-operator">6.10. &#8221;?&#8221; - Ternary Operator</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">7. The Language Specification - Arithmetic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#addition">7.1. &#8220;+&#8221; - Addition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multiplication">7.2. &#8220;*&#8221; - Multiplication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subtraction">7.3. &#8220;-&#8221; - Subtraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#division">7.4. &#8220;/&#8221; - Division</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modulus">7.5. &#8220;%&#8221; - Modulus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exponentiation">7.6. &#8220;^&#8221; - Exponentiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unary-negation">7.7. &#8220;_&#8221; - Unary Negation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#addition-augmented-assignment">7.8. &#8220;~&#8221; - Addition Augmented Assignment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logical-and">7.9. &#8220;&amp; - Logical And</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logical-or">7.10. &#8220;|&#8221; - Logical Or</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#p-prime-factorization">7.11. &#8220;P&#8221; - Prime Factorization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spec_comp.html">8. The Language Specification - Comparisons</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spec_comp.html#is-less-than">8.1. &#8220;&lt;&#8221; - Is Less Than</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_comp.html#q-is-equal-to">8.2. &#8220;q&#8221; - Is Equal To</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_comp.html#is-greater-than">8.3. &#8220;&gt;&#8221; - Is Greater Than</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_comp.html#n-not-equal-to">8.4. &#8220;n&#8221; - Not Equal To</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_comp.html#g-is-greater-than-or-equal-to">8.5. &#8220;g&#8221; - Is Greater Than or Equal To</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_comp.html#contains">8.6. &#8220;}&#8221; - Contains</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spec_seq.html">9. The Language Specification - Sequences</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#string-literal">9.1. &#8221; - String Literal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#list-constructor">9.2. &#8220;[&#8221; - List Constructor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#tuple-contructor">9.3. &#8220;(&#8221; - Tuple Contructor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#set-constructor">9.4. &#8220;{&#8221; - Set Constructor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#string-escape">9.5. &#8220;\&#8221; - String Escape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#one-element-list">9.6. &#8220;]&#8221; - One Element List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#couple-constructor">9.7. &#8221;,&#8221; - Couple Constructor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#a-append">9.8. &#8220;a&#8221; - Append</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#c-chop">9.9. &#8220;c&#8221; - Chop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#e-end">9.10. &#8220;e&#8221; - End</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#head">9.11. Head</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_seq.html#j-join">9.12. &#8220;j&#8221; - Join</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Pyth</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>7. The Language Specification - Arithmetic</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/spec_math.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="the-language-specification-arithmetic">
+<h1>7. The Language Specification - Arithmetic<a class="headerlink" href="#the-language-specification-arithmetic" title="Permalink to this headline">¶</a></h1>
+<p>This is the first glimpse in the specification you are getting of multi-use functions. They will be organized as subsections under each section. Each subsection will be labelled by the type of arguments it receives. Here are the possible types of arguments:</p>
+<div class="highlight-python"><pre>Integer: An integer
+Number: An integer or floating point decimal
+String: A string of characters
+List: A list of arbitrary elements
+Set: A Python Set
+Sequence: A list, tuple, or string
+Any: Anything</pre>
+</div>
+<p>The arguments will be abbreviated .</p>
+<div class="section" id="addition">
+<h2>7.1. &#8220;+&#8221; - Addition<a class="headerlink" href="#addition" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<div class="section" id="num-a-num-b-addition">
+<h3>7.1.1. Num a, Num b: Addition<a class="headerlink" href="#num-a-num-b-addition" title="Permalink to this headline">¶</a></h3>
+<p>This simply returns the sum of the two numbers.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
++2 2
+==================================================
+Pprint("\n",plus(2,(2)))
+==================================================
+4</pre>
+</div>
+</div>
+<div class="section" id="seq-a-any-b-concatenation">
+<h3>7.1.2. Seq a, Any b: Concatenation<a class="headerlink" href="#seq-a-any-b-concatenation" title="Permalink to this headline">¶</a></h3>
+<p>If the <tt class="docutils literal"><span class="pre">b</span></tt> is also a sequence of the same type as <tt class="docutils literal"><span class="pre">a</span></tt>, it returns the concatenation of the two sequences.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
++"Hello"" World!
+==================================================
+Pprint("\n",plus("Hello"," World!"))
+==================================================
+Hello World!</pre>
+</div>
+<p>But if <tt class="docutils literal"><span class="pre">b</span></tt> is not a sequence of the same type as <tt class="docutils literal"><span class="pre">a</span></tt>, a one-element sequence of the same type as <tt class="docutils literal"><span class="pre">a</span></tt> containing only <tt class="docutils literal"><span class="pre">b</span></tt> will be concatenated to a.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
++[1 2 3)4
+==================================================
+Pprint("\n",plus(Plist(1,(2),(3)),4))
+==================================================
+[1, 2, 3, 4]</pre>
+</div>
+</div>
+</div>
+<div class="section" id="multiplication">
+<h2>7.2. &#8220;*&#8221; - Multiplication<a class="headerlink" href="#multiplication" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<div class="section" id="num-a-num-b-multiplication">
+<h3>7.2.1. Num a, Num b: Multiplication<a class="headerlink" href="#num-a-num-b-multiplication" title="Permalink to this headline">¶</a></h3>
+<p>This returns the product of the two numbers.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+*2T
+==================================================
+Pprint("\n",times(2,T))
+==================================================
+20</pre>
+</div>
+</div>
+<div class="section" id="seq-a-int-b-repetition">
+<h3>7.2.2. Seq a, Int b: Repetition<a class="headerlink" href="#seq-a-int-b-repetition" title="Permalink to this headline">¶</a></h3>
+<p>This function repeats sequence <tt class="docutils literal"><span class="pre">a</span></tt>, <tt class="docutils literal"><span class="pre">b</span></tt> times. This is the same as repetition in Python.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+*"abc"5
+==================================================
+Pprint("\n",times("abc",5))
+==================================================
+abcabcabcabcabc</pre>
+</div>
+</div>
+<div class="section" id="seq-a-seq-b-cartesian-product">
+<h3>7.2.3. Seq a, Seq b: Cartesian Product<a class="headerlink" href="#seq-a-seq-b-cartesian-product" title="Permalink to this headline">¶</a></h3>
+<p>Calculates the <a class="reference external" href="http://en.wikipedia.org/wiki/Cartesian_product">Cartesian Product</a> of the two sequences. They have to be of the same type. This means that it generates all the possible ways that you can select one value from both sequences.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+*"abc" "123"
+==================================================
+Pprint("\n",times("abc",("123")))
+==================================================
+[('a', '1'), ('a', '2'), ('a', '3'), ('b', '1'), ('b', '2'), ('b', '3'), ('c', '1'), ('c', '2'), ('c', '3')]</pre>
+</div>
+</div>
+</div>
+<div class="section" id="subtraction">
+<h2>7.3. &#8220;-&#8221; - Subtraction<a class="headerlink" href="#subtraction" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<div class="section" id="num-a-num-b-subtraction">
+<h3>7.3.1. Num a, Num b: Subtraction<a class="headerlink" href="#num-a-num-b-subtraction" title="Permalink to this headline">¶</a></h3>
+<p>Computes the difference of <tt class="docutils literal"><span class="pre">a</span></tt> from <tt class="docutils literal"><span class="pre">b</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+-T4
+==================================================
+Pprint("\n",minus(T,4))
+==================================================
+6</pre>
+</div>
+</div>
+<div class="section" id="set-a-set-b-setwise-difference">
+<h3>7.3.2. Set a, Set b: Setwise Difference<a class="headerlink" href="#set-a-set-b-setwise-difference" title="Permalink to this headline">¶</a></h3>
+<p>Computes the setwise difference of <tt class="docutils literal"><span class="pre">a</span></tt> from <tt class="docutils literal"><span class="pre">b</span></tt>. This means it returns a set with the elements in set <tt class="docutils literal"><span class="pre">a</span></tt> that are not in set <tt class="docutils literal"><span class="pre">b</span></tt>. It preserves the order of set <tt class="docutils literal"><span class="pre">a</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+-{[1 2 3){2
+==================================================
+Pprint("\n",minus(Pset(Plist(1,(2),(3))),Pset(2)))
+==================================================
+{1, 3}</pre>
+</div>
+</div>
+</div>
+<div class="section" id="division">
+<h2>7.4. &#8220;/&#8221; - Division<a class="headerlink" href="#division" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<div class="section" id="num-a-num-b-division">
+<h3>7.4.1. Num a, Num b: Division<a class="headerlink" href="#num-a-num-b-division" title="Permalink to this headline">¶</a></h3>
+<p>Returns <tt class="docutils literal"><span class="pre">a</span></tt> divided by <tt class="docutils literal"><span class="pre">b</span></tt>. Uses integer division which means it truncates the fractional part of the answer.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+/T4
+==================================================
+Pprint("\n",div(T,4))
+==================================================
+2</pre>
+</div>
+</div>
+<div class="section" id="seq-a-any-b-count-occurrences">
+<h3>7.4.2. Seq a, any b: Count Occurrences<a class="headerlink" href="#seq-a-any-b-count-occurrences" title="Permalink to this headline">¶</a></h3>
+<p>Returns the number of times element b appeared in sequence a.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+/[1 2 3 2 5)2
+==================================================
+Pprint("\n",div(Plist(1,(2),(3),(2),(5)),2))
+==================================================
+2</pre>
+</div>
+</div>
+</div>
+<div class="section" id="modulus">
+<h2>7.5. &#8220;%&#8221; - Modulus<a class="headerlink" href="#modulus" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<div class="section" id="num-a-num-b-modulus">
+<h3>7.5.1. Num a, Num b: Modulus<a class="headerlink" href="#num-a-num-b-modulus" title="Permalink to this headline">¶</a></h3>
+<p>Returns the remainder when <tt class="docutils literal"><span class="pre">a</span></tt> is integer divided by <tt class="docutils literal"><span class="pre">b</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+%T3
+==================================================
+Pprint("\n",mod(T,3))
+==================================================
+1</pre>
+</div>
+</div>
+<div class="section" id="string-a-any-b-string-formatting">
+<h3>7.5.2. String a, Any b: String Formatting<a class="headerlink" href="#string-a-any-b-string-formatting" title="Permalink to this headline">¶</a></h3>
+<p>This applies Python&#8217;s string formatting that normally occurs with <tt class="docutils literal"><span class="pre">%</span></tt>. Requires <tt class="docutils literal"><span class="pre">%s</span></tt> or any of th other within the string,, just like in Python.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+%"a: %d"2
+==================================================
+Pprint("\n",mod("a: %d",2))
+==================================================
+a: 2</pre>
+</div>
+</div>
+<div class="section" id="int-a-seq-b-extended-slicing">
+<h3>7.5.3. Int a, Seq b: Extended Slicing<a class="headerlink" href="#int-a-seq-b-extended-slicing" title="Permalink to this headline">¶</a></h3>
+<p>Pyth&#8217;s slicing operator does not support extended slicing, so this operator has the effect of doing <tt class="docutils literal"><span class="pre">b[::a]</span></tt>. This means that it will pick every <tt class="docutils literal"><span class="pre">a</span></tt> elements of <tt class="docutils literal"><span class="pre">b</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+%2"Hello
+==================================================
+Pprint("\n",mod(2,"Hello"))
+==================================================
+Hlo</pre>
+</div>
+</div>
+</div>
+<div class="section" id="exponentiation">
+<h2>7.6. &#8220;^&#8221; - Exponentiation<a class="headerlink" href="#exponentiation" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<div class="section" id="num-a-num-b-exponentiation">
+<h3>7.6.1. Num a, Num b: Exponentiation<a class="headerlink" href="#num-a-num-b-exponentiation" title="Permalink to this headline">¶</a></h3>
+<p>This raises the <tt class="docutils literal"><span class="pre">a</span></tt> to the power of <tt class="docutils literal"><span class="pre">b</span></tt>. Like Python, it allows rational exponents.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+^4 2
+==================================================
+Pprint("\n",Ppow(4,(2)))
+==================================================
+16</pre>
+</div>
+</div>
+<div class="section" id="seq-a-int-b-cartesian-product-with-repeats">
+<h3>7.6.2. Seq a, Int b: Cartesian Product With Repeats<a class="headerlink" href="#seq-a-int-b-cartesian-product-with-repeats" title="Permalink to this headline">¶</a></h3>
+<p>Finds the Cartesian Product of <tt class="docutils literal"><span class="pre">b</span></tt> copies of sequence <tt class="docutils literal"><span class="pre">a</span></tt>. This means that it finds all possible sequences with length <tt class="docutils literal"><span class="pre">b</span></tt> that contain only elements from sequence <tt class="docutils literal"><span class="pre">a</span></tt>.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+^"abc"3
+==================================================
+Pprint("\n",Ppow("abc",3))
+==================================================
+['aaa', 'aab', 'aac', 'aba', 'abb', 'abc', 'aca', 'acb', 'acc', 'baa', 'bab', 'bac', 'bba', 'bbb', 'bbc', 'bca', 'bcb', 'bcc', 'caa', 'cab', 'cac', 'cba', 'cbb', 'cbc', 'cca', 'ccb', 'ccc']</pre>
+</div>
+</div>
+</div>
+<div class="section" id="unary-negation">
+<h2>7.7. &#8220;_&#8221; - Unary Negation<a class="headerlink" href="#unary-negation" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 1</strong></p>
+<div class="section" id="num-a-negation">
+<h3>7.7.1. Num a: Negation<a class="headerlink" href="#num-a-negation" title="Permalink to this headline">¶</a></h3>
+<p>Returns the additive inverse of <tt class="docutils literal"><span class="pre">a</span></tt> or <tt class="docutils literal"><span class="pre">-a</span></tt>. There are no negative number literals in Pyth, this is how you define negatives in Pyth.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+_25
+==================================================
+Pprint("\n",neg(25))
+==================================================
+-25</pre>
+</div>
+</div>
+<div class="section" id="seq-a-reversal">
+<h3>7.7.2. Seq a: Reversal<a class="headerlink" href="#seq-a-reversal" title="Permalink to this headline">¶</a></h3>
+<p>Returns <tt class="docutils literal"><span class="pre">a</span></tt> in reversed order. This is equivalent to the alien smiley face, <tt class="docutils literal"><span class="pre">[::-1]</span></tt> in Python.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+_"abc"
+==================================================
+Pprint("\n",neg("abc"))
+==================================================
+cba</pre>
+</div>
+</div>
+</div>
+<div class="section" id="addition-augmented-assignment">
+<h2>7.8. &#8220;~&#8221; - Addition Augmented Assignment<a class="headerlink" href="#addition-augmented-assignment" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<p>This is the only augmented assignment operator Pyth has. It applies the <tt class="docutils literal"><span class="pre">+</span></tt> operator to the two elements and then sets the first one to the the result. This is analogous to <tt class="docutils literal"><span class="pre">+=</span></tt> in Python.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+~Y]5Y
+==================================================
+Y+=[5]
+Pprint("\n",Y)
+==================================================
+[5]</pre>
+</div>
+</div>
+<div class="section" id="logical-and">
+<h2>7.9. &#8220;&amp; - Logical And<a class="headerlink" href="#logical-and" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<p>This the logical <tt class="docutils literal"><span class="pre">and</span></tt> operator. It returns a truthy value of the type if both of the values are truthy and a falsey otherwise otherwise. The specifics of which value is returned is the same as Python.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+&amp;Z1&amp;1T
+==================================================
+Pprint("\n",(Z and 1))
+Pprint("\n",(1 and T))
+==================================================
+0
+10</pre>
+</div>
+</div>
+<div class="section" id="logical-or">
+<h2>7.10. &#8220;|&#8221; - Logical Or<a class="headerlink" href="#logical-or" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 2</strong></p>
+<p>This is the logical <tt class="docutils literal"><span class="pre">or</span></tt> operator. It returns a truthy value of the type if either or them are truthy and a falsey value if both are falsey. Like the <tt class="docutils literal"><span class="pre">&amp;</span></tt> operator, the specifics of the returned values are the same as in Python.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+|Z1|ZZ
+==================================================
+Pprint("\n",(Z or 1))
+Pprint("\n",(Z or Z))
+==================================================
+1
+0</pre>
+</div>
+</div>
+<div class="section" id="p-prime-factorization">
+<h2>7.11. &#8220;P&#8221; - Prime Factorization<a class="headerlink" href="#p-prime-factorization" title="Permalink to this headline">¶</a></h2>
+<p><strong>Arity: 1</strong></p>
+<div class="section" id="int-a-prime-factorization">
+<h3>7.11.1. Int a: Prime Factorization<a class="headerlink" href="#int-a-prime-factorization" title="Permalink to this headline">¶</a></h3>
+<p>Returns the <a class="reference external" href="http://en.wikipedia.org/wiki/Integer_factorization">prime factorization of</a> <tt class="docutils literal"><span class="pre">a</span></tt>. Returns it as a list and multiplicities are just repeated.</p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+P12
+==================================================
+Pprint("\n",primes_upper(12))
+==================================================
+[2, 2, 3]</pre>
+</div>
+</div>
+<div class="section" id="seq-a-all-but-last">
+<h3>7.11.2. Seq a: All But Last<a class="headerlink" href="#seq-a-all-but-last" title="Permalink to this headline">¶</a></h3>
+<p>Returns all but the last element of <tt class="docutils literal"><span class="pre">a</span></tt>. This is equivalent to the Python <tt class="docutils literal"><span class="pre">[:-1]</span></tt></p>
+<p>Ex:</p>
+<div class="highlight-python"><pre>==================================================
+P"abc"
+==================================================
+Pprint("\n",primes_upper("abc"))
+==================================================
+ab</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="spec_comp.html" class="btn btn-neutral float-right" title="8. The Language Specification - Comparisons"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="spec_control.html" class="btn btn-neutral" title="6. The Language Specification - Control Flow"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Isaacg1.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
