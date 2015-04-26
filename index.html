@@ -59,6 +59,9 @@
 				max-height: 200px;
 				overflow: auto;
 			}
+			#code, #input, #output {
+				font-family: monospace;
+			}
 		</style>
 	</head>
 	<body>
@@ -130,7 +133,7 @@
 
 				$('#code').keyup(function(e) {
 					$('#length').text(e.target.value.length);
-				});
+				}).keyup();
 
 				var docs_cols = ['Char', 'Arity', 'Starts', 'Mnemonic', 'Details'];
 				var search_type;
