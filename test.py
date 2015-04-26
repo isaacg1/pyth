@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import pyth
-import subprocess
 
 # The idea here is to test each type as input to each function.
 # num, float, str, list, tuple, set, dict
@@ -108,7 +107,7 @@ test_cases = [
     ('^.j1_1 2', '-2j\n'),
     ('_.j1_1', '(-1+1j)\n'),
     ('c.j2_6 2', '(1-3j)\n'),
-    ('@.jZ2 2', '(1.0000000000000002+1j)\n'),
+    ('@.jZ2 2', '(1.0000000000000002+1.0000000000000002j)\n'),
     ('%.j5 3 2', '(1+1j)\n'),
     ('.a.j1 1', '1.4142135623730951\n'),
     ('C.j', '-1j\n'),
