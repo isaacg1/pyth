@@ -160,6 +160,7 @@ z  0 N                   Variable. Autoinitializing to input.
 ._ 1 N sign              Use on num. 1 if positive, -1 if negative, 0 otherwise.
 .: 2 N substring         On :<seq><int> return all substrings of <seq> of length <int>. Cast <int> to range,
                          cast <col> by length. Float 2nd arg gives that ratio of the length of the seq substrings.
+                         All possible substrings, if 2nd arg is omitted.
 
 
 Various string operations when calling rab with a str and b int:
