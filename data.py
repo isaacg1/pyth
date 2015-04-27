@@ -1,4 +1,4 @@
-no_init_paren = ('f', 'm', 'o', 'u', '.e', '.m', '.M')
+no_init_paren = ('f', 'm', 'o', 'u', '.e', '.m', '.M', '.U')
 end_statement = ('B', 'R', '.u')
 variables = 'bdGHkNTYZ'
 
@@ -145,6 +145,7 @@ c_to_f = {
     '.S': ('shuffle', 1),
     '.s': ('stripchars', 2),
     '.t': ('trig', 2),
+    '.U': ('reduce2(lambda b, Z:', 2),
     '.w': ('Pwrite', 2),
     '.x': ('product', 1),
     '.z': ('all_input', 0),
@@ -173,7 +174,7 @@ replacements = {
 
 syntax_sugar = {
     '=': (lambda c, r: r[:2] + c+r[1:], lambda n: n),
-    'F': (lambda c, r: "u" + c + c_to_f['u'][0][14:18:3] + ".n4 "+r[1:],
+    'F': (lambda c, r: ".U" + c + c_to_f['u'][0][14:18:3] + r[1:],
           lambda n: n == 2)
 }
 
@@ -190,6 +191,7 @@ next_c_to_f = {
     'o': [('order(lambda Z:', 2), ],
     'u': [('reduce(lambda N, T:', 3), ],
     '.e': [('Penumerate(lambda b, Z:', 2), ],
+    '.U': [('reduce2(lambda k, Y:', 2), ],
     }
 
 # For autoinitializers. One shot, not rotating.

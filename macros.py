@@ -668,12 +668,6 @@ def reduce(a, b, c=None):
         return acc
 
     # Reduce
-
-    #Check for special fold case
-    if b == float('inf'):
-        c = num_to_range(c)
-        b, c = c[1:], c[0]
-
     if is_seq(b) or isinstance(b, int):
         if isinstance(b, int):
             seq = range(b)
@@ -1039,6 +1033,28 @@ def trig(a, b):
 
     return funcs[b](a)
 environment['trig'] = trig
+
+
+# .U. lambda, seq
+def reduce2(a, b):
+    if is_seq(b) or isinstance(b, int):
+        if isinstance(b, int):
+            whole_seq = range(b)
+        else:
+            whole_seq = b
+        if len(whole_seq) == 0:
+            raise BadTypeCombinationError(".U", a, b)
+
+        acc = whole_seq[0]
+        seq = whole_seq[1:]
+
+        while len(seq) > 0:
+            h = seq[0]
+            acc = a(acc, h)
+            seq = seq[1:]
+        return acc
+    raise BadTypeCombinationError(".U", a, b)
+environment['reduce2'] = reduce2
 
 
 # .w. write

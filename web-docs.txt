@@ -114,6 +114,7 @@ z 0 N z Variable. Autoinitializing to input.
 .s 2 N strip-chars a.strip(b)
 .S 1 N shuffle .S<col> random.shuffle(<col>). str out if str in, otherwise list out. .S(<int>) = .S(range(<int>))
 .t 2 N trigonometry Collection of trigonometric functions.
+.U 2 N reduce2           The 2 input reduce, uses first value of sequence as initial value and the rest as sequence.
 .u 1 N unpack-close Shorthand for .*_).
 .x 1 N multiply product, over a non-str seq. Uses Pyth *. With num is random.seed.
 .z 0 N all-input Take all of stdin, return as list of lines.
