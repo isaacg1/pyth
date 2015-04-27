@@ -1,6 +1,6 @@
 no_init_paren = ('f', 'm', 'o', 'u', '.e', '.m', '.M', '.U')
 end_statement = ('B', 'R', '.u')
-variables = 'bdGHkNTYZ'
+variables = 'bdGHkNQTYzZ'
 
 # Variables cheat sheet:
 # b = "\n"
@@ -53,11 +53,9 @@ c_to_i = {
     '?':  (('(', ' if ', ' else ', ')'), 3),
     ',':  (('(', ',', ')'), 2),
     'B':  (('break', ), 0),
-    'J':  (('J=copy(', ')'), 1),
-    'K':  (('K=', ''), 1),
+    'J':  (('assign("J",', ')'), 1),
+    'K':  (('assign("K",', ''), 1),
     'R':  (('return ', ''), 1),
-    'Q':  (('Q=copy(', ')'), 1),
-    'z':  (('z=copy(', ')'), 1),
     '.*': (('*(', ')'), 1),
     '.u': (('*(', ')'), 1),
     '.)': (('', '.pop()'), 1),
@@ -198,12 +196,10 @@ next_c_to_f = {
 next_c_to_i = {
     'J': (('J'), 0),
     'K': (('K'), 0),
-    'Q': (('Q'), 0),
-    'z': (('z'), 0),
     }
 
 # Prependers.
 prepend = {
-    'Q': "Qvw",
-    'z': "zw",
+    'Q': "=Qvw",
+    'z': "=zw",
     }
