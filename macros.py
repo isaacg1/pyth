@@ -59,10 +59,16 @@ def itertools_norm(func, a, *args, **kwargs):
     return [group for group in func(a, *args, **kwargs)]
 
 
+# The environment in which the generated Python code is run.
+# All functions and all variables must be added to it.
+environment = {}
+
+
 # Function library. See data for letter -> function correspondences.
 # !. All.
 def Pnot(a):
     return not a
+environment['Pnot'] = Pnot
 
 
 # @.
