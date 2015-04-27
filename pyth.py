@@ -352,6 +352,7 @@ def preprocess_multiline(code_lines):
 
 def run_code(code, inp):
     global safe_mode
+    global environment
 
     old_stdout, old_stdin = sys.stdout, sys.stdin
 
@@ -359,14 +360,17 @@ def run_code(code, inp):
     sys.stdin = io.StringIO(inp)
 
     error = None
-
+    saved_env = c.deepcopy(environment)
     try:
         safe_mode = False
-        exec(general_parse(code))
+        exec(general_parse(code), environment)
     except SystemExit:
         pass
     except Exception as e:
         error = e
+
+    for key in saved_env:
+        environment[key] = saved_env[key]
 
     result = sys.stdout.getvalue()
 
