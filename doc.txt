@@ -1,4 +1,4 @@
-Pyth documentation 4.0
+Pyth documentation 4.1
 
 Each character is a separate token, except for numbers, 
 strings, and python literals. Written in Polish notation,
@@ -39,8 +39,8 @@ $  X N super-quote       Begins and ends Python literals. A Python literal is pl
                          :<idx><col><any> is indexed substitution. For every index in b an element is taken from c (cycling when exhausted), and assigned to a at that index.
 ;  X N end-line          End everything. Infinite ). Best used in statements.
 <  2 N less-than         Less than, subset, slice. < seq num is seq[:num]. Compare by magnitude on complex.
-=  2 Y defined as        Assignment, using deep copy. Cannot be strung; e.g. while b=d=1 works in Python, ==bd1 fails in Pyth.
-                         Augmented assignment. T*=2 -> T=20.
+=  2 Y assign            Assignment, using deep copy. Returns the assignment value. +2=Z7 -> Z=7, returns 9.
+                         Augmented assignment. *=T2 -> T=20.
 >  2 N greater-than      Greater than, superset, slice. > seq num is seq[num:]. Compare by magnitude on complex.
 ?  3 N ternary           Python ternary. ?abc => a if b else c
 @  2 N lookup            Lookup from str, list or dict. Modulo wrapping on list, str. On seq, seq, intersection.
@@ -161,6 +161,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .: 2 N substring         On :<seq><int> return all substrings of <seq> of length <int>. Cast <int> to range,
                          cast <col> by length. Float 2nd arg gives that ratio of the length of the seq substrings.
                          All possible substrings, if 2nd arg is omitted.
+.= 2 Y assign            Exactly the same as =, except no augmented assignment. Thus, *.=T2 3 sets T to 2, then multiplies the result by 3.
 
 
 Various string operations when calling rab with a str and b int:

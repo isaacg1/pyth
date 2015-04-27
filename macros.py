@@ -73,6 +73,15 @@ environment = {}
 
 
 # Function library. See data for letter -> function correspondences.
+# =. N/A, .=
+def assign(a, b):
+    if isinstance(a, str) and len(a) == 1:
+        environment[a] = copy.deepcopy(b)
+        return b
+    raise BadTypeCombinationError("=", a, b)
+environment['assign'] = assign
+
+
 # !. All.
 def Pnot(a):
     return not a
@@ -100,6 +109,7 @@ def lookup(a, b):
         else:
             return list(intersection)
     raise BadTypeCombinationError("@", a, b)
+environment['lookup'] = lookup
 
 
 # %. int, str.
@@ -111,6 +121,7 @@ def mod(a, b):
     if is_num(a) and is_num(b) or isinstance(a, str):
         return a % b
     raise BadTypeCombinationError("%", a, b)
+environment['mod'] = mod
 
 
 # ^. int, str, list.
@@ -121,6 +132,7 @@ def Ppow(a, b):
         return itertools_norm(itertools.product, a, repeat=b)
 
     raise BadTypeCombinationError("^", a, b)
+environment['Ppow'] = Ppow
 
 
 # *. int, str, list.
@@ -132,11 +144,13 @@ def times(a, b):
             is_seq(a) and isinstance(b, int):
         return a*b
     raise BadTypeCombinationError("*", a, b)
+environment['times'] = times
 
 
 # (. All types
 def Ptuple(*a):
     return a
+environment['Ptuple'] = Ptuple
 
 
 # -. int, set.
@@ -172,6 +186,7 @@ def minus(a, b):
         if isinstance(a, tuple):
             return tuple(difference)
     raise BadTypeCombinationError("-", a, b)
+environment['minus'] = minus
 
 
 # '. str.
@@ -180,6 +195,7 @@ def read_file(a):
         b = [lin[:-1] if lin[-1] == '\n' else lin for lin in (open(a))]
         return b
     raise BadTypeCombinationError("'", a)
+environment['read_file'] = read_file
 
 
 # _. All.
@@ -191,6 +207,7 @@ def neg(a):
     if isinstance(a, dict):
         return {value: key for key, value in a.items()}
     raise BadTypeCombinationError("_", a)
+environment['neg'] = neg
 
 
 # {. All.
@@ -203,6 +220,7 @@ def Pset(a=set()):
         except TypeError as e:
             return set(map(tuple, a))
     raise BadTypeCombinationError("{", a)
+environment['Pset'] = Pset
 
 
 # +. All.
@@ -226,15 +244,13 @@ def plus(a, b):
             isinstance(a, str) and isinstance(b, str):
         return a+b
     raise BadTypeCombinationError("+", a, b)
-
-
-# =. All.
-copy = copy.deepcopy
+environment['plus'] = plus
 
 
 # [. All.
 def Plist(*a):
     return list(a)
+environment['Plist'] = Plist
 
 
 # :. list.
@@ -274,6 +290,7 @@ def at_slice(a, b, c):
         return indexable
 
     raise BadTypeCombinationError(":", a, b, c)
+environment['at_slice'] = at_slice
 
 
 # <. All.
@@ -290,6 +307,7 @@ def lt(a, b):
             isinstance(a, str) and isinstance(b, str):
         return a < b
     raise BadTypeCombinationError("<", a, b)
+environment['lt'] = lt
 
 
 # >. All.
@@ -306,6 +324,7 @@ def gt(a, b):
             isinstance(a, str) and isinstance(b, str):
         return a > b
     raise BadTypeCombinationError(">", a, b)
+environment['gt'] = gt
 
 
 # /. All.
@@ -315,6 +334,7 @@ def div(a, b):
     if is_seq(a):
         return a.count(b)
     raise BadTypeCombinationError("/", a, b)
+environment['div'] = div
 
 
 # a. List, Set.
@@ -330,8 +350,9 @@ def append(a, b):
             a.add(tuple(b))
             return a
     raise BadTypeCombinationError("a", a, b)
+environment['append'] = append
 
-b = "\n"
+environment['b'] = "\n"
 
 
 # c. All
@@ -356,6 +377,7 @@ def chop(a, b=None):
             begin, end = end, end + m + (i + 1 < r)
         return l
     raise BadTypeCombinationError("c", a, b)
+environment['chop'] = chop
 
 
 # C. int, str.
@@ -369,9 +391,10 @@ def Pchr(a):
     if is_col(a):
         return list(zip(*a))
     raise BadTypeCombinationError("C", a)
+environment['Pchr'] = Pchr
 
 
-d = ' '
+environment['d'] = ' '
 
 
 # e. All.
@@ -383,6 +406,7 @@ def end(a):
     if is_seq(a):
         return a[-1]
     raise BadTypeCombinationError("e", a)
+environment['end'] = end
 
 
 # f. single purpose.
@@ -392,7 +416,8 @@ def Pfilter(a, b):
     if is_col(b):
         return list(filter(a, b))
     raise BadTypeCombinationError("f", a, b)
-G = string.ascii_lowercase
+environment['G'] = string.ascii_lowercase
+environment['Pfilter'] = Pfilter
 
 
 # g. All.
@@ -407,7 +432,8 @@ def gte(a, b):
             isinstance(a, str) and isinstance(b, str):
         return a >= b
     raise BadTypeCombinationError("g", a, b)
-H = {}
+environment['gte'] = gte
+environment['H'] = {}
 
 
 # h. int, str, list.
@@ -417,6 +443,7 @@ def head(a):
     if is_seq(a):
         return a[0]
     raise BadTypeCombinationError("h", a)
+environment['head'] = head
 
 
 # i. int, str
@@ -428,6 +455,7 @@ def base_10(a, b):
     if isinstance(a, int) and isinstance(b, int):
         return fractions.gcd(a, b)
     raise BadTypeCombinationError("i", a, b)
+environment['base_10'] = base_10
 
 
 def to_base_ten(arb, base):
@@ -450,6 +478,7 @@ def join(a, b):
     if is_col(b):
         return str(a).join(list(map(lambda N: str(N), b)))
     raise BadTypeCombinationError("j", a, b)
+environment['join'] = join
 
 
 def from_base_ten(arb, base):
@@ -466,15 +495,17 @@ def from_base_ten(arb, base):
         work //= base
     return base_list[::-1]
 
-k = ''
+environment['k'] = ''
 
 
+# l. any
 def Plen(a):
     if is_num(a):
         return math.log(a, 2)
     if is_col(a):
         return len(a)
     raise BadTypeCombinationError("l", a)
+environment['Plen'] = Plen
 
 
 # m. Single purpose.
@@ -484,12 +515,14 @@ def Pmap(a, b):
     if is_col(b):
         return list(map(a, b))
     raise BadTypeCombinationError("m", a, b)
-N = '"'
+environment['Pmap'] = Pmap
+environment['N'] = '"'
 
 
 # n. All.
 def ne(a, b):
     return a != b
+environment['ne'] = ne
 
 
 # O. int, str, list
@@ -501,6 +534,7 @@ def rchoice(a):
     if is_col(a):
         return random.choice(list(a))
     raise BadTypeCombinationError("O", a)
+environment['rchoice'] = rchoice
 
 
 # o. Single purpose.
@@ -511,6 +545,7 @@ def order(a, b):
         else:
             return sorted(b, key=a)
     raise BadTypeCombinationError("o", a, b)
+environment['order'] = order
 
 
 def isprime(num):
@@ -536,6 +571,7 @@ def primes_upper(a):
     if is_seq(a):
         return a[:-1]
     raise BadTypeCombinationError("P", a)
+environment['primes_upper'] = primes_upper
 
 
 # p. All.
@@ -545,11 +581,13 @@ def Pprint(a, b=""):
     else:
         print(b, end=str(a))
     return 0
+environment['Pprint'] = Pprint
 
 
 # q. All.
 def equal(a, b):
     return a == b
+environment['equal'] = equal
 
 
 # r. int, int or str,int.
@@ -577,6 +615,7 @@ def Prange(a, b):
         else:
             return list(range(a, b, -1))
     raise BadTypeCombinationError("r", a, b)
+environment['Prange'] = Prange
 
 
 # s. int, str, list.
@@ -590,15 +629,18 @@ def Psum(a):
     if is_num(a) or isinstance(a, str):
         return int(a)
     raise BadTypeCombinationError("s", a)
+environment['Psum'] = Psum
 
 
+# S. seq
 def Psorted(a):
     if isinstance(a, str):
         return ''.join(sorted(a))
     if is_col(a):
         return sorted(a)
     raise BadTypeCombinationError("S", a)
-T = 10
+environment['Psorted'] = Psorted
+environment['T'] = 10
 
 
 # t. int, str, list.
@@ -608,6 +650,7 @@ def tail(a):
     if is_seq(a):
         return a[1:]
     raise BadTypeCombinationError("t", a)
+environment['tail'] = tail
 
 
 # u. single purpose
@@ -642,6 +685,7 @@ def reduce(a, b, c=None):
             seq = seq[1:]
         return acc
     raise BadTypeCombinationError("u", a, b, c)
+environment['reduce'] = reduce
 
 
 # U. int, str, list.
@@ -651,6 +695,7 @@ def urange(a):
     if is_col(a):
         return list(range(len(a)))
     raise BadTypeCombinationError("U", a)
+environment['urange'] = urange
 
 
 # X.
@@ -695,6 +740,7 @@ def assign_at(a, b, c=None):
             b[a] = c
         return b
     raise BadTypeCombinationError("X", a, b, c)
+environment['assign_at'] = assign_at
 
 
 # x. int, str, list.
@@ -708,6 +754,7 @@ def index(a, b):
         else:
             return -1
     raise BadTypeCombinationError("x", a, b)
+environment['index'] = index
 
 
 # y. string, list.
@@ -735,10 +782,11 @@ def subsets(a):
     if isinstance(a, set):
         return subsets(sorted(list(a)))
     raise BadTypeCombinationError("y", a)
+environment['subsets'] = subsets
 
 
-Y = []
-Z = 0
+environment['Y'] = []
+environment['Z'] = 0
 
 
 def hash_repr(a):
@@ -765,6 +813,7 @@ def hash_repr(a):
 # .h. any
 def Phash(a):
     return int(hashlib.sha256(hash_repr(a).encode("utf-8")).hexdigest(), 16)
+environment['Phash'] = Phash
 
 
 def Phex_multitype(a, func):
@@ -780,16 +829,19 @@ def Phex_multitype(a, func):
 # .H. int/str
 def Phex(a):
     return Phex_multitype(a, ".H")[2:]
+environment['Phex'] = Phex
 
 
 # .B. int/str
 def Pbin(a):
     return bin(int(Phex_multitype(a, ".B"), 16))[2:]
+environment['Pbin'] = Pbin
 
 
 # .O. int/str
 def Poct(a):
     return oct(int(Phex_multitype(a, ".O"), 16))[2:]
+environment['Poct'] = Poct
 
 
 # .c. seq, int
@@ -798,6 +850,7 @@ def combinations(a, b):
         raise BadTypeCombinationError(".c", a, b)
 
     return itertools_norm(itertools.combinations, a, b)
+environment['combinations'] = combinations
 
 
 # .C. iter, int
@@ -806,6 +859,7 @@ def combinations_with_replacement(a, b):
         raise BadTypeCombinationError(".C", a, b)
 
     return itertools_norm(itertools.combinations_with_replacement, a, b)
+environment['combinations_with_replacement'] = combinations_with_replacement
 
 
 # .e. lambda, seq
@@ -814,6 +868,7 @@ def Penumerate(a, b):
         return list(map(lambda arg: a(*arg), enumerate(b)))
 
     raise BadTypeCombinationError(".e", a, b)
+environment['Penumerate'] = Penumerate
 
 
 # .F. format
@@ -824,6 +879,7 @@ def Pformat(a, b):
         return a.format(*b)
 
     return a.format(b)
+environment['Pformat'] = Pformat
 
 
 # .j. int, int
@@ -831,6 +887,7 @@ def Pcomplex(a=0, b=1):
     if not is_num(a) and is_num(b):
         raise BadTypeCombinationError(".j", a, b)
     return a + b*complex(0, 1)
+environment['Pcomplex'] = Pcomplex
 
 
 # .l. num, num
@@ -841,6 +898,7 @@ def log(a, b=math.e):
         return cmath.log(a, b)
 
     return math.log(a, b)
+environment['log'] = log
 
 
 # .m. func, seq or int
@@ -853,6 +911,7 @@ def minimal(a, b):
         raise BadTypeCombinationError(".m", a, b)
     minimum = min(map(a, seq))
     return list(filter(lambda elem: a(elem) == minimum, seq))
+environment['minimal'] = minimal
 
 
 # .M. func, seq or int
@@ -865,6 +924,7 @@ def maximal(a, b):
         raise BadTypeCombinationError(".M", a, b)
     maximum = max(map(a, seq))
     return list(filter(lambda elem: a(elem) == maximum, seq))
+environment['maximal'] = maximal
 
 
 # .n. mathematical constants
@@ -879,6 +939,7 @@ def Pnumbers(a):
                 float("nan")][a]
 
     raise BadTypeCombinationError(".n", a)
+environment['Pnumbers'] = Pnumbers
 
 
 # .p. seq
@@ -886,6 +947,7 @@ def permutations(a):
     if not is_seq(a):
         raise BadTypeCombinationError(".p", a)
     return itertools_norm(itertools.permutations, a, len(a))
+environment['permutations'] = permutations
 
 
 # .P. seq, int
@@ -894,11 +956,13 @@ def permutations2(a, b):
         raise BadTypeCombinationError(".P", a, b)
 
     return itertools_norm(itertools.permutations, a, b)
+environment['permutations2'] = permutations2
 
 
 # .q. N\A
 def Pexit():
     sys.exit(0)
+environment['Pexit'] = Pexit
 
 
 # .Q. N/A
@@ -907,6 +971,7 @@ def eval_all_input():
     def eval_trim_line(line):
         return literal_eval(line.rstrip("\n"))
     return list(map(eval_trim_line, sys.stdin))
+environment['eval_all_input'] = eval_all_input
 
 
 # .r seq, int / col, seq
@@ -926,6 +991,7 @@ def rotate(a, b):
         return list(trans_a)
 
     raise BadTypeCombinationError(".r", a)
+environment['rotate'] = rotate
 
 
 # .s. str, str
@@ -934,6 +1000,7 @@ def stripchars(a, b):
         return a.strip(b)
 
     raise BadTypeCombinationError(".s", a, b)
+environment['stripchars'] = stripchars
 
 
 # .S. seq, int
@@ -955,6 +1022,7 @@ def shuffle(a):
         return tmp_list
 
     raise BadTypeCombinationError('.S', a, b)
+environment['shuffle'] = shuffle
 
 
 # .t. num, int
@@ -969,6 +1037,7 @@ def trig(a, b):
              math.asinh, math.acosh, math.atanh]
 
     return funcs[b](a)
+environment['trig'] = trig
 
 
 # .w. write
@@ -978,6 +1047,7 @@ def Pwrite(a, b="foo.txt"):
     with open(b, 'a') as f:
         f.write(("\n".join(map(str, a)) if is_seq(a) and not isinstance(a, str)
                 else str(a))+"\n")
+environment['Pwrite'] = Pwrite
 
 
 # .x. col
@@ -991,6 +1061,7 @@ def product(a):
         return random.seed(a)
 
     raise BadTypeCombinationError(".x", a)
+environment['product'] = product
 
 
 # .z. N/A
@@ -999,6 +1070,7 @@ def all_input():
     def trim_line(line):
         return line.rstrip("\n")
     return list(map(trim_line, sys.stdin))
+environment['all_input'] = all_input
 
 
 # .&. int, int
@@ -1007,6 +1079,7 @@ def bitand(a, b):
         return a & b
 
     raise BadTypeCombinationError(".&", a, b)
+environment['bitand'] = bitand
 
 
 # .|. int, int
@@ -1024,6 +1097,7 @@ def bitor(a, b):
         return union
 
     raise BadTypeCombinationError(".|", a, b)
+environment['bitor'] = bitor
 
 
 # .<. int/seq, int
@@ -1039,6 +1113,7 @@ def leftshift(a, b):
         return a << b
 
     raise BadTypeCombinationError(".<", a, b)
+environment['leftshift'] = leftshift
 
 
 # .>. int/seq, int
@@ -1054,6 +1129,7 @@ def rightshift(a, b):
         return a >> b
 
     raise BadTypeCombinationError(".>", a, b)
+environment['rightshift'] = rightshift
 
 
 # ._. int
@@ -1067,6 +1143,7 @@ def sign(a):
         return 1
     else:
         return 0
+environment['sign'] = sign
 
 
 # .-. seq, seq
@@ -1086,6 +1163,7 @@ def remove(a, b):
         return tuple(seq)
     else:
         return seq
+environment['remove'] = remove
 
 
 # .:, int/seq, int
@@ -1108,3 +1186,4 @@ def substrings(a, b=None):
     else:
         raise BadTypeCombinationError(".:", a, b)
     return [seq[start:start+step] for start in range(len(seq)-step+1)]
+environment['substrings'] = substrings

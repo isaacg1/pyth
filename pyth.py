@@ -16,7 +16,7 @@
 # uses, once expanded.                                                     #
 ############################################################################
 from extra_parse import *
-from macros import *
+from macros import environment
 from data import *
 import copy as c
 import sys
@@ -476,7 +476,7 @@ See opening comment in pyth.py for more info.""")
                 # and while blacklisting in general
                 # should not be used for security, it does
                 # solve many security problems.
-                exec(code_to_remove_tools + py_code_line)
+                exec(code_to_remove_tools + py_code_line, environment)
                 # ^ is still evil.
 
                 # Honestly, I'd just whitelist your custom functions
@@ -491,4 +491,4 @@ See opening comment in pyth.py for more info.""")
 
             else:
                 safe_mode = False
-                exec(py_code_line)
+                exec(py_code_line, environment)
