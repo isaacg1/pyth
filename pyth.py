@@ -23,6 +23,8 @@ import sys
 import io
 import traceback
 from ast import literal_eval
+environment['literal_eval'] = literal_eval
+
 sys.setrecursionlimit(100000)
 
 
@@ -469,11 +471,9 @@ See opening comment in pyth.py for more info.""")
                 # (eg, import statements)
 
                 code_to_remove_tools =\
-                    "del __builtins__.__dict__['__import__']\n"
+                    "del __builtins__['__import__']\n"
                 # remove import capability
-                code_to_remove_tools += "del sys\n"
-                # remove system tools
-                code_to_remove_tools += "del __builtins__.__dict__['open']\n"
+                code_to_remove_tools += "del __builtins__['open']\n"
                 # remove capability to read/write to files
 
                 # while this is hardly an exaustive list,
