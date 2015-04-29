@@ -985,8 +985,23 @@ def rotate(a, b):
             return set(trans_a)
         return list(trans_a)
 
-    raise BadTypeCombinationError(".r", a)
+    raise BadTypeCombinationError(".r", a, b)
 environment['rotate'] = rotate
+
+
+# .R num, num
+def Pround(a, b):
+    if is_num(a) and b == 0:
+        return int(round(a))
+    if is_num(a) and isinstance(b, int):
+        return round(a, b)
+    if is_num(a) and is_num(b):
+        round_len = 0
+        while round(b, round_len) != b and b < 15:
+            round_len += 1
+        return round(a, round_len)
+    raise BadTypeCombinationError(".R", a, b)
+environment['Pround'] = Pround
 
 
 # .s. str, str
