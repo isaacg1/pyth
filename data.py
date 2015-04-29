@@ -155,7 +155,7 @@ replacements = {
 
 syntax_sugar = {
     '=': (lambda c, r: r[:2] + c+r[1:], lambda n: n),
-    'F': (lambda c, r: ".U" + c + c_to_f['u'][0][14:18:3] + r[1:],
+    'F': (lambda c, r: ".U" + c + c_to_f['.U'][0][15:19:3] + r[1:],
           lambda n: n == 2)
 }
 
