@@ -64,6 +64,23 @@ def itertools_norm(func, a, *args, **kwargs):
 environment = {}
 
 
+# memoizes function calls, key = repr of input.
+class memoized(object):
+    def __init__(self, func):
+        self.func = func
+        self.cache = {}
+
+    def __call__(self, *args):
+        args_repr = repr(args)
+        if args_repr in self.cache:
+            return self.cache[args_repr]
+        else:
+            value = self.func(*args)
+            self.cache[args_repr] = value
+            return value
+environment['memoized'] = memoized
+
+
 # If argument is a number, turn it into a range.
 def num_to_range(arg):
     if is_num(arg):

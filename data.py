@@ -24,23 +24,6 @@ c_to_s = {
     '#': (('while True:\n try:', '\n except Exception:\n  break'), 0, 1),
     }
 
-
-# memoizes function calls, key = repr of input.
-class memoized(object):
-    def __init__(self, func):
-        self.func = func
-        self.cache = {}
-
-    def __call__(self, *args):
-        args_repr = repr(args)
-        if args_repr in self.cache:
-            return self.cache[args_repr]
-        else:
-            value = self.func(*args)
-            self.cache[args_repr] = value
-            return value
-
-
 # Arbitrary format operators - use for assignment, infix, etc.
 # All surrounding strings, arity
 c_to_i = {
@@ -139,7 +122,7 @@ c_to_f = {
     '.q': ('Pexit', 0),
     '.Q': ('eval_all_input', 0),
     '.r': ('rotate', 2),
-    '.R': ('round', 2),
+    '.R': ('Pround', 2),
     '.S': ('shuffle', 1),
     '.s': ('stripchars', 2),
     '.t': ('trig', 2),
