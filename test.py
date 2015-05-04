@@ -116,6 +116,11 @@ test_cases = [
     #?
     #@
     #A
+    ('AGH,1 2', ''),
+    ('AGH,1 2GH', '1\n2\n'),
+    ('AGH,1 2HG', '2\n1\n'),
+    ('Abd"ab"bd', 'a\nb\n'),
+    ('ANNU2N', '1\n'),
     #B
     #C
     #D
