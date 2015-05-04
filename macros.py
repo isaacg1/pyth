@@ -91,11 +91,19 @@ environment['num_to_range'] = num_to_range
 
 
 # Function library. See data for letter -> function correspondences.
-# =. N/A, .=
+# =. N/A, .= A
 def assign(a, b):
-    if isinstance(a, str) and len(a) == 1:
-        environment[a] = copy.deepcopy(b)
-        return b
+    if isinstance(a, str):
+        if len(a) == 1:
+            environment[a] = copy.deepcopy(b)
+            return b
+        else:
+            var_names = a.strip('()').split(',')
+            if is_seq(b) and len(var_names) == len(b) == 2 and \
+                    all(len(var_name) == 1 for var_name in var_names):
+                for var_name, item in zip(var_names, b):
+                    environment[var_name] = copy.deepcopy(item)
+                return b
     raise BadTypeCombinationError("=", a, b)
 environment['assign'] = assign
 

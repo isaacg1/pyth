@@ -12,7 +12,7 @@ test_cases = [
     ('1  1', '1\n'),
     # Test !
     ('!0', 'True\n'),
-    ('!0.', 'True\n'),
+    ('!.0', 'True\n'),
     ('!"', 'True\n'),
     ('![', 'True\n'),
     ('!(', 'True\n'),
@@ -85,6 +85,12 @@ test_cases = [
     (':"abcde",0 3]"lol"', 'lolbclole\n'),
     (':"####$$$$"%2U8\\x', 'x#x#x$x$\n'),
     (':U10r4 7 8', '[0, 1, 2, 3, 8, 8, 8, 7, 8, 9]\n'),
+    # Test A
+    ('AGH,1 2', ''),
+    ('AGH,1 2GH', '1\n2\n'),
+    ('AGH,1 2HG', '2\n1\n'),
+    ('Abd"ab"bd', 'a\nb\n'),
+    ('ANNU2N', '1\n'),
     # Test X
     ('XUT5Z', '[0, 1, 2, 3, 4, 0, 6, 7, 8, 9]\n'),
     ('=YUT XY5Z', ''),
