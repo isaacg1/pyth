@@ -263,7 +263,7 @@ def plus(a, b):
     if isinstance(a, tuple) and not isinstance(b, tuple):
         return a+(b,)
     if isinstance(b, tuple) and not isinstance(a, tuple):
-        return b+(a,)
+        return (a,)+b
     if is_num(a) and is_num(b) or\
             isinstance(a, list) and isinstance(b, list) or\
             isinstance(a, tuple) and isinstance(b, tuple) or\
