@@ -413,7 +413,7 @@ def Pchr(a):
     if is_num(a):
         return a.real - a.imag * 1j
     if isinstance(a, str):
-        return ord(a[0])
+        return to_base_ten(list(map(ord, a)), 256)
     if is_col(a):
         return list(zip(*a))
     raise BadTypeCombinationError("C", a)
