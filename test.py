@@ -177,10 +177,20 @@ test_cases = [
     ('IZ2)E3', '3'),
     ('V4N)E4', '0\n1\n2\n3\n4\n'),
     #F
+    ('Fk3k', '0\n1\n2'),
+    ('Fd<G3d', 'a\nb\nc'),
+    ('rF,1 5', '[1, 2, 3, 4]'),
+    ('^F[4 3 2 1', '4096'),
     #G
+    ('G', 'abcdefghijklmnopqrstuvwxyz'),
+    ('lG', '26'),
     #H
+    ('H', '{}'),
     #I
+    ('I3\n4', '4'),
+    ('I0\n4', ''),
     #J
+    ('J3J', '3'),
     #K
     #L
     #M
@@ -336,3 +346,4 @@ def test(pyth_code, expected_output, input_message=''):
 if __name__ == '__main__':
     for test_case in test_cases:
         test(*test_case)
+    print("All " + str(len(test_cases)) + ' tests passed')
