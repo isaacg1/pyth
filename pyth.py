@@ -114,7 +114,7 @@ def function_parse(active_char, rest_code):
     global next_c_to_f
     func_name, arity = c_to_f[active_char]
     init_paren = (active_char not in no_init_paren)
-    # Swap what variables are used in the map, filter or reduce.
+    # Swap what variables are used in lambda functions.
     if active_char in next_c_to_f:
         temp = c_to_f[active_char]
         c_to_f[active_char] = next_c_to_f[active_char][0]
@@ -134,6 +134,7 @@ def function_parse(active_char, rest_code):
         args_list = args_list[:-1]
     py_code += ','.join(args_list)
     py_code += ')'
+    # Swap back what variables are used in lambda functions.
     if active_char in next_c_to_f:
         temp = next_c_to_f[active_char][-1]
         next_c_to_f[active_char] =\
@@ -358,6 +359,7 @@ def preprocess_multiline(code_lines):
 def run_code(code, inp):
     global safe_mode
     global environment
+    global c_to_i
 
     old_stdout, old_stdin = sys.stdout, sys.stdin
 
@@ -365,7 +367,10 @@ def run_code(code, inp):
     sys.stdin = io.StringIO(inp)
 
     error = None
+
     saved_env = c.deepcopy(environment)
+    saved_c_to_i = c.deepcopy(c_to_i)
+
     try:
         safe_mode = False
         exec(general_parse(code), environment)
@@ -376,6 +381,7 @@ def run_code(code, inp):
 
     for key in saved_env:
         environment[key] = saved_env[key]
+    c_to_i = saved_c_to_i
 
     result = sys.stdout.getvalue()
 
