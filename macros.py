@@ -988,9 +988,7 @@ environment['Pexit'] = Pexit
 # .Q. N/A
 @functools.lru_cache(1)
 def eval_all_input():
-    def eval_trim_line(line):
-        return literal_eval(line.rstrip("\n"))
-    return list(map(eval_trim_line, sys.stdin))
+    return [literal_eval(val) for val in all_input()]
 environment['eval_all_input'] = eval_all_input
 
 
@@ -1124,9 +1122,7 @@ environment['product'] = product
 # .z. N/A
 @functools.lru_cache(1)
 def all_input():
-    def trim_line(line):
-        return line.rstrip("\n")
-    return list(map(trim_line, sys.stdin))
+    return [l.rstrip("\n") for l in sys.stdin]
 environment['all_input'] = all_input
 
 
