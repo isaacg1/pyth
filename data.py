@@ -138,6 +138,7 @@ c_to_f = {
     '._': ('sign', 1),
     '.-': ('remove', 2),
     '.:': ('substrings', 2),
+    '.{': ('unique', 1),
     }
 
 replacements = {
