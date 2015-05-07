@@ -618,7 +618,13 @@ environment['equal'] = equal
 
 # r. int, int or str,int.
 def Prange(a, b):
-    if isinstance(a, str) and isinstance(b, int):
+    def run_length_encode(a):
+        return [[len(list(group)), key] for key, group in itertools.groupby(a)]
+
+    if not isinstance(b, int):
+        raise BadTypeCombinationError("r", a, b)
+
+    if isinstance(a, str):
         if b == 0:
             return a.lower()
         if b == 1:
@@ -635,7 +641,26 @@ def Prange(a, b):
             return a.strip()
         if b == 7:
             return [literal_eval(part) for part in a.split()]
-    if isinstance(a, int) and isinstance(b, int):
+        if b == 8:
+            return run_length_encode(a)
+        if b == 9:
+            # Run length decoding, format "<num><char><num><char>",
+            # e.g. "12W3N6S1E"
+            return re.sub(r'(\d+)(\D)',
+                          lambda match: int(match.group(1))
+                          * match.group(2), a)
+
+    if is_seq(a):
+        if b == 8:
+            return run_length_encode(a)
+        if b == 9:
+            if all(isinstance(key, str) for group_size, key in a):
+                return ''.join(key * group_size for group_size, key in a)
+            else:
+                return sum(([copy.deepcopy(key)] * group_size
+                            for group_size, key in a), [])
+
+    if isinstance(a, int):
         if a < b:
             return list(range(a, b))
         else:
