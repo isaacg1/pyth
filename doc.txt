@@ -141,7 +141,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .p 1 N permutations      itertools.permutations(_).
 .P 2 N permutations      itertools.permutations(a, b).
 .q 0 Y quit              sys.exit(0). Exits the program immediately, except within #, where it breaks but does not exit.
-.Q 0 N eval-all-input    Take all of STDIN, return as list of evaluated (literal_eval) lines.
+.Q 0 N eval-all-input    Take all of STDIN, return as list of evaluated (literal_eval) lines. Cached. .Q and .z refer to the same data.
 .r 2 N rotate            On <col><seq>, perform a translation on <col> which maps each element of <seq> to its successor.
 .R 2 N round             Python round(a, b). On float as b, round to the same length as a.
 .s 2 N strip-chars       a.strip(b)
@@ -150,7 +150,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .u 1 N unpack-close      Shorthand for .*_).
 .U 2 N reduce2           The 2 input reduce, uses first value of sequence as initial value and the rest as sequence. (b, Z) -> (k, Y) ->
 .x 1 N group-x           product, over a non-str seq. Uses Pyth *. With num is random.seed.
-.z 0 N all-input         Take all of STDIN, return as list of lines.
+.z 0 N all-input         Take all of STDIN, return as list of lines. Cached. .Q and .z refer to the same data.
 .^ 3 N powmod            Python pow(a, b, c).
 .& 2 N bitand            Python bitwise &.
 .| 2 N bitor             Python |. Bitwise or on ints, setwise union on collections. Casts to 1st arg type.
@@ -165,6 +165,7 @@ z  0 N                   Variable. Autoinitializing to input.
                          cast <col> by length. Float 2nd arg gives that ratio of the length of the seq substrings.
                          All possible substrings, if 2nd arg is omitted.
 .= 2 Y assign            Exactly the same as =, except no augmented assignment. Thus, *.=T2 3 sets T to 2, then multiplies the result by 3.
+.{ 1 N unique A uniqueness test. Returns true iff the input has no repeated elements.
 
 
 Various string operations when calling rab with a str and b int:
