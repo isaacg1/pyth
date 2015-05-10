@@ -269,6 +269,10 @@ def plus(a, b):
             isinstance(a, tuple) and isinstance(b, tuple) or\
             isinstance(a, str) and isinstance(b, str):
         return a+b
+    if is_num(a) and isinstance(b, str):
+        return str(a) + b
+    if isinstance(a, str) and is_num(b):
+        return a + str(b)
     raise BadTypeCombinationError("+", a, b)
 environment['plus'] = plus
 
