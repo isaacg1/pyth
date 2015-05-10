@@ -12,6 +12,7 @@ import collections
 import numbers
 import binascii
 import hashlib
+import urllib.request
 from ast import literal_eval
 
 
@@ -218,7 +219,12 @@ environment['minus'] = minus
 # '. str.
 def read_file(a):
     if isinstance(a, str):
-        b = [lin[:-1] if lin[-1] == '\n' else lin for lin in (open(a))]
+        if a.startswith("http"):
+            b = urllib.request.urlopen(a)
+        else:
+            b = open(a)
+        
+        b = [lin[:-1] if lin[-1] == '\n' else lin for lin in b]
         return b
     raise BadTypeCombinationError("'", a)
 environment['read_file'] = read_file
@@ -1128,6 +1134,12 @@ environment['reduce2'] = reduce2
 def Pwrite(a, b="foo.txt"):
     if not isinstance(b, str):
         raise BadTypeCombinationError(".w", a, b)
+    
+    if b.startswith("http"):
+        if isinstance(a, dict):
+            a = "&".join("=".join(i) for i in a.items())
+        return [lin[:-1] if lin[-1] == '\n' else lin for lin in urllib.request.urlopen(b, a.encode("UTF-8"))]
+
     with open(b, 'a') as f:
         f.write(("\n".join(map(str, a)) if is_seq(a) and not isinstance(a, str)
                 else str(a))+"\n")
