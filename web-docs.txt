@@ -6,7 +6,7 @@
 $ X N super-quote Begins and ends Python literals. A Python literal is placed directly into the compiled Python output. Counts as one argument for arity purposes. Disabled online.
 % 2 N mod On integers, modulus. On complex, mod real and imag separately. On string, string formatting. %<int><seq> is a modular slice, <seq>[::<int>] in Python.
 & 2 N Python's and-operator (short circuiting). &ab returns a, if it evaluates to a falsy value otherwise b.
-' 1 N quote-file Cat file, return file a list of lines. File name as input.
+' 1 N quote-file Cat file, return file a list of lines. File name as input. If starts with http, does get htttp request.
 ( I N tuple Tuple constructor. Unbounded.
 ) X N close-paren Ends functions, statements. Marks last line of statement, last arg. of function. Necessary for statements, unbounded functions.
 * 2 N times Like python, multiplication, replication. Cartesian product on lists, tuples or sets.
@@ -117,6 +117,7 @@ z 0 N z Variable. Autoinitializing to input.
 .t 2 N trigonometry Collection of trigonometric functions.
 .U 2 N reduce2           The 2 input reduce, uses first value of sequence as initial value and the rest as sequence. (b, Z) -> (k, Y) ->
 .u 1 N unpack-close Shorthand for .*_).
+.w 2 N file-write. Writes first arg to file second arg. If starts with http does http post request with data.
 .x 1 N multiply product, over a non-str seq. Uses Pyth *. With num is random.seed.
 .z 0 N all-input Take all of stdin, return as list of lines. Cached. .Q and .z refer to the same data.
 .^ 3 N powmod Python pow(a, b, c).
