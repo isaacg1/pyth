@@ -111,6 +111,7 @@ c_to_f = {
     '.F': ('Pformat', 2),
     '.H': ('Phex', 1),
     '.h': ('Phash', 1),
+    '.i': ('interleave', 2),
     '.j': ('Pcomplex', 2),
     '.l': ('log', 2),
     '.m': ('minimal(lambda b:', 2),

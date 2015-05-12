@@ -99,6 +99,7 @@ z 0 N z Variable. Autoinitializing to input.
 .F 2 N format a.format(b) - if b is a non-string sequence, it will be unpacked.
 .h 1 N hash
 .H 1 N hex Hexadecimal string representing _. Direct on int, interpreted as UTF-8 on str. No '0x'.
+.i 2 N interleave Interleave two sequences - .i([a1, a2], [b1, b2, b3, b4]) = [a1, b1, a2, b2, b3, b4]
 .j 2 N complex Complex number constructor. .jab = a + bj. .j) = 1j.
 .l 2 N log Python math.log(a, b). Default for b is natural log.
 .m 2 N minimal Filter 2nd arg on elements which give minimal value when 1st arg is applied. First arg is lambda, b ->
@@ -108,14 +109,14 @@ z 0 N z Variable. Autoinitializing to input.
 .O 1 N oct Octal string representing _. Direct on int, interpreted as UTF-8 on str. No '0o'.
 .p 1 N permutations itertools.permutations(_).
 .P 2 N permutations itertools.permutations(a, b).
-.q 0 Y quit sys.exit(0). Exits the program immediately, except within #, where it breaks but does not exit.
+.q 0 Y quit sys.exit(0). Exits the program immediately.
 .Q 0 N eval-all-input Take all of stdin, return as list of evaluated (literal_eval) lines. Cached. .Q and .z refer to the same data.
 .R 2 N round Python round(a, b). On float as b, round to the same length as a.
 .r 2 N rotate On <col><seq>, perform a translation on <col> which maps each element of <seq> to its successor.
 .s 2 N strip-chars a.strip(b)
 .S 1 N shuffle .S<col> random.shuffle(<col>). str out if str in, otherwise list out. .S(<int>) = .S(range(<int>))
 .t 2 N trigonometry Collection of trigonometric functions.
-.U 2 N reduce2           The 2 input reduce, uses first value of sequence as initial value and the rest as sequence. (b, Z) -> (k, Y) ->
+.U 2 N reduce2 The 2 input reduce, uses first value of sequence as initial value and the rest as sequence. (b, Z) -> (k, Y) ->
 .u 1 N unpack-close Shorthand for .*_).
 .w 2 N file-write. Writes first arg to file second arg. If starts with http does http post request with data.
 .x 1 N multiply product, over a non-str seq. Uses Pyth *. With num is random.seed.

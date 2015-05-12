@@ -937,6 +937,24 @@ def Pformat(a, b):
 environment['Pformat'] = Pformat
 
 
+# .i. seq, seq
+def interleave(a, b):
+    if is_seq(a) and is_seq(b):
+        overlap = min(len(a), len(b))
+        longer = max((a, b), key=len)
+        inter_overlap = [item for sublist in zip(a, b) for item in sublist]
+        if isinstance(a, str) and isinstance(b, str):
+            return ''.join(inter_overlap) + longer[overlap:]
+        else:
+            return inter_overlap + list(longer[overlap:])
+    if is_col(a) and not is_seq(a):
+        return interleave(sorted(list(a)), b)
+    if is_col(b) and not is_seq(b):
+        return interleave(a, sorted(list(b)))
+    raise BadTypeCombinationError(".i", a, b)
+environment['interleave'] = interleave
+
+
 # .j. int, int
 def Pcomplex(a=0, b=1):
     if not is_num(a) and is_num(b):
