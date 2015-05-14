@@ -1310,6 +1310,29 @@ def rightshift(a, b):
 environment['rightshift'] = rightshift
 
 
+# ./. seq/int
+def partition(a):
+    if is_seq(a):
+        all_splits = []
+        for n in range(len(a)): # 0, 1, ..., len(a)-1 splits
+            for idxs in itertools.combinations(range(1, len(a)), n):
+                all_splits.append([a[i:j] for i, j in zip((0,) + idxs, idxs + (None,))])
+        return all_splits
+
+    if isinstance(a, int) and a >= 0:
+        def integer_partition(number):
+            result = set()
+            result.add((number, ))
+            for x in range(1, number):
+                for y in integer_partition(number - x):
+                    result.add(tuple(sorted((x, ) + y)))
+            return result
+        return list(sorted(integer_partition(a)))
+
+    raise BadTypeCombinationError("./", a)
+environment['partition'] = partition
+
+
 # ._. int
 def sign(a):
     if not is_num(a):
