@@ -1,4 +1,4 @@
-Pyth documentation 4.1
+Pyth documentation 4.2
 
 Each character is a separate token, except for numbers, 
 strings, and python literals. Written in Polish notation,
@@ -42,7 +42,7 @@ $  X N super-quote       Begins and ends Python literals. A Python literal is pl
 ;  X N end-line          End everything. Infinite ). Best used in statements.
 <  2 N less-than         Less than, subset, slice. < seq num is seq[:num]. Compare by magnitude on complex.
 =  2 Y assign            Assignment, using deep copy. Returns the assignment value. +2=Z7 -> Z=7, returns 9.
-                         Augmented assignment. *=T2 -> T=20.
+                         Augmented assignment. =*T2 -> T=20.
 >  2 N greater-than      Greater than, superset, slice. > seq num is seq[num:]. Compare by magnitude on complex.
 ?  3 N ternary           Python ternary. ?abc => a if b else c
 @  2 N lookup            Lookup from str, list or dict. Modulo wrapping on list, str. On seq, seq, intersection.
@@ -52,7 +52,7 @@ B  0 Y break             Python break. Implicit ).
 C  1 N chr               char -> int, int -> char. Matrix transpose on list of lists, zip(*a) specifically. Conjugate on complex.
 D  S Y def               Python def. Match arity w/ existing function. Memoized.
 E  S Y else              Python else.
-F  S Y for               Python for. Also is fold operator. <binary>F = u<binary>GH.
+F  S Y for               Python for. Also is fold operator. <binary>F = .U<binary>bZ.
 G  0 N strinG.lowercase  Variable. "abcdefghijklmnopqrstuvwxyz"
 H  0 N hash-table        Variable. {}
 I  S Y if                Python if.
@@ -115,7 +115,7 @@ z  0 N                   Variable. Autoinitializing to input.
 {  1 N set               Python set. Makes one element set on num.
 |  2 N or                Logical or. Short-circuiting.
 }  2 N in                Python in.
-~  1 Y +=                The same as +=.
+~  1 Y +=                The same as =+.
 .a 1 N abs               Python abs(_).
 .A 1 N all               Python all(_).
 .B 1 N bin               Binary string representing _. Direct on int, interpreted as UTF-8 on str. No '0b'.

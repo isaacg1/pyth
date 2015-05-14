@@ -149,7 +149,7 @@ replacements = {
     'L': ('DybR', 0),
     'M': ('DgGHR', 0),
     '.N': ('D:NTYR', 0),
-    '~': ('+=', 0),
+    '~': ('=+', 0),
     }
 
 #Provides parsing functions and arity conditions for syntactical sugar

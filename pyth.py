@@ -89,14 +89,39 @@ def parse(code, spacing="\n "):
     # Replace replaements
     if active_char in replacements:
         return replace_parse(active_char, rest_code, spacing)
+    # Syntactic sugar handling.
+
+    # <binary function/infix>F: Fold operator
+    if rest_code and rest_code[0] == 'F':
+        if (active_char in c_to_f and c_to_f[active_char][1] == 2) or\
+                (active_char in c_to_i and c_to_i[active_char][1] == 2):
+            reduce_arg1 = c_to_f['.U'][0][-5]
+            reduce_arg2 = c_to_f['.U'][0][-2]
+            return parse(".U" +
+                         active_char +
+                         reduce_arg1 +
+                         reduce_arg2 +
+                         rest_code[1:])
+    # =<function/infix>: augmented assignment.
+    if active_char == '=':
+        if rest_code[0] == ".":
+            func_char = rest_code[:2]
+            following_code = rest_code[2:]
+        else:
+            func_char = rest_code[0]
+            following_code = rest_code[1:]
+        if (func_char in c_to_f and c_to_f[func_char][1] > 0) or\
+           (func_char in c_to_i and c_to_i[func_char][1] > 0
+                and not func_char == ','):
+            var_char = following_code[0]
+            if (var_char in variables or var_char in next_c_to_i):
+                return parse('=' +
+                             var_char +
+                             func_char +
+                             var_char +
+                             following_code[1:])
     # And for general functions
     if active_char in c_to_f:
-        # Check for syntactic sugar
-        if not len(rest_code) == 0 and rest_code[0] in syntax_sugar:
-                sugar = syntax_sugar[rest_code[0]]
-                if sugar[-1](c_to_f[active_char][1]):  # Passes arity test
-                    return parse(sugar[0](active_char, rest_code))
-        # Just a regular function parse
         return function_parse(active_char, rest_code)
     # General format functions/operators
     if active_char in c_to_i:
@@ -245,15 +270,14 @@ def add_print(code):
         if code[0] == ".":
             assert len(code) >= 2
             if code[:2] in c_to_f and not code[:2] == '.q':
-                return len(code) == 2 or code[2] != "="
+                return True
             if code[:2] in variables:
                 return True
             if code[1] not in '0123456789':
                 return False
 
         if (code[0] not in 'p a'
-                and code[0] in c_to_f
-                and (len(code) == 1 or code[1] != "=")) or \
+                and code[0] in c_to_f) or \
             code[0] in variables or \
             code[0] in "@&|]}?,\\\".0123456789," or \
             ((code[0] in 'JK' or code[0] in prepend) and
