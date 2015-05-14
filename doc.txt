@@ -125,7 +125,10 @@ z  0 N                   Variable. Autoinitializing to input.
 .D 2 N divmod
 .e 2 N enumerate         map over a enumerate. First arg is lambda, (k, Y) -> (b, Z) ->. k is the number, Y is the sequence.
 .E 1 N any               Python any(_).
-.f 1 N float
+.f 3 N first_n           .fabc: Filters for the first c elements of infinite sequence starting at b for which a is truthy.
+                         a is lambda of Z.
+                         Infinite sequence is increasing numbers by 1 on num, or successive strings on string.
+                         Uses ruby .succ equivalent, doc here: http://ruby-doc.org/core-2.2.2/String.html#method-i-succ
 .F 2 N format            a.format(b) - if b is a non-string sequence, it will be unpacked.
 .h 1 N hash
 .H 1 N hex               Hexadecimal string representing _. Direct on int, interpreted as UTF-8 on str. No '0x'.
@@ -150,6 +153,8 @@ z  0 N                   Variable. Autoinitializing to input.
 .t 2 N trigonometry      Collection of trigonometric functions. See below.
 .u 1 N unpack-close      Shorthand for .*_).
 .U 2 N reduce2           The 2 input reduce, uses first value of sequence as initial value and the rest as sequence. (b, Z) -> (k, Y) ->
+.V 2 Y forever           An infinite for loop. b iterates over an infinite sequence starting at the input, same sequence as .f.
+                         On num, incrementing sequence. On str, rupy's .succ sequence.
 .w 2 N file write        Writes first arg to file second arg. If starts with http does http post request with data.
 .x 1 N group-x           product, over a non-str seq. Uses Pyth *. With num is random.seed.
 .z 0 N all-input         Take all of STDIN, return as list of lines. Cached. .Q and .z refer to the same data.

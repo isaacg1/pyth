@@ -65,6 +65,54 @@ def itertools_norm(func, a, *args, **kwargs):
 environment = {}
 
 
+# Infinite Iterator. Used in .f, .V
+def infinte_iterator(start):
+    def successor(char):
+        if char.isalpha():
+            if char == 'z':
+                return 'a', True
+            if char == 'Z':
+                return 'A', True
+            return chr(ord(char)+1), False
+        elif char.isdigit():
+            if char == '9':
+                return '0', True
+            return chr(ord(char)+1), False
+        else:
+            return chr(ord(char)+1), False
+
+    if is_num(start):
+        while True:
+            yield start
+            start += 1
+
+    # Replicates the behavior of ruby's .succ
+    if isinstance(start, str):
+        while True:
+            yield start
+            alphanum_locs = list(filter(lambda loc: start[loc].isalnum()
+                                        and ord(start[loc]) < 128,
+                                        range(len(start))))
+            if alphanum_locs:
+                locs = alphanum_locs[::-1]
+            elif start:
+                locs = range(len(start))[::-1]
+            else:
+                locs = []
+                succ_char = 'a'
+            for inc_loc in locs:
+                inc_char = start[inc_loc]
+                succ_char, carry = successor(inc_char)
+                start = start[:inc_loc] + succ_char + start[inc_loc+1:]
+                if not carry:
+                    break
+            else:
+                start = succ_char + start
+
+    raise BadTypeCombinationError("infinite_iterator, probably .V", start)
+environment['infinite_iterator'] = infinte_iterator
+
+
 # memoizes function calls, key = repr of input.
 class memoized(object):
     def __init__(self, func):
@@ -924,6 +972,18 @@ def Penumerate(a, b):
 
     raise BadTypeCombinationError(".e", a, b)
 environment['Penumerate'] = Penumerate
+
+
+def first_n(a, b, c):
+    if not isinstance(c, int):
+        raise BadTypeCombinationError(".f", a, b, c)
+    if is_num(b) or isinstance(b, str):
+        outputs = []
+        for i in filter(a, infinte_iterator(b)):
+            outputs.append(i)
+            if len(outputs) >= c:
+                return outputs
+environment['first_n'] = first_n
 
 
 # .F. format

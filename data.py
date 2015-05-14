@@ -1,4 +1,4 @@
-no_init_paren = ('f', 'm', 'o', 'u', '.e', '.m', '.M', '.U')
+no_init_paren = ('f', 'm', 'o', 'u', '.e', '.f', '.m', '.M', '.U')
 end_statement = ('B', 'R', '.u')
 variables = 'bdGHkNQTYzZ'
 
@@ -22,6 +22,7 @@ c_to_s = {
     'I': (('if ', ':'), 1),
     'W': (('while ', ':'), 1),
     '#': (('while True:\n try:', '\n except Exception:\n  break'), 0, 1),
+    '.V': (('for b in infinite_iterator(', '):'), 1),
     }
 
 # Arbitrary format operators - use for assignment, infix, etc.
@@ -106,7 +107,7 @@ c_to_f = {
     '.D': ('divmod', 2),
     '.E': ('any', 1),
     '.e': ('Penumerate(lambda k, Y:', 2),
-    '.f': ('float', 1),
+    '.f': ('first_n(lambda Z:', 3),
     '.F': ('Pformat', 2),
     '.H': ('Phex', 1),
     '.h': ('Phash', 1),
