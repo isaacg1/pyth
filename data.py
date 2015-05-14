@@ -27,7 +27,6 @@ c_to_s = {
 # Arbitrary format operators - use for assignment, infix, etc.
 # All surrounding strings, arity
 c_to_i = {
-    '~':  (('', '+=', ''), 2),
     '=':  (('assign(\'', '\',', ')'), 2),
     '&':  (('(', ' and ', ')'), 2),
     '|':  (('(', ' or ', ')'), 2),
@@ -149,6 +148,7 @@ replacements = {
     'L': ('DybR', 0),
     'M': ('DgGHR', 0),
     '.N': ('D:NTYR', 0),
+    '~': ('+=', 0),
     }
 
 #Provides parsing functions and arity conditions for syntactical sugar
