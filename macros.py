@@ -66,7 +66,7 @@ environment = {}
 
 
 # Infinite Iterator. Used in .f, .V
-def infinte_iterator(start):
+def infinite_iterator(start):
     def successor(char):
         if char.isalpha():
             if char == 'z':
@@ -110,7 +110,7 @@ def infinte_iterator(start):
                 start = succ_char + start
 
     raise BadTypeCombinationError("infinite_iterator, probably .V", start)
-environment['infinite_iterator'] = infinte_iterator
+environment['infinite_iterator'] = infinite_iterator
 
 
 # memoizes function calls, key = repr of input.
@@ -980,7 +980,7 @@ def first_n(a, b, c=1):
         raise BadTypeCombinationError(".f", a, b, c)
     if is_num(c) or isinstance(c, str):
         outputs = []
-        for i in filter(a, infinte_iterator(c)):
+        for i in filter(a, infinite_iterator(c)):
             outputs.append(i)
             if len(outputs) >= b:
                 return outputs
@@ -1172,14 +1172,14 @@ def shuffle(a):
         random.shuffle(tmp_list)
         return tmp_list
 
-    raise BadTypeCombinationError('.S', a, b)
+    raise BadTypeCombinationError('.S', a)
 environment['shuffle'] = shuffle
 
 
 # .t. num, int
 def trig(a, b):
     if not is_num(a) or not isinstance(b, int):
-        raise BadTypeCombinationError(".t", a, b, c)
+        raise BadTypeCombinationError(".t", a, b)
 
     funcs = [math.sin, math.cos, math.tan,
              math.asin, math.acos, math.atan,
@@ -1310,6 +1310,29 @@ def rightshift(a, b):
 environment['rightshift'] = rightshift
 
 
+# ./. seq/int
+def partition(a):
+    if is_seq(a):
+        all_splits = []
+        for n in range(len(a)): # 0, 1, ..., len(a)-1 splits
+            for idxs in itertools.combinations(range(1, len(a)), n):
+                all_splits.append([a[i:j] for i, j in zip((0,) + idxs, idxs + (None,))])
+        return all_splits
+
+    if isinstance(a, int) and a >= 0:
+        def integer_partition(number):
+            result = set()
+            result.add((number, ))
+            for x in range(1, number):
+                for y in integer_partition(number - x):
+                    result.add(tuple(sorted((x, ) + y)))
+            return result
+        return list(sorted(integer_partition(a)))
+
+    raise BadTypeCombinationError("./", a)
+environment['partition'] = partition
+
+
 # ._. int
 def sign(a):
     if not is_num(a):
@@ -1370,7 +1393,7 @@ environment['substrings'] = substrings
 # .{ col
 def unique(a):
     if not is_col(a):
-        raise BadTypeCombinationError('.{', a, b)
+        raise BadTypeCombinationError('.{', a)
     try:
         return len(a) == len(set(a))
     except TypeError as e:
