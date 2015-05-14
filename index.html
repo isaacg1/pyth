@@ -114,6 +114,7 @@
 				params={code: $('#code').val()}
 				if ($('#input').val()) params.input=$('#input').val()
 				if (!$('#debug').is(':checked')) params.debug=0
+				if ($('#debug').is(':checked')) params.debug=1
 				document.location="?"+$.param(params)
 			}
 
