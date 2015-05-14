@@ -125,7 +125,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .D 2 N divmod
 .e 2 N enumerate         map over a enumerate. First arg is lambda, (k, Y) -> (b, Z) ->. k is the number, Y is the sequence.
 .E 1 N any               Python any(_).
-.f 3 N first_n           .fabc: Filters for the first c elements of infinite sequence starting at b for which a is truthy.
+.f 3 N first_n           .fabc: Filters for the first b elements of infinite sequence starting at c for which a is truthy. c defaults to 1.
                          a is lambda of Z.
                          Infinite sequence is increasing numbers by 1 on num, or successive strings on string.
                          Uses ruby .succ equivalent, doc here: http://ruby-doc.org/core-2.2.2/String.html#method-i-succ

@@ -974,14 +974,15 @@ def Penumerate(a, b):
 environment['Penumerate'] = Penumerate
 
 
-def first_n(a, b, c):
-    if not isinstance(c, int):
+# .f. lambda, int, num or str.
+def first_n(a, b, c=1):
+    if not isinstance(b, int):
         raise BadTypeCombinationError(".f", a, b, c)
-    if is_num(b) or isinstance(b, str):
+    if is_num(c) or isinstance(c, str):
         outputs = []
-        for i in filter(a, infinte_iterator(b)):
+        for i in filter(a, infinte_iterator(c)):
             outputs.append(i)
-            if len(outputs) >= c:
+            if len(outputs) >= b:
                 return outputs
 environment['first_n'] = first_n
 
