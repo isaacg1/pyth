@@ -1017,6 +1017,8 @@ environment['Pnumbers'] = Pnumbers
 
 # .p. seq
 def permutations(a):
+    if isinstance(a, int):
+        a = list(range(a))
     if not is_seq(a):
         raise BadTypeCombinationError(".p", a)
     return itertools_norm(itertools.permutations, a, len(a))
@@ -1025,6 +1027,8 @@ environment['permutations'] = permutations
 
 # .P. seq, int
 def permutations2(a, b):
+    if isinstance(a, int):
+        a = list(range(a))
     if not is_seq(a) or not isinstance(b, int):
         raise BadTypeCombinationError(".P", a, b)
 
