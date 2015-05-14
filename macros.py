@@ -1172,14 +1172,14 @@ def shuffle(a):
         random.shuffle(tmp_list)
         return tmp_list
 
-    raise BadTypeCombinationError('.S', a, b)
+    raise BadTypeCombinationError('.S', a)
 environment['shuffle'] = shuffle
 
 
 # .t. num, int
 def trig(a, b):
     if not is_num(a) or not isinstance(b, int):
-        raise BadTypeCombinationError(".t", a, b, c)
+        raise BadTypeCombinationError(".t", a, b)
 
     funcs = [math.sin, math.cos, math.tan,
              math.asin, math.acos, math.atan,
@@ -1370,7 +1370,7 @@ environment['substrings'] = substrings
 # .{ col
 def unique(a):
     if not is_col(a):
-        raise BadTypeCombinationError('.{', a, b)
+        raise BadTypeCombinationError('.{', a)
     try:
         return len(a) == len(set(a))
     except TypeError as e:
