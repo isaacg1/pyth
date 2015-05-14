@@ -66,7 +66,7 @@ environment = {}
 
 
 # Infinite Iterator. Used in .f, .V
-def infinte_iterator(start):
+def infinite_iterator(start):
     def successor(char):
         if char.isalpha():
             if char == 'z':
@@ -110,7 +110,7 @@ def infinte_iterator(start):
                 start = succ_char + start
 
     raise BadTypeCombinationError("infinite_iterator, probably .V", start)
-environment['infinite_iterator'] = infinte_iterator
+environment['infinite_iterator'] = infinite_iterator
 
 
 # memoizes function calls, key = repr of input.
@@ -980,7 +980,7 @@ def first_n(a, b, c=1):
         raise BadTypeCombinationError(".f", a, b, c)
     if is_num(c) or isinstance(c, str):
         outputs = []
-        for i in filter(a, infinte_iterator(c)):
+        for i in filter(a, infinite_iterator(c)):
             outputs.append(i)
             if len(outputs) >= b:
                 return outputs
