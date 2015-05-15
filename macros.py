@@ -297,7 +297,7 @@ def Pset(a=set()):
     if is_col(a):
         try:
             return set(a)
-        except TypeError as e:
+        except TypeError:
             return set(map(tuple, a))
     raise BadTypeCombinationError("{", a)
 environment['Pset'] = Pset
@@ -576,7 +576,7 @@ def from_base_ten(arb, base):
         return [0]
     if base == 1:
         return [0]*arb
-    #Main routine
+    # Main routine
     base_list = []
     work = arb
     while work > 0:
@@ -1402,9 +1402,18 @@ def unique(a):
         raise BadTypeCombinationError('.{', a)
     try:
         return len(a) == len(set(a))
-    except TypeError as e:
+    except TypeError:
         if len(a) == 0:
             return True
         sort = sorted(a)
         return all(x != y for x, y in zip(sort, sort[1:]))
 environment['unique'] = unique
+
+
+# .! factorial
+def factorial(a):
+    if not isinstance(a, int):
+        raise BadTypeCombinationError('.!', a)
+
+    return math.factorial(a)
+environment['factorial'] = factorial

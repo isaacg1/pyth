@@ -136,3 +136,4 @@ z 0 N z Variable. Autoinitializing to input.
 .: 2 N substring On :<seq><int> return all substrings of <seq> of length <int>. Cast <int> to range, cast <col> by length. Float 2nd arg gives that ratio of the length of the seq substrings. All possible substrings, if 2nd arg is omitted.
 .= 2 Y assign Exactly the same as =, except no augmented assignment. Thus, *.=T2 3 sets T to 2, then multiplies the result by 3.
 .{ 1 N unique A uniqueness test. Returns true iff the input has no repeated elements.
+.! 1 N factorial Python math.factorial(_).
