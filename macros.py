@@ -619,7 +619,11 @@ def rchoice(a):
     if isinstance(a, int):
         if a == 0:
             return random.random()
-        return random.choice(urange(a))
+        if a < 0:
+            random.seed(-a)
+            return -a
+        if a > 0:
+            return random.choice(urange(a))
     if is_col(a):
         return random.choice(list(a))
     raise BadTypeCombinationError("O", a)
