@@ -106,7 +106,7 @@ c_to_f = {
     '.d': ('dict', 1),
     '.D': ('divmod', 2),
     '.E': ('any', 1),
-    '.e': ('Penumerate(lambda k, Y:', 2),
+    '.e': ('Penumerate(lambda k, b:', 2),
     '.f': ('first_n(lambda Z:', 3),
     '.F': ('Pformat', 2),
     '.H': ('Phex', 1),
@@ -175,7 +175,7 @@ next_c_to_f = {
     'm': [('Pmap(lambda k:', 2), ('Pmap(lambda b:', 2), ],
     'o': [('order(lambda Z:', 2), ],
     'u': [('reduce(lambda N, T:', 3), ],
-    '.e': [('Penumerate(lambda b, Z:', 2), ],
+    '.e': [('Penumerate(lambda Y, Z:', 2), ],
     '.U': [('reduce2(lambda k, Y:', 2), ],
     }
 
