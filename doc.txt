@@ -88,6 +88,7 @@ b  0 N lineBreak         Variable. "\n"
 c  2 N chop              On <str/list><int> chop str/list every n elements. 
                          On <int><str/list> split str/list into n pieces (elements are equally distributed).
                          Also str.split, floating point division.
+                         On <seq><col of ints> split seq at each int into list of seqs.
 d  0 N                   Variable. " "
 e  1 N end               %10 or last element. Imaginary part on complex.
 f  2 N filter            Implicit lambda, T -> Y -> Z -> . on num, iter.count

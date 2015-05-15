@@ -460,6 +460,11 @@ def chop(a, b=None):
             l.append(b[begin:end])
             begin, end = end, end + m + (i + 1 < r)
         return l
+    # seq, col of ints -> chop seq at number locations.
+    if is_seq(a) and is_col(b):
+        if all(isinstance(elem, int) for elem in b):
+            locs = sorted(b)
+            return list(map(lambda i, j: a[i:j], [0] + locs, locs + [len(a)]))
     raise BadTypeCombinationError("c", a, b)
 environment['chop'] = chop
 
@@ -1314,9 +1319,10 @@ environment['rightshift'] = rightshift
 def partition(a):
     if is_seq(a):
         all_splits = []
-        for n in range(len(a)): # 0, 1, ..., len(a)-1 splits
+        for n in range(len(a)):  # 0, 1, ..., len(a)-1 splits
             for idxs in itertools.combinations(range(1, len(a)), n):
-                all_splits.append([a[i:j] for i, j in zip((0,) + idxs, idxs + (None,))])
+                all_splits.append(
+                    [a[i:j] for i, j in zip((0,) + idxs, idxs + (None,))])
         return all_splits
 
     if isinstance(a, int) and a >= 0:
