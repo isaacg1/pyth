@@ -141,6 +141,7 @@ c_to_f = {
     '.-': ('remove', 2),
     '.:': ('substrings', 2),
     '.{': ('unique', 1),
+    '.!': ('factorial', 1),
     }
 
 replacements = {
@@ -153,9 +154,9 @@ replacements = {
     '~': ('=+', 0),
     }
 
-#Provides parsing functions and arity conditions for syntactical sugar
-#<non-zero>=: Augmented assignment
-#<binary>F: Fold operator
+# Provides parsing functions and arity conditions for syntactical sugar
+# <non-zero>=: Augmented assignment
+# <binary>F: Fold operator
 
 syntax_sugar = {
     '=': (lambda c, r: r[:2] + c+r[1:], lambda n: n),

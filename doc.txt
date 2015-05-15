@@ -120,7 +120,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .a 1 N abs               Python abs(_).
 .A 1 N all               Python all(_).
 .B 1 N bin               Binary string representing _. Direct on int, interpreted as UTF-8 on str. No '0b'.
-.c 2 N combinations      Combinations of elements from a of length b.
+.c 2 N combinations      Combinations of elements from a of length b. On two ints, nCr.
 .C 2 N comb-replacement  Combinations of elements from a of length b, with replacement.
 .d 1 n dict
 .D 2 N divmod
@@ -144,7 +144,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .N 1 Y The one after M   def :(N, T, Y): return _.
 .O 1 N oct               Octal string representing _. Direct on int, interpreted as UTF-8 on str. No '0o'.
 .p 1 N permutations      itertools.permutations(_).
-.P 2 N permutations      itertools.permutations(a, b).
+.P 2 N permutations      itertools.permutations(a, b). On two ints, nPr.
 .q 0 Y quit              sys.exit(0). Exits the program immediately.
 .Q 0 N eval-all-input    Take all of STDIN, return as list of evaluated (literal_eval) lines. Cached. .Q and .z refer to the same data.
 .r 2 N rotate            On <col><seq>, perform a translation on <col> which maps each element of <seq> to its successor.
@@ -174,7 +174,8 @@ z  0 N                   Variable. Autoinitializing to input.
                          cast <col> by length. Float 2nd arg gives that ratio of the length of the seq substrings.
                          All possible substrings, if 2nd arg is omitted.
 .= 2 Y assign            Exactly the same as =, except no augmented assignment. Thus, *.=T2 3 sets T to 2, then multiplies the result by 3.
-.{ 1 N unique A uniqueness test. Returns true iff the input has no repeated elements.
+.{ 1 N unique            A uniqueness test. Returns true iff the input has no repeated elements.
+.! 1 N factorial         Python math.factorial(_).
 
 
 Various string operations when calling rab with a str and b int:
