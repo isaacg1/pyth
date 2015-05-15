@@ -1,17 +1,18 @@
+import binascii
+import cmath
+import collections
 import copy
 import fractions
-import itertools
 import functools
-import cmath
+import hashlib
+import itertools
 import math
+import numbers
+import operator
 import random
 import re
 import string
 import sys
-import collections
-import numbers
-import binascii
-import hashlib
 import urllib.request
 from ast import literal_eval
 
@@ -297,7 +298,7 @@ def Pset(a=set()):
     if is_col(a):
         try:
             return set(a)
-        except TypeError as e:
+        except TypeError:
             return set(map(tuple, a))
     raise BadTypeCombinationError("{", a)
 environment['Pset'] = Pset
@@ -576,7 +577,7 @@ def from_base_ten(arb, base):
         return [0]
     if base == 1:
         return [0]*arb
-    #Main routine
+    # Main routine
     base_list = []
     work = arb
     while work > 0:
@@ -928,7 +929,7 @@ def Phash(a):
 environment['Phash'] = Phash
 
 
-def Phex_multitype(a, func):
+def hex_multitype(a, func):
     if isinstance(a, str):
         return "0x" + binascii.hexlify(a.encode("utf-8")).decode("utf-8")
 
@@ -940,24 +941,37 @@ def Phex_multitype(a, func):
 
 # .H. int/str
 def Phex(a):
-    return Phex_multitype(a, ".H")[2:]
+    return hex_multitype(a, ".H")[2:]
 environment['Phex'] = Phex
 
 
 # .B. int/str
 def Pbin(a):
-    return bin(int(Phex_multitype(a, ".B"), 16))[2:]
+    return bin(int(hex_multitype(a, ".B"), 16))[2:]
 environment['Pbin'] = Pbin
 
 
 # .O. int/str
 def Poct(a):
-    return oct(int(Phex_multitype(a, ".O"), 16))[2:]
+    return oct(int(hex_multitype(a, ".O"), 16))[2:]
 environment['Poct'] = Poct
 
 
 # .c. seq, int
 def combinations(a, b):
+    if isinstance(a, int) and isinstance(b, int):
+        # compute n C r
+        n, r = a, min(b, b - a)
+        if r == 0:
+            return 1
+        if r < 0:
+            r = b
+
+        num = functools.reduce(operator.mul, range(n, n-r, -1), 1)
+        den = math.factorial(r)
+
+        return num // den
+
     if not is_seq(a) or not isinstance(b, int):
         raise BadTypeCombinationError(".c", a, b)
 
@@ -1097,6 +1111,10 @@ environment['permutations'] = permutations
 
 # .P. seq, int
 def permutations2(a, b):
+    if isinstance(a, int) and isinstance(b, int):
+        # compute n P r
+        return functools.reduce(operator.mul, range(a - b + 1, a + 1), 1)
+
     if isinstance(a, int):
         a = list(range(a))
     if not is_seq(a) or not isinstance(b, int):
@@ -1406,9 +1424,18 @@ def unique(a):
         raise BadTypeCombinationError('.{', a)
     try:
         return len(a) == len(set(a))
-    except TypeError as e:
+    except TypeError:
         if len(a) == 0:
             return True
         sort = sorted(a)
         return all(x != y for x, y in zip(sort, sort[1:]))
 environment['unique'] = unique
+
+
+# .! factorial
+def factorial(a):
+    if not isinstance(a, int):
+        raise BadTypeCombinationError('.!', a)
+
+    return math.factorial(a)
+environment['factorial'] = factorial
