@@ -1,17 +1,18 @@
+import binascii
+import cmath
+import collections
 import copy
 import fractions
-import itertools
 import functools
-import cmath
+import hashlib
+import itertools
 import math
+import numbers
+import operator
 import random
 import re
 import string
 import sys
-import collections
-import numbers
-import binascii
-import hashlib
 import urllib.request
 from ast import literal_eval
 
@@ -954,6 +955,19 @@ environment['Poct'] = Poct
 
 # .c. seq, int
 def combinations(a, b):
+    if isinstance(a, int) and isinstance(b, int):
+        # compute n C r
+        n, r = a, min(b, b - a)
+        if r == 0:
+            return 1
+        if r < 0:
+            r = b
+
+        num = functools.reduce(operator.mul, range(n, n-r, -1), 1)
+        den = math.factorial(r)
+
+        return num // den
+
     if not is_seq(a) or not isinstance(b, int):
         raise BadTypeCombinationError(".c", a, b)
 
@@ -1093,6 +1107,10 @@ environment['permutations'] = permutations
 
 # .P. seq, int
 def permutations2(a, b):
+    if isinstance(a, int) and isinstance(b, int):
+        # compute n P r
+        return functools.reduce(operator.mul, range(a - b + 1, a + 1), 1)
+
     if isinstance(a, int):
         a = list(range(a))
     if not is_seq(a) or not isinstance(b, int):
