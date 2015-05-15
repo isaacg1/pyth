@@ -924,7 +924,7 @@ def Phash(a):
 environment['Phash'] = Phash
 
 
-def Phex_multitype(a, func):
+def hex_multitype(a, func):
     if isinstance(a, str):
         return "0x" + binascii.hexlify(a.encode("utf-8")).decode("utf-8")
 
@@ -936,19 +936,19 @@ def Phex_multitype(a, func):
 
 # .H. int/str
 def Phex(a):
-    return Phex_multitype(a, ".H")[2:]
+    return hex_multitype(a, ".H")[2:]
 environment['Phex'] = Phex
 
 
 # .B. int/str
 def Pbin(a):
-    return bin(int(Phex_multitype(a, ".B"), 16))[2:]
+    return bin(int(hex_multitype(a, ".B"), 16))[2:]
 environment['Pbin'] = Pbin
 
 
 # .O. int/str
 def Poct(a):
-    return oct(int(Phex_multitype(a, ".O"), 16))[2:]
+    return oct(int(hex_multitype(a, ".O"), 16))[2:]
 environment['Poct'] = Poct
 
 

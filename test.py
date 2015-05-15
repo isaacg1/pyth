@@ -216,7 +216,7 @@ test_cases = [
     # Y
     # Z
     # [
-    # <backslash>
+    # \              (this text is here to prevent backslash line continuation)
     # ]
     # ^
     # _
