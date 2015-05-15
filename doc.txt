@@ -1,9 +1,9 @@
-Pyth documentation 4.2
+Pyth documentation 4.3
 
 Each character is a separate token, except for numbers, 
-strings, and python literals. Written in Polish notation,
-with fixed arities for each operator. Statements are special, 
-allow multiple lines.
+strings, and python literals and tokens of the form "._", where _ could be a variety of things.
+Written in Polish notation, with fixed arities for each operator. Statements are special, allow multiple lines.
+Top-level values a printed by default, unless prefixed by " " or the value is None.
 
 num = int, float
 seq = str, list, tuple
@@ -61,7 +61,7 @@ K  1 Y                   Variable. Autoinitializing. K=_. For stringing.
 L  1 Y lambda            define y(b): return _.
 M  1 Y The one after L   define g(G,H): return _.
 N  0 N                   Variable. '"'
-O  1 N randOm-chOice     random.choice(_). Uses range(int). O0 = random.random()
+O  1 N randOm-chOice     random.choice(_). Uses range(int). O0 = random.random(). Oa if a < 0 is random.seed(-a).
 P  1 N Prime/Pop         prime factorization on int. All but last on str, list. Phase on complex.
 Q  0 N quick             Variable. Autoinitializing to evaluated input.
 R  1 Y return            Python return. Implicit ).
@@ -70,7 +70,7 @@ T  0 N ten               Variable. 10
 U  1 N unary-range       Python unary range. Splats 2 tuples. U_=Ul_ on str, list.
 V  S Y                   Loop times equal to input. Equivalent to FNU
 W  S Y while             Python while.
-X  3 Y indeXed assign    Indexed assignment, returns updated. Only returns on str, mod-wrap on list.
+X  3 N indeXed assign    Indexed assignment, returns updated. Only returns on str, mod-wrap on list.
                          On <seq><seq><seq> performs translation, uses reversed of 2nd arg, if 3rd is omitted.
                          On <int><list> or <any><dict>, performs indexed +=. Assigns if key not in dict.
 Y  0 N                   Variable. []
@@ -152,12 +152,10 @@ z  0 N                   Variable. Autoinitializing to input.
 .s 2 N strip-chars       a.strip(b)
 .S 1 N shuffle           .S<col> random.shuffle(<col>). .S(<int>) = .S(range(<int>))
 .t 2 N trigonometry      Collection of trigonometric functions. See below.
-.u 1 N unpack-close      Shorthand for .*_).
 .U 2 N reduce2           The 2 input reduce, uses first value of sequence as initial value and the rest as sequence. (b, Z) -> (k, Y) ->
 .V 2 Y forever           An infinite for loop. b iterates over an infinite sequence starting at the input, same sequence as .f.
                          On num, incrementing sequence. On str, rupy's .succ sequence.
 .w 2 N file write        Writes first arg to file second arg. If starts with http does http post request with data.
-.x 1 N group-x           product, over a non-str seq. Uses Pyth *. With num is random.seed.
 .z 0 N all-input         Take all of STDIN, return as list of lines. Cached. .Q and .z refer to the same data.
 .^ 3 N powmod            Python pow(a, b, c).
 .& 2 N bitand            Python bitwise &.
@@ -165,7 +163,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .< 2 N leftshift         Leftshift on int, cyclic leftshift on str/list.
 .> 2 N rightshift        Rightshift on int, cyclic rightshift on str/list.
 ./ 1 N partition         Integer partitions on int, all possible splits on seq.
-.* 1 N unpack            Python unpacking. Literally translates to *(_) in the output.
+.* 1 N unpack            Python unpacking. Literally translates to *(_) in the output. Ends enclosing function.
 .) 1 N pop               Remove and return last element of a list. Symbol from Golfscript.
 .( 2 N pop2              Remove and return indexed element of a list.
 .- 2 N remove            Multiset difference. Remove the leftmost instance of each element in 2nd argument from 1st argument. .-<seq><col>
@@ -173,7 +171,6 @@ z  0 N                   Variable. Autoinitializing to input.
 .: 2 N substring         On :<seq><int> return all substrings of <seq> of length <int>. Cast <int> to range,
                          cast <col> by length. Float 2nd arg gives that ratio of the length of the seq substrings.
                          All possible substrings, if 2nd arg is omitted.
-.= 2 Y assign            Exactly the same as =, except no augmented assignment. Thus, *.=T2 3 sets T to 2, then multiplies the result by 3.
 .{ 1 N unique            A uniqueness test. Returns true iff the input has no repeated elements.
 .! 1 N factorial         Python math.factorial(_).
 

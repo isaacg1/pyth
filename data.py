@@ -1,5 +1,5 @@
 no_init_paren = ('f', 'm', 'o', 'u', '.e', '.f', '.m', '.M', '.U')
-end_statement = ('B', 'R', '.u')
+end_statement = ('B', 'R', '.*')
 variables = 'bdGHkNQTYzZ'
 
 # Variables cheat sheet:
@@ -40,10 +40,8 @@ c_to_i = {
     'K':  (('assign("K",', ')'), 1),
     'R':  (('return ', ''), 1),
     '.*': (('*(', ')'), 1),
-    '.u': (('*(', ')'), 1),
     '.)': (('', '.pop()'), 1),
     '.(': (('', '.pop(', ')'), 2),
-    '.=': (('assign(\'', '\',', ')'), 2),
     }
 
 # Simple functions only.
@@ -129,7 +127,6 @@ c_to_f = {
     '.t': ('trig', 2),
     '.U': ('reduce2(lambda b, Z:', 2),
     '.w': ('Pwrite', 2),
-    '.x': ('product', 1),
     '.z': ('all_input', 0),
     '.^': ('pow', 3),
     '.&': ('bitand', 2),

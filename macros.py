@@ -622,7 +622,7 @@ def rchoice(a):
             return random.random()
         if a < 0:
             random.seed(-a)
-            return -a
+            return
         if a > 0:
             return random.choice(urange(a))
     if is_col(a):
@@ -670,10 +670,11 @@ environment['primes_upper'] = primes_upper
 
 # p. All.
 def Pprint(a, b=""):
-    if isinstance(a, str):
-        print(b, end=a)
-    else:
-        print(b, end=str(a))
+    if not b is None:
+        if isinstance(a, str):
+            print(b, end=a)
+        else:
+            print(b, end=str(a))
     return 0
 environment['Pprint'] = Pprint
 
@@ -1255,20 +1256,6 @@ def Pwrite(a, b="foo.txt"):
         f.write(("\n".join(map(str, a)) if is_seq(a) and not isinstance(a, str)
                 else str(a))+"\n")
 environment['Pwrite'] = Pwrite
-
-
-# .x. col
-def product(a):
-    if is_col(a) and not isinstance(a, str):
-        if len(a) == 0:
-            return 1
-        return reduce(lambda b, c: times(b, c), a[1:], a[0])
-
-    if is_num(a):
-        return random.seed(a)
-
-    raise BadTypeCombinationError(".x", a)
-environment['product'] = product
 
 
 # .z. N/A
