@@ -194,6 +194,10 @@ test_cases = [
     # K
     # L
     # M
+    ('hMU3', '[1, 2, 3]'),
+    ('SM,"ba""31', "['ab', '13']"),
+    ('>MC,U5_U5', '[False, False, False, True, True]'),
+    ('xMC,U5r4T', '[4, 4, 4, 4, 12]'),
     # N
     # O
     ('O_1OT', '2'),

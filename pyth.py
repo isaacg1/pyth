@@ -102,6 +102,24 @@ def parse(code, spacing="\n "):
                          reduce_arg1 +
                          reduce_arg2 +
                          rest_code[1:])
+
+    # <function>M: Map operator
+    if rest_code and rest_code[0] == 'M':
+        if active_char in c_to_f and not c_to_f[active_char] == 0:
+            map_arg = c_to_f['m'][0][-2]
+            arity = c_to_f[active_char][1]
+            if arity == 1:
+                return parse('m' +
+                             active_char +
+                             map_arg +
+                             rest_code[1:])
+            else:
+                return parse('m' +
+                             active_char +
+                             '.*' +
+                             map_arg +
+                             rest_code[1:])
+
     # =<function/infix>: augmented assignment.
     if active_char == '=':
         if rest_code[0] == ".":
