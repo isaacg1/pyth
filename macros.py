@@ -1219,6 +1219,35 @@ def trig(a, b):
 environment['trig'] = trig
 
 
+# .u. lambda, seq, any
+def cu_reduce(a, b, c=None):
+    if c is None:
+        counter = 0
+        old_acc = b
+        acc = a(b, counter)
+        results = [old_acc]
+        while old_acc != acc:
+            counter += 1
+            old_acc = acc
+            acc = a(acc, counter)
+            results.append(old_acc)
+        return results
+    if is_seq(b) or isinstance(b, int):
+        if isinstance(b, int):
+            seq = range(b)
+        else:
+            seq = b
+        acc = c
+        results = [acc]
+        while len(seq) > 0:
+            h = seq[0]
+            acc = a(acc, h)
+            seq = seq[1:]
+            results.append(acc)
+        return results
+environment['cu_reduce'] = cu_reduce
+
+
 # .U. lambda, seq
 def reduce2(a, b):
     if is_seq(b) or isinstance(b, int):

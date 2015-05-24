@@ -1,4 +1,4 @@
-no_init_paren = ('f', 'm', 'o', 'u', '.e', '.f', '.m', '.M', '.U')
+no_init_paren = ('f', 'm', 'o', 'u', '.e', '.f', '.m', '.M', '.u', '.U')
 end_statement = ('B', 'R', '.*')
 variables = 'bdGHkNQTYzZ'
 
@@ -126,6 +126,7 @@ c_to_f = {
     '.s': ('stripchars', 2),
     '.t': ('trig', 2),
     '.U': ('reduce2(lambda b, Z:', 2),
+    '.u': ('cu_reduce(lambda N, Y:', 3),
     '.w': ('Pwrite', 2),
     '.z': ('all_input', 0),
     '.^': ('pow', 3),
@@ -151,15 +152,6 @@ replacements = {
     '~': ('=+', 0),
     }
 
-# Provides parsing functions and arity conditions for syntactical sugar
-# <non-zero>=: Augmented assignment
-# <binary>F: Fold operator
-
-syntax_sugar = {
-    '=': (lambda c, r: r[:2] + c+r[1:], lambda n: n),
-    'F': (lambda c, r: ".U" + c + c_to_f['.U'][0][15:19:3] + r[1:],
-          lambda n: n == 2)
-}
 
 # Gives next function header to use - for filter, map, reduce.
 # map: d, k, b

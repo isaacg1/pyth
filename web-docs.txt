@@ -116,6 +116,7 @@ z 0 N z Variable. Autoinitializing to input.
 .s 2 N strip-chars a.strip(b)
 .S 1 N shuffle .S<col> random.shuffle(<col>). str out if str in, otherwise list out. .S(<int>) = .S(range(<int>))
 .t 2 N trigonometry Collection of trigonometric functions.
+.u 3 N cumul-reduce      Just like u, except returns a collection of all intermediate states. lambda N, Y.
 .U 2 N reduce2 The 2 input reduce, uses first value of sequence as initial value and the rest as sequence. (b, Z) -> (k, Y) ->
 .V S Y forever An infinite for loop. b iterates over an infinite sequence starting at the input, same sequence as .f. On num, incrementing sequence. On str, rupy's .succ sequence.
 .w 2 N file-write. Writes first arg to file second arg. If starts with http does http post request with data.
