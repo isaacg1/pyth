@@ -105,7 +105,7 @@ def parse(code, spacing="\n "):
 
     # <function>M: Map operator
     if rest_code and rest_code[0] == 'M':
-        if active_char in c_to_f and not c_to_f[active_char] == 0:
+        if active_char in c_to_f and not c_to_f[active_char][1] == 0:
             map_arg = c_to_f['m'][0][-2]
             arity = c_to_f[active_char][1]
             if arity == 1:
