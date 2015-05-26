@@ -97,7 +97,7 @@ c_to_f = {
     'x': ('index', 2),
     'y': ('subsets', 1),
     '.A': ('all', 1),
-    '.a': ('abs', 1),
+    '.a': ('Pabs', 1),
     '.B': ('Pbin', 1),
     '.c': ('combinations', 2),
     '.C': ('combinations_with_replacement', 2),

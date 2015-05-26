@@ -958,6 +958,22 @@ def Poct(a):
 environment['Poct'] = Poct
 
 
+# .a num/seq of num/seq of 2 seq of num
+def Pabs(a):
+    if is_num(a):
+        return abs(a)
+    if isinstance(a, tuple) or isinstance(a, list):
+        if not a:
+            return 0
+        if is_num(a[0]):
+            return sum(num ** 2 for num in a) ** .5
+        if len(a) == 2:
+            return sum((num1 - num2) ** 2 for num1, num2 in zip(*a)) ** .5
+
+    raise BadTypeCombinationError(".a", a)
+environment['Pabs'] = Pabs
+
+
 # .c. seq, int
 def combinations(a, b):
     if isinstance(a, int) and isinstance(b, int):
