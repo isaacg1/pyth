@@ -64,11 +64,11 @@ N  0 N                   Variable. '"'
 O  1 N randOm-chOice     random.choice(_). Uses range(int). O0 = random.random(). Oa if a < 0 is random.seed(-a).
 P  1 N Prime/Pop         prime factorization on int. All but last on str, list. Phase on complex.
 Q  0 N quick             Variable. Autoinitializing to evaluated input.
-R  1 Y return            Python return. Implicit ).
+R  1 Y return            Python return. Implicit ). Also is right map operator. %R4[5 10 20 = [5%4, 10%4, 20%4].
 S  1 N sorted            Python sorted.
 T  0 N ten               Variable. 10
 U  1 N unary-range       Python unary range. Splats 2 tuples. U_=Ul_ on str, list.
-V  S Y                   Loop times equal to input. Equivalent to FNU
+V  S Y                   Loop times equal to input. Equivalent to FNU. Also is vectorize operator. +V[1 2 3)[4 5 6) = [5, 7, 9]
 W  S Y while             Python while.
 X  3 N indeXed assign    Indexed assignment, returns updated. Only returns on str, mod-wrap on list.
                          On <seq><seq><seq> performs translation, uses reversed of 2nd arg, if 3rd is omitted.
