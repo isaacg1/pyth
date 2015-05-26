@@ -48,6 +48,9 @@ def general_parse(code):
 
 
 def parse(code, spacing="\n "):
+    # Skip newlines.
+    while code[:1] == "\n":
+        code = code[1:]
     # If we've reached the end of the string, finish up.
     if code == '':
         return '', ''
