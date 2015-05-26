@@ -130,6 +130,16 @@ class memoized(object):
             return value
 environment['memoized'] = memoized
 
+#Custom class for operator chaining
+class OpChain(object):
+    def __init__(self, initial_chain):
+        self.chain=initial_chain
+    
+    def __bool__(self):
+        return bool(eval(self.chain))
+    
+    def __repr__(self):
+        return str(bool(self))
 
 # If argument is a number, turn it into a range.
 def num_to_range(arg):
@@ -386,11 +396,15 @@ def lt(a, b):
         return a[:b]
     if isinstance(a, complex) or isinstance(b, complex):
         return abs(a) < abs(b)
-    if is_num(a) and is_num(b) or\
-            isinstance(a, list) and isinstance(b, list) or\
-            isinstance(a, tuple) and isinstance(b, tuple) or\
-            isinstance(a, str) and isinstance(b, str):
-        return a < b
+    if (is_num(a) or isinstance(a, OpChain)) and is_num(b) or\
+            isinstance(a, (list, OpChain)) and isinstance(b, list) or\
+            isinstance(a, (tuple, OpChain)) and isinstance(b, tuple) or\
+            isinstance(a, (str, OpChain)) and isinstance(b, str):
+        
+        if isinstance(a, OpChain):
+            a.chain+="<"+str(b)
+            return a
+        return OpChain(str(a)+"<"+str(b))
     raise BadTypeCombinationError("<", a, b)
 environment['lt'] = lt
 
@@ -403,11 +417,15 @@ def gt(a, b):
         return a[b:]
     if isinstance(a, complex) or isinstance(b, complex):
         return abs(a) > abs(b)
-    if is_num(a) and is_num(b) or\
-            isinstance(a, list) and isinstance(b, list) or\
-            isinstance(a, tuple) and isinstance(b, tuple) or\
-            isinstance(a, str) and isinstance(b, str):
-        return a > b
+    if (is_num(a) or isinstance(a, OpChain)) and is_num(b) or\
+            isinstance(a, (list, OpChain)) and isinstance(b, list) or\
+            isinstance(a, (tuple, OpChain)) and isinstance(b, tuple) or\
+            isinstance(a, (str, OpChain)) and isinstance(b, str):
+        
+        if isinstance(a, OpChain):
+            a.chain+=">"+str(b)
+            return a
+        return OpChain(str(a)+">"+str(b))
     raise BadTypeCombinationError(">", a, b)
 environment['gt'] = gt
 
@@ -516,11 +534,15 @@ def gte(a, b):
         return a.issuperset(b)
     if is_seq(a) and is_num(b):
         return a[b-1:]
-    if is_num(a) and is_num(b) or\
-            isinstance(a, list) and isinstance(b, list) or\
-            isinstance(a, tuple) and isinstance(b, tuple) or\
-            isinstance(a, str) and isinstance(b, str):
-        return a >= b
+    if (is_num(a) or isinstance(a, OpChain)) and is_num(b) or\
+            isinstance(a, (list, OpChain)) and isinstance(b, list) or\
+            isinstance(a, (tuple, OpChain)) and isinstance(b, tuple) or\
+            isinstance(a, (str, OpChain)) and isinstance(b, str):
+        
+        if isinstance(a, OpChain):
+            a.chain+=">="+str(b)
+            return a
+        return OpChain(str(a)+">="+str(b))
     raise BadTypeCombinationError("g", a, b)
 environment['gte'] = gte
 environment['H'] = {}
@@ -611,7 +633,12 @@ environment['N'] = '"'
 
 # n. All.
 def ne(a, b):
-    return a != b
+    if isinstance(a, OpChain):
+        a.chain+="!="+str(b)
+        return a
+
+    else:
+        return OpChain(str(a)+"!="+str(b))
 environment['ne'] = ne
 
 
@@ -681,7 +708,13 @@ environment['Pprint'] = Pprint
 
 # q. All.
 def equal(a, b):
-    return a == b
+    if isinstance(a, OpChain):
+        a.chain+="=="+str(b)
+        return a
+
+    else:
+        return OpChain(str(a)+"=="+str(b))
+    
 environment['equal'] = equal
 
 
