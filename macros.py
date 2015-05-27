@@ -728,6 +728,7 @@ def Prange(a, b):
             else:
                 return sum(([copy.deepcopy(key)] * group_size
                             for group_size, key in a), [])
+        raise BadTypeCombinationError("r", a, b)
 
     if isinstance(a, int):
         if a < b:
