@@ -175,7 +175,11 @@ def lookup(a, b):
     if is_seq(a) and isinstance(b, int):
         return a[b % len(a)]
     if is_col(a) and is_col(b):
-        intersection = filter(lambda b_elm: b_elm in a, b)
+        if isinstance(a, str):
+            intersection = filter(lambda b_elm: isinstance(b_elm, str)
+                                  and b_elm in a, b)
+        else:
+            intersection = filter(lambda b_elem: b_elem in a, b)
         if isinstance(a, str):
             return ''.join(intersection)
         if isinstance(a, tuple):
@@ -252,7 +256,11 @@ def minus(a, b):
         if isinstance(a, tuple):
             return minus(a, (b,))
     if is_col(a) and is_col(b):
-        difference = filter(lambda c: c not in b, a)
+        if isinstance(b, str):
+            difference =\
+                filter(lambda c: not isinstance(c, str) or c not in b, a)
+        else:
+            difference = filter(lambda c: c not in b, a)
         if isinstance(a, str):
             return ''.join(difference)
         if isinstance(a, list):
