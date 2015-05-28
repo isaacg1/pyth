@@ -384,6 +384,8 @@ def lt(a, b):
         return a.issubset(b) and a != b
     if is_seq(a) and is_num(b):
         return a[:b]
+    if is_num(a) and is_seq(b):
+        return b[:-a]
     if isinstance(a, complex) or isinstance(b, complex):
         return abs(a) < abs(b)
     if is_num(a) and is_num(b) or\
@@ -401,6 +403,8 @@ def gt(a, b):
         return a.issuperset(b) and a != b
     if is_seq(a) and is_num(b):
         return a[b:]
+    if is_num(a) and is_seq(b):
+        return b[-a:]
     if isinstance(a, complex) or isinstance(b, complex):
         return abs(a) > abs(b)
     if is_num(a) and is_num(b) or\
