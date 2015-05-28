@@ -1460,8 +1460,6 @@ def unique(a):
     try:
         return len(a) == len(set(a))
     except TypeError:
-        if len(a) == 0:
-            return True
         sort = sorted(a)
         return all(x != y for x, y in zip(sort, sort[1:]))
 environment['unique'] = unique
