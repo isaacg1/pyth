@@ -1133,8 +1133,6 @@ def permutations2(a, b):
         # compute n P r
         return functools.reduce(operator.mul, range(a - b + 1, a + 1), 1)
 
-    if isinstance(a, int):
-        a = list(range(a))
     if not is_seq(a) or not isinstance(b, int):
         raise BadTypeCombinationError(".P", a, b)
 
