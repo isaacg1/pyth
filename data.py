@@ -82,7 +82,7 @@ c_to_f = {
     'n': ('ne', 2),
     'O': ('rchoice', 1),
     'o': ('order(lambda N:', 2),
-    'P': ('primes_upper', 1),
+    'P': ('primes_pop', 1),
     'p': ('Pprint', 2),
     'q': ('equal', 2),
     'r': ('Prange', 2),

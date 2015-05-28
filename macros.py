@@ -659,7 +659,7 @@ def isprime(num):
 
 
 # P. int, str, list.
-def primes_upper(a):
+def primes_pop(a):
     if isinstance(a, int):
         if a < 2:
             return []
@@ -677,7 +677,7 @@ def primes_upper(a):
     if is_seq(a):
         return a[:-1]
     raise BadTypeCombinationError("P", a)
-environment['primes_upper'] = primes_upper
+environment['primes_pop'] = primes_pop
 
 
 # p. All.
