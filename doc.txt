@@ -38,6 +38,7 @@ $  X N super-quote       Begins and ends Python literals. A Python literal is pl
 /  2 N div               Floored division. .count() method on containers.
 :  3 N slice-sub         Python slice. :<seq><int><int> -> <seq>[<int>:<int>].
                          :<str><str><str> is regex substitution, substitute in a, b for c. :<str><str><oth> is regex search, boolean.
+                         On :<num><num><num>, generalized range. :abc is range from a to b, step size c or -c as appropriate if c > 0. If c < 0, equivalent to :ba_c
                          :<idx><col><any> is indexed substitution. For every index in b an element is taken from c (cycling when exhausted), and assigned to a at that index.
 ;  X N end-line          End everything. Infinite ). Best used in statements.
 <  2 N less-than         Less than, subset, slice. < seq num is seq[:num]. Compare by magnitude on complex.

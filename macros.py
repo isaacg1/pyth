@@ -353,8 +353,26 @@ def at_slice(a, b, c):
             return bool(re.search(b, a))
         else:
             return re.sub(b, c, a)
-    if isinstance(b, int) and (isinstance(c, int) or c is None):
+    if is_seq(a) and isinstance(b, int) and isinstance(c, int):
         return a[slice(b, c)]
+
+    if is_num(a) and is_num(b) and is_num(c):
+        if c > 0:
+            work = a
+            end = b
+            gen_range = []
+            if a <= b:
+                cont_test = lambda work: work < b
+                step = c
+            else:
+                cont_test = lambda work: work > b
+                step = -c
+            while cont_test(work):
+                gen_range.append(work)
+                work += step
+            return gen_range
+        elif c < 0:
+            return at_slice(b, a, -c)[::-1]
 
     # There is no nice ABC for this check.
     if hasattr(a, "__getitem__") and is_col(b):
