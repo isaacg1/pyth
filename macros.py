@@ -785,8 +785,6 @@ def Psum(a):
     if isinstance(a, complex):
         return a.real
     if is_num(a) or isinstance(a, str):
-        if isinstance(a, int):
-            return list(range(1, a+1))
         return int(a)
     raise BadTypeCombinationError("s", a)
 environment['Psum'] = Psum
@@ -798,6 +796,8 @@ def Psorted(a):
         return ''.join(sorted(a))
     if is_col(a):
         return sorted(a)
+    if isinstance(a, int):
+        return list(range(1, a+1))
     raise BadTypeCombinationError("S", a)
 environment['Psorted'] = Psorted
 environment['T'] = 10

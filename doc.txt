@@ -66,7 +66,7 @@ O  1 N randOm-chOice     random.choice(_). Uses range(int). O0 = random.random()
 P  1 N Prime/Pop         prime factorization on int. All but last on str, list. Phase on complex.
 Q  0 N quick             Variable. Autoinitializing to evaluated input.
 R  1 Y return            Python return. Implicit ). Also is right map operator. %R4[5 10 20 = [5%4, 10%4, 20%4].
-S  1 N sorted            Python sorted.
+S  1 N sorted            Python sorted. Inclusive range from 1 on int.
 T  0 N ten               Variable. 10
 U  1 N unary-range       Python unary range. Splats 2 tuples. U_=Ul_ on str, list.
 V  S Y                   Loop times equal to input. Equivalent to FNU. Also is vectorize operator. +V[1 2 3)[4 5 6) = [5, 7, 9]
@@ -105,7 +105,7 @@ o  2 N order-by          Python sorted, key=. Implicit lambda, N -> Z ->
 p  2 N print             Python print, end=. Implicitly called with "\n".
 q  2 N equals            Python ==.
 r  2 N range             Python 2 range. range(a, b, -1) if a > b. Various string + seq processing (see below).
-s  1 N sum-int           Reduce Pyth + on non-str seq, cast to int on other. Real part on complex. Inclusive range from 1 on int.
+s  1 N sum-int           Reduce Pyth + on non-str seq, cast to int on other. Real part on complex.
 t  1 N tail              _[1:], _-1.
 u  3 N reduce            Reduce, implicit lambda. 3rd is base case. G,H -> N,T.
                          Fixed point operator if 2nd arg omitted, e.g. u<1st><3rd>).
