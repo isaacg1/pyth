@@ -311,6 +311,13 @@ def Pset(a=set()):
     raise BadTypeCombinationError("{", a)
 environment['Pset'] = Pset
 
+# }. in
+def Pin(a, b):
+    if isinstance(a, int) and isinstance(b, int):
+        return list(range(a, b+1))
+     
+    return a in b
+environment['Pin'] = Pin
 
 # +. All.
 def plus(a, b):
@@ -778,6 +785,8 @@ def Psum(a):
     if isinstance(a, complex):
         return a.real
     if is_num(a) or isinstance(a, str):
+        if isinstance(a, int):
+            return list(range(1, a+1))
         return int(a)
     raise BadTypeCombinationError("s", a)
 environment['Psum'] = Psum
