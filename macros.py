@@ -134,7 +134,7 @@ environment['memoized'] = memoized
 # If argument is a number, turn it into a range.
 def num_to_range(arg):
     if is_num(arg):
-        return range(int(arg))
+        return urange(int(arg))
 
     return arg
 environment['num_to_range'] = num_to_range
@@ -315,7 +315,7 @@ environment['Pset'] = Pset
 def Pin(a, b):
     if isinstance(a, int) and isinstance(b, int):
         return list(range(a, b+1))
-     
+
     return a in b
 environment['Pin'] = Pin
 
@@ -638,7 +638,7 @@ environment['Plen'] = Plen
 # m. Single purpose.
 def Pmap(a, b):
     if isinstance(b, int):
-        return list(map(a, range(b)))
+        return list(map(a, urange(b)))
     if is_col(b):
         return list(map(a, b))
     raise BadTypeCombinationError("m", a, b)
@@ -845,7 +845,10 @@ environment['reduce'] = reduce
 # U. int, str, list.
 def urange(a):
     if isinstance(a, int):
-        return list(range(a))
+        if a >= 0:
+            return list(range(a))
+        else:
+            return list(range(a, 0))
     if is_col(a):
         return list(range(len(a)))
     raise BadTypeCombinationError("U", a)
@@ -1118,7 +1121,7 @@ environment['log'] = log
 # .m. func, seq or int
 def minimal(a, b):
     if isinstance(b, int):
-        seq = range(b)
+        seq = urange(b)
     elif is_col(b):
         seq = b
     else:
@@ -1131,7 +1134,7 @@ environment['minimal'] = minimal
 # .M. func, seq or int
 def maximal(a, b):
     if isinstance(b, int):
-        seq = range(b)
+        seq = urange(b)
     elif is_col(b):
         seq = b
     else:
@@ -1159,7 +1162,7 @@ environment['Pnumbers'] = Pnumbers
 # .p. seq
 def permutations(a):
     if isinstance(a, int):
-        a = list(range(a))
+        a = urange(a)
     if not is_seq(a):
         raise BadTypeCombinationError(".p", a)
     return itertools_norm(itertools.permutations, a, len(a))
@@ -1250,7 +1253,7 @@ def shuffle(a):
         random.shuffle(tmp_list)
         return tmp_list
     if isinstance(a, int):
-        tmp_list = list(range(a))
+        tmp_list = urange(a)
         random.shuffle(tmp_list)
         return tmp_list
 
@@ -1288,7 +1291,7 @@ def cu_reduce(a, b, c=None):
         return results
     if is_seq(b) or isinstance(b, int):
         if isinstance(b, int):
-            seq = range(b)
+            seq = urange(b)
         else:
             seq = b
         acc = c
@@ -1306,7 +1309,7 @@ environment['cu_reduce'] = cu_reduce
 def reduce2(a, b):
     if is_seq(b) or isinstance(b, int):
         if isinstance(b, int):
-            whole_seq = range(b)
+            whole_seq = urange(b)
         else:
             whole_seq = b
         if len(whole_seq) == 0:
@@ -1470,7 +1473,7 @@ def substrings(a, b=None):
     if is_seq(a):
         seq = a
     elif isinstance(a, int):
-        seq = list(range(a))
+        seq = urange(a)
     else:
         raise BadTypeCombinationError(".:", a, b)
     if isinstance(b, int):

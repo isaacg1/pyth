@@ -44,7 +44,7 @@ Q 0 N quick Variable. Autoinitializing to evaluated input.
 R 1 Y return Python return. Implicit ). Also is right map operator. %R4[5 10 20 = [5%4, 10%4, 20%4].
 S 1 N sorted Python sorted.
 T 0 N ten Variable. 10
-U 1 N unary-range Python unary range. Splats 2 tuples. U_=Ul_ on str, list.
+U 1 N unary-range Python unary range. U_=Ul_ on str, list. On negative ints, range(a, 0).
 V S Y eval-loop Loop times equal to input. Equivalent to FNU. Also is vectorize operator. +V[1 2 3)[4 5 6) = [5, 7, 9]
 W S Y while Python while.
 X 3 Y indeXed assign Indexed assignment, returns updated. Only returns on str, mod-wrap on list. On <seq><seq><seq> performs translation, uses reversed of 2nd arg, if 3rd is omitted. On <int><list> or <any><dict>, performs indexed +=. Assigns if key not in dict.
