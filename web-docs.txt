@@ -84,7 +84,7 @@ y 1 N powerset On num, double. On seq, powerset.
 z 0 N z Variable. Autoinitializing to input.
 { 1 N set Python set. Makes one element set on num.
 | 2 N or Logical or. Short-circuiting.
-} 2 N in Python in.
+} 2 N in Python in. Inclusive range on int, int.
 ~ 1 N += The same as =+.
 .a 1 N abs Python abs(_). On list of nums, vector length. On list of 2 lists of nums, Euclidean distance.
 .A 1 N all Python all(_).

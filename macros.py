@@ -311,6 +311,13 @@ def Pset(a=set()):
     raise BadTypeCombinationError("{", a)
 environment['Pset'] = Pset
 
+# }. in
+def Pin(a, b):
+    if isinstance(a, int) and isinstance(b, int):
+        return list(range(a, b+1))
+     
+    return a in b
+environment['Pin'] = Pin
 
 # +. All.
 def plus(a, b):
@@ -789,6 +796,8 @@ def Psorted(a):
         return ''.join(sorted(a))
     if is_col(a):
         return sorted(a)
+    if isinstance(a, int):
+        return list(range(1, a+1))
     raise BadTypeCombinationError("S", a)
 environment['Psorted'] = Psorted
 environment['T'] = 10

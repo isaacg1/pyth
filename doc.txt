@@ -66,7 +66,7 @@ O  1 N randOm-chOice     random.choice(_). Uses range(int). O0 = random.random()
 P  1 N Prime/Pop         prime factorization on int. All but last on str, list. Phase on complex.
 Q  0 N quick             Variable. Autoinitializing to evaluated input.
 R  1 Y return            Python return. Implicit ). Also is right map operator. %R4[5 10 20 = [5%4, 10%4, 20%4].
-S  1 N sorted            Python sorted.
+S  1 N sorted            Python sorted. Inclusive range from 1 on int.
 T  0 N ten               Variable. 10
 U  1 N unary-range       Python unary range. Splats 2 tuples. U_=Ul_ on str, list.
 V  S Y                   Loop times equal to input. Equivalent to FNU. Also is vectorize operator. +V[1 2 3)[4 5 6) = [5, 7, 9]
@@ -116,7 +116,7 @@ y  1 N                   On num, double. On col, powerset.
 z  0 N                   Variable. Autoinitializing to input.
 {  1 N set               Python set. Makes one element set on num.
 |  2 N or                Logical or. Short-circuiting.
-}  2 N in                Python in.
+}  2 N in                Python in. Inclusive range on int, int.
 ~  1 Y +=                The same as =+.
 .a 1 N abs               Python abs(_). On list of nums, vector length. On list of 2 lists of nums, Euclidean distance.
 .A 1 N all               Python all(_).
