@@ -125,6 +125,7 @@ c_to_f = {
     '.S': ('shuffle', 1),
     '.s': ('stripchars', 2),
     '.t': ('trig', 2),
+    '.T': ('transpose', 1),
     '.U': ('reduce2(lambda b, Z:', 2),
     '.u': ('cu_reduce(lambda N, Y:', 3),
     '.w': ('Pwrite', 2),

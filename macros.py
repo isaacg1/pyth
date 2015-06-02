@@ -311,6 +311,7 @@ def Pset(a=set()):
     raise BadTypeCombinationError("{", a)
 environment['Pset'] = Pset
 
+
 # }. in
 def Pin(a, b):
     if isinstance(a, int) and isinstance(b, int):
@@ -318,6 +319,7 @@ def Pin(a, b):
 
     return a in b
 environment['Pin'] = Pin
+
 
 # +. All.
 def plus(a, b):
@@ -369,10 +371,10 @@ def at_slice(a, b, c):
             end = b
             gen_range = []
             if a <= b:
-                cont_test = lambda work: work < b
+                def cont_test(work): return work < b
                 step = c
             else:
-                cont_test = lambda work: work > b
+                def cont_test(work): return work > b
                 step = -c
             while cont_test(work):
                 gen_range.append(work)
@@ -516,7 +518,11 @@ def Pchr(a):
     if isinstance(a, str):
         return to_base_ten(list(map(ord, a)), 256)
     if is_col(a):
-        return list(zip(*a))
+        trans = list(zip(*a))
+        if all(isinstance(sublist, str) for sublist in a):
+            return list(map(''.join, trans))
+        else:
+            return list(map(list, trans))
     raise BadTypeCombinationError("C", a)
 environment['Pchr'] = Pchr
 
@@ -707,7 +713,7 @@ environment['primes_pop'] = primes_pop
 
 # p. All.
 def Pprint(a, b=""):
-    if not b is None:
+    if b is not None:
         if isinstance(a, str):
             print(b, end=a)
         else:
@@ -1274,6 +1280,23 @@ def trig(a, b):
 
     return funcs[b](a)
 environment['trig'] = trig
+
+
+# .T. list
+def transpose(a):
+    if is_col(a):
+        lol = [urange(elem) if isinstance(elem, int) else elem for elem in a]
+        cols = max(len(sublist) for sublist in lol)
+        trans = [[] for _ in range(cols)]
+        for sublist in lol:
+            for index, elem in enumerate(sublist):
+                trans[index].append(elem)
+        if all(isinstance(sublist, str) for sublist in lol):
+            return list(map(''.join, trans))
+        else:
+            return list(map(list, trans))
+    raise BadTypeCombinationError(".T", a)
+environment['transpose'] = transpose
 
 
 # .u. lambda, seq, any

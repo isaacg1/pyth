@@ -1,4 +1,4 @@
-<newline> 1 N newline  Separates without suppressing printing.
+<newline> 1 N newline Separates without suppressing printing.
 <space> 1 N blank Primarily used to separate numeric literals. Also suppresses printing, which is default on.
 ! 1 N not Logical not. Uses Python's truthy/falsy.
 " X N quote Begins and ends string literals. Optional at end of line.
@@ -26,7 +26,7 @@ $ X N super-quote Begins and ends Python literals. A Python literal is placed di
 @ 2 N lookup Lookup from str, list or dict. Modulo wrapping on list, str. On seq, seq, intersection. Specifically, filter second arg on presence in first arg. On num, num, bth root of a.
 A 3 Y assign-pair Aabc => a,b = c. First arguments must be variables. c must be a 2-tuple.
 B 0 Y break Python break. Implicit ).
-C 1 N chr char -> int, int -> char. Matrix transpose on list of lists, zip(*a) specifically. Conjugate on complex.
+C 1 N chr char -> int, int -> char. Matrix transpose on list of lists, zip(*a) specifically. If input was list of str, output will be as well. Conjugate on complex.
 D S Y def Python def. Match arity w/ existing function. Memoized.
 E S Y else Python else.
 F S Y for Python for. Also is fold operator. <binary>F = .U<binary>bZ.
@@ -56,7 +56,7 @@ Z 0 N zero Variable. 0
 ^ 2 N power Python pow, Cartesian product with # of repeats.
 _ 1 N neg Negation. Str and list reverse.
 ` 1 N repr Python repr.
-a  2 N append Python .append(), .add(). First argument must be a list or set. Returns resultant list or string as well as modifying input. On non-hashable additions to set, casts to tuple.
+a 2 N append Python .append(), .add(). First argument must be a list or set. Returns resultant list or string as well as modifying input. On non-hashable additions to set, casts to tuple.
 b 0 N line-Break Variable. "\n"
 c 2 N chop On <str/list><int> chop str/list every n elements. On <int><str/list> split str/list into n pieces (elements are equally distributed). On <str><str>, str.split. On <num><num> floating point division. On <seq><col of ints> split seq at each int into list of seqs.
 d 0 N d Variable. " "
@@ -89,7 +89,7 @@ z 0 N z Variable. Autoinitializing to input.
 .a 1 N abs Python abs(_). On list of nums, vector length. On list of 2 lists of nums, Euclidean distance.
 .A 1 N all Python all(_).
 .B 1 N bin Binary string representing _. Direct on int, interpreted as UTF-8 on str. No '0b'.
-.c 2 N combinations  of elements from a of length b. On two integers, nCr.
+.c 2 N combinations combinations of elements from a of length b. On two integers, nCr.
 .C 2 N comb-replacement Combinations of elements from a of length b, with replacement.
 .d 1 n dict
 .D 2 N divmod
@@ -116,7 +116,8 @@ z 0 N z Variable. Autoinitializing to input.
 .s 2 N strip-chars a.strip(b)
 .S 1 N shuffle .S<col> random.shuffle(<col>). str out if str in, otherwise list out. .S(<int>) = .S(range(<int>))
 .t 2 N trigonometry Collection of trigonometric functions.
-.u 3 N cumul-reduce      Just like u, except returns a collection of all intermediate states. lambda N, Y.
+.T 1 N transpose Matrix transpose. Do not strip characters, instead top justify. list of str -> list of str, ofther to list of lists. Casts int elems to urange.
+.u 3 N cumul-reduce Just like u, except returns a collection of all intermediate states. lambda N, Y.
 .U 2 N reduce2 The 2 input reduce, uses first value of sequence as initial value and the rest as sequence. (b, Z) -> (k, Y) ->
 .V S Y forever An infinite for loop. b iterates over an infinite sequence starting at the input, same sequence as .f. On num, incrementing sequence. On str, rupy's .succ sequence.
 .w 2 N file-write. Writes first arg to file second arg. If starts with http does http post request with data.

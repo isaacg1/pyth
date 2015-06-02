@@ -50,7 +50,7 @@ $  X N super-quote       Begins and ends Python literals. A Python literal is pl
                          Specifically, filter second arg on presence in first arg. On num, num, bth root of a.
 A  3 Y assign-pair       Aabc => a,b = c. First arguments must be variables. c must be a 2-tuple.
 B  0 Y break             Python break. Implicit ).
-C  1 N chr               char -> int, int -> char. Matrix transpose on list of lists, zip(*a) specifically. Conjugate on complex.
+C  1 N chr               char -> int, int -> char. Matrix transpose on list of lists, zip(*a) specifically. If input was list of str, output will be as well. Conjugate on complex.
 D  S Y def               Python def. Match arity w/ existing function. Memoized.
 E  S Y else              Python else.
 F  S Y for               Python for. Also is fold operator. <binary>F = .U<binary>bZ.
@@ -153,6 +153,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .s 2 N strip-chars       a.strip(b)
 .S 1 N shuffle           .S<col> random.shuffle(<col>). .S(<int>) = .S(range(<int>))
 .t 2 N trigonometry      Collection of trigonometric functions. See below.
+.T 1 N transpose         Matrix transpose. Do not strip characters, instead top justify. list of str -> list of str, ofther to list of lists. Casts int elems to urange.
 .u 3 N cumul-reduce      Just like u, except returns a collection of all intermediate states. lambda N, Y.
 .U 2 N reduce2           The 2 input reduce, uses first value of sequence as initial value and the rest as sequence. (b, Z) -> (k, Y) ->
 .V 2 Y forever           An infinite for loop. b iterates over an infinite sequence starting at the input, same sequence as .f.
