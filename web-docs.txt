@@ -97,6 +97,7 @@ z 0 N z Variable. Autoinitializing to input.
 .E 1 N any Python any(_).
 .f 3 N first_n .fabc: Filters for the first b elements of infinite sequence starting at c for which a is truthy. a is lambda of Z. c defaults to 1. Infinite sequence is increasing numbers by 1 on num, or successive strings on string. Uses ruby .succ equivalent, doc here: http://ruby-doc.org/core-2.2.2/String.html#method-i-succ
 .F 2 N format a.format(b) - if b is a non-string sequence, it will be unpacked.
+.g 2 N group_by group seq by the value of the lambda. Groups are sorted by the value of the lambda.
 .h 1 N hash
 .H 1 N hex Hexadecimal string representing _. Direct on int, interpreted as UTF-8 on str. No '0x'.
 .i 2 N interleave Interleave two sequences - .i([a1, a2], [b1, b2, b3, b4]) = [a1, b1, a2, b2, b3, b4]

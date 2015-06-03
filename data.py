@@ -1,4 +1,4 @@
-no_init_paren = ('f', 'm', 'o', 'u', '.e', '.f', '.m', '.M', '.u', '.U')
+no_init_paren = ('f', 'm', 'o', 'u', '.e', '.f', '.m', '.g', '.M', '.u', '.U')
 end_statement = ('B', 'R', '.*')
 variables = 'bdGHkNQTYzZ'
 
@@ -107,6 +107,7 @@ c_to_f = {
     '.e': ('Penumerate(lambda k, b:', 2),
     '.f': ('first_n(lambda Z:', 3),
     '.F': ('Pformat', 2),
+    '.g': ('group_by(lambda k:', 2),
     '.H': ('Phex', 1),
     '.h': ('Phash', 1),
     '.i': ('interleave', 2),

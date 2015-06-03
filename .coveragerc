@@ -1,4 +1,7 @@
 [report]
 exclude_lines =
-    raise*
-    class BadTypeCombinationError*
+    raise
+    class .*(Exception)
+    if __name__
+    def preprocess
+    except

@@ -1089,6 +1089,23 @@ def Pformat(a, b):
 environment['Pformat'] = Pformat
 
 
+# .g lambda, seq
+def group_by(a, b):
+    if is_num(b):
+        seq = urange(b)
+    elif is_col(b):
+        seq = b
+    else:
+        raise BadTypeCombinationError(".g", a, b)
+    key_sort = sorted(seq, key=a)
+    grouped = itertools.groupby(key_sort, key=a)
+    if isinstance(b, str):
+        return list(map(lambda group: ''.join(group[1]), grouped))
+    else:
+        return list(map(lambda group: list(group[1]), grouped))
+environment['group_by'] = group_by
+
+
 # .i. seq, seq
 def interleave(a, b):
     if is_seq(a) and is_seq(b):
