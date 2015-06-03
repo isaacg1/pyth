@@ -131,6 +131,13 @@ def parse(code, spacing="\n "):
         if active_char in c_to_f and 1 <= c_to_f[active_char][1] <= 2:
             return parse(active_char + "MC," + rest_code[1:])
 
+    # <unary function>I<any> Invariant operator.
+    # Equivalent to q<func><any><any>
+    if rest_code and rest_code[0] == 'I':
+        if active_char in c_to_f and c_to_f[active_char][1] == 1:
+            parsed, rest_code = parse(rest_code[1:])
+            func_name = c_to_f[active_char][0]
+            return ('invariant(' + func_name + ',' + parsed + ')', rest_code)
     # =<function/infix>: augmented assignment.
     if active_char == '=':
         if rest_code[0] == ".":

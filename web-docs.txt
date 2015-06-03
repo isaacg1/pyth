@@ -11,7 +11,7 @@ $ X N super-quote Begins and ends Python literals. A Python literal is placed di
 ) X N close-paren Ends functions, statements. Marks last line of statement, last arg. of function. Necessary for statements, unbounded functions.
 * 2 N times Like python, multiplication, replication. Cartesian product on lists, tuples or sets.
 + 2 N plus Addition, concatenation. Set union. Prepend or append non-list to list. str + num cast to str.
-, 2 N pair 2 entry tuple.
+, 2 N pair 2 entry list.
 - 2 N minus Subtraction, setwise difference. Maintains order. -<num><seq> coerces number to sequence type. Return type is type of first arg.
 . X N point Numeric literals. Secondary function list - see end of doc for details.
 / 2 N div Floored division. .count() method on containers.

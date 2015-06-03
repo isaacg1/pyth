@@ -34,6 +34,10 @@ def is_hash(a):
     return isinstance(a, collections.Hashable)
 
 
+def is_lst(a):
+    return isinstance(a, list) or isinstance(a, tuple)
+
+
 # Error handling
 class BadTypeCombinationError(Exception):
     def __init__(self, func, *args):
@@ -53,12 +57,10 @@ class BadTypeCombinationError(Exception):
 def itertools_norm(func, a, *args, **kwargs):
     if isinstance(a, str):
         return ["".join(group) for group in func(a, *args, **kwargs)]
-    if isinstance(a, list):
-        return [list(group) for group in func(a, *args, **kwargs)]
     if isinstance(a, set):
         return [set(group) for group in func(a, *args, **kwargs)]
-
-    return [group for group in func(a, *args, **kwargs)]
+    else:
+        return [list(group) for group in func(a, *args, **kwargs)]
 
 
 # The environment in which the generated Python code is run.
@@ -140,6 +142,12 @@ def num_to_range(arg):
 environment['num_to_range'] = num_to_range
 
 
+# Checks whether a function outputs its input. Used in I.
+def invariant(func, a):
+    return func(a) == a
+environment['invariant'] = invariant
+
+
 # Function library. See data for letter -> function correspondences.
 # =. N/A, .= A
 def assign(a, b):
@@ -148,7 +156,7 @@ def assign(a, b):
             environment[a] = copy.deepcopy(b)
             return b
         else:
-            var_names = a.strip('()').split(',')
+            var_names = a.strip('[]').split(',')
             if is_seq(b) and len(var_names) == len(b) == 2 and \
                     all(len(var_name) == 1 for var_name in var_names):
                 for var_name, item in zip(var_names, b):
@@ -182,8 +190,6 @@ def lookup(a, b):
             intersection = filter(lambda b_elem: b_elem in a, b)
         if isinstance(a, str):
             return ''.join(intersection)
-        if isinstance(a, tuple):
-            return tuple(intersection)
         if isinstance(a, set):
             return set(intersection)
         else:
@@ -198,8 +204,13 @@ def mod(a, b):
         return b[::a]
     if isinstance(a, complex) and is_num(b):
         return (a.real % b) + (a.imag % b) * 1j
-    if is_num(a) and is_num(b) or isinstance(a, str):
+    if is_num(a) and is_num(b):
         return a % b
+    if isinstance(a, str):
+        if is_lst(b):
+            return a % tuple(b)
+        else:
+            return a % b
     raise BadTypeCombinationError("%", a, b)
 environment['mod'] = mod
 
@@ -218,7 +229,11 @@ environment['Ppow'] = Ppow
 # *. int, str, list.
 def times(a, b):
     if is_col(a) and is_col(b):
-        return list(itertools.product(a, b))
+        prod = list(itertools.product(a, b))
+        if isinstance(a, str) and isinstance(b, str):
+            return list(map(''.join, prod))
+        else:
+            return list(map(list, prod))
     if is_num(a) and is_num(b) or\
             isinstance(a, int) and is_seq(b) or\
             is_seq(a) and isinstance(b, int):
@@ -240,21 +255,17 @@ def minus(a, b):
     if is_num(a) and is_col(b):
         if isinstance(b, str):
             return minus(str(a), b)
-        if isinstance(b, list):
+        if is_lst(b):
             return minus([a], b)
         if isinstance(b, set):
             return minus({a}, b)
-        if isinstance(b, tuple):
-            return minus((a,), b)
     if is_num(b) and is_col(a):
         if isinstance(a, str):
             return minus(a, str(b))
-        if isinstance(a, list):
+        if is_lst(a):
             return minus(a, [b])
         if isinstance(a, set):
             return minus(a, {b})
-        if isinstance(a, tuple):
-            return minus(a, (b,))
     if is_col(a) and is_col(b):
         if isinstance(b, str):
             difference =\
@@ -263,12 +274,10 @@ def minus(a, b):
             difference = filter(lambda c: c not in b, a)
         if isinstance(a, str):
             return ''.join(difference)
-        if isinstance(a, list):
+        if is_lst(a):
             return list(difference)
         if isinstance(a, set):
             return set(difference)
-        if isinstance(a, tuple):
-            return tuple(difference)
     raise BadTypeCombinationError("-", a, b)
 environment['minus'] = minus
 
@@ -328,17 +337,13 @@ def plus(a, b):
             return a.union(b)
         else:
             return a.union({b})
-    if isinstance(a, list) and not isinstance(b, list):
-        return a+[b]
-    if isinstance(b, list) and not isinstance(a, list):
-        return [a]+b
-    if isinstance(a, tuple) and not isinstance(b, tuple):
-        return a+(b,)
-    if isinstance(b, tuple) and not isinstance(a, tuple):
-        return (a,)+b
+    if is_lst(a) and not is_lst(b):
+        return list(a)+[b]
+    if is_lst(b) and not is_lst(a):
+        return [a]+list(b)
+    if is_lst(a) and is_lst(b):
+        return list(a)+list(b)
     if is_num(a) and is_num(b) or\
-            isinstance(a, list) and isinstance(b, list) or\
-            isinstance(a, tuple) and isinstance(b, tuple) or\
             isinstance(a, str) and isinstance(b, str):
         return a+b
     if is_num(a) and isinstance(b, str):
@@ -400,9 +405,6 @@ def at_slice(a, b, c):
                 indexable[index] = str(next(c))
             else:
                 indexable[index] = next(c)
-
-        if isinstance(a, tuple):
-            return tuple(indexable)
 
         if isinstance(a, str):
             return "".join(indexable)
@@ -1389,12 +1391,10 @@ def bitor(a, b):
         return a | b
     if is_col(a) and is_col(b):
         union = set(a) | set(b)
-        if isinstance(a, list):
+        if is_lst(a):
             return list(union)
         if isinstance(a, str):
             return ''.join(union)
-        if isinstance(a, tuple):
-            return tuple(union)
         return union
 
     raise BadTypeCombinationError(".|", a, b)
@@ -1484,10 +1484,7 @@ def remove(a, b):
 
     if isinstance(a, str):
         return ''.join(seq)
-    if isinstance(a, tuple):
-        return tuple(seq)
-    else:
-        return seq
+    return seq
 environment['remove'] = remove
 
 
