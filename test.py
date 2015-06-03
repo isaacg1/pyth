@@ -578,6 +578,8 @@ test_cases = [
     ('.Uh*bZ7', '1237'),
     ('.U*l`bZ"abcd', 'ddddddd'),
     # .w
+    # .x
+    ('m.x/8d5T', '[5, 8, 4, 2, 2, 1, 1, 1, 1, 0]'),
     # .V
     ('.V1bI>b5B', '1\n2\n3\n4\n5\n6'),
     ('.V\\apkbI>b\\fB', 'abcdefg'),

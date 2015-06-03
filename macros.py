@@ -1386,6 +1386,16 @@ def Pwrite(a, b="foo.txt"):
 environment['Pwrite'] = Pwrite
 
 
+
+# .x try except
+def Pexcept(a, b):
+    try:
+        return a()
+    except:
+        return b()
+environment['Pexcept'] = Pexcept
+
+
 # .z. N/A
 @functools.lru_cache(1)
 def all_input():
