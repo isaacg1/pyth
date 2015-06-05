@@ -125,6 +125,17 @@ def parse(code, spacing="\n "):
             map_arg = c_to_f['m'][0][-2]
             return parse('m' + active_char + map_arg + rest_code[1:])
 
+    # <binary function>L<any><seq>: Left Map operator
+    # >LG[1 2 3 4 -> 'm>Gd[1 2 3 4'.
+    if rest_code and rest_code[0] == 'L':
+        if active_char in c_to_f and c_to_f[active_char][1] == 2:
+            parsed1, rest_code1 = parse(rest_code[1:])
+            parsed2, rest_code2 = parse(rest_code1)
+            func_name = c_to_f[active_char][0]
+            map_arg = c_to_f['m'][0][-2]
+            return (c_to_f['m'][0] + func_name + '(' + parsed1 + ',' +
+                    map_arg + '),' + parsed2 + ')', rest_code2)
+
     # <function>V<seq><seq> Vectorize operator.
     # Equivalent to <func>MC,<seq><seq>.
     if rest_code and rest_code[0] == 'V':
@@ -137,7 +148,8 @@ def parse(code, spacing="\n "):
         if active_char in c_to_f and c_to_f[active_char][1] == 1:
             parsed, rest_code = parse(rest_code[1:])
             func_name = c_to_f[active_char][0]
-            return ('invariant(' + func_name + ',' + parsed + ')', rest_code)
+            return 'invariant(' + func_name + ',' + parsed + ')', rest_code
+
     # =<function/infix>: augmented assignment.
     if active_char == '=':
         if rest_code[0] == ".":
