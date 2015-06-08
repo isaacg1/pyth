@@ -21,8 +21,8 @@ from data import *
 import copy as c
 import sys
 import io
-import traceback
 from ast import literal_eval
+
 environment['literal_eval'] = literal_eval
 
 sys.setrecursionlimit(100000)
@@ -170,7 +170,10 @@ def parse(code, spacing="\n "):
                              following_code[1:])
     # And for general functions
     if active_char in c_to_f:
-        return function_parse(active_char, rest_code)
+        if active_char in next_c_to_f:
+            return changing_function_parse(active_char, rest_code)
+        else:
+            return function_parse(active_char, rest_code)
     # General format functions/operators
     if active_char in c_to_i:
         return infix_parse(active_char, rest_code)
@@ -182,16 +185,38 @@ def parse(code, spacing="\n "):
     raise PythParseError(active_char, rest_code)
 
 
-def function_parse(active_char, rest_code):
+def changing_function_parse(active_char, rest_code):
+    # Function will definitely be in next_c_to_f
     global c_to_f
     global next_c_to_f
     func_name, arity = c_to_f[active_char]
-    init_paren = (active_char not in no_init_paren)
     # Swap what variables are used in lambda functions.
-    if active_char in next_c_to_f:
-        temp = c_to_f[active_char]
-        c_to_f[active_char] = next_c_to_f[active_char][0]
-        next_c_to_f[active_char] = next_c_to_f[active_char][1:] + [temp]
+    temp = c_to_f[active_char]
+    c_to_f[active_char] = next_c_to_f[active_char][0]
+    next_c_to_f[active_char] = next_c_to_f[active_char][1:] + [temp]
+    # Take one argument, the lambda.
+    parsed, rest_code = parse(rest_code)
+    args_list = [parsed]
+    # Rotate back.
+    temp = next_c_to_f[active_char][-1]
+    next_c_to_f[active_char] =\
+        [c_to_f[active_char]] + next_c_to_f[active_char][:-1]
+    c_to_f[active_char] = temp
+    while len(args_list) != arity and parsed != '':
+        parsed, rest_code = parse(rest_code)
+        args_list.append(parsed)
+    py_code = func_name
+    # Initital parenthesis is never needed.
+    if len(args_list) > 0 and args_list[-1] == '':
+        args_list = args_list[:-1]
+    py_code += ','.join(args_list)
+    py_code += ')'
+    return py_code, rest_code
+
+
+def function_parse(active_char, rest_code):
+    func_name, arity = c_to_f[active_char]
+    init_paren = (active_char not in no_init_paren)
     # Recurse until terminated by end paren or EOF
     # or received enough arguments
     args_list = []
@@ -207,12 +232,6 @@ def function_parse(active_char, rest_code):
         args_list = args_list[:-1]
     py_code += ','.join(args_list)
     py_code += ')'
-    # Swap back what variables are used in lambda functions.
-    if active_char in next_c_to_f:
-        temp = next_c_to_f[active_char][-1]
-        next_c_to_f[active_char] =\
-            [c_to_f[active_char]] + next_c_to_f[active_char][:-1]
-        c_to_f[active_char] = temp
     return py_code, rest_code
 
 
@@ -299,11 +318,11 @@ def prepend_parse(code):
 
     for prep_char in sorted(prepend):
         quot_marks = 0
-        for i, c in enumerate(code):
-            if c == '"' and not_escaped(code[:i]):
+        for index, char in enumerate(code):
+            if char == '"' and not_escaped(code[:index]):
                 quot_marks += 1
-            elif c == prep_char and quot_marks % 2 == 0 and \
-                    not_escaped(code[:i]):
+            elif char == prep_char and quot_marks % 2 == 0 and \
+                    not_escaped(code[:index]):
                 out_code = prepend[prep_char] + out_code
                 break
 
@@ -510,7 +529,7 @@ See opening comment in pyth.py for more info.""")
             print("Error: multiline input from command line.")
         else:
             if code_on:
-                code = file_or_string
+                pyth_code = file_or_string
             else:
                 code_file = file_or_string
                 if line_on:
@@ -518,28 +537,28 @@ See opening comment in pyth.py for more info.""")
                     runable_code_lines = [code_line[:-1]
                                           for code_line in code_lines
                                           if code_line[0] not in ';)\n']
-                    code = runable_code_lines[line_num]
+                    pyth_code = runable_code_lines[line_num]
                 elif multiline_on:
                     code_lines = list(open(file_or_string))
-                    code = preprocess_multiline(code_lines)
+                    pyth_code = preprocess_multiline(code_lines)
                 else:
                     end_marker = '; end\n'
                     code_list = list(open(file_or_string))
                     if end_marker in code_list:
                         end_line = code_list.index(end_marker)
-                        code = ''.join(code_list[:end_line])
+                        pyth_code = ''.join(code_list[:end_line])
                     else:
-                        code = ''.join(list(open(file_or_string)))
-                    if len(code) > 0 and code[-1] == '\n':
-                        code = code[:-1]
+                        pyth_code = ''.join(list(open(file_or_string)))
+                    if len(pyth_code) > 0 and pyth_code[-1] == '\n':
+                        pyth_code = pyth_code[:-1]
 
             # Debug message
             if debug_on:
-                print('{:=^50}'.format(' ' + str(len(code)) + ' chars '))
-                print(code)
+                print('{:=^50}'.format(' ' + str(len(pyth_code)) + ' chars '))
+                print(pyth_code)
                 print('='*50)
 
-            py_code_line = general_parse(code)
+            py_code_line = general_parse(pyth_code)
 
             if debug_on:
                 print(py_code_line)
