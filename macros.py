@@ -154,14 +154,16 @@ def assign(a, b):
     if isinstance(a, str):
         if len(a) == 1:
             environment[a] = copy.deepcopy(b)
-            return b
+            return environment[a]
         else:
             var_names = a.strip('[]').split(',')
             if is_seq(b) and len(var_names) == len(b) == 2 and \
                     all(len(var_name) == 1 for var_name in var_names):
+                output = []
                 for var_name, item in zip(var_names, b):
                     environment[var_name] = copy.deepcopy(item)
-                return b
+                    output.append(environment[var_name])
+                return output
     raise BadTypeCombinationError("=", a, b)
 environment['assign'] = assign
 
@@ -1040,20 +1042,38 @@ def combinations(a, b):
 
         return num // den
 
-    if not is_seq(a) or not isinstance(b, int):
-        raise BadTypeCombinationError(".c", a, b)
+    if is_col(a) and isinstance(b, int):
+        return itertools_norm(itertools.combinations, a, b)
 
-    return itertools_norm(itertools.combinations, a, b)
+    raise BadTypeCombinationError(".c", a, b)
+
 environment['combinations'] = combinations
 
 
 # .C. iter, int
 def combinations_with_replacement(a, b):
-    if not is_seq(a) or not isinstance(b, int):
+    if not is_col(a) or not isinstance(b, int):
         raise BadTypeCombinationError(".C", a, b)
 
     return itertools_norm(itertools.combinations_with_replacement, a, b)
 environment['combinations_with_replacement'] = combinations_with_replacement
+
+
+# .D num, num or seq, int or seq, col
+def divmod_or_delete(a, b):
+    if is_num(a) and is_num(b):
+        return divmod(a, b)
+    elif is_seq(a) and is_num(b):
+        return divmod_or_delete(a, [b])
+    elif is_seq(a) and is_col(b):
+        output = []
+        for index, elem in enumerate(a):
+            if index not in b:
+                output.append(elem)
+        return output
+    else:
+        raise BadTypeCombinationError('.D', a, b)
+environment['divmod_or_delete'] = divmod_or_delete
 
 
 # .e. lambda, seq
@@ -1124,6 +1144,26 @@ def interleave(a, b):
 environment['interleave'] = interleave
 
 
+# .I. lambda, any
+def invert(a, b):
+    inv = 1.
+    if a(inv) == b:
+        return inv
+    while a(inv) < b:
+        inv *= 2
+    delta = inv/2
+    while delta > 1e-20:
+        if a(inv) == b:
+            return inv
+        if a(inv - delta) > b:
+            inv -= delta
+        elif a(inv - delta) == b:
+            return inv - delta
+        delta /= 2
+    return inv
+environment['invert'] = invert
+
+
 # .j. int, int
 def Pcomplex(a=0, b=1):
     if not is_num(a) and is_num(b):
@@ -1188,7 +1228,7 @@ environment['Pnumbers'] = Pnumbers
 def permutations(a):
     if isinstance(a, int):
         a = urange(a)
-    if not is_seq(a):
+    if not is_col(a):
         raise BadTypeCombinationError(".p", a)
     return itertools_norm(itertools.permutations, a, len(a))
 environment['permutations'] = permutations
@@ -1200,7 +1240,7 @@ def permutations2(a, b):
         # compute n P r
         return functools.reduce(operator.mul, range(a - b + 1, a + 1), 1)
 
-    if not is_seq(a) or not isinstance(b, int):
+    if not is_col(a) or not isinstance(b, int):
         raise BadTypeCombinationError(".P", a, b)
 
     return itertools_norm(itertools.permutations, a, b)
@@ -1273,7 +1313,7 @@ def shuffle(a):
         tmp_list = list(a)
         random.shuffle(tmp_list)
         return ''.join(tmp_list)
-    if is_seq(a):
+    if is_col(a):
         tmp_list = list(a)
         random.shuffle(tmp_list)
         return tmp_list
@@ -1384,7 +1424,6 @@ def Pwrite(a, b="foo.txt"):
         f.write(("\n".join(map(str, a)) if is_seq(a) and not isinstance(a, str)
                 else str(a))+"\n")
 environment['Pwrite'] = Pwrite
-
 
 
 # .x try except
@@ -1500,7 +1539,7 @@ environment['sign'] = sign
 
 # .-. seq, seq
 def remove(a, b):
-    if not is_seq(a) or not is_col(b):
+    if not is_col(a) or not is_col(b):
         raise BadTypeCombinationError(".-", a, b)
 
     seq = list(a)

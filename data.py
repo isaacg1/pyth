@@ -1,4 +1,5 @@
-no_init_paren = ('f', 'm', 'o', 'u', '.e', '.f', '.m', '.g', '.M', '.u', '.U')
+no_init_paren = ('f', 'm', 'o', 'u', '.e', '.f', '.I', '.m', '.g', '.M', '.u',
+                 '.U')
 end_statement = ('B', 'R', '.*')
 variables = 'bdGHkNQTYzZ'
 
@@ -103,7 +104,7 @@ c_to_f = {
     '.c': ('combinations', 2),
     '.C': ('combinations_with_replacement', 2),
     '.d': ('dict', 1),
-    '.D': ('divmod', 2),
+    '.D': ('divmod_or_delete', 2),
     '.E': ('any', 1),
     '.e': ('Penumerate(lambda k, b:', 2),
     '.f': ('first_n(lambda Z:', 3),
@@ -112,6 +113,7 @@ c_to_f = {
     '.H': ('Phex', 1),
     '.h': ('Phash', 1),
     '.i': ('interleave', 2),
+    '.I': ('invert(lambda G:', 2),
     '.j': ('Pcomplex', 2),
     '.l': ('log', 2),
     '.m': ('minimal(lambda b:', 2),

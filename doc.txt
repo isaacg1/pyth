@@ -124,7 +124,9 @@ z  0 N                   Variable. Autoinitializing to input.
 .c 2 N combinations      Combinations of elements from a of length b. On two ints, nCr.
 .C 2 N comb-replacement  Combinations of elements from a of length b, with replacement.
 .d 1 n dict
-.D 2 N divmod
+.D 2 N divmod_or_delete  .D<num><num is divmod(<num>,<num>).
+                         .D<seq><num> removes the <num>th element of <seq>.
+                         .D<seq><seq> is the same but for all the elements in <seq>.
 .e 2 N enumerate         map over a enumerate. First arg is lambda, (k, b) -> (Y, Z) ->. k is the number, b is the sequence.
 .E 1 N any               Python any(_).
 .f 3 N first_n           .fabc: Filters for the first b elements of infinite sequence starting at c for which a is truthy. c defaults to 1.
@@ -136,6 +138,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .h 1 N hash
 .H 1 N hex               Hexadecimal string representing _. Direct on int, interpreted as UTF-8 on str. No '0x'.
 .i 2 N interleave        Interleave two sequences - .i([a1, a2], [b1, b2, b3, b4]) = [a1, b1, a2, b2, b3, b4]
+.I 2 N invert            .I<lambda><num> invert <num> = <lambda>(x). Searches over positive reals. Works on increasing functions.
 .j 2 N complex           Complex number constructor. .jab = a + bj. .j) = 1j.
 .l 2 N log               Python math.log(a, b). Default for b is natural log.
 .m 2 N minimal           Filter 2nd arg on elements which give minimal value when 1st arg is applied.
