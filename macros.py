@@ -647,7 +647,7 @@ environment['Plen'] = Plen
 
 # m. Single purpose.
 def Pmap(a, b):
-    if isinstance(b, int):
+    if is_num(b):
         return list(map(a, urange(b)))
     if is_col(b):
         return list(map(a, b))
@@ -808,6 +808,8 @@ def Psorted(a):
         return sorted(a)
     if isinstance(a, int):
         return list(range(1, a+1))
+    if is_num(a):
+        return Psorted(int(a))
     raise BadTypeCombinationError("S", a)
 environment['Psorted'] = Psorted
 environment['T'] = 10
@@ -859,6 +861,8 @@ def urange(a):
             return list(range(a))
         else:
             return list(range(a, 0))
+    if is_num(a):
+        return urange(int(a))
     if is_col(a):
         return list(range(len(a)))
     raise BadTypeCombinationError("U", a)
@@ -1185,7 +1189,7 @@ environment['log'] = log
 
 # .m. func, seq or int
 def minimal(a, b):
-    if isinstance(b, int):
+    if is_num(b):
         seq = urange(b)
     elif is_col(b):
         seq = b
@@ -1198,7 +1202,7 @@ environment['minimal'] = minimal
 
 # .M. func, seq or int
 def maximal(a, b):
-    if isinstance(b, int):
+    if is_num(b):
         seq = urange(b)
     elif is_col(b):
         seq = b
@@ -1226,7 +1230,7 @@ environment['Pnumbers'] = Pnumbers
 
 # .p. seq
 def permutations(a):
-    if isinstance(a, int):
+    if is_num(a):
         a = urange(a)
     if not is_col(a):
         raise BadTypeCombinationError(".p", a)
@@ -1317,7 +1321,7 @@ def shuffle(a):
         tmp_list = list(a)
         random.shuffle(tmp_list)
         return tmp_list
-    if isinstance(a, int):
+    if is_num(a):
         tmp_list = urange(a)
         random.shuffle(tmp_list)
         return tmp_list
@@ -1344,7 +1348,7 @@ environment['trig'] = trig
 # .T. list
 def transpose(a):
     if is_col(a):
-        lol = [urange(elem) if isinstance(elem, int) else elem for elem in a]
+        lol = [urange(elem) if is_num(elem) else elem for elem in a]
         cols = max(len(sublist) for sublist in lol)
         trans = [[] for _ in range(cols)]
         for sublist in lol:
@@ -1372,7 +1376,7 @@ def cu_reduce(a, b, c=None):
             results.append(old_acc)
         return results
     if is_seq(b) or isinstance(b, int):
-        if isinstance(b, int):
+        if is_num(b):
             seq = urange(b)
         else:
             seq = b
@@ -1390,7 +1394,7 @@ environment['cu_reduce'] = cu_reduce
 # .U. lambda, seq
 def reduce2(a, b):
     if is_seq(b) or isinstance(b, int):
-        if isinstance(b, int):
+        if is_num(b):
             whole_seq = urange(b)
         else:
             whole_seq = b
@@ -1558,7 +1562,7 @@ environment['remove'] = remove
 def substrings(a, b=None):
     if is_seq(a):
         seq = a
-    elif isinstance(a, int):
+    elif is_num(a):
         seq = urange(a)
     else:
         raise BadTypeCombinationError(".:", a, b)

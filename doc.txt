@@ -138,7 +138,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .h 1 N hash
 .H 1 N hex               Hexadecimal string representing _. Direct on int, interpreted as UTF-8 on str. No '0x'.
 .i 2 N interleave        Interleave two sequences - .i([a1, a2], [b1, b2, b3, b4]) = [a1, b1, a2, b2, b3, b4]
-.I 2 N invert            .I<lambda><num> invert <num> = <lambda>(x). Searches over positive reals. Works on increasing functions.
+.I 2 N invert            .I<lambda><num> invert <num> = <lambda>(x). Searches over positive reals. Works on increasing functions. Lambda G.
 .j 2 N complex           Complex number constructor. .jab = a + bj. .j) = 1j.
 .l 2 N log               Python math.log(a, b). Default for b is natural log.
 .m 2 N minimal           Filter 2nd arg on elements which give minimal value when 1st arg is applied.

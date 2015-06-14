@@ -168,6 +168,7 @@ def parse(code, spacing="\n "):
                              func_char +
                              var_char +
                              following_code[1:])
+
     # And for general functions
     if active_char in c_to_f:
         if active_char in next_c_to_f:
