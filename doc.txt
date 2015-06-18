@@ -27,7 +27,7 @@ Char, arity, begins line, mnemonic, details. When in doubt, similar to python.
 $  X N super-quote       Begins and ends Python literals. A Python literal is placed directly into the compiled Python output. Counts as one argument for arity purposes. Disabled online.
 %  2 N mod               On integers, modulus. On complex, mod real and imag separately. On string, string formatting. %<int><seq> is a modular slice, <seq>[::<int>] in Python.
 &  2 N and               Python's and-operator (short circuiting). &ab returns a, if it evaluates to a falsy value otherwise b.
-'  1 N quote-file        Cat file, return file a list of lines. File name as input. If starts with http, does get http request.
+'  1 N quote-file        Cat file, return file a list of lines. File name as input. If starts with http, does get http request. If image file returns bitmap nested array of tuples (grayscale single value instead of tuples).
 (  I N tuple             Tuple constructor. Unbounded.
 )  X N close-paren       Ends functions, statements. Marks last line of statement, last arg. of function. Necessary for statements, unbounded functions.
 *  2 N times             Like python, multiplication, replication. Cartesian product on lists, tuples or sets.
@@ -162,7 +162,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .U 2 N reduce2           The 2 input reduce, uses first value of sequence as initial value and the rest as sequence. (b, Z) -> (k, Y) ->
 .V 2 Y forever           An infinite for loop. b iterates over an infinite sequence starting at the input, same sequence as .f.
                          On num, incrementing sequence. On str, rupy's .succ sequence.
-.w 2 N file write        Writes first arg to file second arg. If starts with http does http post request with data.
+.w 2 N file write        Writes first arg to file second arg. If starts with http does http post request with data. If array, writes to image file as bitmap. Default file name is o.txt/png.
 .x 2 N try-except        Attempts to run first arg. If an exception occurs, runs the second.
 .z 0 N all-input         Take all of STDIN, return as list of lines. Cached. .Q and .z refer to the same data.
 .^ 3 N powmod            Python pow(a, b, c).
