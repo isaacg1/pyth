@@ -85,7 +85,7 @@ z 0 N z Variable. Autoinitializing to input.
 { 1 N set Python set. Makes one element set on num.
 | 2 N or Logical or. Short-circuiting.
 } 2 N in Python in. Inclusive range on int, int.
-~ 1 N += The same as =+.
+~ 1 Y post_assign Similar to =, except that the return value is the old value of the variable.
 .a 1 N abs Python abs(_). On list of nums, vector length. On list of 2 lists of nums, Euclidean distance.
 .A 1 N all Python all(_).
 .B 1 N bin Binary string representing _. Direct on int, interpreted as UTF-8 on str. No '0b'.
