@@ -15,7 +15,6 @@ import string
 import sys
 import urllib.request
 from ast import literal_eval
-from PIL import Image
 
 
 # Type checking
@@ -288,21 +287,6 @@ environment['minus'] = minus
 # '. str.
 def read_file(a):
     if isinstance(a, str):
-        if any(a.lower().endswith("." + i) for i in ["png", "jpg", "jpeg", "gif", "svg", "ppm", "pgm", "pbm"]):
-            img = Image.open(a)
-            data = list(img.getdata())
-            
-            #If alpha all 255, take out alpha
-            if len(data[0])>3 and all(i[3]==255 for i in data):
-                data = [i[:3] for i in data]
-            
-            #Check grayscale
-            if all(i.count(i[0])==len(i) for i in data):
-                data = [i[0] for i in data]
-            
-            data = chop(data, img.size[0])
-            return data
-            
         if a.startswith("http"):
             b = urllib.request.urlopen(a)
         else:
@@ -310,8 +294,6 @@ def read_file(a):
 
         b = [lin[:-1] if lin[-1] == '\n' else lin for lin in b]
         return b
-        
-
     raise BadTypeCombinationError("'", a)
 environment['read_file'] = read_file
 
@@ -1432,7 +1414,7 @@ environment['reduce2'] = reduce2
 
 
 # .w. write
-def Pwrite(a, b=''):
+def Pwrite(a, b="foo.txt"):
     if not isinstance(b, str):
         raise BadTypeCombinationError(".w", a, b)
 
@@ -1442,25 +1424,9 @@ def Pwrite(a, b=''):
         return [lin[:-1] if lin[-1] == '\n' else lin for lin
                 in urllib.request.urlopen(b, a.encode("UTF-8"))]
 
-    prefix = b.split('.')[0] if b else 'o'
-    suffix = b.split('.')[1] if '.' in b else None
-
-    if is_lst(a):
-        suffix = suffix if suffix else 'png'
-        
-        if not is_lst(a[0][0]):
-            a = [(i, i, i) for i in a]
-        
-        img =  Image.new("RGB" + ("A" if len(a[0][0])>3 else ""), (len(a[0]), len(a)))
-        img.putdata(Psum(a))
-        img.save(prefix + "." + suffix)
-    else:
-        suffix = suffix if suffix else ".txt"
-
-        with open(prefix + '.' + suffix, 'a') as f:
-            f.write(("\n".join(map(str, a)) if is_seq(a) and not isinstance(a, str)
-            else str(a))+"\n")
-
+    with open(b, 'a') as f:
+        f.write(("\n".join(map(str, a)) if is_seq(a) and not isinstance(a, str)
+                else str(a))+"\n")
 environment['Pwrite'] = Pwrite
 
 
