@@ -524,6 +524,7 @@ See opening comment in pyth.py for more info.""")
         multiline_on = flag_on('m', '--multiline')
         if safe_mode:
             c_to_f['v'] = ('literal_eval', 1)
+            del c_to_f['.w']
         if line_on:
             line_num = int(sys.argv[-2])
         if code_on and (line_on or multiline_on):
