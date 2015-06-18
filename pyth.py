@@ -150,8 +150,8 @@ def parse(code, spacing="\n "):
             func_name = c_to_f[active_char][0]
             return 'invariant(' + func_name + ',' + parsed + ')', rest_code
 
-    # =<function/infix>: augmented assignment.
-    if active_char == '=':
+    # =<function/infix>, ~<function/infix>: augmented assignment.
+    if active_char in ('=', '~'):
         if rest_code[0] == ".":
             func_char = rest_code[:2]
             following_code = rest_code[2:]
@@ -163,7 +163,7 @@ def parse(code, spacing="\n "):
                 and not func_char == ','):
             var_char = following_code[0]
             if (var_char in variables or var_char in next_c_to_i):
-                return parse('=' +
+                return parse(active_char +
                              var_char +
                              func_char +
                              var_char +

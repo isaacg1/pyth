@@ -149,7 +149,7 @@ environment['invariant'] = invariant
 
 
 # Function library. See data for letter -> function correspondences.
-# =. N/A, .= A
+# =. N/A
 def assign(a, b):
     if isinstance(a, str):
         if len(a) == 1:
@@ -166,6 +166,17 @@ def assign(a, b):
                 return output
     raise BadTypeCombinationError("=", a, b)
 environment['assign'] = assign
+
+
+# ~. N/A
+def post_assign(a, b):
+    if isinstance(a, str):
+        if len(a) == 1:
+            old_a = environment[a]
+            environment[a] = copy.deepcopy(b)
+            return old_a
+    raise BadTypeCombinationError("~", a, b)
+environment['post_assign'] = post_assign
 
 
 # !. All.
