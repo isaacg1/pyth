@@ -27,16 +27,16 @@ Ex::
 10.1.2. Seq a, Int b: Slice Till
 -------------------------------
 
-Takes a slice of sequence ``a`` until index ``b``. This is equivalent to the Python statement ``a[:b]``. The slice is inclusive of the element at index ``b``
+Takes a slice of sequence ``a`` until index ``b``. This is equivalent to the Python statement ``a[:b]``. The slice is not inclusive of the element at index ``b``
 
 Ex::
 
+	<"abcdefgh"5
 	==================================================
-	>"abcdefgh"5
+	Pprint("\n",lt("abcdefgh",5))
 	==================================================
-	Pprint("\n",gt("abcdefgh",5))
-	==================================================
-	fgh
+	abcde
+
 
 10.1.3. Set a, Set b: Is Subset
 ------------------------------
@@ -94,15 +94,16 @@ Ex::
 10.3.2 Seq a, Int b: Slice From
 ------------------------------
 
-This takes a slice of sequence ``a`` from index ``b`` onwards till the end. This is equivalent to the Python ``a[b:]``. The slice is not inclusive of the element at index ``b``.
+This takes a slice of sequence ``a`` from index ``b`` onwards till the end. This is equivalent to the Python ``a[b:]``. The slice is inclusive of the element at index ``b``.
 
 Ex::
 
-	<"abcdefgh"5
 	==================================================
-	Pprint("\n",lt("abcdefgh",5))
+	>"abcdefgh"5
 	==================================================
-	abcde
+	Pprint("\n",gt("abcdefgh",5))
+	==================================================
+	fgh
 
 10.3.3. Set a, Set b: Is Superset
 --------------------------------
