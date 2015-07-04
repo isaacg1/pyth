@@ -41,10 +41,10 @@ $  X N super-quote       Begins and ends Python literals. A Python literal is pl
                          On :<num><num><num>, generalized range. :abc is range from a to b, step size c or -c as appropriate if c > 0. If c < 0, equivalent to :ba_c
                          :<idx><col><any> is indexed substitution. For every index in b an element is taken from c (cycling when exhausted), and assigned to a at that index.
 ;  X N end-line          End everything. Infinite ). Best used in statements.
-<  2 N less-than         Less than, subset, slice. < seq num is seq[:num]. Compare by magnitude on complex.
+<  2 N less-than         Less than, subset, slice. < seq num is seq[:num]. < num seq is seq[:-num]. Compare by magnitude on complex.
 =  2 Y assign            Assignment, using deep copy. Returns the assignment value. +2=Z7 -> Z=7, returns 9.
                          Augmented assignment. =*T2 -> T=20.
->  2 N greater-than      Greater than, superset, slice. > seq num is seq[num:]. Compare by magnitude on complex.
+>  2 N greater-than      Greater than, superset, slice. > seq num is seq[num:]. > num seq is seq[-num:]. Compare by magnitude on complex.
 ?  3 N ternary           Python ternary. ?abc => a if b else c
 @  2 N lookup            Lookup from str, list or dict. Modulo wrapping on list, str. On seq, seq, intersection.
                          Specifically, filter second arg on presence in first arg. On num, num, bth root of a.
