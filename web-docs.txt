@@ -24,7 +24,7 @@ $ X N super-quote Begins and ends Python literals. A Python literal is placed di
 > 2 N greater-than Greater than, superset, slice. > seq num is seq[num:]. > num seq is seq[-num:]. Compare by magnitude on complex.
 ? 3 N ternary Python ternary. ?abc => a if b else c
 @ 2 N lookup Lookup from str, list or dict. Modulo wrapping on list, str. On seq, seq, intersection. Specifically, filter second arg on presence in first arg. On num, num, bth root of a.
-A 3 Y assign-pair Aabc => a,b = c. First arguments must be variables. c must be a 2-tuple.
+A 1 Y assign-pair A_ => G,H = _. Input must be a 2-tuple.
 B 0 Y break Python break. Implicit ).
 C 1 N chr char -> int, int -> char. Matrix transpose on list of lists, zip(*a) specifically. If input was list of str, output will be as well. Conjugate on complex.
 D S Y def Python def. Match arity w/ existing function. Memoized.
@@ -45,7 +45,7 @@ R 1 Y return Python return. Implicit ). Also is right map operator. %R4[5 10 20 
 S 1 N sorted Python sorted.
 T 0 N ten Variable. 10
 U 1 N unary-range Python unary range. U_=Ul_ on str, list. On negative ints, range(a, 0).
-V S Y eval-loop Loop times equal to input. Equivalent to FN. Also is vectorize operator. +V[1 2 3)[4 5 6) = [5, 7, 9]. If given sequence, loops thorugh sequence.
+V S Y for-N-in Implicit variable for loop. Equivalent to FN. Also is vectorize operator. +V[1 2 3)[4 5 6) = [5, 7, 9]. If given sequence, loops thorugh sequence.
 W S Y while Python while.
 X 3 Y indeXed assign Indexed assignment, returns updated. Only returns on str, mod-wrap on list. On <seq><seq><seq> performs translation, uses reversed of 2nd arg, if 3rd is omitted. On <int><list> or <any><dict>, performs indexed +=. Assigns if key not in dict.
 Y 0 N Y Variable. []

@@ -341,6 +341,8 @@ def add_print(code):
                 return True
             if code[:2] in variables:
                 return True
+            if code[:2] in ('.x',):
+                return True
             if code[1] not in '0123456789':
                 return False
 
