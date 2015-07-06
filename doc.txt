@@ -102,9 +102,9 @@ l  1 N len               Python len. log base 2 on nums.
 m  2 N map               Python 2 map. Int as second arg -> range(<int>). Implicit lambda, d -> k -> b ->
 n  2 N not-equal         Python !=.
 o  2 N order-by          Python sorted, key=. Implicit lambda, N -> Z ->
-p  2 N print             Python print, end=. Implicitly called with "\n".
+p  1 N print             Python print, no trailing character. Returns the input.
 q  2 N equals            Python ==.
-r  2 N range             Python 2 range. range(a, b, -1) if a > b. Various string + seq processing (see below).
+r  2 N range             Python 2 range. range(a, b, -1) if a > b. Various string + seq processing (see below). On str, str, str range in C order.
 s  1 N sum-int           Reduce Pyth + on non-str seq, cast to int on other. Real part on complex.
 t  1 N tail              _[1:], _-1.
 u  3 N reduce            Reduce, implicit lambda. 3rd is base case. G,H -> N,T.

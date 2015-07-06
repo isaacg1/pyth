@@ -149,6 +149,13 @@ def invariant(func, a):
 environment['invariant'] = invariant
 
 
+# Implicit print
+def imp_print(a):
+    if a is not None:
+        print(a)
+environment['imp_print'] = imp_print
+
+
 # Function library. See data for letter -> function correspondences.
 # =. N/A
 def assign(a, b):
@@ -745,13 +752,9 @@ environment['primes_pop'] = primes_pop
 
 
 # p. All.
-def Pprint(a, b=""):
-    if b is not None:
-        if isinstance(a, str):
-            print(b, end=a)
-        else:
-            print(b, end=str(a))
-    return 0
+def Pprint(a):
+    print(a, end='')
+    return a
 environment['Pprint'] = Pprint
 
 
@@ -766,52 +769,56 @@ def Prange(a, b):
     def run_length_encode(a):
         return [[len(list(group)), key] for key, group in itertools.groupby(a)]
 
-    if not isinstance(b, int):
-        raise BadTypeCombinationError("r", a, b)
+    if isinstance(b, int):
+        if isinstance(a, str):
+            if b == 0:
+                return a.lower()
+            if b == 1:
+                return a.upper()
+            if b == 2:
+                return a.swapcase()
+            if b == 3:
+                return a.title()
+            if b == 4:
+                return a.capitalize()
+            if b == 5:
+                return string.capwords(a)
+            if b == 6:
+                return a.strip()
+            if b == 7:
+                return [literal_eval(part) for part in a.split()]
+            if b == 8:
+                return run_length_encode(a)
+            if b == 9:
+                # Run length decoding, format "<num><char><num><char>",
+                # e.g. "12W3N6S1E"
+                return re.sub(r'(\d+)(\D)',
+                              lambda match: int(match.group(1))
+                              * match.group(2), a)
 
-    if isinstance(a, str):
-        if b == 0:
-            return a.lower()
-        if b == 1:
-            return a.upper()
-        if b == 2:
-            return a.swapcase()
-        if b == 3:
-            return a.title()
-        if b == 4:
-            return a.capitalize()
-        if b == 5:
-            return string.capwords(a)
-        if b == 6:
-            return a.strip()
-        if b == 7:
-            return [literal_eval(part) for part in a.split()]
-        if b == 8:
-            return run_length_encode(a)
-        if b == 9:
-            # Run length decoding, format "<num><char><num><char>",
-            # e.g. "12W3N6S1E"
-            return re.sub(r'(\d+)(\D)',
-                          lambda match: int(match.group(1))
-                          * match.group(2), a)
+        if is_seq(a):
+            if b == 8:
+                return run_length_encode(a)
+            if b == 9:
+                if all(isinstance(key, str) for group_size, key in a):
+                    return ''.join(key * group_size for group_size, key in a)
+                else:
+                    return sum(([copy.deepcopy(key)] * group_size
+                                for group_size, key in a), [])
+            raise BadTypeCombinationError("r", a, b)
 
-    if is_seq(a):
-        if b == 8:
-            return run_length_encode(a)
-        if b == 9:
-            if all(isinstance(key, str) for group_size, key in a):
-                return ''.join(key * group_size for group_size, key in a)
+        if isinstance(a, int):
+            if a < b:
+                return list(range(a, b))
             else:
-                return sum(([copy.deepcopy(key)] * group_size
-                            for group_size, key in a), [])
+                return list(range(a, b, -1))
         raise BadTypeCombinationError("r", a, b)
-
-    if isinstance(a, int):
-        if a < b:
-            return list(range(a, b))
-        else:
-            return list(range(a, b, -1))
-    raise BadTypeCombinationError("r", a, b)
+    if isinstance(a, str) and isinstance(b, str):
+        a_val = Pchr(a)
+        b_val = Pchr(b)
+        ab_range = range(a_val, b_val)
+        return list(''.join(chr(char_val) for char_val in join(str_val, 256))
+                    for str_val in ab_range)
 environment['Prange'] = Prange
 
 

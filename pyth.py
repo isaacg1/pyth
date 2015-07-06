@@ -35,9 +35,10 @@ def general_parse(code):
     args_list = []
     parsed = 'Not empty'
     while parsed != '':
-        if add_print(code):
-            code = 'p"\\n"'+code
+        to_print = add_print(code)
         parsed, code = parse(code)
+        if to_print:
+            parsed = 'imp_print(' + parsed + ')'
         # Finish semicolon parsing
         if code and code[0] == ';':
             code = code[1:]
@@ -282,9 +283,10 @@ def statement_parse(active_char, rest_code, spacing):
     args_list = []
     parsed = 'Not empty'
     while parsed != '':
-        if add_print(rest_code):
-            rest_code = 'p"\\n"' + rest_code
+        to_print = add_print(rest_code)
         parsed, rest_code = parse(rest_code, spacing+addl_spaces+' ')
+        if to_print:
+            parsed = 'imp_print(' + parsed + ')'
         args_list.append(parsed)
     # Trim the '' away and combine.
     if args_list[-1] == '':

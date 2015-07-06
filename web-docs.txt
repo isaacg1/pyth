@@ -71,9 +71,9 @@ l 1 N len Python len. log base 2 on nums.
 m 2 N map Python 2 map. Int as second arg -> range(<int>). implicit lambda, d -> k -> b ->
 n 2 N not-equal Python !=.
 o 2 N order-by Python sorted, key=. Implicit lambda, N -> Z ->
-p 2 N print Python print, end=. Implicitly called with "\n".
+p 1 N print Python print, no trailing character. Returns the input.
 q 2 N equals Python ==.
-r 2 N range Python 2 range. Rev if a>b. Various string + seq processing.
+r 2 N range Python 2 range. Rev if a>b. Various string + seq processing. On str, str, str range in C order.
 s 1 N sum Reduce + on list, cast to int on other. Real part on complex.
 t 1 N tail _[1:]. _-1.
 u 3 N redUce Reduce, implicit lambda. 3rd is base case. G,H -> N,T. Fixed point operator if 2nd arg omitted and ) used, e.g. u<1st><3rd>).
