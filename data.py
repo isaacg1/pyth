@@ -128,7 +128,7 @@ c_to_f = {
     '.r': ('rotate', 2),
     '.R': ('Pround', 2),
     '.S': ('shuffle', 1),
-    '.s': ('stripchars', 2),
+    '.s': ('Pstrip', 2),
     '.t': ('trig', 2),
     '.T': ('transpose', 1),
     '.U': ('reduce2(lambda b, Z:', 2),

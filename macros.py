@@ -1335,13 +1335,23 @@ def Pround(a, b):
 environment['Pround'] = Pround
 
 
-# .s. str, str
-def stripchars(a, b):
+# .s. str, str / seq, any
+def Pstrip(a, b):
     if isinstance(a, str) and isinstance(b, str):
         return a.strip(b)
-
+    if is_seq(a):
+        if is_seq(b):
+            strip_items = list(b)
+        else:
+            strip_items = [b]
+        seq = copy.deepcopy(a)
+        while seq and seq[0] in strip_items:
+            seq.pop(0)
+        while seq and seq[-1] in strip_items:
+            seq.pop()
+        return seq
     raise BadTypeCombinationError(".s", a, b)
-environment['stripchars'] = stripchars
+environment['Pstrip'] = Pstrip
 
 
 # .S. seq, int
