@@ -1665,3 +1665,30 @@ def factorial(a):
 
     return math.factorial(a)
 environment['factorial'] = factorial
+
+
+# .]. str, str, int
+def pad(a, b, c):
+    if isinstance(a, str) and isinstance(b, str) and isinstance(c, int):
+        pad_len = max(0, c - len(a))
+        return a + (b*pad_len)[:pad_len]
+    if isinstance(b, str) and isinstance(c, str) and isinstance(a, int):
+        pad_len = max(0, a - len(b))
+        return (c*pad_len)[:pad_len] + b
+    if isinstance(c, str) and isinstance(a, str) and isinstance(b, int):
+        pad_len = max(0, b - len(c))
+        pad_string = (a*pad_len)[:pad_len]
+        return pad_string[:pad_len//2] + c + pad_string[pad_len//2:]
+
+    if is_seq(a) and isinstance(c, int):
+        pad_len = max(0, c - len(a))
+        return list(a) + [b]*pad_len
+    if is_seq(b) and isinstance(a, int):
+        pad_len = max(0, a - len(b))
+        return [c]*(pad_len//2) + list(b) + [c]*((pad_len+1)//2)
+    if is_seq(c) and isinstance(b, int):
+        pad_len = max(0, b - len(c))
+        return [a]*pad_len + list(c)
+
+    raise BadTypeCombinationError(".[", a, b, c)
+environment['pad'] = pad

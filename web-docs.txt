@@ -139,3 +139,4 @@ z 0 N z Variable. Autoinitializing to input.
 .: 2 N substring On :<seq><int> return all substrings of <seq> of length <int>. Cast <int> to range, cast <col> by length. Float 2nd arg gives that ratio of the length of the seq substrings. All possible substrings, if 2nd arg is omitted.
 .{ 1 N unique A uniqueness test. Returns true iff the input has no repeated elements.
 .! 1 N factorial Python math.factorial(_).
+.[ 3 N pad Pads string or sequence, so that it reaches specific length. On <seq><any><int> pad right. on <int><seq><any> pad left and right. On <any><int><seq> pad left. Returns a string, if <seq> and <any> ary both <str>.

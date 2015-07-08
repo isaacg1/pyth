@@ -146,6 +146,7 @@ c_to_f = {
     '.:': ('substrings', 2),
     '.{': ('unique', 1),
     '.!': ('factorial', 1),
+    '.[': ('pad', 3),
     }
 
 replacements = {
