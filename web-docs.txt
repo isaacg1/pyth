@@ -73,7 +73,7 @@ n 2 N not-equal Python !=.
 o 2 N order-by Python sorted, key=. Implicit lambda, N -> Z ->
 p 1 N print Python print, no trailing character. Returns the input.
 q 2 N equals Python ==.
-r 2 N range Python 2 range. Rev if a>b. Various string + seq processing. On str, str, str range in C order.
+r 2 N range Python 2 range. Rev if a>b. On str, str str-range in C order. Various str/seq operations with <str/seq><int>. b=0 a.lower(); b=1 a.upper(); b=2 a.swapcase(); b=3 a.title(); b=4 a.capitalize(); b=5 capwords(a); b=6 a.strip(); b=7 map(eval, a.split()); b=8 run-length-encode; b=9 run-length-decode
 s 1 N sum Reduce + on list, cast to int on other. Real part on complex.
 t 1 N tail _[1:]. _-1.
 u 3 N redUce Reduce, implicit lambda. 3rd is base case. G,H -> N,T. Fixed point operator if 2nd arg omitted and ) used, e.g. u<1st><3rd>).
@@ -117,7 +117,7 @@ z 0 N z Variable. Autoinitializing to input.
 .r 2 N rotate On <col><seq>, perform a translation on <col> which maps each element of <seq> to its successor.
 .s 2 N strip Strip the elements in b from the beginning and end of a.
 .S 1 N shuffle .S<col> random.shuffle(<col>). str out if str in, otherwise list out. .S(<int>) = .S(range(<int>))
-.t 2 N trigonometry Collection of trigonometric functions.
+.t 2 N trigonometry Collection of trigonometric functions: b=0 sin(a); b=1 cos(a); b=2 tan(a); b=3 asin(a); b=4 acos(a); b=5 atan(a); b=6 degrees(a); b=7 radians(a); b=8 sinh(a); b=9 cosh(a); b=10 tanh(a); b=11 asinh(a); b=12 acosh(a); b=13 atanh(a)
 .T 1 N transpose Matrix transpose. Do not strip characters, instead top justify. list of str -> list of str, ofther to list of lists. Casts int elems to urange.
 .u 3 N cumul-reduce Just like u, except returns a collection of all intermediate states. lambda N, Y.
 .U 2 N reduce2 The 2 input reduce, uses first value of sequence as initial value and the rest as sequence. (b, Z) -> (k, Y) ->
