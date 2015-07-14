@@ -25,6 +25,7 @@ def submit():
 
     code_message = request.form.get('code', '')
     input_message = request.form.get('input', '')
+    input_message += '\n'
     debug_on = int(request.form.get('debug'), 0)
 
     pyth_code = '\n'.join(code_message.split("\r\n"))
