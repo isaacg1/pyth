@@ -817,8 +817,8 @@ def Prange(a, b):
         a_val = Pchr(a)
         b_val = Pchr(b)
         ab_range = range(a_val, b_val)
-        return list(''.join(chr(char_val) for char_val in join(str_val, 256))
-                    for str_val in ab_range)
+        return [''.join(chr(char_val) for char_val in join(str_val, 256))
+                for str_val in ab_range]
 environment['Prange'] = Prange
 
 
@@ -1594,15 +1594,16 @@ environment['partition'] = partition
 
 # ._. int
 def sign(a):
-    if not is_num(a):
-        raise BadTypeCombinationError("._", a)
-
-    if a < 0:
-        return -1
-    if a > 0:
-        return 1
-    else:
-        return 0
+    if is_seq(a):
+        return [a[:end] for end in range(1, len(a)+1)]
+    if is_num(a):
+        if a < 0:
+            return -1
+        if a > 0:
+            return 1
+        else:
+            return 0
+    raise BadTypeCombinationError("._", a)
 environment['sign'] = sign
 
 
