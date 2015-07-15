@@ -1477,10 +1477,13 @@ def Pwrite(a, b=''):
         suffix = suffix if suffix else 'png'
 
         if not is_lst(a[0][0]):
-            a = [(i, i, i) for i in a]
+            a = [[(i, i, i) for i in j] for j in a]
+        else:
+            a = [[tuple(i) for i in j] for j in a]
 
         header = "RGBA" if len(a[0][0]) > 3 else "RGB"
         img = Image.new(header, (len(a[0]), len(a)))
+
         img.putdata(Psum(a))
         img.save(prefix + "." + suffix)
     else:
@@ -1507,7 +1510,7 @@ environment['Pexcept'] = Pexcept
 # .z. N/A
 @functools.lru_cache(1)
 def all_input():
-    return [l.rstrip("\n") for l in sys.stdin]
+    return [l.rstrip("\n") for l in iter(sys.stdin.readline, "\n")]
 environment['all_input'] = all_input
 
 
