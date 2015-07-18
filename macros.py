@@ -1510,7 +1510,7 @@ environment['Pexcept'] = Pexcept
 # .z. N/A
 @functools.lru_cache(1)
 def all_input():
-    return [l.rstrip("\n") for l in iter(sys.stdin.readline, "\n")]
+    return [l.rstrip("\n") for l in sys.stdin]
 environment['all_input'] = all_input
 
 
