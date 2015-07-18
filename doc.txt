@@ -92,7 +92,7 @@ c  2 N chop              On <str/list><int> chop str/list every n elements.
                          On <seq><col of ints> split seq at each int into list of seqs.
 d  0 N                   Variable. " "
 e  1 N end               %10 or last element. Imaginary part on complex.
-f  2 N filter            Implicit lambda, T -> Y -> Z -> . on num, iter.count
+f  2 N filter            Implicit lambda, T -> Y -> Z -> . on num, iter.count. Default second input 1.
 g  2 N grt-or-eq         Python >=. Superset. g<seq><int> = seq[int-1:]
 h  1 N head              First element, +1.
 i  2 N int-2             Convert str or list from given base to base 10, or gcd.
