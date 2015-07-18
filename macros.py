@@ -1387,6 +1387,17 @@ def trig(a, b):
                  math.asinh, math.acosh, math.atanh]
 
         return funcs[b](a)
+
+    if is_lst(a):
+        width = max(len(row) for row in a)
+        padded_matrix = [list(row) + (width - len(row)) * [b] for row in a]
+        transpose = list(zip(*padded_matrix))
+        if all(isinstance(row, str) for row in a) and isinstance(b, str):
+            normalizer = ''.join
+        else:
+            normalizer = list
+        norm_trans = [normalizer(padded_row) for padded_row in transpose]
+        return norm_trans
     raise BadTypeCombinationError(".t", a, b)
 environment['trig'] = trig
 
