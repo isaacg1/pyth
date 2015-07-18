@@ -583,7 +583,7 @@ environment['end'] = end
 
 
 # f. single purpose.
-def Pfilter(a, b):
+def Pfilter(a, b=1):
     if is_num(b):
         return next(filter(a, itertools.count(b)))
     if is_col(b):
@@ -1378,16 +1378,16 @@ environment['shuffle'] = shuffle
 
 # .t. num, int
 def trig(a, b):
-    if not is_num(a) or not isinstance(b, int):
-        raise BadTypeCombinationError(".t", a, b)
+    if is_num(a) and isinstance(b, int):
 
-    funcs = [math.sin, math.cos, math.tan,
-             math.asin, math.acos, math.atan,
-             math.degrees, math.radians,
-             math.sinh, math.cosh, math.tanh,
-             math.asinh, math.acosh, math.atanh]
+        funcs = [math.sin, math.cos, math.tan,
+                 math.asin, math.acos, math.atan,
+                 math.degrees, math.radians,
+                 math.sinh, math.cosh, math.tanh,
+                 math.asinh, math.acosh, math.atanh]
 
-    return funcs[b](a)
+        return funcs[b](a)
+    raise BadTypeCombinationError(".t", a, b)
 environment['trig'] = trig
 
 
