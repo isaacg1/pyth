@@ -26,7 +26,7 @@ $ X N super-quote Begins and ends Python literals. A Python literal is placed di
 @ 2 N lookup Lookup from str, list or dict. Modulo wrapping on list, str. On seq, seq, intersection. Specifically, filter second arg on presence in first arg. On num, num, bth root of a.
 A 1 Y assign-pair A_ => G,H = _. Input must be a 2-tuple.
 B 0 Y break Python break. Implicit ).
-C 1 N chr char -> int, int -> char. Matrix transpose on list of lists, zip(*a) specifically. If input was list of str, output will be as well. Conjugate on complex.
+C 1 N chr char -> int, int -> char. str -> int, treated as base 256 number. Matrix transpose on list of lists, zip(*a) specifically. If input was list of str, output will be as well. Conjugate on complex.
 D S Y def Python def. Match arity w/ existing function. Memoized.
 E S Y else Python else.
 F S Y for Python for. Also is fold operator. <binary>F = .U<binary>bZ.
