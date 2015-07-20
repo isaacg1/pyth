@@ -45,7 +45,7 @@ $  X N super-quote       Begins and ends Python literals. A Python literal is pl
 =  2 Y assign            Assignment, using deep copy. Returns the assignment value. +2=Z7 -> Z=7, returns 9.
                          Augmented assignment. =*T2 -> T=20.
 >  2 N greater-than      Greater than, superset, slice. > seq num is seq[num:]. > num seq is seq[-num:]. Compare by magnitude on complex.
-?  3 N ternary           Python ternary. ?abc => a if b else c
+?  3 N ternary           C-style ternary. ?abc => if a then b else c
 @  2 N lookup            Lookup from str, list or dict. Modulo wrapping on list, str. On seq, seq, intersection.
                          Specifically, filter second arg on presence in first arg. On num, num, bth root of a.
 A  1 Y assign-pair       A_ => G,H = _. Input must be a 2-tuple.

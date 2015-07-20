@@ -99,8 +99,8 @@ def parse(code, spacing="\n "):
     if rest_code and rest_code[0] == 'F':
         if (active_char in c_to_f and c_to_f[active_char][1] == 2) or\
                 (active_char in c_to_i and c_to_i[active_char][1] == 2):
-            reduce_arg1 = c_to_f['.U'][0][-5]
-            reduce_arg2 = c_to_f['.U'][0][-2]
+            reduce_arg1 = lambda_vars['.U'][0][0]
+            reduce_arg2 = lambda_vars['.U'][0][-1]
             return parse(".U" +
                          active_char +
                          reduce_arg1 +
@@ -110,7 +110,7 @@ def parse(code, spacing="\n "):
     # <function>M: Map operator
     if rest_code and rest_code[0] == 'M':
         if active_char in c_to_f and not c_to_f[active_char][1] == 0:
-            map_arg = c_to_f['m'][0][-2]
+            map_arg = lambda_vars['m'][0][0]
             arity = c_to_f[active_char][1]
             remainder = rest_code[1:]
             if arity == 1:
@@ -123,7 +123,7 @@ def parse(code, spacing="\n "):
     if rest_code and rest_code[0] == 'R':
         if (active_char in c_to_f and c_to_f[active_char][1] == 2) or\
                 (active_char in c_to_i and c_to_i[active_char][1] == 2):
-            map_arg = c_to_f['m'][0][-2]
+            map_arg = lambda_vars['m'][0][0]
             return parse('m' + active_char + map_arg + rest_code[1:])
 
     # <binary function>L<any><seq>: Left Map operator
@@ -133,8 +133,9 @@ def parse(code, spacing="\n "):
             parsed1, rest_code1 = parse(rest_code[1:])
             parsed2, rest_code2 = parse(rest_code1)
             func_name = c_to_f[active_char][0]
-            map_arg = c_to_f['m'][0][-2]
-            return (c_to_f['m'][0] + func_name + '(' + parsed1 + ',' +
+            map_arg = lambda_vars['m'][0][0]
+            return (c_to_f['m'][0] + '(lambda ' + map_arg + ':' +
+                    func_name + '(' + parsed1 + ',' +
                     map_arg + '),' + parsed2 + ')', rest_code2)
 
     # <function>V<seq><seq> Vectorize operator.
@@ -172,8 +173,8 @@ def parse(code, spacing="\n "):
 
     # And for general functions
     if active_char in c_to_f:
-        if active_char in next_c_to_f:
-            return changing_function_parse(active_char, rest_code)
+        if active_char in lambda_f:
+            return lambda_function_parse(active_char, rest_code)
         else:
             return function_parse(active_char, rest_code)
     # General format functions/operators
@@ -187,28 +188,24 @@ def parse(code, spacing="\n "):
     raise PythParseError(active_char, rest_code)
 
 
-def changing_function_parse(active_char, rest_code):
+def lambda_function_parse(active_char, rest_code):
     # Function will definitely be in next_c_to_f
     global c_to_f
     global next_c_to_f
     func_name, arity = c_to_f[active_char]
+    var = lambda_vars[active_char][0]
     # Swap what variables are used in lambda functions.
-    temp = c_to_f[active_char]
-    c_to_f[active_char] = next_c_to_f[active_char][0]
-    next_c_to_f[active_char] = next_c_to_f[active_char][1:] + [temp]
+    saved_lambda_vars = lambda_vars[active_char]
+    lambda_vars[active_char] = lambda_vars[active_char][1:] + [var]
     # Take one argument, the lambda.
     parsed, rest_code = parse(rest_code)
     args_list = [parsed]
     # Rotate back.
-    temp = next_c_to_f[active_char][-1]
-    next_c_to_f[active_char] =\
-        [c_to_f[active_char]] + next_c_to_f[active_char][:-1]
-    c_to_f[active_char] = temp
+    lambda_vars[active_char] = saved_lambda_vars
     while len(args_list) != arity and parsed != '':
         parsed, rest_code = parse(rest_code)
         args_list.append(parsed)
-    py_code = func_name
-    # Initital parenthesis is never needed.
+    py_code = func_name + '(lambda ' + var + ':'
     if len(args_list) > 0 and args_list[-1] == '':
         args_list = args_list[:-1]
     py_code += ','.join(args_list)
@@ -218,7 +215,6 @@ def changing_function_parse(active_char, rest_code):
 
 def function_parse(active_char, rest_code):
     func_name, arity = c_to_f[active_char]
-    init_paren = (active_char not in no_init_paren)
     # Recurse until terminated by end paren or EOF
     # or received enough arguments
     args_list = []
@@ -227,9 +223,7 @@ def function_parse(active_char, rest_code):
         parsed, rest_code = parse(rest_code)
         args_list.append(parsed)
     # Build the output string.
-    py_code = func_name
-    if init_paren:
-        py_code += '('
+    py_code = func_name + '('
     if len(args_list) > 0 and args_list[-1] == '':
         args_list = args_list[:-1]
     py_code += ','.join(args_list)
@@ -251,10 +245,7 @@ def infix_parse(active_char, rest_code):
     # Statements that cannot have anything after them
     if active_char in end_statement:
         rest_code = ")" + rest_code
-    py_code = infixes[0]
-    for i in range(len(args_list)):
-        py_code += args_list[i]
-        py_code += infixes[i+1]
+    py_code = infixes.format(*args_list)
     return py_code, rest_code
 
 

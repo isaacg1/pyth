@@ -1,5 +1,4 @@
-no_init_paren = ('f', 'm', 'o', 'u', '.e', '.f', '.I', '.m', '.g', '.M', '.u',
-                 '.U')
+lambda_f = ('f', 'm', 'o', 'u', '.e', '.f', '.I', '.m', '.g', '.M', '.u', '.U')
 end_statement = ('B', 'R', '.*')
 variables = 'bdGHkNQTYzZ'
 
@@ -29,21 +28,21 @@ c_to_s = {
 # Arbitrary format operators - use for assignment, infix, etc.
 # All surrounding strings, arity
 c_to_i = {
-    '=':  (('assign(\'', '\',', ')'), 2),
-    '~':  (('post_assign(\'', '\',', ')'), 2),
-    '&':  (('(', ' and ', ')'), 2),
-    '|':  (('(', ' or ', ')'), 2),
-    ']':  (('[', ']'), 1),
-    '?':  (('(', ' if ', ' else ', ')'), 3),
-    ',':  (('[', ',', ']'), 2),
-    'B':  (('break', ), 0),
-    'J':  (('assign("J",', ')'), 1),
-    'K':  (('assign("K",', ')'), 1),
-    'R':  (('return ', ''), 1),
-    '.x': (('Pexcept(lambda:', ', lambda:', ')'), 2),
-    '.*': (('*(', ')'), 1),
-    '.)': (('', '.pop()'), 1),
-    '.(': (('', '.pop(', ')'), 2),
+    '=':  ('assign(\'{0}\',{1})', 2),
+    '~':  ('post_assign(\'{0}\',{1})', 2),
+    '&':  ('({0} and {1})', 2),
+    '|':  ('({0} or {1})', 2),
+    ']':  ('[{0}]', 1),
+    '?':  ('({1} if {0} else {2})', 3),
+    ',':  ('[{0},{1}]', 2),
+    'B':  ('break', 0),
+    'J':  ('assign("J",{0})', 1),
+    'K':  ('assign("K",{0})', 1),
+    'R':  ('return {0}', 1),
+    '.x': ('Pexcept(lambda:{0}, lambda:{1})', 2),
+    '.*': ('*({0})', 1),
+    '.)': ('{0}.pop()', 1),
+    '.(': ('{0}.pop({1})', 2),
     }
 
 # Simple functions only.
@@ -75,16 +74,16 @@ c_to_f = {
     'C': ('Pchr', 1),
     'c': ('chop', 2),
     'e': ('end', 1),
-    'f': ('Pfilter(lambda T:', 2),
+    'f': ('Pfilter', 2),
     'g': ('gte', 2),
     'h': ('head', 1),
     'i': ('base_10', 2),
     'j': ('join', 2),
     'l': ('Plen', 1),
-    'm': ('Pmap(lambda d:', 2),
+    'm': ('Pmap', 2),
     'n': ('ne', 2),
     'O': ('rchoice', 1),
-    'o': ('order(lambda N:', 2),
+    'o': ('order', 2),
     'P': ('primes_pop', 1),
     'p': ('Pprint', 1),
     'q': ('equal', 2),
@@ -93,7 +92,7 @@ c_to_f = {
     's': ('Psum', 1),
     't': ('tail', 1),
     'U': ('urange', 1),
-    'u': ('reduce(lambda G, H:', 3),
+    'u': ('reduce', 3),
     'v': ('eval', 1),
     'w': ('input', 0),
     'X': ('assign_at', 3),
@@ -107,18 +106,18 @@ c_to_f = {
     '.d': ('dict', 1),
     '.D': ('divmod_or_delete', 2),
     '.E': ('any', 1),
-    '.e': ('Penumerate(lambda k, b:', 2),
-    '.f': ('first_n(lambda Z:', 3),
+    '.e': ('Penumerate', 2),
+    '.f': ('first_n', 3),
     '.F': ('Pformat', 2),
-    '.g': ('group_by(lambda k:', 2),
+    '.g': ('group_by', 2),
     '.H': ('Phex', 1),
     '.h': ('Phash', 1),
     '.i': ('interleave', 2),
-    '.I': ('invert(lambda G:', 2),
+    '.I': ('invert', 2),
     '.j': ('Pcomplex', 2),
     '.l': ('log', 2),
-    '.m': ('minimal(lambda b:', 2),
-    '.M': ('maximal(lambda Z:', 2),
+    '.m': ('minimal', 2),
+    '.M': ('maximal', 2),
     '.n': ('Pnumbers', 1),
     '.O': ('Poct', 1),
     '.p': ('permutations', 1),
@@ -131,8 +130,8 @@ c_to_f = {
     '.s': ('Pstrip', 2),
     '.t': ('trig', 2),
     '.T': ('transpose', 1),
-    '.U': ('reduce2(lambda b, Z:', 2),
-    '.u': ('cu_reduce(lambda N, Y:', 3),
+    '.U': ('reduce2', 2),
+    '.u': ('cu_reduce', 3),
     '.w': ('Pwrite', 2),
     '.z': ('all_input', 0),
     '.^': ('pow', 3),
@@ -160,19 +159,20 @@ replacements = {
 
 
 # Gives next function header to use - for filter, map, reduce.
-# map: d, k, b
-# filter: T, Y, Z
-# order: N, Z,
-# reduce: (G,H), (N,T)
-# enumerate: (k, Y), (b, Z)
 
-next_c_to_f = {
-    'f': [('Pfilter(lambda Y:', 2), ('Pfilter(lambda Z:', 2), ],
-    'm': [('Pmap(lambda k:', 2), ('Pmap(lambda b:', 2), ],
-    'o': [('order(lambda Z:', 2), ],
-    'u': [('reduce(lambda N, T:', 3), ],
-    '.e': [('Penumerate(lambda Y, Z:', 2), ],
-    '.U': [('reduce2(lambda k, Y:', 2), ],
+lambda_vars = {
+    'f': ['T', 'Y', 'Z'],
+    'm': ['d', 'k', 'b'],
+    'o': ['N', 'Z'],
+    'u': ['G, H', 'N, T'],
+    '.e': ['k, b', 'Y, Z'],
+    '.f': ['Z'],
+    '.g': ['k'],
+    '.I': ['G'],
+    '.m': ['b'],
+    '.M': ['Z'],
+    '.u': ['N, Y'],
+    '.U': ['b, Z', 'k, Y'],
     }
 
 # For autoinitializers. One shot, not rotating.
