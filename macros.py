@@ -657,9 +657,12 @@ def from_base_ten(arb, base):
     # Main routine
     base_list = []
     work = arb
-    while work > 0:
-        base_list.append(work % base)
-        work //= base
+    while work != 0:
+        work, remainder = divmod(work, base)
+        if remainder < 0:
+            work += 1
+            remainder -= base
+        base_list.append(remainder)
     return base_list[::-1]
 
 environment['k'] = ''
