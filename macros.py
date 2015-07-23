@@ -627,7 +627,7 @@ environment['base_10'] = base_10
 
 def to_base_ten(arb, base):
     # Special cases
-    if base == 1:
+    if abs(base) == 1:
         return len(arb)
     acc = 0
     for digit in arb:
@@ -652,7 +652,7 @@ def from_base_ten(arb, base):
     # Special cases
     if arb == 0:
         return [0]
-    if base == 1:
+    if abs(base) == 1:
         return [0]*arb
     # Main routine
     base_list = []
