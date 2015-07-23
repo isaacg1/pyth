@@ -143,12 +143,6 @@ def num_to_range(arg):
 environment['num_to_range'] = num_to_range
 
 
-# Checks whether a function outputs its input. Used in I.
-def invariant(func, a):
-    return func(a) == a
-environment['invariant'] = invariant
-
-
 # Implicit print
 def imp_print(a):
     if a is not None:
@@ -816,7 +810,7 @@ def Prange(a, b):
     if isinstance(a, str) and isinstance(b, str):
         a_val = Pchr(a)
         b_val = Pchr(b)
-        ab_range = range(a_val, b_val)
+        ab_range = Prange(a_val, b_val)
         return [''.join(chr(char_val) for char_val in join(str_val, 256))
                 for str_val in ab_range]
 environment['Prange'] = Prange
@@ -1682,7 +1676,7 @@ def factorial(a):
 environment['factorial'] = factorial
 
 
-# .]. str, str, int
+# .[. str, str, int
 def pad(a, b, c):
     if isinstance(a, str) and isinstance(b, str) and isinstance(c, int):
         pad_len = max(0, c - len(a))
