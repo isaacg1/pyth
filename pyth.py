@@ -150,26 +150,22 @@ def parse(code, spacing="\n "):
         if active_char in c_to_f and c_to_f[active_char][1] == 1:
             parsed, rest_code = parse(rest_code[1:])
             func_name = c_to_f[active_char][0]
-            return 'invariant(' + func_name + ',' + parsed + ')', rest_code
+            return (c_to_f['q'][0] + '(' + func_name + '(' + parsed + ')'
+                    + ',' + parsed + ')', rest_code)
 
+    # <function>W<condition><any><...> Condition application operator.
+    # Equivalent to ?<condition><function><any1><any2><any1>
+    if rest_code and rest_code[0] == 'W':
+        if active_char in c_to_f or active_char in c_to_i:
+            condition, rest_code1 = parse(rest_code[1:])
+            arg1, rest_code2 = parse(rest_code1)
+            func, rest_code2b = parse(active_char + rest_code1)
+            return ('(' + func + ' if ' + condition + ' else ' + arg1 + ')',
+                    rest_code2b)
     # =<function/infix>, ~<function/infix>: augmented assignment.
     if active_char in ('=', '~'):
-        if rest_code[0] == ".":
-            func_char = rest_code[:2]
-            following_code = rest_code[2:]
-        else:
-            func_char = rest_code[0]
-            following_code = rest_code[1:]
-        if (func_char in c_to_f and c_to_f[func_char][1] > 0) or\
-           (func_char in c_to_i and c_to_i[func_char][1] > 0
-                and not func_char == ','):
-            var_char = following_code[0]
-            if (var_char in variables or var_char in next_c_to_i):
-                return parse(active_char +
-                             var_char +
-                             func_char +
-                             var_char +
-                             following_code[1:])
+        if augment_assignment_test(rest_code):
+            return augment_assignment_parse(active_char, rest_code)
 
     # And for general functions
     if active_char in c_to_f:
@@ -186,6 +182,37 @@ def parse(code, spacing="\n "):
     # If we get here, the character has not been implemented.
     # There is no non-ASCII support.
     raise PythParseError(active_char, rest_code)
+
+
+def augment_assignment_test(rest_code):
+    if rest_code[0] == ".":
+        func_char = rest_code[:2]
+        following_code = rest_code[2:]
+    else:
+        func_char = rest_code[0]
+        following_code = rest_code[1:]
+    if (func_char in c_to_f and c_to_f[func_char][1] > 0) or\
+       (func_char in c_to_i and c_to_i[func_char][1] > 0
+            and not func_char == ','):
+        var_char = following_code[0]
+        if (var_char in variables or var_char in next_c_to_i):
+            return True
+    return False
+
+
+def augment_assignment_parse(active_char, rest_code):
+    if rest_code[0] == ".":
+        func_char = rest_code[:2]
+        following_code = rest_code[2:]
+    else:
+        func_char = rest_code[0]
+        following_code = rest_code[1:]
+    var_char = following_code[0]
+    return parse(active_char +
+                 var_char +
+                 func_char +
+                 var_char +
+                 following_code[1:])
 
 
 def lambda_function_parse(active_char, rest_code):
