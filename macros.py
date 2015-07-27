@@ -1325,7 +1325,7 @@ def Pround(a, b):
         return round(a, b)
     if is_num(a) and is_num(b):
         round_len = 0
-        while round(b, round_len) != b and b < 15:
+        while round(b, round_len) != b and round_len < 15:
             round_len += 1
         return round(a, round_len)
     raise BadTypeCombinationError(".R", a, b)
