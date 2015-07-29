@@ -132,6 +132,7 @@ c_to_f = {
     '.T': ('transpose', 1),
     '.U': ('reduce2', 2),
     '.u': ('cu_reduce', 3),
+    '.v': ('average', 1),
     '.w': ('Pwrite', 2),
     '.z': ('all_input', 0),
     '.^': ('pow', 3),

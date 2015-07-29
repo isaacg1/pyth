@@ -1467,6 +1467,17 @@ def reduce2(a, b):
 environment['reduce2'] = reduce2
 
 
+# .v. average
+def average(a):
+    if is_seq(a) and all(map(is_num, a)):
+        if len(a) == 0:
+            return 0.0
+        else:
+            return sum(a) / len(a)
+    raise BadTypeCombinationError(".v", a)
+environment['average'] = average
+
+
 # .w. write
 def Pwrite(a, b=''):
     if not isinstance(b, str):
