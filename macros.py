@@ -1042,9 +1042,15 @@ def Pbin(a):
 environment['Pbin'] = Pbin
 
 
-# .O. int/str
+# .O. int/str. Octal, average
 def Poct(a):
-    return oct(int(hex_multitype(a, ".O"), 16))[2:]
+    if is_seq(a) and all(map(is_num, a)):
+        if len(a) == 0:
+            return 0.0
+        else:
+            return sum(a) / len(a)
+    else:
+        return oct(int(hex_multitype(a, ".O"), 16))[2:]
 environment['Poct'] = Poct
 
 

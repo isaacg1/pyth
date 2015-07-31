@@ -108,7 +108,7 @@ z 0 N z Variable. Autoinitializing to input.
 .M 2 N maximal Filter 2nd arg on elements which give maximal value when 1st arg is applied. First arg is lambda, Z ->
 .n 1 N Numbers List of mathematical constants: pi, e, sqrt(2), phi, infinity
 .N 1 Y the-one-after-M def :(N, T, Y): return _.
-.O 1 N oct Octal string representing _. Direct on int, interpreted as UTF-8 on str. No '0o'.
+.O 1 N oct Octal string representing _. Direct on int, interpreted as UTF-8 on str. No '0o'. Average of a list of numbers.
 .p 1 N permutations itertools.permutations(_).
 .P 2 N permutations itertools.permutations(a, b). On two ints, nPr.
 .q 0 Y quit sys.exit(0). Exits the program immediately.
