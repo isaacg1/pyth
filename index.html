@@ -94,7 +94,7 @@
                             Lines / Test: 
                             <input type="number" class="form-control" id="input-size" style="display: inline;width: 70px;" value="{{ input_size }}" min="1">
                         </div>
-                        <a id="switcher" class="bottom-row" href="javascript: input_type = input_type ? 0 : 1; change_input_type()">Test Suite -></a>
+                        <a id="switcher" class="bottom-row" href="javascript: input_type = input_type ? 0 : 1; change_input_type()">Switch to Test Suite</a>
                     </div>
                     
                     
@@ -144,7 +144,7 @@
                 $("#input").css("display", input_type ? "none" : "block")
                 $("#test-suite").css("display", input_type ? "block" : "none")
                 $("#input-size-cont").css("display", input_type ? "block" : "none")
-                $('#switcher').text(input_type ? "Regular Input ->" : "Test Suite ->")
+                $('#switcher').text(input_type ? "Switch to Regular Input" : "Switch to Test Suite")
             }
             
 			function permalink() {
