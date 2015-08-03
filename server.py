@@ -60,7 +60,7 @@ def submit_test_suite():
 	debug_on = int(request.form.get('debug'), 0)
 	
 	return Response("\n".join([run_code(code_message, inputs[0], debug_on)] + \
-				[run_code(code_message, i, False) for i in inputs[1:]]))
+				[run_code(code_message, i, False) for i in inputs[1:]]) if inputs else "")
 
 @app.route('/<path>')
 def other(path):
