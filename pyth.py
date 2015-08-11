@@ -94,74 +94,81 @@ def parse(code, spacing="\n "):
     if active_char in replacements:
         return replace_parse(active_char, rest_code, spacing)
     # Syntactic sugar handling.
-
-    # <binary function/infix>F: Fold operator
-    if rest_code and rest_code[0] == 'F':
-        if (active_char in c_to_f and c_to_f[active_char][1] == 2) or\
-                (active_char in c_to_i and c_to_i[active_char][1] == 2):
-            reduce_arg1 = lambda_vars['.U'][0][0]
-            reduce_arg2 = lambda_vars['.U'][0][-1]
-            return parse(".U" +
-                         active_char +
-                         reduce_arg1 +
-                         reduce_arg2 +
-                         rest_code[1:])
-
-    # <function>M: Map operator
-    if rest_code and rest_code[0] == 'M':
-        if active_char in c_to_f and not c_to_f[active_char][1] == 0:
-            map_arg = lambda_vars['m'][0][0]
+    if rest_code and (active_char in c_to_f or active_char in c_to_i):
+        sugar_char = rest_code[0]
+        remainder = rest_code[1:]
+        if active_char in c_to_f:
             arity = c_to_f[active_char][1]
-            remainder = rest_code[1:]
-            if arity == 1:
-                return parse('m' + active_char + map_arg + remainder)
-            else:
-                return parse('m' + active_char + '.*' + map_arg + remainder)
+        else:
+            arity = c_to_i[active_char][1]
 
-    # <binary function>R<any><seq>: Right Map operator
-    # '+R4[1 2 3 4' -> 'm+d4[1 2 3 4'.
-    if rest_code and rest_code[0] == 'R':
-        if (active_char in c_to_f and c_to_f[active_char][1] == 2) or\
-                (active_char in c_to_i and c_to_i[active_char][1] == 2):
-            map_arg = lambda_vars['m'][0][0]
-            return parse('m' + active_char + map_arg + rest_code[1:])
+        if arity > 0:
+            # <binary function/infix>F: Fold operator
+            if sugar_char == 'F':
+                if arity == 2:
+                    reduce_arg1 = lambda_vars['.U'][0][0]
+                    reduce_arg2 = lambda_vars['.U'][0][-1]
+                    return parse(".U" +
+                                 active_char +
+                                 reduce_arg1 +
+                                 reduce_arg2 +
+                                 remainder)
+                else:
+                    raise PythParseError(active_char + sugar_char, remainder)
 
-    # <binary function>L<any><seq>: Left Map operator
-    # >LG[1 2 3 4 -> 'm>Gd[1 2 3 4'.
-    if rest_code and rest_code[0] == 'L':
-        if active_char in c_to_f and c_to_f[active_char][1] == 2:
-            parsed1, rest_code1 = parse(rest_code[1:])
-            parsed2, rest_code2 = parse(rest_code1)
-            func_name = c_to_f[active_char][0]
-            map_arg = lambda_vars['m'][0][0]
-            return (c_to_f['m'][0] + '(lambda ' + map_arg + ':' +
-                    func_name + '(' + parsed1 + ',' +
-                    map_arg + '),' + parsed2 + ')', rest_code2)
+            # <function>M: Map operator
+            if sugar_char == 'M':
+                m_arg = lambda_vars['m'][0][0]
+                if arity == 1:
+                    return parse('m' + active_char + m_arg + remainder)
+                elif arity == 2:
+                    return parse('m' + active_char + 'F' + m_arg + remainder)
+                else:
+                    return parse('m' + active_char + '.*' + m_arg + remainder)
 
-    # <function>V<seq><seq> Vectorize operator.
-    # Equivalent to <func>MC,<seq><seq>.
-    if rest_code and rest_code[0] == 'V':
-        if active_char in c_to_f and 1 <= c_to_f[active_char][1] <= 2:
-            return parse(active_char + "MC," + rest_code[1:])
+            # <binary function>R<any><seq>: Right Map operator
+            # '+R4[1 2 3 4' -> 'm+d4[1 2 3 4'.
+            if sugar_char == 'R':
+                if arity == 2:
+                    map_arg = lambda_vars['m'][0][0]
+                    return parse('m' + active_char + map_arg + remainder)
+                else:
+                    raise PythParseError(active_char + sugar_char, remainder)
 
-    # <unary function>I<any> Invariant operator.
-    # Equivalent to q<func><any><any>
-    if rest_code and rest_code[0] == 'I':
-        if active_char in c_to_f and c_to_f[active_char][1] == 1:
-            parsed, rest_code = parse(rest_code[1:])
-            func_name = c_to_f[active_char][0]
-            return (c_to_f['q'][0] + '(' + func_name + '(' + parsed + ')'
-                    + ',' + parsed + ')', rest_code)
+            # <binary function>L<any><seq>: Left Map operator
+            # >LG[1 2 3 4 -> 'm>Gd[1 2 3 4'.
+            if sugar_char == 'L':
+                if arity == 2:
+                    parsed, rest = state_maintaining_parse(remainder)
+                    pyth_seg = remainder[:len(remainder) - len(rest)]
+                    m_arg = lambda_vars['m'][0][0]
+                    return parse('m' + active_char + pyth_seg + m_arg + rest)
 
-    # <function>W<condition><any><...> Condition application operator.
-    # Equivalent to ?<condition><function><any1><any2><any1>
-    if rest_code and rest_code[0] == 'W':
-        if active_char in c_to_f or active_char in c_to_i:
-            condition, rest_code1 = parse(rest_code[1:])
-            arg1, rest_code2 = parse(rest_code1)
-            func, rest_code2b = parse(active_char + rest_code1)
-            return ('(' + func + ' if ' + condition + ' else ' + arg1 + ')',
-                    rest_code2b)
+            # <function>V<seq><seq> Vectorize operator.
+            # Equivalent to <func>MC,<seq><seq>.
+            if sugar_char == 'V':
+                return parse(active_char + "MC," + remainder)
+
+            # <unary function>I<any> Invariant operator.
+            # Equivalent to q<func><any><any>
+            if sugar_char == 'I':
+                if active_char in c_to_f and arity == 1:
+                    parsed, rest_code = parse(remainder)
+                    func_name = c_to_f[active_char][0]
+                    return (c_to_f['q'][0] + '(' + func_name + '(' + parsed
+                            + ')' + ',' + parsed + ')', rest_code)
+                else:
+                    raise PythParseError(active_char + sugar_char, remainder)
+
+            # <function>W<condition><any><...> Condition application operator.
+            # Equivalent to ?<condition><function><any1><any2><any1>
+            if sugar_char == 'W':
+                    condition, rest_code1 = parse(remainder)
+                    arg1, rest_code2 = state_maintaining_parse(rest_code1)
+                    func, rest_code2b = parse(active_char + rest_code1)
+                    return ('(' + func + ' if ' + condition
+                            + ' else ' + arg1 + ')', rest_code2b)
+
     # =<function/infix>, ~<function/infix>: augmented assignment.
     if active_char in ('=', '~'):
         if augment_assignment_test(rest_code):
@@ -182,6 +189,14 @@ def parse(code, spacing="\n "):
     # If we get here, the character has not been implemented.
     # There is no non-ASCII support.
     raise PythParseError(active_char, rest_code)
+
+
+def state_maintaining_parse(code):
+    global c_to_i
+    saved_c_to_i = c.deepcopy(c_to_i)
+    py_code, rest_code = parse(code)
+    c_to_i = saved_c_to_i
+    return py_code, rest_code
 
 
 def augment_assignment_test(rest_code):
@@ -361,7 +376,7 @@ def add_print(code):
                 return True
             if code[:2] in variables:
                 return True
-            if code[:2] in ('.x',):
+            if code[:2] in ('.x', '.(', '.)',):
                 return True
             if code[1] not in '0123456789':
                 return False
