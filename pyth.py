@@ -570,24 +570,21 @@ See opening comment in pyth.py for more info.""")
             if code_on:
                 pyth_code = file_or_string
             else:
-                code_file = file_or_string
+                code_lines = list(open(file_or_string, encoding='iso-8859-1'))
                 if line_on:
-                    code_lines = list(open(file_or_string))
                     runable_code_lines = [code_line[:-1]
                                           for code_line in code_lines
                                           if code_line[0] not in ';)\n']
                     pyth_code = runable_code_lines[line_num]
                 elif multiline_on:
-                    code_lines = list(open(file_or_string))
                     pyth_code = preprocess_multiline(code_lines)
                 else:
                     end_marker = '; end\n'
-                    code_list = list(open(file_or_string))
-                    if end_marker in code_list:
-                        end_line = code_list.index(end_marker)
-                        pyth_code = ''.join(code_list[:end_line])
+                    if end_marker in code_lines:
+                        end_line = code_lines.index(end_marker)
+                        pyth_code = ''.join(code_lines[:end_line])
                     else:
-                        pyth_code = ''.join(list(open(file_or_string)))
+                        pyth_code = ''.join(code_lines)
                     if len(pyth_code) > 0 and pyth_code[-1] == '\n':
                         pyth_code = pyth_code[:-1]
 
