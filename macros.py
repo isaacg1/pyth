@@ -1135,9 +1135,17 @@ def first_n(a, b, c=1):
     if is_num(c) or isinstance(c, str):
         outputs = []
         for i in filter(a, infinite_iterator(c)):
-            outputs.append(i)
             if len(outputs) >= b:
                 return outputs
+            outputs.append(i)
+    elif is_col(c):
+        outputs = []
+        for i in filter(a, c):
+            if len(outputs) >= b:
+                return outputs
+            outputs.append(i)
+        return outputs
+    raise BadTypeCombinationError(".f", a, b, c)
 environment['first_n'] = first_n
 
 
