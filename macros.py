@@ -146,7 +146,7 @@ environment['num_to_range'] = num_to_range
 # Implicit print
 def imp_print(a):
     if is_lst(a):
-        print('\n'.join(a))
+        print('\n'.join(map(str,a)))
     elif a is not None:
         print(a)
 environment['imp_print'] = imp_print
@@ -643,9 +643,9 @@ def join(a, b):
     if isinstance(a, int) and isinstance(b, int):
         return from_base_ten(a, b)
     if isinstance(a, str) and is_col(b):
-        return a.join(list(map(lambda N: str(N), b)))
+        return a.join(list(map(str, b)))
     if is_col(b):
-        return str(a).join(list(map(lambda N: str(N), b)))
+        return str(a).join(list(map(str, b)))
     raise BadTypeCombinationError("j", a, b)
 environment['join'] = join
 
