@@ -145,7 +145,9 @@ environment['num_to_range'] = num_to_range
 
 # Implicit print
 def imp_print(a):
-    if a is not None:
+    if is_lst(a):
+        print('\n'.join(a))
+    elif a is not None:
         print(a)
 environment['imp_print'] = imp_print
 
