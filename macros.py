@@ -637,13 +637,15 @@ def to_base_ten(arb, base):
 
 
 # j. str.
-def join(a, b):
+def join(a, b = None):
+    if b is None:
+        a, b = '\n', a
     if isinstance(a, int) and isinstance(b, int):
         return from_base_ten(a, b)
     if isinstance(a, str) and is_col(b):
-        return a.join(list(map(lambda N: str(N), b)))
+        return a.join(list(map(str, b)))
     if is_col(b):
-        return str(a).join(list(map(lambda N: str(N), b)))
+        return str(a).join(list(map(str, b)))
     raise BadTypeCombinationError("j", a, b)
 environment['join'] = join
 
