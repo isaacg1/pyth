@@ -637,7 +637,7 @@ def to_base_ten(arb, base):
 
 
 # j. str.
-def join(a, b = None):
+def join(a, b=None):
     if b is None:
         a, b = '\n', a
     if isinstance(a, int) and isinstance(b, int):
@@ -1070,6 +1070,20 @@ def Pabs(a):
 
     raise BadTypeCombinationError(".a", a)
 environment['Pabs'] = Pabs
+
+
+# .b lambda, 2 ints or cols
+def binary_map(a, b, c=None):
+    if c is None:
+        b, c = zip(*b)
+    if is_num(b):
+        b = urange(b)
+    if is_num(c):
+        c = urange(c)
+    if is_col(b) and is_col(c):
+        return list(map(a, b, c))
+    raise BadTypeCombinationError(".b", a, b, c)
+environment['binary_map'] = binary_map
 
 
 # .c. seq, int

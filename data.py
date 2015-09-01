@@ -1,4 +1,5 @@
-lambda_f = ('f', 'm', 'o', 'u', '.e', '.f', '.I', '.m', '.g', '.M', '.u', '.U')
+lambda_f = ('f', 'm', 'o', 'u', '.b', '.e', '.f', '.g', '.I',
+            '.m', '.M', '.u', '.U')
 end_statement = ('B', 'R', '.*')
 variables = 'bdGHkNQTYzZ'
 
@@ -101,6 +102,7 @@ c_to_f = {
     '.A': ('all', 1),
     '.a': ('Pabs', 1),
     '.B': ('Pbin', 1),
+    '.b': ('binary_map', 3),
     '.c': ('combinations', 2),
     '.C': ('combinations_with_replacement', 2),
     '.d': ('dict', 1),
@@ -165,6 +167,7 @@ lambda_vars = {
     'm': ['d', 'k', 'b'],
     'o': ['N', 'Z'],
     'u': ['G, H', 'N, T'],
+    '.b': ['N, Y'],
     '.e': ['k, b', 'Y, Z'],
     '.f': ['Z'],
     '.g': ['k'],
