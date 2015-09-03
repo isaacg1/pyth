@@ -126,7 +126,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .B 1 N bin               Binary string representing _. Direct on int, interpreted as UTF-8 on str. No '0b'.
 .c 2 N combinations      Combinations of elements from a of length b. On two ints, nCr.
 .C 2 N comb-replacement  Combinations of elements from a of length b, with replacement.
-.d 1 n dict
+.d 1 n dict_or_date      On col, python dict function. On int, various info about current date and time.
 .D 2 N divmod_or_delete  .D<num><num is divmod(<num>,<num>).
                          .D<seq><num> removes the <num>th element of <seq>.
                          .D<seq><seq> is the same but for all the elements in <seq>.
@@ -203,6 +203,20 @@ Various string operations when calling rab with a str and b int:
     7 [literal_eval(part) for part in a.split()]
     8 run length encode of seq.
     9 run length decode of seq. Accepts [[5, "a"], [6, 10] ...] style, and "12r3T242O" style.
+
+Various date and time operations when calling .da with a int:
+
+    a result
+    0 Time since epoch in seconds.
+    1 On Unix, time process has been running for. On Windows, time since .n1 was first called.
+    2 Current [year, month, day, hour, minute, second, microseconds]
+    3 year
+    4 month
+    5 day
+    6 hour
+    7 minute
+    8 second
+    9 weekday (0 is monday, 6 is sunday)
 
 Various trigonometric functions when calling .tab:
 

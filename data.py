@@ -105,7 +105,7 @@ c_to_f = {
     '.b': ('binary_map', 3),
     '.c': ('combinations', 2),
     '.C': ('combinations_with_replacement', 2),
-    '.d': ('dict', 1),
+    '.d': ('dict_or_date', 1),
     '.D': ('divmod_or_delete', 2),
     '.E': ('any', 1),
     '.e': ('Penumerate', 2),

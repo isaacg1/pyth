@@ -2,6 +2,7 @@ import binascii
 import cmath
 import collections
 import copy
+import datetime
 import fractions
 import functools
 import hashlib
@@ -13,6 +14,7 @@ import random
 import re
 import string
 import sys
+import time
 import urllib.request
 from ast import literal_eval
 from PIL import Image
@@ -1116,6 +1118,31 @@ def combinations_with_replacement(a, b):
 
     return itertools_norm(itertools.combinations_with_replacement, a, b)
 environment['combinations_with_replacement'] = combinations_with_replacement
+
+
+# .d num, list of 2-elem lists
+def dict_or_date(a):
+    if isinstance(a, int):
+        if a == 0:
+            return time.time()
+        if a == 1:
+            return time.clock()
+        if 2 <= a <= 9:
+            today = datetime.datetime.now()
+            attributes = [today.year, today.month, today.day, today.hour, today.minute, today.second, today.microsecond]
+            if a == 2:
+                return attributes
+            if a < 9:
+                return attributes[a-3]
+            if a == 9:
+                return today.weekday()
+
+
+        raise BadTypeCombinationError(".d", a)
+    if is_col(a):
+        return dict(a)
+    raise BadTypeCombinationError(".d", a)
+environment['dict_or_date'] = dict_or_date
 
 
 # .D num, num or seq, int or seq, col
