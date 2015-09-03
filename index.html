@@ -156,6 +156,12 @@
                 $('#switcher').text(input_type ? "Switch to Regular Input" : "Switch to Test Suite")
             }
 
+            function fixedEncodeURIComponent (str) {
+              return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+                return '%' + c.charCodeAt(0).toString(16);
+              });
+            }
+
 			function permalink() {
 				params={code: $('#code').val()}
 				if ($('#input').val()) params.input=$('#input').val()
@@ -165,7 +171,7 @@
 				if ($('#debug').is(':checked')) params.debug=1
                 if ($("#input-size").val()!=1) params.input_size=$("#input-size").val()
 
-				history.pushState(null, null, "?" + $.map(params, function(val, i) {return i + "=" + escape(val)}).join("&"))
+				history.pushState(null, null, "?" + $.map(params, function(val, i) {return i + "=" + fixedEncodeURIComponent(val)}).join("&"))
 			}
 
 			function submit_code() {
