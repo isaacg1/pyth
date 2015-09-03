@@ -171,7 +171,7 @@
 				if ($('#debug').is(':checked')) params.debug=1
                 if ($("#input-size").val()!=1) params.input_size=$("#input-size").val()
 
-				history.pushState(null, null, "?" + $.map(params, function(val, i) {return i + "=" + fixedEncodeURIComponent(val)}).join("&"))
+				history.pushState(null, null, "?" + $.param(params).replace(/[!'()*]/g, function(c) {return '%' + c.charCodeAt(0).toString(16)}))
 			}
 
 			function submit_code() {
