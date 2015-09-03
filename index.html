@@ -156,13 +156,7 @@
                 $('#switcher').text(input_type ? "Switch to Regular Input" : "Switch to Test Suite")
             }
 
-            function fixedEncodeURIComponent (str) {
-              return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
-                return '%' + c.charCodeAt(0).toString(16);
-              });
-            }
-
-			function permalink() {
+	function permalink() {
 				params={code: $('#code').val()}
 				if ($('#input').val()) params.input=$('#input').val()
                 if (input_type) params.test_suite = input_type
