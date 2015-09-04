@@ -136,6 +136,7 @@ c_to_f = {
     '.u': ('cu_reduce', 3),
     '.w': ('Pwrite', 2),
     '.z': ('all_input', 0),
+    '.Z': ('compress', 1),
     '.^': ('pow', 3),
     '.&': ('bitand', 2),
     '.|': ('bitor', 2),
