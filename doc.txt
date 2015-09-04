@@ -166,7 +166,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .v 1 N average           Average of a list of numbers
 .V 2 Y forever           An infinite for loop. b iterates over an infinite sequence starting at the input, same sequence as .f.
                          On num, incrementing sequence. On str, rupy's .succ sequence.
-.w 2 N file write        Writes first arg to file second arg. If starts with http does http post request with data. If array, writes to image file as bitmap. Default file name is o.txt/png.
+.w 2 N file write        Writes first arg to file second arg. If starts with http does http post request with data. If array, writes to image file as bitmap. Default file name is o.txt/png. Writes in iso-8859-1 format.
 .x 2 N try-except        Attempts to run first arg. If an exception occurs, runs the second.
 .z 0 N all-input         Take all of STDIN, return as list of lines. Cached. .Q and .z refer to the same data.
 .^ 3 N powmod            Python pow(a, b, c).

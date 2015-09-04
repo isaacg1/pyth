@@ -1554,7 +1554,7 @@ def Pwrite(a, b=''):
     else:
         suffix = suffix if suffix else "txt"
 
-        with open(prefix + '.' + suffix, 'a') as f:
+        with open(prefix + '.' + suffix, 'a', encoding='iso-8859-1') as f:
             if is_seq(a) and not isinstance(a, str):
                 f.write("\n".join(map(str, a)) + "\n")
             else:
