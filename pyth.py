@@ -129,7 +129,7 @@ def parse(code, spacing="\n "):
             # <binary function>R<any><seq>: Right Map operator
             # '+R4[1 2 3 4' -> 'm+d4[1 2 3 4'.
             if sugar_char == 'R':
-                if arity == 2:
+                if arity >= 2:
                     map_arg = lambda_vars['m'][0][0]
                     return parse('m' + active_char + map_arg + remainder)
                 else:
@@ -138,7 +138,7 @@ def parse(code, spacing="\n "):
             # <binary function>L<any><seq>: Left Map operator
             # >LG[1 2 3 4 -> 'm>Gd[1 2 3 4'.
             if sugar_char == 'L':
-                if arity == 2:
+                if arity >= 2:
                     parsed, rest = state_maintaining_parse(remainder)
                     pyth_seg = remainder[:len(remainder) - len(rest)]
                     m_arg = lambda_vars['m'][0][0]
