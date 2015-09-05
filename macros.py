@@ -1129,14 +1129,19 @@ def dict_or_date(a):
             return time.clock()
         if 2 <= a <= 9:
             today = datetime.datetime.now()
-            attributes = [today.year, today.month, today.day, today.hour, today.minute, today.second, today.microsecond]
+            attributes = [today.year,
+                          today.month,
+                          today.day,
+                          today.hour,
+                          today.minute,
+                          today.second,
+                          today.microsecond]
             if a == 2:
                 return attributes
             if a < 9:
                 return attributes[a-3]
             if a == 9:
                 return today.weekday()
-
 
         raise BadTypeCombinationError(".d", a)
     if is_col(a):
@@ -1700,12 +1705,14 @@ def substrings(a, b=None):
         seq = urange(a)
     else:
         raise BadTypeCombinationError(".:", a, b)
+    if is_col(b):
+        return sum(([seq[start:start+step]
+                     for step in b if start + step <= len(seq)]
+                    for start in range(len(seq))), [])
     if isinstance(b, int):
         step = b
     elif isinstance(b, float):
         step = int(b * len(seq))
-    elif is_col(b):
-        step = len(b)
     elif not b:
         all_substrs = [substrings(seq, step) for step in range(1, len(seq)+1)]
         return list(itertools.chain(*all_substrs))
