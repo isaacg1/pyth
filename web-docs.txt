@@ -126,6 +126,7 @@ z 0 N z Variable. Autoinitializing to input.
 .w 2 N file-write Writes first arg to file second arg. If starts with http does http post request with data. If array, writes to image file as bitmap. Default file name is o.txt/png. Writes in iso-8859-1 format.
 .x 2 N try-except Attempts to run first arg. If an exception occurs, runs the second.
 .z 0 N all-input Take all of stdin, return as list of lines. Cached. .Q and .z refer to the same data.
+.Z 1 N compress Compresses or decompresses a string. Before decompressing you might have to escape the chars '"' and '\' and replace the null-byte with `\0`.
 .^ 3 N powmod Python pow(a, b, c).
 .& 2 N bitand Python bitwise &.
 .| 2 N bitor Python |. Bitwise or on ints, setwise union on collections. Casts to 1st arg type.

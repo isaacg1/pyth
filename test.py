@@ -644,6 +644,9 @@ test_cases = [
     ('.V\\apbI>b\\fB', 'abcdefg'),
     # .z
     ('l.z', '2', '1 2\n31'),
+    # .Z
+    ('.Z.Z"Hello World!', 'Hello World!'),
+    ('l.Z"aaaaabbbbbcccccdddddeeeeefffff', '24'),
     # .^
     ('.^3 99 10', '7'),
     # .&

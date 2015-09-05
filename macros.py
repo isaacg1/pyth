@@ -18,6 +18,7 @@ import time
 import urllib.request
 from ast import literal_eval
 from PIL import Image
+import zlib
 
 
 # Type checking
@@ -1582,6 +1583,20 @@ environment['Pexcept'] = Pexcept
 def all_input():
     return [l.rstrip("\n") for l in sys.stdin]
 environment['all_input'] = all_input
+
+
+# .Z. string
+def compress(a):
+    if isinstance(a, str):
+        a = a.encode('iso-8859-1')
+        try:
+            a = zlib.decompress(a)
+        except:
+            a = zlib.compress(a, 9)
+        return a.decode('iso-8859-1')
+
+    raise BadTypeCombinationError(".Z", a)
+environment['compress'] = compress
 
 
 # .&. int, int
