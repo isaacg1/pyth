@@ -676,7 +676,10 @@ environment['k'] = ''
 # l. any
 def Plen(a):
     if is_num(a):
+        if a < 0:
+            return cmath.log(a, 2)
         return math.log(a, 2)
+
     if is_col(a):
         return len(a)
     raise BadTypeCombinationError("l", a)
