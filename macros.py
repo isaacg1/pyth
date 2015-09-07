@@ -17,7 +17,6 @@ import sys
 import time
 import urllib.request
 from ast import literal_eval
-from PIL import Image
 import zlib
 
 
@@ -305,6 +304,7 @@ def read_file(a):
     if isinstance(a, str):
         if any(a.lower().endswith("." + i) for i in
                ["png", "jpg", "jpeg", "gif", "svg", "ppm", "pgm", "pbm"]):
+            from PIL import Image
             img = Image.open(a)
             data = list(img.getdata())
 
@@ -1545,6 +1545,7 @@ def Pwrite(a, b=''):
     suffix = b.split('.')[1] if '.' in b else None
 
     if is_lst(a):
+        from PIL import Image
         suffix = suffix if suffix else 'png'
 
         if not is_lst(a[0][0]):
