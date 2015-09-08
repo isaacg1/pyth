@@ -60,7 +60,7 @@ I  S Y if                Python if.
 J  1 Y                   Variable. Autoinitializing. J=copy(_).
 K  1 Y                   Variable. Autoinitializing. K=_. For stringing.
 L  1 Y lambda            define y(b): return _. Also is left map operator. <LG3 = [<G0, <G1, <G2]. Map var is 2nd, arity must be at least 2.
-M  1 Y The one after L   define g(G,H): return _. Also is map operator. <func>M = m<func>d or m<func>.*d
+M  1 Y The one after L   define g(G,H): return _. Also is map operator. <func>M = m<func>d or m<func>.*d. Also can be repeated, e.g. <func>MM = m<func>Md = mm<func>kd. Also can be repeated with a L or R at the end.
 N  0 N                   Variable. '"'
 O  1 N randOm-chOice     random.choice(_). Uses range(int). O0 = random.random(). Oa if a < 0 is random.seed(-a).
 P  1 N Prime/Pop         prime factorization on int. All but last on str, list. Phase on complex.

@@ -119,6 +119,17 @@ def parse(code, spacing="\n "):
             # <function>M: Map operator
             if sugar_char == 'M':
                 m_arg = lambda_vars['m'][0][0]
+                if remainder and remainder[0] in 'LMR':
+                    while remainder and remainder[0] in 'LMR':
+                        if remainder[0] == 'M':
+                            active_char += remainder[0]
+                            remainder = remainder[1:]
+                        if remainder and remainder[0] in 'LR':
+                            active_char += remainder[0]
+                            remainder = remainder[1:]
+                            seg, remainder = next_seg(remainder)
+                            active_char += seg
+                    return parse('m' + active_char + m_arg + remainder)
                 if arity == 1:
                     return parse('m' + active_char + m_arg + remainder)
                 elif arity == 2:
@@ -189,6 +200,12 @@ def parse(code, spacing="\n "):
     # If we get here, the character has not been implemented.
     # There is no non-ASCII support.
     raise PythParseError(active_char, rest_code)
+
+
+def next_seg(code):
+    parsed, rest = state_maintaining_parse(code)
+    pyth_seg = code[:len(code) - len(rest)]
+    return pyth_seg, rest
 
 
 def state_maintaining_parse(code):
