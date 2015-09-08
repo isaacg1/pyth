@@ -932,7 +932,7 @@ def assign_at(a, b, c=None):
             c = b[::-1]
 
         def trans_func(element):
-            return c[b.index(element)] if element in b else element
+            return c[b.index(element) % len(c)] if element in b else element
         translation = map(trans_func, a)
         if isinstance(a, str) and isinstance(c, str):
             return ''.join(translation)
