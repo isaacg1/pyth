@@ -676,7 +676,10 @@ environment['k'] = ''
 # l. any
 def Plen(a):
     if is_num(a):
+        if a < 0:
+            return cmath.log(a, 2)
         return math.log(a, 2)
+
     if is_col(a):
         return len(a)
     raise BadTypeCombinationError("l", a)
@@ -929,7 +932,7 @@ def assign_at(a, b, c=None):
             c = b[::-1]
 
         def trans_func(element):
-            return c[b.index(element)] if element in b else element
+            return c[b.index(element) % len(c)] if element in b else element
         translation = map(trans_func, a)
         if isinstance(a, str) and isinstance(c, str):
             return ''.join(translation)
