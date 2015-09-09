@@ -22,7 +22,7 @@ Char, arity, begins line, mnemonic, details. When in doubt, similar to python.
 \n 1 N newline           Separates without suppressing printing.
    1 N blank             Primarily used to separate numeric literals. Also suppresses printing, which is default on.
 !  1 N not               Logical not. Uses Python's truthy/falsy.
-"  X N quote             Begins and ends string literals. Optional at end of line.
+"  X N quote             Begins and ends string literals. Implicit at end of file.
 #  S Y                   "While True:" loop. On error, suppresses error and breaks out of loop.
 $  X N super-quote       Begins and ends Python literals. A Python literal is placed directly into the compiled Python output. Counts as one argument for arity purposes. Disabled online.
 %  2 N mod               On integers, modulus. On complex, mod real and imag separately. On string, string formatting. %<int><seq> is a modular slice, <seq>[::<int>] in Python.
