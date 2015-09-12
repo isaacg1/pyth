@@ -721,6 +721,8 @@ environment['rchoice'] = rchoice
 
 # o. Single purpose.
 def order(a, b):
+    if is_num(b):
+        b = urange(b)
     if is_col(b):
         if isinstance(b, str):
             return ''.join(sorted(b, key=a))
