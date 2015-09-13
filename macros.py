@@ -408,7 +408,6 @@ def at_slice(a, b, c):
     if is_num(a) and is_num(b) and is_num(c):
         if c > 0:
             work = a
-            end = b
             gen_range = []
             if a <= b:
                 def cont_test(work): return work < b
@@ -1163,10 +1162,9 @@ def divmod_or_delete(a, b):
     elif is_seq(a) and is_num(b):
         return divmod_or_delete(a, [b])
     elif is_seq(a) and is_col(b):
-        output = []
-        for index, elem in enumerate(a):
-            if index not in b:
-                output.append(elem)
+        output = [e for i, e in enumerate(a) if i not in b]
+        if isinstance(a, str):
+            return "".join(output)
         return output
     else:
         raise BadTypeCombinationError('.D', a, b)
