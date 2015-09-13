@@ -1187,18 +1187,9 @@ def first_n(a, b, c=1):
     if not isinstance(b, int):
         raise BadTypeCombinationError(".f", a, b, c)
     if is_num(c) or isinstance(c, str):
-        outputs = []
-        for i in filter(a, infinite_iterator(c)):
-            if len(outputs) >= b:
-                return outputs
-            outputs.append(i)
+        return list(itertools.islice(filter(a, infinite_iterator(c)), b))
     elif is_col(c):
-        outputs = []
-        for i in filter(a, c):
-            if len(outputs) >= b:
-                return outputs
-            outputs.append(i)
-        return outputs
+        return list(itertools.islice(filter(a, c), b))
     raise BadTypeCombinationError(".f", a, b, c)
 environment['first_n'] = first_n
 
