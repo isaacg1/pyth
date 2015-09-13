@@ -1185,18 +1185,9 @@ def first_n(a, b, c=1):
     if not isinstance(b, int):
         raise BadTypeCombinationError(".f", a, b, c)
     if is_num(c) or isinstance(c, str):
-        outputs = []
-        for i in filter(a, infinite_iterator(c)):
-            if len(outputs) >= b:
-                return outputs
-            outputs.append(i)
+        return list(itertools.islice(filter(a, infinite_iterator(c)), b))
     elif is_col(c):
-        outputs = []
-        for i in filter(a, c):
-            if len(outputs) >= b:
-                return outputs
-            outputs.append(i)
-        return outputs
+        return list(itertools.islice(filter(a, c), b))
     raise BadTypeCombinationError(".f", a, b, c)
 environment['first_n'] = first_n
 
@@ -1769,11 +1760,11 @@ def pad(a, b, c):
         return a + (b*pad_len)[:pad_len]
     if isinstance(b, str) and isinstance(c, str) and isinstance(a, int):
         pad_len = max(0, a - len(b))
-        return (c*pad_len)[:pad_len] + b
+        pad_string = (c*pad_len)[:pad_len]
+        return pad_string[:pad_len//2] + b + pad_string[pad_len//2:]
     if isinstance(c, str) and isinstance(a, str) and isinstance(b, int):
         pad_len = max(0, b - len(c))
-        pad_string = (a*pad_len)[:pad_len]
-        return pad_string[:pad_len//2] + c + pad_string[pad_len//2:]
+        return (a*pad_len)[:pad_len] + c
 
     if is_seq(a) and isinstance(c, int):
         pad_len = max(0, c - len(a))

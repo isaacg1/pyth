@@ -190,7 +190,7 @@ z  0 N                   Variable. Autoinitializing to input.
                          ordering.
 .{ 1 N unique            A uniqueness test. Returns true iff the input has no repeated elements.
 .! 1 N factorial         Python math.factorial(_).
-.[ 3 N pad               Pads string or sequence, so that it reaches specific length. On <seq><any><int> pad right. on <int><seq><any> pad left and right.
+.[ 3 N pad               Pads string or sequence, so that it reaches specific length. On <seq><any><int> pad right. On <int><seq><any> pad left and right.
                          On <any><int><seq> pad left. Returns a string, if <seq> and <any> ary both <str>.
 
 
