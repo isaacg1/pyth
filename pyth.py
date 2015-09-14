@@ -607,15 +607,15 @@ See opening comment in pyth.py for more info.""")
 
             # Debug message
             if debug_on:
-                print('{:=^50}'.format(' ' + str(len(pyth_code)) + ' chars '))
-                print(pyth_code)
-                print('='*50)
+                print('{:=^50}'.format(' ' + str(len(pyth_code)) + ' chars '), file=sys.stderr)
+                print(pyth_code, file=sys.stderr)
+                print('='*50, file=sys.stderr)
 
             py_code_line = general_parse(pyth_code)
 
             if debug_on:
-                print(py_code_line)
-                print('='*50)
+                print(py_code_line, file=sys.stderr)
+                print('='*50, file=sys.stderr)
 
             if safe_mode:
                 # to fix most security problems, we will disable the use of

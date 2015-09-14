@@ -23,7 +23,7 @@ def root():
 
 def run_code(code_message, input_message, debug_on):
     resp = ''
-    
+
     input_message += '\n'
     pyth_code = '\n'.join(code_message.split("\r\n"))
     pyth_process = \
@@ -41,7 +41,7 @@ def run_code(code_message, input_message, debug_on):
 
     if code_message:
         resp += output.decode() + (errors if errors else '')
-    
+
     return resp
 
 @app.route('/submit', methods=['POST'])
@@ -58,7 +58,7 @@ def submit_test_suite():
 	input_size = int(request.form.get('input_size', '1'), 0)
 	inputs = ["\n".join(i) for i in zip(*[iter(request.form.get('input', '').split("\n"))]*input_size)]
 	debug_on = int(request.form.get('debug'), 0)
-	
+
 	return Response("\n".join([run_code(code_message, inputs[0], debug_on)] + \
 				[run_code(code_message, i, False) for i in inputs[1:]]) if inputs else "")
 
