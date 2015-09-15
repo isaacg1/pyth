@@ -208,19 +208,18 @@ Yikes! We forgot that a ``for`` loop's influence is infinite so the printing hap
 
 It works!
 
-One final change we can make to shorten the program is to use Pyth's augmented assignment syntactic sugar. Just like Python has ``+=``, ``-=`` and so forth, Pyth has the same constructs. However, Pyth's augmented assignment can be used with any function, not just binary arithmetic operators. For instance, ``h=K`` has the same effect as ``K++``. For this code, we will use ``*=``::
-
+One final change we can make to shorten the program is to use Pyth's augmented assignment syntactic sugar. Just like Python has ``+=``, ``-=`` and so forth, Pyth has the same constructs, except in reverse, such as ``=+``, ``=-``, etc. However, Pyth's augmented assignment can be used with any function, not just binary arithmetic operators. For instance, ``h=K`` has the same effect as ``K++``. For this code, we will use ``=*``::
 
     input: 5
 
     ==================== 14 chars ====================
-    K1FNr1hQ*=KN;K
+    K1FNr1hQ=*KN;K
     ==================================================
-    Q=copy(eval(input()))
-    K=1
-    for N in Prange(1,head(Q)):
-    K=copy(times(K,N))
-    Pprint("\n",K)
+    assign('Q',eval(input()))
+    assign("K",1)
+    for N in num_to_range(Prange(1,head(Q))):
+     assign('K',times(K,N))
+     imp_print(K)
     ==================================================
     120
 
