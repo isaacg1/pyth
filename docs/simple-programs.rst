@@ -208,7 +208,7 @@ Yikes! We forgot that a ``for`` loop's influence is infinite so the printing hap
 
 It works!
 
-One final change we can make to shorten the program is to use Pyth's augmented assignment syntactic sugar. Just like Python has ``+=``, ``-=`` and so forth, Pyth has the same constructs, except in reverse, such as ``=+``, ``=-``, etc. However, Pyth's augmented assignment can be used with any function, not just binary arithmetic operators. For instance, ``h=K`` has the same effect as ``K++``. For this code, we will use ``=*``::
+One final change we can make to shorten the program is to use Pyth's augmented assignment syntactic sugar. Just like Python has ``+=``, ``-=`` and so forth, Pyth has the same constructs, except in reverse, such as ``=+``, ``=-``, etc. However, Pyth's augmented assignment can be used with any function, not just binary arithmetic operators. For instance, ``=hK`` has the same effect as ``K++``. For this code, we will use ``=*``::
 
     input: 5
 
