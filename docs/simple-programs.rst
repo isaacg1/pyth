@@ -329,12 +329,12 @@ As with each function in Pyth which uses an implicit lambda, reduce (``u``) has 
 However, we can do better than this. If we use the list from ``0`` to ``Q-1`` instead, but multiply by one more than the sequence variable in the reduce, we can shorten the code. ``UQ``, unary range of ``Q`` will produce the appropriate list, but ``u`` has a handy default where a number as the second variable will be treated identically to the unary range of that number. Thus, our code becomes::
 
     input: 5
-    
-    ==================== 3 chars =====================
-    .!Q
+
+    ==================== 7 chars =====================
+    u*GhHQ1
     ==================================================
     assign('Q',eval(input()))
-    imp_print(factorial(Q))
+    imp_print(reduce(lambda G, H:times(G,head(H)),Q,1))
     ==================================================
     120
 
