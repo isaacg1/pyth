@@ -347,12 +347,14 @@ Pyth has a lot of specialty functions. So many, in fact, that there are too many
 
     input: 5
 
+
     ==================== 3 chars =====================
-    .!0
+    .!Q
     ==================================================
-    imp_print(factorial(0))
+    assign('Q',eval(input()))
+    imp_print(factorial(Q))
     ==================================================
-    1
+    120
 
 3.2. The First n Fibonacci numbers
 ==================================
