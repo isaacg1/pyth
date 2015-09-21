@@ -548,7 +548,10 @@ environment['chop'] = chop
 # C. int, str.
 def Pchr(a):
     if isinstance(a, int):
-        return chr(a)
+        try:
+            return chr(a)
+        except:
+            return ''.join(chr(digit) for digit in from_base_ten(a, 256))
     if is_num(a):
         return a.real - a.imag * 1j
     if isinstance(a, str):
