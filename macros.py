@@ -162,7 +162,7 @@ def assign(a, b):
             environment[a] = copy.deepcopy(b)
             return environment[a]
         else:
-            var_names = a.strip('[]').replace(' ', '').split(',')
+            var_names = a.strip('[]').split(',')
             if is_seq(b) and len(var_names) == len(b) == 2 and \
                     all(len(var_name) == 1 for var_name in var_names):
                 output = []
@@ -183,17 +183,6 @@ def post_assign(a, b):
             return old_a
     raise BadTypeCombinationError("~", a, b)
 environment['post_assign'] = post_assign
-
-
-def make_lambda_func(var_string, code_string):
-    def lambda_func(*input_vals):
-        if len(input_vals) == 1:
-            assign(var_string, input_vals[0])
-        else:
-            assign(var_string, input_vals)
-        return eval(code_string, environment)
-    return lambda_func
-environment['make_lambda_func'] = make_lambda_func
 
 
 # !. All.
