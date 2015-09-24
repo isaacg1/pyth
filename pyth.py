@@ -267,7 +267,9 @@ def lambda_function_parse(active_char, rest_code):
     while len(args_list) != arity and parsed != '':
         parsed, rest_code = parse(rest_code)
         args_list.append(parsed)
-    py_code = func_name + '(lambda ' + var + ':'
+    py_code = func_name + '(make_lambda_func("' + var + '", "'
+    args_list[0] = args_list[0].replace('\\', '\\\\').replace('"', '\\"')
+    args_list[0] += '")'
     if len(args_list) > 0 and args_list[-1] == '':
         args_list = args_list[:-1]
     py_code += ','.join(args_list)
