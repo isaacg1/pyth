@@ -86,7 +86,7 @@ def parse(code, spacing="\n "):
         if rest_code == '':
             return '', ''
         else:
-            return '', ';'+rest_code
+            return '', ';' + rest_code
     # Designated variables
     if active_char in variables:
         return active_char, rest_code
@@ -150,8 +150,11 @@ def parse(code, spacing="\n "):
             # >LG[1 2 3 4 -> 'm>Gd[1 2 3 4'.
             if sugar_char == 'L':
                 if arity >= 2:
-                    parsed, rest = state_maintaining_parse(remainder)
-                    pyth_seg = remainder[:len(remainder) - len(rest)]
+                    pyth_seg = ''
+                    for _ in range(arity - 1):
+                        parsed, rest = state_maintaining_parse(remainder)
+                        pyth_seg += remainder[:len(remainder) - len(rest)]
+                        remainder = rest
                     m_arg = lambda_vars['m'][0][0]
                     return parse('m' + active_char + pyth_seg + m_arg + rest)
 
@@ -174,11 +177,11 @@ def parse(code, spacing="\n "):
             # <function>W<condition><any><...> Condition application operator.
             # Equivalent to ?<condition><function><any1><any2><any1>
             if sugar_char == 'W':
-                    condition, rest_code1 = parse(remainder)
-                    arg1, rest_code2 = state_maintaining_parse(rest_code1)
-                    func, rest_code2b = parse(active_char + rest_code1)
-                    return ('(' + func + ' if ' + condition
-                            + ' else ' + arg1 + ')', rest_code2b)
+                condition, rest_code1 = parse(remainder)
+                arg1, rest_code2 = state_maintaining_parse(rest_code1)
+                func, rest_code2b = parse(active_char + rest_code1)
+                return ('(' + func + ' if ' + condition
+                        + ' else ' + arg1 + ')', rest_code2b)
 
     # =<function/infix>, ~<function/infix>: augmented assignment.
     if active_char in ('=', '~'):
@@ -316,7 +319,7 @@ def statement_parse(active_char, rest_code, spacing):
         addl_spaces = ''
     else:
         infixes, arity, num_spaces = c_to_s[active_char]
-        addl_spaces = ' '*num_spaces
+        addl_spaces = ' ' * num_spaces
     # Handle newlines in infix segments
     infixes = [infix.replace("\n", spacing[:-1]) for infix in infixes]
     args_list = []
@@ -327,14 +330,14 @@ def statement_parse(active_char, rest_code, spacing):
     part_py_code = infixes[0]
     for i in range(len(args_list)):
         part_py_code += args_list[i]
-        part_py_code += infixes[i+1]
+        part_py_code += infixes[i + 1]
     # Handle the body - ends object as well.
     assert rest_code != ''
     args_list = []
     parsed = 'Not empty'
     while parsed != '':
         to_print = add_print(rest_code)
-        parsed, rest_code = parse(rest_code, spacing+addl_spaces+' ')
+        parsed, rest_code = parse(rest_code, spacing + addl_spaces + ' ')
         if to_print:
             parsed = 'imp_print(' + parsed + ')'
         args_list.append(parsed)
@@ -342,8 +345,8 @@ def statement_parse(active_char, rest_code, spacing):
     if args_list[-1] == '':
         args_list = args_list[:-1]
     # Combine pieces - intro, statement, conclusion.
-    all_pieces = [part_py_code] + args_list + infixes[arity+1:]
-    return (spacing+addl_spaces).join(all_pieces), rest_code
+    all_pieces = [part_py_code] + args_list + infixes[arity + 1:]
+    return (spacing + addl_spaces).join(all_pieces), rest_code
 
 
 def replace_parse(active_char, rest_code, spacing):
@@ -480,7 +483,7 @@ def preprocess_multiline(code_lines):
                 consecutive_spaces = 0
 
             if consecutive_spaces == 2:
-                line = line[:i-1]
+                line = line[:i - 1]
                 break
 
             i += 1
@@ -607,15 +610,16 @@ See opening comment in pyth.py for more info.""")
 
             # Debug message
             if debug_on:
-                print('{:=^50}'.format(' ' + str(len(pyth_code)) + ' chars '), file=sys.stderr)
+                print('{:=^50}'.format(' ' + str(len(pyth_code)) + ' chars '),
+                      file=sys.stderr)
                 print(pyth_code, file=sys.stderr)
-                print('='*50, file=sys.stderr)
+                print('=' * 50, file=sys.stderr)
 
             py_code_line = general_parse(pyth_code)
 
             if debug_on:
                 print(py_code_line, file=sys.stderr)
-                print('='*50, file=sys.stderr)
+                print('=' * 50, file=sys.stderr)
 
             if safe_mode:
                 # to fix most security problems, we will disable the use of

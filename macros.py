@@ -43,6 +43,7 @@ def is_lst(a):
 
 # Error handling
 class BadTypeCombinationError(Exception):
+
     def __init__(self, func, *args):
         self.args = args
         self.func = func
@@ -79,13 +80,13 @@ def infinite_iterator(start):
                 return 'a', True
             if char == 'Z':
                 return 'A', True
-            return chr(ord(char)+1), False
+            return chr(ord(char) + 1), False
         elif char.isdigit():
             if char == '9':
                 return '0', True
-            return chr(ord(char)+1), False
+            return chr(ord(char) + 1), False
         else:
-            return chr(ord(char)+1), False
+            return chr(ord(char) + 1), False
 
     if is_num(start):
         while True:
@@ -109,7 +110,7 @@ def infinite_iterator(start):
             for inc_loc in locs:
                 inc_char = start[inc_loc]
                 succ_char, carry = successor(inc_char)
-                start = start[:inc_loc] + succ_char + start[inc_loc+1:]
+                start = start[:inc_loc] + succ_char + start[inc_loc + 1:]
                 if not carry:
                     break
             else:
@@ -121,6 +122,7 @@ environment['infinite_iterator'] = infinite_iterator
 
 # memoizes function calls, key = repr of input.
 class memoized(object):
+
     def __init__(self, func):
         self.func = func
         self.cache = {}
@@ -254,7 +256,7 @@ def times(a, b):
     if is_num(a) and is_num(b) or\
             isinstance(a, int) and is_seq(b) or\
             is_seq(a) and isinstance(b, int):
-        return a*b
+        return a * b
     raise BadTypeCombinationError("*", a, b)
 environment['times'] = times
 
@@ -268,7 +270,7 @@ environment['Ptuple'] = Ptuple
 # -. int, set.
 def minus(a, b):
     if is_num(a) and is_num(b):
-        return a-b
+        return a - b
     if is_num(a) and is_col(b):
         if isinstance(b, str):
             return minus(str(a), b)
@@ -359,7 +361,7 @@ environment['Pset'] = Pset
 # }. in
 def Pin(a, b):
     if isinstance(a, int) and isinstance(b, int):
-        return list(range(a, b+1))
+        return list(range(a, b + 1))
 
     return a in b
 environment['Pin'] = Pin
@@ -373,14 +375,14 @@ def plus(a, b):
         else:
             return a.union({b})
     if is_lst(a) and not is_lst(b):
-        return list(a)+[b]
+        return list(a) + [b]
     if is_lst(b) and not is_lst(a):
-        return [a]+list(b)
+        return [a] + list(b)
     if is_lst(a) and is_lst(b):
-        return list(a)+list(b)
+        return list(a) + list(b)
     if is_num(a) and is_num(b) or\
             isinstance(a, str) and isinstance(b, str):
-        return a+b
+        return a + b
     if is_num(a) and isinstance(b, str):
         return str(a) + b
     if isinstance(a, str) and is_num(b):
@@ -518,14 +520,14 @@ environment['b'] = "\n"
 # c. All
 def chop(a, b=None):
     if is_num(a) and is_num(b):
-        return a/b
+        return a / b
     if isinstance(a, str) and isinstance(b, str):
         return a.split(b)
     if isinstance(a, str) and b is None:
         return a.split()
     # iterable, int -> chop a into pieces of length b
     if is_seq(a) and isinstance(b, int):
-        return [a[i:i+b] for i in range(0, len(a), b)]
+        return [a[i:i + b] for i in range(0, len(a), b)]
     # int, iterable -> split b into a pieces (distributed equally)
     if isinstance(a, int) and is_seq(b):
         m = len(b) // a  # min number of elements
@@ -597,7 +599,7 @@ def gte(a, b):
     if isinstance(a, set) and is_col(b):
         return a.issuperset(b)
     if is_seq(a) and is_num(b):
-        return a[b-1:]
+        return a[b - 1:]
     if is_num(a) and is_num(b) or\
             isinstance(a, list) and isinstance(b, list) or\
             isinstance(a, tuple) and isinstance(b, tuple) or\
@@ -611,7 +613,7 @@ environment['H'] = {}
 # h. int, str, list.
 def head(a):
     if is_num(a):
-        return a+1
+        return a + 1
     if is_seq(a):
         return a[0]
     raise BadTypeCombinationError("h", a)
@@ -660,7 +662,7 @@ def from_base_ten(arb, base):
     if arb == 0:
         return [0]
     if abs(base) == 1:
-        return [0]*arb
+        return [0] * arb
     # Main routine
     base_list = []
     work = arb
@@ -852,7 +854,7 @@ def Psorted(a):
     if is_col(a):
         return sorted(a)
     if isinstance(a, int):
-        return list(range(1, a+1))
+        return list(range(1, a + 1))
     if is_num(a):
         return Psorted(int(a))
     raise BadTypeCombinationError("S", a)
@@ -863,7 +865,7 @@ environment['T'] = 10
 # t. int, str, list.
 def tail(a):
     if is_num(a):
-        return a-1
+        return a - 1
     if is_seq(a):
         return a[1:]
     raise BadTypeCombinationError("t", a)
@@ -927,9 +929,9 @@ def assign_at(a, b, c=None):
             a[b % len(a)] = c
             return a
         if isinstance(a, str):
-            return a[:b % len(a)] + str(c) + a[(b % len(a))+1:]
+            return a[:b % len(a)] + str(c) + a[(b % len(a)) + 1:]
         if isinstance(a, tuple):
-            return a[:b % len(a)] + (c,) + a[(b % len(a))+1:]
+            return a[:b % len(a)] + (c,) + a[(b % len(a)) + 1:]
     # Translate
     if is_seq(a) and is_seq(b) and (c is None or is_seq(c)):
         if c is None:
@@ -976,7 +978,7 @@ environment['index'] = index
 # y. string, list.
 def subsets(a):
     if is_num(a):
-        return a*2
+        return a * 2
     if isinstance(a, str):
         if len(a) == 0:
             return [a]
@@ -1106,7 +1108,7 @@ def combinations(a, b):
         if r < 0:
             r = b
 
-        num = functools.reduce(operator.mul, range(n, n-r, -1), 1)
+        num = functools.reduce(operator.mul, range(n, n - r, -1), 1)
         den = math.factorial(r)
 
         return num // den
@@ -1147,7 +1149,7 @@ def dict_or_date(a):
             if a == 2:
                 return attributes
             if a < 9:
-                return attributes[a-3]
+                return attributes[a - 3]
             if a == 9:
                 return today.weekday()
 
@@ -1248,7 +1250,7 @@ def invert(a, b):
         return inv
     while a(inv) < b:
         inv *= 2
-    delta = inv/2
+    delta = inv / 2
     while delta > 1e-20:
         if a(inv) == b:
             return inv
@@ -1265,7 +1267,7 @@ environment['invert'] = invert
 def Pcomplex(a=0, b=1):
     if not is_num(a) and is_num(b):
         raise BadTypeCombinationError(".j", a, b)
-    return a + b*complex(0, 1)
+    return a + b * complex(0, 1)
 environment['Pcomplex'] = Pcomplex
 
 
@@ -1312,7 +1314,7 @@ def Pnumbers(a):
         return [math.pi,
                 math.e,
                 2**.5,
-                (1+5**0.5)/2,
+                (1 + 5**0.5) / 2,
                 float("inf"),
                 -float("inf"),
                 float("nan")][a]
@@ -1562,7 +1564,7 @@ def Pwrite(a, b=''):
             if is_seq(a) and not isinstance(a, str):
                 f.write("\n".join(map(str, a)) + "\n")
             else:
-                f.write(str(a)+"\n")
+                f.write(str(a) + "\n")
 
 environment['Pwrite'] = Pwrite
 
@@ -1681,7 +1683,7 @@ environment['partition'] = partition
 # ._. int
 def sign(a):
     if is_seq(a):
-        return [a[:end] for end in range(1, len(a)+1)]
+        return [a[:end] for end in range(1, len(a) + 1)]
     if is_num(a):
         if a < 0:
             return -1
@@ -1719,7 +1721,7 @@ def substrings(a, b=None):
     else:
         raise BadTypeCombinationError(".:", a, b)
     if is_col(b):
-        return sum(([seq[start:start+step]
+        return sum(([seq[start:start + step]
                      for step in b if start + step <= len(seq)]
                     for start in range(len(seq))), [])
     if isinstance(b, int):
@@ -1727,11 +1729,17 @@ def substrings(a, b=None):
     elif isinstance(b, float):
         step = int(b * len(seq))
     elif not b:
-        all_substrs = [substrings(seq, step) for step in range(1, len(seq)+1)]
+        all_substrs = [
+            substrings(
+                seq,
+                step) for step in range(
+                1,
+                len(seq) +
+                1)]
         return list(itertools.chain(*all_substrs))
     else:
         raise BadTypeCombinationError(".:", a, b)
-    return [seq[start:start+step] for start in range(len(seq)-step+1)]
+    return [seq[start:start + step] for start in range(len(seq) - step + 1)]
 environment['substrings'] = substrings
 
 
@@ -1760,24 +1768,24 @@ environment['factorial'] = factorial
 def pad(a, b, c):
     if isinstance(a, str) and isinstance(b, str) and isinstance(c, int):
         pad_len = max(0, c - len(a))
-        return a + (b*pad_len)[:pad_len]
+        return a + (b * pad_len)[:pad_len]
     if isinstance(b, str) and isinstance(c, str) and isinstance(a, int):
         pad_len = max(0, a - len(b))
-        pad_string = (c*pad_len)[:pad_len]
-        return pad_string[:pad_len//2] + b + pad_string[pad_len//2:]
+        pad_string = (c * pad_len)[:pad_len]
+        return pad_string[:pad_len // 2] + b + pad_string[pad_len // 2:]
     if isinstance(c, str) and isinstance(a, str) and isinstance(b, int):
         pad_len = max(0, b - len(c))
-        return (a*pad_len)[:pad_len] + c
+        return (a * pad_len)[:pad_len] + c
 
     if is_seq(a) and isinstance(c, int):
         pad_len = max(0, c - len(a))
-        return list(a) + [b]*pad_len
+        return list(a) + [b] * pad_len
     if is_seq(b) and isinstance(a, int):
         pad_len = max(0, a - len(b))
-        return [c]*(pad_len//2) + list(b) + [c]*((pad_len+1)//2)
+        return [c] * (pad_len // 2) + list(b) + [c] * ((pad_len + 1) // 2)
     if is_seq(c) and isinstance(b, int):
         pad_len = max(0, b - len(c))
-        return [a]*pad_len + list(c)
+        return [a] * pad_len + list(c)
 
     raise BadTypeCombinationError(".[", a, b, c)
 environment['pad'] = pad
