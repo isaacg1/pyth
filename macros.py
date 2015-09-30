@@ -398,7 +398,7 @@ environment['Plist'] = Plist
 
 
 # :. list.
-def at_slice(a, b, c):
+def at_slice(a, b, c=1):
     if isinstance(a, str) and isinstance(b, str):
         if not isinstance(c, str):
             return bool(re.search(b, a))
