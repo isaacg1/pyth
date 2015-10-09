@@ -122,6 +122,7 @@ z 0 N z Variable. Autoinitializing to input.
 .T 1 N transpose Matrix transpose. Do not strip characters, instead top justify. list of str -> list of str, ofther to list of lists. Casts int elems to urange.
 .u 3 N cumul-reduce Just like u, except returns a collection of all intermediate states. lambda N, Y.
 .U 2 N reduce2 The 2 input reduce, uses first value of sequence as initial value and the rest as sequence. (b, Z) -> (k, Y) ->
+.v 1 N pyth-eval Eval a pyth expression. Must be a str.
 .V S Y forever An infinite for loop. b iterates over an infinite sequence starting at the input, same sequence as .f. On num, incrementing sequence. On str, rupy's .succ sequence.
 .w 2 N file-write Writes first arg to file second arg. If starts with http does http post request with data. If array, writes to image file as bitmap. Default file name is o.txt/png. Writes in iso-8859-1 format.
 .x 2 N try-except Attempts to run first arg. If an exception occurs, runs the second.

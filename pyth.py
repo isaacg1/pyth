@@ -16,7 +16,7 @@
 # uses, once expanded.                                                     #
 ############################################################################
 from extra_parse import *
-from macros import environment
+from macros import environment, BadTypeCombinationError
 from data import *
 import copy as c
 import sys
@@ -409,6 +409,14 @@ def add_print(code):
                 c_to_i[code[0]] == next_c_to_i[code[0]]):
             return True
     return False
+
+
+# Pyth eval
+def pyth_eval(a):
+    if not isinstance(a, str):
+        raise BadTypeCombinationError(".v", a)
+    return eval(parse(a)[0], environment)
+environment['pyth_eval'] = pyth_eval
 
 
 # Preprocessor for multi-line mode.
