@@ -398,12 +398,23 @@ environment['Plist'] = Plist
 
 
 # :. list.
-def at_slice(a, b, c=1):
+def at_slice(a, b, c=0):
     if isinstance(a, str) and isinstance(b, str):
-        if not isinstance(c, str):
-            return bool(re.search(b, a))
-        else:
+        if isinstance(c, str):
             return re.sub(b, c, a)
+        if c == 0:
+            return bool(re.search(b, a))
+        if c == 1:
+            return [m.group(0) for m in re.finditer(b, a)]
+        if c == 2:
+            def first_group(matchobj):
+                return matchobj.group(1)
+            return re.sub(b, first_group, a)
+        if c == 3:
+            return re.split(b, a)
+        if c == 4:
+            return [[m.group(0)] + list(m.groups()) for m in re.finditer(b, a)]
+        raise BadTypeCombinationError(":", a, b, c)
     if is_seq(a) and isinstance(b, int) and isinstance(c, int):
         return a[slice(b, c)]
 
