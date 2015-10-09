@@ -42,7 +42,7 @@ O 1 N randOm-chOice random.choice(_). Uses range(int). O0 = random.random(). Oa 
 P 1 N Prime/Pop prime factorization on int. All but last on str, list. Phase on complex.
 Q 0 N quick Variable. Autoinitializing to evaluated input.
 R 1 Y return Python return. Implicit ). Also is right map operator. %R4[5 10 20 = [5%4, 10%4, 20%4]. Map var is first, arity must be at least 2.
-S 1 N sorted Python sorted.
+S 1 N sorted Python sorted. Inclusive range from 1 on int.
 T 0 N ten Variable. 10
 U 1 N unary-range Python unary range. U_=Ul_ on str, list. On negative ints, range(a, 0).
 V S Y for-N-in Implicit variable for loop. Equivalent to FN. Also is vectorize operator. +V[1 2 3)[4 5 6) = [5, 7, 9]. If given sequence, loops thorugh sequence.
