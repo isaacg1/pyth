@@ -119,7 +119,7 @@ z  0 N                   Variable. Autoinitializing to input.
 {  1 N set               Python set. Makes one element set on num.
 |  2 N or                Logical or. Short-circuiting.
 }  2 N in                Python in. Inclusive range on int, int.
-~  1 Y post_assign       Similar to =, except that the return value is the old value of the variable.
+~  2 Y post_assign       Similar to =, except that the return value is the old value of the variable.
 .a 1 N abs               Python abs(_). On list of nums, vector length. On list of 2 lists of nums, Euclidean distance.
 .A 1 N all               Python all(_).
 .b 3 N binary_map        Python map over two args. num -> urange, missing 3rd arg assumes 2nd arg is col of tuples.
@@ -167,6 +167,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .V 2 Y forever           An infinite for loop. b iterates over an infinite sequence starting at the input, same sequence as .f.
                          On num, incrementing sequence. On str, rupy's .succ sequence.
 .w 2 N file write        Writes first arg to file second arg. If starts with http does http post request with data. If array, writes to image file as bitmap. Default file name is o.txt/png. Writes in iso-8859-1 format.
+.W 3 N apply-while       First arg is condition, lambda H. Second arg is modification, lambda Z. Third arg is strating value. While condtion(value): value = modification(value)
 .x 2 N try-except        Attempts to run first arg. If an exception occurs, runs the second.
 .z 0 N all-input         Take all of STDIN, return as list of lines. Cached. .Q and .z refer to the same data.
 .Z 1 N compress          Compresses or decompresses a string. Before decompressing you might have to escape the chars '"' and '\' and replace the null-byte with `\0`.

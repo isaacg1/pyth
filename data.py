@@ -40,6 +40,7 @@ c_to_i = {
     'J':  ('assign("J",{0})', 1),
     'K':  ('assign("K",{0})', 1),
     'R':  ('return {0}', 1),
+    '.W': ('apply_while(lambda H:{0}, lambda Z:{1}, {2})', 3),
     '.x': ('Pexcept(lambda:{0}, lambda:{1})', 2),
     '.*': ('*({0})', 1),
     '.)': ('{0}.pop()', 1),

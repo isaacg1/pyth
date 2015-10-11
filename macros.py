@@ -1580,6 +1580,15 @@ def Pwrite(a, b=''):
 environment['Pwrite'] = Pwrite
 
 
+def apply_while(a, b, c):
+    condition = a
+    function = b
+    value = c
+    while condition(value):
+        value = function(value)
+    return value
+environment['apply_while'] = apply_while
+
 # .x try except
 def Pexcept(a, b):
     try:
