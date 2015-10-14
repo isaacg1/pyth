@@ -885,16 +885,16 @@ environment['tail'] = tail
 
 # u. single purpose
 def reduce(a, b, c=None):
-    # Fixed point
+    # Fixed point / Loop
     if c is None:
         counter = 0
-        old_acc = b
+        results = [b]
         acc = a(b, counter)
-        while old_acc != acc:
+        while acc not in results:
             counter += 1
-            old_acc = acc
+            results.append(acc)
             acc = a(acc, counter)
-        return acc
+        return results[-1]
 
     # Reduce
     if is_seq(b) or isinstance(b, int):
@@ -1493,14 +1493,12 @@ environment['transpose'] = transpose
 def cu_reduce(a, b, c=None):
     if c is None:
         counter = 0
-        old_acc = b
+        results = [b]
         acc = a(b, counter)
-        results = [old_acc]
-        while old_acc != acc:
+        while acc not in results:
             counter += 1
-            old_acc = acc
+            results.append(acc)
             acc = a(acc, counter)
-            results.append(old_acc)
         return results
     if is_seq(b) or isinstance(b, int):
         if is_num(b):

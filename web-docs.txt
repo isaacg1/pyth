@@ -76,7 +76,7 @@ q 2 N equals Python ==.
 r 2 N range Python 2 range. Rev if a>b. On str, str str-range in C order. Various str/seq operations with <str/seq><int>. b=0 a.lower(); b=1 a.upper(); b=2 a.swapcase(); b=3 a.title(); b=4 a.capitalize(); b=5 capwords(a); b=6 a.strip(); b=7 map(eval, a.split()); b=8 run-length-encode; b=9 run-length-decode
 s 1 N sum Reduce + on list, cast to int on other. Real part on complex.
 t 1 N tail _[1:]. _-1.
-u 3 N redUce Reduce, implicit lambda. 3rd is base case. G,H -> N,T. Fixed point operator if 2nd arg omitted and ) used, e.g. u<1st><3rd>).
+u 3 N redUce Reduce, implicit lambda. 3rd is base case. G,H -> N,T. Terminates when loop detected, just before first repetition if 2nd arg omitted, e.g. u<1st><3rd>).
 v 1 N eVal Python eval. Often used for str -> int.
 w 1 N raW_input Python 3 input()
 x 2 N indeX Find first occurrence. -1 if not found. Bitwise xor.
