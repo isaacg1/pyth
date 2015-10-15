@@ -1773,6 +1773,14 @@ def unique(a):
 environment['unique'] = unique
 
 
+# .} col
+def unique_elems(a):
+    if not is_col(a):
+        raise BadTypeCombinationError('.}', a)
+    return sorted(set(a), key=lambda x: a.index(x))
+environment['unique_elems'] = unique_elems
+
+
 # .! factorial
 def factorial(a):
     if not isinstance(a, int):
