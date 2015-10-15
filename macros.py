@@ -1691,6 +1691,7 @@ def partition(a):
         return all_splits
 
     if isinstance(a, int) and a >= 0:
+        @memoized
         def integer_partition(number):
             result = set()
             result.add((number, ))
