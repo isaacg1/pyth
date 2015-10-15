@@ -60,7 +60,7 @@ def parse(code, spacing="\n "):
     rest_code = code[1:]
     # Deal with alternate command table
     if active_char == ".":
-        assert len(rest_code) >= 1
+        assert len(rest_code) >= 1, 'expected letter after .'
         if rest_code[0] not in "0123456789":
             active_char += rest_code[0]
             rest_code = rest_code[1:]
