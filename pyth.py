@@ -332,7 +332,7 @@ def statement_parse(active_char, rest_code, spacing):
         part_py_code += args_list[i]
         part_py_code += infixes[i + 1]
     # Handle the body - ends object as well.
-    assert rest_code != ''
+    assert rest_code != '', 'expected statement after %s' % active_char
     args_list = []
     parsed = 'Not empty'
     while parsed != '':
@@ -391,7 +391,7 @@ def add_print(code):
     if len(code) > 0:
         # Handle alternate table commands before confusion with numerals.
         if code[0] == ".":
-            assert len(code) >= 2
+            assert len(code) >= 2, 'expected letter after .'
             if code[:2] in c_to_f and not code[:2] == '.q':
                 return True
             if code[:2] in variables:
