@@ -183,6 +183,13 @@ def parse(code, spacing="\n "):
                 return ('(' + func + ' if ' + condition
                         + ' else ' + arg1 + ')', rest_code2b)
 
+            # <function>B<arg><args> -> ,<arg><function><arg><args>
+            if sugar_char == 'B':
+                parsed, rest = state_maintaining_parse(remainder)
+                pyth_seg = remainder[:len(remainder) - len(rest)]
+                return parse(',' + pyth_seg + active_char + remainder)
+
+
     # =<function/infix>, ~<function/infix>: augmented assignment.
     if active_char in ('=', '~'):
         if augment_assignment_test(rest_code):
