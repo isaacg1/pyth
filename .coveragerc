@@ -8,3 +8,4 @@ exclude_lines =
 [run]
 omit =
     *PIL*
+    *sympy*

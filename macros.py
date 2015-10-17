@@ -747,10 +747,6 @@ def order(a, b):
 environment['order'] = order
 
 
-def isprime(num):
-    return all(num % div != 0 for div in range(2, int(num ** .5 + 1)))
-
-
 # P. int, str, list.
 def primes_pop(a):
     if isinstance(a, int):

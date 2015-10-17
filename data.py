@@ -154,13 +154,15 @@ c_to_f = {
     }
 
 replacements = {
-    '\\': ('"{0}"', 1),
-    'V': ('FN', 0),
-    'A': ('=,GH', 0),
-    'L': ('DybR', 0),
-    'M': ('DgGHR', 0),
-    '.N': ('D:NTYR', 0),
+    '\\': [('"{0}"', 1),],
+    'V': ['FN','FH','Fb',],
+    'A': ['=,GH',],
+    'L': ['DybR',"D'bR",],
+    'M': ['DgGHR', 'DnGHR',],
+    '.N': ['D:NTYR','DXNTYR',],
     }
+
+rotate_back_replacements = ('V',)
 
 
 # Gives next function header to use - for filter, map, reduce.

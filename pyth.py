@@ -357,13 +357,26 @@ def statement_parse(active_char, rest_code, spacing):
 
 
 def replace_parse(active_char, rest_code, spacing):
+    global replacements
     # Special case for \\
     if active_char == "\\" and rest_code[0] in "\"\\":
         return parse('"\\' + rest_code[0] + '"' + rest_code[1:], spacing)
-    format_str, format_num = replacements[active_char]
-    format_chars = tuple(rest_code[:format_num])
-    new_code = format_str.format(*format_chars) + rest_code[format_num:]
-    return parse(new_code, spacing)
+    # Rotate replacements.
+    repl_str = replacements[active_char][0]
+    saved_replacements = replacements[active_char]
+    replacements[active_char] = replacements[active_char][1:] + [repl_str]
+    # Parse
+    if isinstance(repl_str, tuple):
+        repl_str, num_args = repl_str
+        format_chars = tuple(rest_code[:num_args])
+        new_code = repl_str.format(*format_chars) + rest_code[num_args:]
+        parsed, remainder = parse(new_code, spacing)
+    else:
+        parsed, remainder = parse(repl_str + rest_code, spacing)
+    # Rotate back in some cases.
+    if active_char in rotate_back_replacements:
+        replacements[active_char] = saved_replacements
+    return parsed, remainder
 
 
 # Prependers are magic. Automatically prepend to program if present.
@@ -524,6 +537,7 @@ def run_code(code, inp):
     global safe_mode
     global environment
     global c_to_i
+    global replacements
 
     old_stdout, old_stdin = sys.stdout, sys.stdin
 
@@ -534,6 +548,7 @@ def run_code(code, inp):
 
     saved_env = c.deepcopy(environment)
     saved_c_to_i = c.deepcopy(c_to_i)
+    saved_replacements = c.deepcopy(replacements)
 
     try:
         safe_mode = False
@@ -546,6 +561,7 @@ def run_code(code, inp):
     for key in saved_env:
         environment[key] = saved_env[key]
     c_to_i = saved_c_to_i
+    replacements = saved_replacements
 
     result = sys.stdout.getvalue()
 
