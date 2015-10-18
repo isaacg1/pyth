@@ -899,11 +899,11 @@ def reduce(a, b, c=None):
     # Fixed point / Loop
     if c is None:
         counter = 0
-        results = [b]
+        results = [copy.deepcopy(b)]
         acc = a(b, counter)
         while acc not in results:
             counter += 1
-            results.append(acc)
+            results.append(copy.deepcopy(acc))
             acc = a(acc, counter)
         return results[-1]
 
@@ -1519,11 +1519,11 @@ environment['transpose'] = transpose
 def cu_reduce(a, b, c=None):
     if c is None:
         counter = 0
-        results = [b]
+        results = [copy.deepcopy(b)]
         acc = a(b, counter)
         while acc not in results:
             counter += 1
-            results.append(acc)
+            results.append(copy.deepcopy(acc))
             acc = a(acc, counter)
         return results
     if is_seq(b) or isinstance(b, int):
@@ -1532,12 +1532,12 @@ def cu_reduce(a, b, c=None):
         else:
             seq = b
         acc = c
-        results = [acc]
+        results = [copy.deepcopy(acc)]
         while len(seq) > 0:
             h = seq[0]
             acc = a(acc, h)
             seq = seq[1:]
-            results.append(acc)
+            results.append(copy.deepcopy(acc))
         return results
 environment['cu_reduce'] = cu_reduce
 
