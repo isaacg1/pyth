@@ -1332,7 +1332,7 @@ environment['maximal'] = maximal
 
 # .n. mathematical constants
 def Pnumbers(a):
-    if a < 7 and isinstance(a, int):
+    if isinstance(a, int) and a < 7 :
         return [math.pi,
                 math.e,
                 2**.5,
@@ -1340,6 +1340,17 @@ def Pnumbers(a):
                 float("inf"),
                 -float("inf"),
                 float("nan")][a]
+
+    if is_lst(a):
+        def flatten(l):
+            for el in l:
+                if is_lst(el):
+                    for sub in flatten(el):
+                        yield sub
+                else:
+                    yield el
+
+        return list(flatten(a))
 
     raise BadTypeCombinationError(".n", a)
 environment['Pnumbers'] = Pnumbers
