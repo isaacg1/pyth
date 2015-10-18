@@ -149,6 +149,7 @@ c_to_f = {
     '.-': ('remove', 2),
     '.:': ('substrings', 2),
     '.{': ('unique', 1),
+    '.}': ('unique_elems', 1),
     '.!': ('factorial', 1),
     '.[': ('pad', 3),
     }
