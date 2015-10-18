@@ -853,6 +853,13 @@ def Psum(a):
     if is_col(a) and not isinstance(a, str):
         if len(a) == 0:
             return 0
+        if all(isinstance(elem, str) for elem in a):
+            return ''.join(a)
+        if len(a) > 100:
+            cutoff = len(a) // 2
+            first = a[:cutoff]
+            second = a[cutoff:]
+            return plus(Psum(first), Psum(second))
         return reduce(lambda b, c: plus(b, c), a[1:], a[0])
     if isinstance(a, complex):
         return a.real
