@@ -59,8 +59,8 @@ H  0 N hash-table        Variable. {}
 I  S Y if                Python if.
 J  1 Y                   Variable. Autoinitializing. J=copy(_).
 K  1 Y                   Variable. Autoinitializing. K=_. For stringing.
-L  1 Y lambda            define y(b): return _. Also is left map operator. <LG3 = [<G0, <G1, <G2]. Map var is 2nd, arity must be at least 2.
-M  1 Y The one after L   define g(G,H): return _. Also is map operator. <func>M = m<func>d or m<func>.*d. Also can be repeated, e.g. <func>MM = m<func>Md = mm<func>kd. Also can be repeated with a L or R at the end.
+L  1 Y lambda            define y(b): return _. '(b) on second use. Also is left map operator. <LG3 = [<G0, <G1, <G2]. Map var is 2nd, arity must be at least 2.
+M  1 Y The one after L   define g(G,H): return _. n(G,H) on second use. Also is map operator. <func>M = m<func>d or m<func>.*d. Also can be repeated, e.g. <func>MM = m<func>Md = mm<func>kd. Also can be repeated with a L or R at the end.
 N  0 N                   Variable. '"'
 O  1 N randOm-chOice     random.choice(_). Uses range(int). O0 = random.random(). Oa if a < 0 is random.seed(-a).
 P  1 N Prime/Pop         prime factorization on int. All but last on str, list. Phase on complex.
@@ -69,7 +69,7 @@ R  1 Y return            Python return. Implicit ). Also is right map operator. 
 S  1 N sorted            Python sorted. Inclusive range from 1 on int.
 T  0 N ten               Variable. 10
 U  1 N unary-range       Python unary range. U_=Ul_ on str, list. On negative ints, range(a, 0).
-V  S Y for-N-in          Implicit variable for loop. Equivalent to FN. Also is vectorize operator. +V[1 2 3)[4 5 6) = [5, 7, 9]. If given sequence, loops thorugh sequence.
+V  S Y for-N-in          Implicit variable for loop. Equivalent to FN. Rotates FN -> FH -> Fb on nested use. Also is vectorize operator. +V[1 2 3)[4 5 6) = [5, 7, 9]. If given sequence, loops thorugh sequence.
 W  S Y while             Python while. Also is conditional aplication operator.
                          _WNG = _G if N else G.
                          +WNZ2 = +Z2 if N else Z.
@@ -149,7 +149,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .M 2 N maximal           Filter 2nd arg on elements which give maximal value when 1st arg is applied.
                          First arg is lambda, Z ->
 .n 1 N Numbers           List of mathematical constants: pi, e, sqrt(2), phi, infinity. Deep flatten on lists.
-.N 1 Y The one after M   def :(N, T, Y): return _.
+.N 1 Y The one after M   def :(N, T, Y): return _. X(N, T, Y) on second use.
 .O 1 N oct               Octal string representing _. Direct on int, interpreted as UTF-8 on str. No '0o'. Average of a list of numbers.
 .p 1 N permutations      itertools.permutations(_).
 .P 2 N permutations      itertools.permutations(a, b). On two ints, nPr.
