@@ -122,7 +122,7 @@ z  0 N                   Variable. Autoinitializing to input.
 ~  2 Y post_assign       Similar to =, except that the return value is the old value of the variable.
 .a 1 N abs               Python abs(_). On list of nums, vector length. On list of 2 lists of nums, Euclidean distance.
 .A 1 N all               Python all(_).
-.b 3 N binary_map        Python map over two args. num -> urange, missing 3rd arg assumes 2nd arg is col of tuples.
+.b 3 N binary_map        Python map over two args. First arg is lambda, (N, Y). num -> urange, missing 3rd arg assumes 2nd arg is col of tuples.
 .B 1 N bin               Binary string representing _. Direct on int, interpreted as UTF-8 on str. No '0b'.
 .c 2 N combinations      Combinations of elements from a of length b. On two ints, nCr.
 .C 2 N comb-replacement  Combinations of elements from a of length b, with replacement.
@@ -135,9 +135,9 @@ z  0 N                   Variable. Autoinitializing to input.
 .f 3 N first_n           .fabc: Filters for the first b elements of infinite sequence starting at c for which a is truthy. c defaults to 1.
                          a is lambda of Z.
                          Infinite sequence is increasing numbers by 1 on num, or successive strings on string.
-                         Uses ruby .succ equivalent, doc here: http://ruby-doc.org/core-2.2.2/String.html#method-i-succ
+                         Uses Ruby .succ equivalent, doc here: http://ruby-doc.org/core-2.2.2/String.html#method-i-succ
 .F 2 N format            a.format(b) - if b is a non-string sequence, it will be unpacked.
-.g 2 N group_by          group seq by the value of the lambda. Groups are sorted by the value of the lambda.
+.g 2 N group_by          group seq by the value of the lambda. Groups are sorted by the value of the lambda. Lambda k.
 .h 1 N hash
 .H 1 N hex               Hexadecimal string representing _. Direct on int, interpreted as UTF-8 on str. No '0x'.
 .i 2 N interleave        Interleave two sequences - .i([a1, a2], [b1, b2, b3, b4]) = [a1, b1, a2, b2, b3, b4]
@@ -165,9 +165,9 @@ z  0 N                   Variable. Autoinitializing to input.
 .U 2 N reduce2           The 2 input reduce, uses first value of sequence as initial value and the rest as sequence. (b, Z) -> (k, Y) ->
 .v 1 N pyth-eval         Eval a pyth expression. Must be a str.
 .V 2 Y forever           An infinite for loop. b iterates over an infinite sequence starting at the input, same sequence as .f.
-                         On num, incrementing sequence. On str, rupy's .succ sequence.
+                         On num, incrementing sequence. On str, Ruby's .succ sequence.
 .w 2 N file write        Writes first arg to file second arg. If starts with http does http post request with data. If array, writes to image file as bitmap. Default file name is o.txt/png. Writes in iso-8859-1 format.
-.W 3 N apply-while       First arg is condition, lambda H. Second arg is modification, lambda Z. Third arg is strating value. While condtion(value): value = modification(value)
+.W 3 N apply-while       First arg is condition, lambda H. Second arg is modification, lambda Z. Third arg is starting value. While condtion(value): value = modification(value)
 .x 2 N try-except        Attempts to run first arg. If an exception occurs, runs the second.
 .z 0 N all-input         Take all of STDIN, return as list of lines. Cached. .Q and .z refer to the same data.
 .Z 1 N compress          Compresses or decompresses a string. Before decompressing you might have to escape the chars '"' and '\' and replace the null-byte with `\0`.
