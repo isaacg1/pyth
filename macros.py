@@ -691,7 +691,7 @@ environment['k'] = ''
 # l. any
 def Plen(a):
     if is_num(a):
-        if a < 0:
+        if isinstance(a, complex) or a < 0:
             return cmath.log(a, 2)
         return math.log(a, 2)
 
