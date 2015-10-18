@@ -1342,6 +1342,10 @@ def Pnumbers(a):
                 float("nan")][a]
 
     if is_lst(a):
+        # Algorithm from:
+        # http://stackoverflow.com/a/2158532/3739851
+        # cc by-sa 3.0
+        # Altered to use is_lst
         def flatten(l):
             for el in l:
                 if is_lst(el):
