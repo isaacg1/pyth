@@ -1050,12 +1050,6 @@ def hash_repr(a):
     raise BadTypeCombinationError(".h", a)
 
 
-# .h. any
-def Phash(a):
-    return int(hashlib.sha256(hash_repr(a).encode("utf-8")).hexdigest(), 16)
-environment['Phash'] = Phash
-
-
 def hex_multitype(a, func):
     if isinstance(a, str):
         return "0x" + binascii.hexlify(a.encode("utf-8")).decode("utf-8")
@@ -1066,28 +1060,10 @@ def hex_multitype(a, func):
     raise BadTypeCombinationError(func, a)
 
 
-# .H. int/str
-def Phex(a):
-    return hex_multitype(a, ".H")[2:]
-environment['Phex'] = Phex
-
-
-# .B. int/str
-def Pbin(a):
-    return bin(int(hex_multitype(a, ".B"), 16))[2:]
-environment['Pbin'] = Pbin
-
-
-# .O. int/str. Octal, average
-def Poct(a):
-    if is_seq(a) and all(map(is_num, a)):
-        if len(a) == 0:
-            return 0.0
-        else:
-            return sum(a) / len(a)
-    else:
-        return oct(int(hex_multitype(a, ".O"), 16))[2:]
-environment['Poct'] = Poct
+# .h. any
+def Phash(a):
+    return int(hashlib.sha256(hash_repr(a).encode("utf-8")).hexdigest(), 16)
+environment['Phash'] = Phash
 
 
 # .a num/seq of num/seq of 2 seq of num
@@ -1118,6 +1094,12 @@ def binary_map(a, b, c=None):
         return list(map(a, b, c))
     raise BadTypeCombinationError(".b", a, b, c)
 environment['binary_map'] = binary_map
+
+
+# .B. int/str
+def Pbin(a):
+    return bin(int(hex_multitype(a, ".B"), 16))[2:]
+environment['Pbin'] = Pbin
 
 
 # .c. seq, int
@@ -1247,6 +1229,12 @@ def group_by(a, b):
 environment['group_by'] = group_by
 
 
+# .H. int/str
+def Phex(a):
+    return hex_multitype(a, ".H")[2:]
+environment['Phex'] = Phex
+
+
 # .i. seq, seq
 def interleave(a, b):
     if is_seq(a) and is_seq(b):
@@ -1358,6 +1346,18 @@ def Pnumbers(a):
 
     raise BadTypeCombinationError(".n", a)
 environment['Pnumbers'] = Pnumbers
+
+
+# .O. int/str. Octal, average
+def Poct(a):
+    if is_seq(a) and all(map(is_num, a)):
+        if len(a) == 0:
+            return 0.0
+        else:
+            return sum(a) / len(a)
+    else:
+        return oct(int(hex_multitype(a, ".O"), 16))[2:]
+environment['Poct'] = Poct
 
 
 # .p. seq
