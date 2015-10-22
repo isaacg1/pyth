@@ -1098,7 +1098,9 @@ environment['binary_map'] = binary_map
 
 # .B. int/str
 def Pbin(a):
-    return bin(int(hex_multitype(a, ".B"), 16))[2:]
+    if isinstance(a, int) or isinstance(a, str):
+        return bin(int(hex_multitype(a, ".B"), 16))[2:]
+    raise BadTypeCombinationError(".B", a)
 environment['Pbin'] = Pbin
 
 
@@ -1231,7 +1233,9 @@ environment['group_by'] = group_by
 
 # .H. int/str
 def Phex(a):
-    return hex_multitype(a, ".H")[2:]
+    if isinstance(a, int) or isinstance(a, str):
+        return hex_multitype(a, ".H")[2:]
+    raise BadTypeCombinationError(".H", a)
 environment['Phex'] = Phex
 
 
@@ -1355,8 +1359,9 @@ def Poct(a):
             return 0.0
         else:
             return sum(a) / len(a)
-    else:
+    elif isinstance(a, int) or isinstance(a, str):
         return oct(int(hex_multitype(a, ".O"), 16))[2:]
+    raise BadTypeCombinationError(".O", a)
 environment['Poct'] = Poct
 
 
