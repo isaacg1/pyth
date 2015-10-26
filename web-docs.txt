@@ -118,7 +118,7 @@ z 0 N z Variable. Autoinitializing to input.
 .r 2 N rotate On <col><seq>, perform a translation on <col> which maps each element of <seq> to its successor.
 .s 2 N strip Strip the elements in b from the beginning and end of a.
 .S 1 N shuffle .S<col> random.shuffle(<col>). str out if str in, otherwise list out. .S(<int>) = .S(range(<int>))
-.t 2 N trigonometry Collection of trigonometric functions: b=0 sin(a); b=1 cos(a); b=2 tan(a); b=3 asin(a); b=4 acos(a); b=5 atan(a); b=6 degrees(a); b=7 radians(a); b=8 sinh(a); b=9 cosh(a); b=10 tanh(a); b=11 asinh(a); b=12 acosh(a); b=13 atanh(a); Also padded transpose. Pads first input to rectangle with second input, then transposes.
+.t 2 N trigonometry Collection of trigonometric functions: b=0 sin(a); b=1 cos(a); b=2 tan(a); b=3 asin(a); b=4 acos(a); b=5 atan(a); b=6 degrees(a); b=7 radians(a); b=8 sinh(a); b=9 cosh(a); b=10 tanh(a); b=11 asinh(a); b=12 acosh(a); b=13 atanh(a); b=14 atan2(*a); Also padded transpose. Pads first input to rectangle with second input, then transposes.
 .T 1 N transpose Matrix transpose. Do not strip characters, instead top justify. list of str -> list of str, ofther to list of lists. Casts int elems to urange.
 .u 3 N cumul-reduce Just like u, except returns a collection of all intermediate states. lambda N, Y.
 .U 2 N reduce2 The 2 input reduce, uses first value of sequence as initial value and the rest as sequence. (b, Z) -> (k, Y) ->

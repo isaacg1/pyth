@@ -1474,13 +1474,14 @@ environment['shuffle'] = shuffle
 
 # .t. num, int
 def trig(a, b):
-    if is_num(a) and isinstance(b, int):
+    if (is_num(a) or (is_seq(a) and len(a) > 0 and is_num(a[0]))) and isinstance(b, int):
 
         funcs = [math.sin, math.cos, math.tan,
                  math.asin, math.acos, math.atan,
                  math.degrees, math.radians,
                  math.sinh, math.cosh, math.tanh,
-                 math.asinh, math.acosh, math.atanh]
+                 math.asinh, math.acosh, math.atanh,
+                 lambda a: math.atan2(*a)]
 
         return funcs[b](a)
 
