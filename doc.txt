@@ -240,6 +240,7 @@ Various trigonometric functions when calling .tab:
    11 asinh(a)
    12 acosh(a)
    13 atanh(a)
+   14 atan2(*a)
 
 Various regex operations when calling :abc
 a is text, b is pattern.
