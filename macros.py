@@ -346,16 +346,27 @@ environment['neg'] = neg
 
 
 # {. All.
-def Pset(a=set()):
-    if is_num(a):
-        return set([a])
-    if is_col(a):
+def uniquify(a):
+    if is_seq(a):
         try:
-            return set(a)
-        except TypeError:
-            return set(map(tuple, a))
-    raise BadTypeCombinationError("{", a)
-environment['Pset'] = Pset
+            seen = set()
+            out = []
+            for elem in a:
+                if not elem in seen:
+                    out.append(elem)
+                    seen.add(elem)
+        except:
+            out = []
+            for elem in a:
+                if not elem in out:
+                    out.append(elem)
+        if isinstance(a, str):
+            return ''.join(out)
+        return out
+    if is_col(a):
+        return sorted(a)
+    raise BadTypeCombinationError('{', a)
+environment['uniquify'] = uniquify
 
 
 # }. in
@@ -1793,16 +1804,17 @@ def substrings(a, b=None):
 environment['substrings'] = substrings
 
 
-# .{ col
-def unique(a):
-    if not is_col(a):
-        raise BadTypeCombinationError('.{', a)
-    try:
-        return len(a) == len(set(a))
-    except TypeError:
-        sort = sorted(a)
-        return all(x != y for x, y in zip(sort, sort[1:]))
-environment['unique'] = unique
+# .{. All.
+def Pset(a=set()):
+    if is_num(a):
+        return set([a])
+    if is_col(a):
+        try:
+            return set(a)
+        except TypeError:
+            return set(map(tuple, a))
+    raise BadTypeCombinationError("{", a)
+environment['Pset'] = Pset
 
 
 # .! factorial
