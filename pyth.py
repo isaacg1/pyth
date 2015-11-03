@@ -339,7 +339,6 @@ def statement_parse(active_char, rest_code, spacing):
         part_py_code += args_list[i]
         part_py_code += infixes[i + 1]
     # Handle the body - ends object as well.
-    assert rest_code != '', 'expected statement after %s' % active_char
     args_list = []
     parsed = 'Not empty'
     while parsed != '':
@@ -351,6 +350,8 @@ def statement_parse(active_char, rest_code, spacing):
     # Trim the '' away and combine.
     if args_list[-1] == '':
         args_list = args_list[:-1]
+    if args_list == []:
+        args_list = ['pass']
     # Combine pieces - intro, statement, conclusion.
     all_pieces = [part_py_code] + args_list + infixes[arity + 1:]
     return (spacing + addl_spaces).join(all_pieces), rest_code
@@ -558,6 +559,8 @@ def run_code(code, inp):
     except Exception as e:
         error = e
 
+    for key in list(environment):
+        del environment[key]
     for key in saved_env:
         environment[key] = saved_env[key]
     c_to_i = saved_c_to_i

@@ -764,8 +764,8 @@ def primes_pop(a):
         if a < 2:
             return []
         try:
-            import sympy
-            factor_dict = sympy.factorint(a)
+            from sympy import factorint
+            factor_dict = factorint(a)
             factors_with_mult = [[fact for _ in range(factor_dict[fact])] for fact in factor_dict]
             return sorted(sum(factors_with_mult, []))
         except:
