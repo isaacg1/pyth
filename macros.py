@@ -965,6 +965,7 @@ def assign_at(a, b, c=None):
             return a[:b % len(a)] + str(c) + a[(b % len(a)) + 1:]
         if isinstance(a, tuple):
             return a[:b % len(a)] + (c,) + a[(b % len(a)) + 1:]
+        raise BadTypeCombinationError("X", a, b, c)
     # Translate
     if is_seq(a) and is_seq(b) and (c is None or is_seq(c)):
         if c is None:
@@ -990,6 +991,11 @@ def assign_at(a, b, c=None):
         else:
             b[a] = c
         return b
+    # Insert in a string, X<int><str><any>
+    if isinstance(a, int) and isinstance(b, str):
+        if not isinstance(c, str):
+            c = str(c)
+        return b[:a] + c + b[a:]
     raise BadTypeCombinationError("X", a, b, c)
 environment['assign_at'] = assign_at
 
