@@ -480,7 +480,7 @@ def lt(a, b):
     if is_seq(a) and is_num(b):
         return a[:b]
     if is_num(a) and is_seq(b):
-        return b[:-a]
+        return b[:len(b)-a]
     if isinstance(a, complex) or isinstance(b, complex):
         return abs(a) < abs(b)
     if is_num(a) and is_num(b) or\
@@ -499,7 +499,7 @@ def gt(a, b):
     if is_seq(a) and is_num(b):
         return a[b:]
     if is_num(a) and is_seq(b):
-        return b[-a:]
+        return b[len(b)-a:]
     if isinstance(a, complex) or isinstance(b, complex):
         return abs(a) > abs(b)
     if is_num(a) and is_num(b) or\
@@ -645,6 +645,8 @@ environment['head'] = head
 # i. int, str
 def base_10(a, b):
     if isinstance(a, str) and isinstance(b, int):
+        if not a:
+            return 0
         return int(a, b)
     if is_seq(a) and is_num(b):
         return to_base_ten(a, b)
@@ -874,6 +876,8 @@ def Psum(a):
         return reduce(lambda b, c: plus(b, c), a[1:], a[0])
     if isinstance(a, complex):
         return a.real
+    if a == '':
+        return 0
     if is_num(a) or isinstance(a, str):
         return int(a)
     raise BadTypeCombinationError("s", a)
