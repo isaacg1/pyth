@@ -72,6 +72,9 @@ def parse(code, spacing="\n "):
     # String literals
     if active_char == '"':
         return str_parse(active_char, rest_code)
+    if active_char == '."':
+        string, rest_code = str_parse('"', rest_code)
+        return c_to_f['."'][0] + '(' + string + ')', rest_code
     # Python code literals
     if active_char == '$':
         if safe_mode:

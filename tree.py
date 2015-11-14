@@ -136,7 +136,7 @@ def disp_tree(tree):
         return count
     for tree in trees:
         count = add(tree, count) + 1
-    graph.render('pyth.gv', view=True)
+    graph.render('tree-rep.gv', view=True)
 
 code = input()
 trees = assemble_trees(code)

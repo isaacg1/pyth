@@ -129,6 +129,7 @@ z 0 N z Variable. Autoinitializing to input.
 .x 2 N try-except Attempts to run first arg. If an exception occurs, runs the second.
 .z 0 N all-input Take all of stdin, return as list of lines. Cached. .Q and .z refer to the same data.
 .Z 1 N compress Compresses or decompresses a string. Before decompressing you might have to escape the chars '"' and '\' and replace the null-byte with `\0`.
+." X N pack_str Packed string with no inital quote mark, in the following format: first char is lowest output char, second is highest, the rest is the string with the lowest char subtracted out, converted to the minimal base, converted with C (anything C accepts is fine). ++\.N++hSzeSzCi-RChSzCMz-hCeSzChSz
 .^ 3 N powmod Python pow(a, b, c).
 .& 2 N bitand Python bitwise &.
 .| 2 N bitor Python |. Bitwise or on ints, setwise union on collections. Casts to 1st arg type.

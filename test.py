@@ -687,6 +687,9 @@ test_cases = [
     # .Z
     ('.Z.Z"Hello World!', 'Hello World!'),
     ('l.Z"aaaaabbbbbcccccdddddeeeeefffff', '24'),
+    # ."
+    ('."adblah', 'bcacbcdabcabbcca'),
+    ('."4T1420', 'I76POS'),
     # .^
     ('.^3 99 10', '7'),
     # .&

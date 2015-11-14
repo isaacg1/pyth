@@ -1669,6 +1669,31 @@ def compress(a):
 environment['compress'] = compress
 
 
+"""
+To encode into this format, use the following Pyth expression:
+
+J"Your string here"++hSJeSJCi-RChSJCMJ-hCeSJChSJ
+
+Basically, subtract the character value of the smallest character from every character,
+then base encode in the minimal possible base, convert back to a string, and stick
+the smallest two characters at the front.
+"""
+# .". Special - str
+def packed_str(pack):
+    if not isinstance(pack, str):
+        raise BadTypeCombinationError('."', pack)
+    assert len(pack) >= 2, '." needs bounds.'
+    lowest = pack[0]
+    highest = pack[1]
+    offset = ord(lowest)
+    base = ord(highest) - ord(lowest) + 1
+    int_rep = Pchr(pack[2:])
+    reduced = from_base_ten(int_rep, base)
+    final = ''.join(chr(a + offset) for a in reduced)
+    return final
+environment['packed_str'] = packed_str
+
+
 # .&. int, int
 def bitand(a, b):
     if isinstance(a, int) and isinstance(b, int):
