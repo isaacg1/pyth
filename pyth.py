@@ -49,9 +49,6 @@ def general_parse(code):
 
 
 def parse(code, spacing="\n "):
-    # Skip newlines.
-    while code[:1] == "\n":
-        code = code[1:]
     # If we've reached the end of the string, finish up.
     if code == '':
         return '', ''
@@ -425,7 +422,7 @@ def add_print(code):
             if code[1] not in '0123456789':
                 return False
 
-        if (code[0] not in 'p a'
+        if (code[0] not in 'p a\n'
                 and code[0] in c_to_f) or \
             code[0] in variables or \
             code[0] in "@&|]}?,\\\".0123456789," or \

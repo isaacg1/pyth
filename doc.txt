@@ -19,7 +19,7 @@ Char, arity, begins line, mnemonic, details. When in doubt, similar to python.
 
 0123456789               Numeric literals
 
-\n 1 N newline           Separates without suppressing printing.
+\n 1 N newline           Print with trailing newline. Return input.
    1 N blank             Primarily used to separate numeric literals. Also suppresses printing, which is default on.
 !  1 N not               Logical not. Uses Python's truthy/falsy.
 "  X N quote             Begins and ends string literals. Implicit at end of file.

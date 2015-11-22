@@ -1,4 +1,4 @@
-<newline> 1 N newline Separates without suppressing printing.
+<newline> 1 N newline Print with trailing newline. Return input.
 <space> 1 N blank Primarily used to separate numeric literals. Also suppresses printing, which is default on.
 ! 1 N not Logical not. Uses Python's truthy/falsy.
 " X N quote Begins and ends string literals. Implicit at end of file.

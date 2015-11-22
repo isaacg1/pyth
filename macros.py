@@ -151,6 +151,7 @@ environment['num_to_range'] = num_to_range
 def imp_print(a):
     if a is not None:
         print(a)
+    return a
 environment['imp_print'] = imp_print
 
 
