@@ -690,6 +690,7 @@ test_cases = [
     # ."
     ('."adblah', 'bcacbcdabcabbcca'),
     ('."4T1420', 'I76POS'),
+    ('."abc"Q', 'bbaaabb\n3', '3'),
     # .^
     ('.^3 99 10', '7'),
     # .&

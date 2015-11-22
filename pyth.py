@@ -192,7 +192,6 @@ def parse(code, spacing="\n "):
                 pyth_seg = remainder[:len(remainder) - len(rest)]
                 return parse(',' + pyth_seg + active_char + remainder)
 
-
     # =<function/infix>, ~<function/infix>: augmented assignment.
     if active_char in ('=', '~'):
         if augment_assignment_test(rest_code):
@@ -399,7 +398,8 @@ def prepend_parse(code):
     for prep_char in sorted(prepend):
         quot_marks = 0
         for index, char in enumerate(code):
-            if char == '"' and not_escaped(code[:index]):
+            if char == '"' and (not_escaped(code[:index]) or
+                                (index > 0 and code[index - 1] == '.')):
                 quot_marks += 1
             elif char == prep_char and quot_marks % 2 == 0 and \
                     not_escaped(code[:index]):
