@@ -1014,6 +1014,8 @@ def index(a, b):
         # replicate functionality from str.find
         else:
             return -1
+    if (is_num(a) or isinstance(a, str)) and is_lst(b):
+        return [index for index, elem in enumerate(b) if elem == a]
     raise BadTypeCombinationError("x", a, b)
 environment['index'] = index
 

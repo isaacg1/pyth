@@ -113,7 +113,7 @@ u  3 N reduce            Reduce, implicit lambda. 3rd is base case. G,H -> N,T.
                          Terminates when loop detected, just before first repetition if 2nd arg omitted, e.g. u<1st><3rd>).
 v  1 N eval              Python eval. Often used for str -> int.
 w  0 N raw_input         Python 3 input()
-x  2 N index             Find first occurrence. -1 if not found. Bitwise xor.
+x  2 N index             x<seq><any>: Find first occurrence index`. -1 if not found. x<int><int>: Bitwise xor. x<int/str><list>: All occurence indexes.
 y  1 N                   On num, double. On col, powerset.
 z  0 N                   Variable. Autoinitializing to input.
 {  1 N uniquify          Unique elements, in the original order. Single elem list on num.
