@@ -1,0 +1,48 @@
+Pyth token reference
+
+Types:
+
+num = int, float
+cmp = complex
+seq = str, list, tuple
+lst = list, tuple
+col = str, list, set, dict
+... = any number of arguments.
+
+Shorthands:
+In the text, A refers to the first argument, B to the second, etc.
+If two type definitions overlap, more specific takes precedence.
+No operations modify the input unless specifically specificed.
+
+Format:
+Token | Input types | Effect
+
+0                       Leading 0 is a separate token, number zero.
+0123456789.             Numeric literals. Leading 0 ignored, trailing . often ignored.
+\n <any>                Print with trailing newline. Return input.
+!  <any>                Logical negation. 0, 0.0, "", [], (), {}, set() -> True, else False.
+"                       Begin and end string literal.
+#                       Loop until error statement. On error, suppress and break out of loop.
+$                       Begin and end Python literal. Counts as one token. Disabled in -s (online).
+%  <num> <num>          Modulo. Same as Python.
+%  <int> <seq>          Every Ath element of B. B[::A] in Python.
+%  <str> <lst>          Format string, B is list of arguments. % in Python.
+%  <str> <any>          Format string, B is only argument.
+%  <cmp> <num>          Apply modulo to real and imaginary parts separately.
+&  <any> <any>          If not A, return A. Else, return B. Short-circuiting. Same as Python and.
+'  <str>                Open the file or website given by the input string. Return list of lines if normal file or website. Return list of color triples for color images, and list of brightness values for grayscale images.
+(  <any...>             Tuple constructor. tuple in Python.
+)                       End function or statement.
+*  <num> <num>          Multiplication. * in Python.
+*  <num> <seq>          Repetition. * in Python.
+*  <seq> <num>          Repetition. * in Python.
+*  <col> <col>          Cartesian product. All pairs of A_elem, B_elem.
++  <num> <num>          Addition. + in Python.
++  <str> <str>          Concatenate. + in Python.
++  <lst> <lst>          Concatenate. + in Python (But cast to list).
++  <lst> <any>          Append B to the end of A.
++  <any> <lst>          Prepend A to the beginning of B.
++  <str> <num>          Append str(B) to the end of A.
++  <num> <str>          Prepend str(A) to the beginning of B.
++  <set> <col>          Union of A and B.
++  <set> <any>          Union of A and {B}.
