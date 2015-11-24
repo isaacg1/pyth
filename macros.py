@@ -577,8 +577,10 @@ def Pchr(a):
             return chr(a)
         except:
             return ''.join(chr(digit) for digit in from_base_ten(a, 256))
-    if is_num(a):
+    if isinstance(a, complex):
         return a.real - a.imag * 1j
+    if is_num(a):
+        return Pchr(int(a))
     if isinstance(a, str):
         return to_base_ten(list(map(ord, a)), 256)
     if is_col(a):
