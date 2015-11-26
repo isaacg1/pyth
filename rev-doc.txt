@@ -6,13 +6,16 @@ num = int, float
 cmp = complex
 seq = str, list, tuple
 lst = list, tuple
+idx = str, list, dict
 col = str, list, set, dict
 ... = any number of arguments.
+var = variable. Not evaluated.
+func = function. Not evaluated.
 
 Shorthands:
 In the text, A refers to the first argument, B to the second, etc.
 If two type definitions overlap, more specific takes precedence.
-No operations modify the input unless specifically specificed.
+No operations modify the input unless specifically specified.
 
 Format:
 Token | Input types | Effect
@@ -46,3 +49,47 @@ $                       Begin and end Python literal. Counts as one token. Disab
 +  <num> <str>          Prepend str(A) to the beginning of B.
 +  <set> <col>          Union of A and B.
 +  <set> <any>          Union of A and {B}.
+,  <any> <any>          [A, B]
+-  <num> <num>          Subtraction. - in Python.
+-  <col> <col>          Filter A on absence from b. Uses not in.
+-  <num> <col>          Cast A to B's type, then filter on absence.
+-  <col> <num>          Cast B to A's type, then filter on absence.
+/  <num> <num>          Integer division. // in Python.
+/  <lst> <any>          Count occurrences of B in A.
+/  <str> <str>          Count occurrences of B in A.
+:  <seq> <int> <int>    Slice of A from B to C. A[B:C] in Python.
+:  <num> <num> <num>    Stepped range. Go from A to B with a step size of C.
+:  <idx> <col> <col>    Multiple assignment. For i in B, A[i] = C[i], If C runs out, it repeats.
+:  <idx> <col> <num>    Multiple assignment. For i in B, A[i] = C.
+:  <str> <str> <str>    Regex substitution. In A, replace B with C.
+:  <str> <str> 0 or )   Regex search boolean. In A, return whether a match for B is found.
+:  <str> <str> 1        Regex search. In A, return every match for B (non overlapping)
+:  <str> <str> 2        In A, replace each match of regex B with its first capturing group.
+:  <str> <str> 3        Split A on matches of regex B. Retain capturing groups.
+:  <str> <str> 4        Return list of match and all capturing groups for each match of B in A.
+;                       End all containing functions, statements, etc.
+<  <num> <num>          Less than, numeric.
+<  <str> <str>          Less than, lexicographic.
+<  <lst> <lst>          Less than, lexicographic.
+<  <seq> <num>          First B elements of A. A[:B] in Python.
+<  <num> <seq>          All but last A elements of B. B[:len(B)-A] in Python.
+<  <cmp> <num>          Less than, absolute value/magnitude.
+<  <num> <cmp>          Less than, absolute value/magnitude.
+<  <set> <col>          Proper subset.
+=  <var> <any>          Assign A value B. deepcopy value before assignment.
+=  <func> <var> <...>   Assign B value A(B,C,..). The Python Y += 3 would be =+Y3.
+>  <num> <num>          Greater than, numeric.
+>  <str> <str>          Greater than, lexicographic.
+>  <lst> <lst>          Greater than, lexicographic.
+>  <seq> <num>          A at and after index B. A[B:] in Python.
+>  <num> <seq>          Last A elements of B. B[len(B)-A:] in Python.
+>  <cmp> <num>          Greater than, absolute value/magnitude.
+>  <num> <cmp>          Greater than, absolute value/magnitude.
+>  <set> <col>          Proper superset.
+?  <any> <any> <any>    Ternary. A ? B : C in C-like langauges. B if A else C in Python.
+@  <seq> <num>          Index into the sequence. Modular wrapping. Python A[B % len(A)]
+@  <dict> <any>         Index into the dict. A[B] in Python.
+@  <col> <col>          Intersection. Filter B on presence in A.
+@  <num> <num>          Root. A ** (1/B) in Python.
+
+
