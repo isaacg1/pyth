@@ -608,6 +608,12 @@ def end(a):
 environment['end'] = end
 
 
+# E.
+def eval_input():
+    return literal_eval(input())
+
+
+environment['eval_input'] = eval_input
 # f. single purpose.
 def Pfilter(a, b=1):
     if is_num(b):
@@ -615,8 +621,8 @@ def Pfilter(a, b=1):
     if is_col(b):
         return list(filter(a, b))
     raise BadTypeCombinationError("f", a, b)
-environment['G'] = string.ascii_lowercase
 environment['Pfilter'] = Pfilter
+environment['G'] = string.ascii_lowercase
 
 
 # g. All.

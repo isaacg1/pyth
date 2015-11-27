@@ -18,12 +18,12 @@ variables = 'bdGHkNQTYzZ'
 
 c_to_s = {
     'D': (('@memoized\ndef ', ':'), 1),
-    'E': (('else:', ), 0),
     'F': (('for ', ' in num_to_range(', '):'), 2),
     'I': (('if ', ':'), 1),
     'W': (('while ', ':'), 1),
     '#': (('while True:\n try:', '\n except Exception:\n  break'), 0, 1),
     '.V': (('for b in infinite_iterator(', '):'), 1),
+    '.?': (('else:', ), 0),
     }
 
 # Arbitrary format operators - use for assignment, infix, etc.
@@ -75,6 +75,7 @@ c_to_f = {
     'a': ('append', 2),
     'C': ('Pchr', 1),
     'c': ('chop', 2),
+    'E': ('eval_input', 0),
     'e': ('end', 1),
     'f': ('Pfilter', 2),
     'g': ('gte', 2),
