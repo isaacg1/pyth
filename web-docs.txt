@@ -28,7 +28,7 @@ A 1 Y assign-pair A_ => G,H = _. Input must be a 2-tuple.
 B 0 Y break Python break. Implicit ). Also is bifurcate operator. <func>B<arg><oth args> = ,<arg><func><arg><oth args>
 C 1 N chr char -> int, int -> char. str -> int, treated as base 256 number. Matrix transpose on list of lists, zip(*a) specifically. If input was list of str, output will be as well. Conjugate on complex. If input is int outside unicode range, convert to string as base 256 number.
 D S Y def Python def. Match arity w/ existing function. Memoized.
-E S Y else Python else.
+E 0 N eval_input Take a line of user input, eval it.
 F S Y for Python for. Also is fold operator. <binary>F = .U<binary>bZ.
 G 0 N strinG.lowercase Variable. "abcdefghijklmnopqrstuvwxyz"
 H 0 N hash-table Variable. {}
@@ -145,3 +145,4 @@ z 0 N z Variable. Autoinitializing to input.
 .{ 1 N set Python set. Makes one element set on num.
 .! 1 N factorial Python math.factorial(_).
 .[ 3 N pad Pads string or sequence, so that it reaches specific length. On <seq><any><int> pad right. On <int><seq><any> pad left and right. On <any><int><seq> pad left. Returns a string, if <seq> and <any> ary both <str>.
+.? S Y else Python else.

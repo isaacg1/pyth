@@ -126,3 +126,5 @@ P  <int>                  List of prime factors of A with multiplicity in increa
 P  <num>                  Complex phase of A.
 P  <seq>                  All but the last element of A. A[:-1] in Python.
 Q                         Variable, Autoinitialized to eval(input()).
+R  <any>                  Return, used inside D.
+R  <pfn> <any n-1> <col>  Right map. n >= 2. Map A(_, B, ...) over C, where _ takes on each of C's values. Map uses m underneath, and B may refer to its lambda variable.
