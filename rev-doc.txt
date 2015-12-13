@@ -1,4 +1,4 @@
-Pyth token reference
+Pyth reference and documentation
 
 Types:
 
@@ -11,12 +11,15 @@ col = str, list, set, dict
 any = any expression
 smt = any series of statements
 ... = any number of arguments.
-_ n = n _s.
+n _ = n _ arguments.
 var = variable. Not evaluated.
 func = function. Not evaluated.
 func n = function with arity n.
 pfn = Preceding function of arity n. *F, for instance.
 l_  = Lambda with lambda variable(s) _
+i>0 = positive int.
+i>=0 = nonnegative int.
+i<0 = negative int.
 
 Shorthands:
 In the text, A refers to the first argument, B to the second, etc.
@@ -29,6 +32,7 @@ Token | Input types | Effect
 0                         Leading 0 is a separate token, number zero.
 0123456789.               Numeric literals. Leading 0 ignored, trailing . often ignored.
 \n <any>                  Print with trailing newline. Return input.
+   <any>                  Identity function. Suppresses printing.
 !  <any>                  Logical negation. 0, 0.0, "", [], (), {}, set() -> True, else False.
 "                         Begin and end string literal.
 #                         Loop until error statement. On error, suppress and break out of loop.
@@ -92,8 +96,8 @@ $                         Begin and end Python literal. Counts as one token. Dis
 >  <cmp> <num>            Greater than, absolute value/magnitude.
 >  <num> <cmp>            Greater than, absolute value/magnitude.
 >  <set> <col>            Proper superset.
-?  <any> <any> <any>      Ternary. A ? B : C in C-like langauges. B if A else C in Python.
-@  <seq> <num>            Index into the sequence. Modular wrapping. Python A[B % len(A)]
+?  <any> <any> <any>      Ternary. A ? B : C in C-like languages. B if A else C in Python.
+@  <seq> <num>            Index into the sequence. Modular wrapping. A[B % len(A)] in Python.
 @  <dict> <any>           Index into the dict. A[B] in Python.
 @  <col> <col>            Intersection. Filter B on presence in A.
 @  <num> <num>            Root. A ** (1/B) in Python.
@@ -110,7 +114,7 @@ E                         Evaluate input. Same as ast.literal_eval(input()) in P
 F  <var> <num> <smt>      For A in range(int(B)): C
 F  <var> <any> <smt>      For A in B: C
 G                         Variable. Initialized to "abcdefghijklmnopqrstuvwxyz".
-H                         Variable. Initialized to {}.
+H                         Variable. Initialized to {}. (Hash table)
 I  <ant> <smt>            if A: B
 I  <pf1> <any>            Invariant. A(B) == B.
 J  <any>                  Variable, Autoinitializing. J=A on first use.
@@ -122,9 +126,18 @@ M  <any>                  def g(G,H): return A. On second use, def n(G,H): retur
 N                         Variable. Initialized to '"'.
 O  <int>                  If A > 0, random int below A. If A == 0, random float 0 to 1. If A < 0, random.seed(-A).
 O  <col>                  Random element of A.
-P  <int>                  List of prime factors of A with multiplicity in increasing order. Uses sympy if sympy is installed, trial division otherwise. Empty list if A < 2
+P  <i>=0>                 List of prime factors of A with multiplicity in increasing order. Uses sympy if sympy is installed, trial division otherwise. Empty list if A is 0 or 1.
+P  <i<0>                  Returns whether -A is prime.
 P  <num>                  Complex phase of A.
 P  <seq>                  All but the last element of A. A[:-1] in Python.
 Q                         Variable, Autoinitialized to eval(input()).
 R  <any>                  Return, used inside D.
-R  <pfn> <any n-1> <col>  Right map. n >= 2. Map A(_, B, ...) over C, where _ takes on each of C's values. Map uses m underneath, and B may refer to its lambda variable.
+R  <pfn> <n-1 any> <col>  Right map. n >= 2. Map A(_, B, ...) over C, where _ takes on each of C's values. Map uses m underneath, and B may refer to its lambda variable.
+S  <col>                  Sort. sorted(A) in Python.
+S  <int>                  1-indexed range. [1, 2, ... A].
+S  <num>                  1-indexed range up to floor of A.
+T                         Variable. Initialized to 10. (Ten)
+U  <i>=0>                 Unary range. [0, 1, ... A-1]. range(A) in Python.
+U  <i<0>                  Reversed unary range. [A, A+1, ... -1]. range(A, 0) in Python.
+V  <num> <stmt>           Shorthand for 'FNU'. N -> H -> b -> N ... on nested uses.
+V  <col> <stmt>           Shorthand for 'FN'. N -> H -> b -> N ... on nested uses.
