@@ -63,7 +63,7 @@ L  1 Y lambda            define y(b): return _. '(b) on second use. Also is left
 M  1 Y The one after L   define g(G,H): return _. n(G,H) on second use. Also is map operator. <func>M = m<func>d or m<func>.*d. Also can be repeated, e.g. <func>MM = m<func>Md = mm<func>kd. Also can be repeated with a L or R at the end.
 N  0 N                   Variable. '"'
 O  1 N randOm-chOice     random.choice(_). Uses range(int). O0 = random.random(). Oa if a < 0 is random.seed(-a).
-P  1 N Prime/Pop         prime factorization on int. All but last on str, list. Phase on complex.
+P  1 N Prime/Pop         Prime factorization on nonnegative int. Primality testing of -a on negative int. All but last on str, list. Phase on complex.
 Q  0 N quick             Variable. Autoinitializing to evaluated input.
 R  1 Y return            Python return. Implicit ). Also is right map operator. %R4[5 10 20 = [5%4, 10%4, 20%4]. Map var is first, arity must be at least 2.
 S  1 N sorted            Python sorted. Inclusive range from 1 on int.

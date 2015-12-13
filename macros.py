@@ -772,6 +772,9 @@ environment['order'] = order
 # P. int, str, list.
 def primes_pop(a):
     if isinstance(a, int):
+        if a < 0:
+            # Primality testing
+            return len(primes_pop(-a)) == 1
         if a < 2:
             return []
         try:
