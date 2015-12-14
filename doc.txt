@@ -192,7 +192,7 @@ z  0 N                   Variable. Autoinitializing to input.
                          their starting points in the initial col, and by the original length
                          ordering.
 .{ 1 N set               Python set. Makes one element set on num.
-.! 1 N factorial         Python math.factorial(_).
+.! 1 N factorial         Python math.factorial(_) on ints, math.gamma(_ + 1) on nums.
 .[ 3 N pad               Pads string or sequence, so that it reaches a multiple of a specific length.
                          On <seq><any><int> pad right.
                          On <int><seq><any> pad left and right.

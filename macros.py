@@ -1868,10 +1868,11 @@ environment['Pset'] = Pset
 
 # .! factorial
 def factorial(a):
-    if not isinstance(a, int):
-        raise BadTypeCombinationError('.!', a)
-
-    return math.factorial(a)
+    if isinstance(a, int):
+        return math.factorial(a)
+    if is_num(a):
+        return math.gamma(a+1)
+    raise BadTypeCombinationError('.!', a)
 environment['factorial'] = factorial
 
 
