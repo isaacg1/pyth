@@ -193,8 +193,11 @@ z  0 N                   Variable. Autoinitializing to input.
                          ordering.
 .{ 1 N set               Python set. Makes one element set on num.
 .! 1 N factorial         Python math.factorial(_).
-.[ 3 N pad               Pads string or sequence, so that it reaches specific length. On <seq><any><int> pad right. On <int><seq><any> pad left and right.
-                         On <any><int><seq> pad left. Returns a string, if <seq> and <any> ary both <str>.
+.[ 3 N pad               Pads string or sequence, so that it reaches a multiple of a specific length.
+                         On <seq><any><int> pad right.
+                         On <int><seq><any> pad left and right.
+                         On <any><int><seq> pad left.
+                         Returns a string, if <seq> and <any> are both <str>.
 .? S Y else              Python else.
 
 

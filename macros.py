@@ -1878,24 +1878,24 @@ environment['factorial'] = factorial
 # .[. str, str, int
 def pad(a, b, c):
     if isinstance(a, str) and isinstance(b, str) and isinstance(c, int):
-        pad_len = max(0, c - len(a))
+        pad_len = (c - len(a)) % c
         return a + (b * pad_len)[:pad_len]
     if isinstance(b, str) and isinstance(c, str) and isinstance(a, int):
-        pad_len = max(0, a - len(b))
+        pad_len = (a - len(b)) % a
         pad_string = (c * pad_len)[:pad_len]
         return pad_string[:pad_len // 2] + b + pad_string[pad_len // 2:]
     if isinstance(c, str) and isinstance(a, str) and isinstance(b, int):
-        pad_len = max(0, b - len(c))
+        pad_len = (b - len(c)) % b
         return (a * pad_len)[:pad_len] + c
 
     if is_seq(a) and isinstance(c, int):
-        pad_len = max(0, c - len(a))
+        pad_len = (c - len(a)) % c
         return list(a) + [b] * pad_len
     if is_seq(b) and isinstance(a, int):
-        pad_len = max(0, a - len(b))
+        pad_len = (a - len(b)) % a
         return [c] * (pad_len // 2) + list(b) + [c] * ((pad_len + 1) // 2)
     if is_seq(c) and isinstance(b, int):
-        pad_len = max(0, b - len(c))
+        pad_len = (b - len(c)) % b
         return [a] * pad_len + list(c)
 
     raise BadTypeCombinationError(".[", a, b, c)
