@@ -481,7 +481,7 @@ def lt(a, b):
     if is_seq(a) and is_num(b):
         return a[:b]
     if is_num(a) and is_seq(b):
-        return b[:len(b)-a]
+        return b[:len(b) - a]
     if isinstance(a, complex) or isinstance(b, complex):
         return abs(a) < abs(b)
     if is_num(a) and is_num(b) or\
@@ -500,7 +500,7 @@ def gt(a, b):
     if is_seq(a) and is_num(b):
         return a[b:]
     if is_num(a) and is_seq(b):
-        return b[len(b)-a:]
+        return b[len(b) - a:]
     if isinstance(a, complex) or isinstance(b, complex):
         return abs(a) > abs(b)
     if is_num(a) and is_num(b) or\
@@ -788,7 +788,8 @@ def primes_pop(a):
         try:
             from sympy import factorint
             factor_dict = factorint(a)
-            factors_with_mult = [[fact for _ in range(factor_dict[fact])] for fact in factor_dict]
+            factors_with_mult = [[fact for _ in range(
+                factor_dict[fact])] for fact in factor_dict]
             return sorted(sum(factors_with_mult, []))
         except:
             working = a
@@ -1367,7 +1368,7 @@ environment['maximal'] = maximal
 
 # .n. mathematical constants
 def Pnumbers(a):
-    if isinstance(a, int) and a < 7 :
+    if isinstance(a, int) and a < 7:
         return [math.pi,
                 math.e,
                 2**.5,
@@ -1661,6 +1662,7 @@ def apply_while(a, b, c):
     return value
 environment['apply_while'] = apply_while
 
+
 # .x try except
 def Pexcept(a, b):
     try:
@@ -1700,6 +1702,8 @@ Basically, subtract the character value of the smallest character from every cha
 then base encode in the minimal possible base, convert back to a string, and stick
 the smallest two characters at the front.
 """
+
+
 # .". Special - str
 def packed_str(pack):
     if not isinstance(pack, str):
@@ -1879,7 +1883,7 @@ def factorial(a):
     if isinstance(a, int):
         return math.factorial(a)
     if is_num(a):
-        return math.gamma(a+1)
+        return math.gamma(a + 1)
     raise BadTypeCombinationError('.!', a)
 environment['factorial'] = factorial
 
