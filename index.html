@@ -183,7 +183,7 @@
 						runs--
 						if (! runs) $("#loading").hide()
 
-                        $('#output').text(($('#debug').is(':checked') & $('#input').val() ?
+                        $('#output').text(($('#debug').is(':checked') && $('#input').val() ?
 							"===================== Input ======================\n" +
 							$('#input').val() + "\n" : "") + data);
 
