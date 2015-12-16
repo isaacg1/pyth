@@ -129,7 +129,7 @@ def parse(code, spacing="\n "):
                             remainder = remainder[1:]
                             seg, remainder = next_seg(remainder)
                             active_char += seg
-                    return parse('m' + active_char + m_arg +  remainder)
+                    return parse('m' + active_char + m_arg + remainder)
                 if arity == 1:
                     return parse('m' + active_char + m_arg + remainder)
                 elif arity == 2:
@@ -163,7 +163,6 @@ def parse(code, spacing="\n "):
             if sugar_char == 'V':
                 return parse(active_char + "MC," + remainder)
 
-
             # <function>W<condition><arg><rgs> Condition application operator.
             # Equivalent to ?<condition><function><arg><args><arg>
             if sugar_char == 'W':
@@ -177,9 +176,10 @@ def parse(code, spacing="\n "):
             # <unary function>I<any> Invariant operator.
             # Equivalent to q<func><any><any>
             if sugar_char in 'BI':
-                func_dict = {'B': ',',
-                        'I': 'q',
-                        }
+                func_dict = {
+                    'B': ',',
+                    'I': 'q',
+                }
                 func_char = func_dict[sugar_char]
                 parsed, rest = state_maintaining_parse(remainder)
                 pyth_seg = remainder[:len(remainder) - len(rest)]

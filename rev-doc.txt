@@ -16,10 +16,11 @@ var = variable. Not evaluated.
 func = function. Not evaluated.
 func n = function with arity n.
 pfn = Preceding function of arity n. *F, for instance.
-l_  = Lambda with lambda variable(s) _
+l _ = Lambda with lambda variable(s) _
 i>0 = positive int.
 i>=0 = nonnegative int.
 i<0 = negative int.
+none = missing argument.
 
 Shorthands:
 In the text, A refers to the first argument, B to the second, etc.
@@ -45,7 +46,7 @@ $                         Begin and end Python literal. Counts as one token. Dis
 %  <cmp> <num>            Apply modulo to real and imaginary parts separately.
 &  <any> <any>            If not A, return A. Else, return B. Short-circuiting. Same as Python and.
 '  <str>                  Open the file or website given by the input string. Return list of lines if normal file or website. Return list of color triples for color images, and list of brightness values for grayscale images.
-(  <any...>               Tuple constructor. tuple in Python.
+(  <any...>               Tuple constructor. tuple(A) in Python.
 )                         End function or statement.
 *  <num> <num>            Multiplication. * in Python.
 *  <num> <seq>            Repetition. * in Python.
@@ -104,7 +105,7 @@ $                         Begin and end Python literal. Counts as one token. Dis
 @  <num> <num>            Root. A ** (1/B) in Python.
 A  <list, 2 elements>     Assign the first value of the list to G and the second to H. Return the input.
 B                         Break. Ends surrounding statement.
-B  <pfn> <any> <n-1 any>  Bifurcate. Return two element list [B, A(B, C ...)]. C can be empty.
+B  <pfn> <any> <n-1 any>  Bifurcate. Return two element list [B, A(B, ...)].
 C  <int>                  Character with code point A. If A is too large, convert to base 256 and turn each into a character.
 C  <float>                C(floor(A))
 C  <cmp>                  Complex conjugate.
@@ -117,7 +118,7 @@ F  <var> <any> <smt>      For A in B: C
 G                         Variable. Initialized to "abcdefghijklmnopqrstuvwxyz".
 H                         Variable. Initialized to {}. (Hash table)
 I  <ant> <smt>            if A: B
-I  <pf1> <any>            Invariant. A(B) == B.
+I  <pfn> <any> <n-1 any>  Invariant. A(B, ...) == B.
 J  <any>                  Variable, Autoinitializing. J=A on first use.
 J                         Variable. Second use and later.
 K  <any>                  Variable, Autoinitializing. K=A on first use.
@@ -145,4 +146,49 @@ U  <i<0>                  Reversed unary range. [A, A+1, ... -1]. range(A, 0) in
 V  <num> <stmt>           Shorthand for 'FNU'. N -> H -> b ->
 V  <col> <stmt>           Shorthand for 'FN'. N -> H -> b ->
 W  <any> <stmt>           While loop. while A: B in Python.
-W  
+W  <pfn> <any> <any> <n-1 any> Conditional application. If B, A(C, ...). Else, C.
+X  <dict> <list> <any>    Dictionary assignment. A[tuple(B)] = C in Python.
+X  <dict> <any> <any>     Dictionary assignment. A[B] = C
+X  <str> <int> <any>      String assignment. Replace in A at index B with str(C). Modular indexing.
+X  <seq> <int> <any>      Sequence assignment. Replace in A at index B with C. Modular indexing.
+X  <seq> <seq> <seq>      Translate A from B to C. Modular indexing.
+X  <seq> <seq> <none>     Translate A from B to B[::-1].
+X  <int> <list> <any>     In-place +=. B[A] += C. Modular indexing.
+X  <list> <dict> <any>    B[tuple(A)] += C, or B[tuple(A)] = C if tuple(A) not in B.
+X  <any> <dict> <any>     B[A] += C, or B[A] = C if A not in B.
+X  <int> <str> <any>      Insert into string. Insert str(C) into B at A.
+Y                         Variable. Initialized to [].
+Z                         Variable. Initialized to 0. (zero)
+[  <any...>               List constructor. list(A) in Python.
+\  <char>                 One character string.
+]  <any>                  [A].
+^  <num> <num>            Exponentiation. A ** B in Python.
+^  <col> <int>            Repeated Cartesian Product. itertools.product(A, repeat=B) in Python.
+_  <num>                  Negation. -A in Python.
+_  <seq>                  Reversal. A[::-1] in Python.
+_  <dict>                 Swap keys and values.
+`  <any>                  Representation. repr in Python.
+a  <list> <any>           Append. A.append(B) in Python. Return A.
+a  <set> <any>            Add. A.add(B) in Python. return A.
+b                         Variable. Initialized to '\n'.
+c  <num> <num>            Float division. A / B in Python.
+c  <str> <str>            Split. A.split(B) in Python.
+c  <str> <none>           Split on whitespace. A.split() in Python.
+c  <str> <int>            Chop A into pieces of length B. Last shorter if necessary.
+c  <int> <str>            Chop A into B pieces of equal sizes, initial pieces one longer if necessary.
+c  <seq> <col of ints>    Chop A at every location in B.
+c  <seq> <any>            Chop A at every occurrence of B.
+d                         Variable. Initialized to ' '.
+e  <seq>                  End. A[-1] in Python.
+e  <cmp>                  Imaginary part. A.imag in Python.
+e  <num>                  Last digit. A % 10 in Python.
+f  <l T> <col>            Filter A(_) over B. T -> Y -> Z ->
+f  <l T> <num>            First input where A(_) is truthy over [B, B+1, B+2, ...]
+f  <l T> <none>           First input where A(_) is truthy over [1, 2, 3, 4...]
+g  <num> <num>            Greater than or equal. A >= B in Python.
+g  <seq> <seq>            Greater than or equal. A >= B in Python.
+g  <set> <col>            Superset. A.issuperset(B)
+g  <seq> <num>            Inclusive slice. A[B-1:] in Python.
+h  <seq>                  Head. A[0] in Python.
+h  <num>                  A + 1.
+h
