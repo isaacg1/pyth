@@ -49,14 +49,14 @@ $  X N super-quote       Begins and ends Python literals. A Python literal is pl
 @  2 N lookup            Lookup from str, list or dict. Modulo wrapping on list, str. On seq, seq, intersection.
                          Specifically, filter second arg on presence in first arg. On num, num, bth root of a.
 A  1 Y assign-pair       A_ => G,H = _. Input must be a 2-tuple.
-B  0 Y break             Python break. Implicit ). Also is bifurcate operator. <func>B<arg><oth args> = ,<arg><func><arg><oth args>
+B  0 Y break             Python break. Implicit ). Also is bifurcate operator. <func>B<arg><args> = ,<arg><func><arg><args>
 C  1 N chr               char -> int, int -> char. str -> int, treated as base 256 number. Matrix transpose on list of lists, zip(*a) specifically. If input was list of str, output will be as well. Conjugate on complex. If input is int outside unicode range, convert to string as base 256 number.
 D  S Y def               Python def. Match arity w/ existing function. Memoized.
 E  0 N eval_input        Take a line of user input, eval it.
 F  S Y for               Python for. Also is fold operator. <binary>F = .U<binary>bZ.
 G  0 N strinG.lowercase  Variable. "abcdefghijklmnopqrstuvwxyz"
 H  0 N hash-table        Variable. {}
-I  S Y if                Python if.
+I  S Y if                Python if. Also is invariant operator: <func>I<arg><args> -> q<arg><func><arg><args>
 J  1 Y                   Variable. Autoinitializing. J=copy(_).
 K  1 Y                   Variable. Autoinitializing. K=_. For stringing.
 L  1 Y lambda            define y(b): return _. '(b) on second use. Also is left map operator. <LG3 = [<G0, <G1, <G2]. Map var is 2nd, arity must be at least 2.

@@ -25,6 +25,7 @@ Shorthands:
 In the text, A refers to the first argument, B to the second, etc.
 If two type definitions overlap, more specific takes precedence.
 No operations modify the input unless specifically specified.
+x -> y -> z -> ... means on future / nested uses, the successive character is used. If there is an extra -> at the end, it is cyclic.
 
 Format:
 Token | Input types | Effect
@@ -121,8 +122,10 @@ J  <any>                  Variable, Autoinitializing. J=A on first use.
 J                         Variable. Second use and later.
 K  <any>                  Variable, Autoinitializing. K=A on first use.
 K                         Variable.  Second use and later.
-L  <any>                  def y(b): return A. On second use, def '(b): return A
-M  <any>                  def g(G,H): return A. On second use, def n(G,H): return A
+L  <any>                  def y(b): return A. y -> ' ->
+L  <pfn> <n-1 any> <col>  Left map. n>=2. Map A(B, ..., _) over C, where _ is the lambda variable. Map uses m underneath, and B may refer to its lambda variable.
+M  <any>                  def g(G,H): return A. g -> n ->
+M <pfn> <col>             Map. Map A(_) over B, where _ is the lambda variable. Map uses m underneath, and B may refer to its lambda variable.
 N                         Variable. Initialized to '"'.
 O  <int>                  If A > 0, random int below A. If A == 0, random float 0 to 1. If A < 0, random.seed(-A).
 O  <col>                  Random element of A.
@@ -132,12 +135,14 @@ P  <num>                  Complex phase of A.
 P  <seq>                  All but the last element of A. A[:-1] in Python.
 Q                         Variable, Autoinitialized to eval(input()).
 R  <any>                  Return, used inside D.
-R  <pfn> <n-1 any> <col>  Right map. n >= 2. Map A(_, B, ...) over C, where _ takes on each of C's values. Map uses m underneath, and B may refer to its lambda variable.
+R  <pfn> <n-1 any> <col>  Right map. n >= 2. Map A(_, B, ...) over C, where _ is the lambda variable. Map uses m underneath, and B may refer to its lambda variable.
 S  <col>                  Sort. sorted(A) in Python.
 S  <int>                  1-indexed range. [1, 2, ... A].
 S  <num>                  1-indexed range up to floor of A.
 T                         Variable. Initialized to 10. (Ten)
 U  <i>=0>                 Unary range. [0, 1, ... A-1]. range(A) in Python.
 U  <i<0>                  Reversed unary range. [A, A+1, ... -1]. range(A, 0) in Python.
-V  <num> <stmt>           Shorthand for 'FNU'. N -> H -> b -> N ... on nested uses.
-V  <col> <stmt>           Shorthand for 'FN'. N -> H -> b -> N ... on nested uses.
+V  <num> <stmt>           Shorthand for 'FNU'. N -> H -> b ->
+V  <col> <stmt>           Shorthand for 'FN'. N -> H -> b ->
+W  <any> <stmt>           While loop. while A: B in Python.
+W  

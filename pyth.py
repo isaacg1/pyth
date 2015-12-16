@@ -129,7 +129,7 @@ def parse(code, spacing="\n "):
                             remainder = remainder[1:]
                             seg, remainder = next_seg(remainder)
                             active_char += seg
-                    return parse('m' + active_char + m_arg + remainder)
+                    return parse('m' + active_char + m_arg +  remainder)
                 if arity == 1:
                     return parse('m' + active_char + m_arg + remainder)
                 elif arity == 2:
@@ -163,19 +163,9 @@ def parse(code, spacing="\n "):
             if sugar_char == 'V':
                 return parse(active_char + "MC," + remainder)
 
-            # <unary function>I<any> Invariant operator.
-            # Equivalent to q<func><any><any>
-            if sugar_char == 'I':
-                if active_char in c_to_f and arity == 1:
-                    parsed, rest_code = parse(remainder)
-                    func_name = c_to_f[active_char][0]
-                    return (c_to_f['q'][0] + '(' + func_name + '(' + parsed
-                            + ')' + ',' + parsed + ')', rest_code)
-                else:
-                    raise PythParseError(active_char + sugar_char, remainder)
 
-            # <function>W<condition><any><...> Condition application operator.
-            # Equivalent to ?<condition><function><any1><any2><any1>
+            # <function>W<condition><arg><rgs> Condition application operator.
+            # Equivalent to ?<condition><function><arg><args><arg>
             if sugar_char == 'W':
                 condition, rest_code1 = parse(remainder)
                 arg1, rest_code2 = state_maintaining_parse(rest_code1)
@@ -184,10 +174,16 @@ def parse(code, spacing="\n "):
                         + ' else ' + arg1 + ')', rest_code2b)
 
             # <function>B<arg><args> -> ,<arg><function><arg><args>
-            if sugar_char == 'B':
+            # <unary function>I<any> Invariant operator.
+            # Equivalent to q<func><any><any>
+            if sugar_char in 'BI':
+                func_dict = {'B': ',',
+                        'I': 'q',
+                        }
+                func_char = func_dict[sugar_char]
                 parsed, rest = state_maintaining_parse(remainder)
                 pyth_seg = remainder[:len(remainder) - len(rest)]
-                return parse(',' + pyth_seg + active_char + remainder)
+                return parse(func_char + pyth_seg + active_char + remainder)
 
     # =<function/infix>, ~<function/infix>: augmented assignment.
     if active_char in ('=', '~'):
