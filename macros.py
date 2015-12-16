@@ -566,6 +566,14 @@ def chop(a, b=None):
         if all(isinstance(elem, int) for elem in b):
             locs = sorted(b)
             return list(map(lambda i, j: a[i:j], [0] + locs, locs + [len(a)]))
+    if is_seq(a):
+        output = [[]]
+        for elem in a:
+            if elem == b:
+                output.append([])
+            else:
+                output[-1].append(elem)
+        return output
     raise BadTypeCombinationError("c", a, b)
 environment['chop'] = chop
 

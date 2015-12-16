@@ -1,6 +1,6 @@
 Pyth documentation 4.3
 
-Each character is a separate token, except for numbers, 
+Each character is a separate token, except for numbers,
 strings, and python literals and tokens of the form "._", where _ could be a variety of things.
 Written in Polish notation, with fixed arities for each operator. Statements are special, allow multiple lines.
 Top-level values a printed by default, unless prefixed by " " or the value is None.
@@ -88,10 +88,11 @@ a  2 N append            Python .append(), .add(). First argument must be a list
                          Returns resultant list or string as well as modifying input.
                          On non-hashable additions to set, casts to tuple.
 b  0 N lineBreak         Variable. "\n"
-c  2 N chop              On <str/list><int> chop str/list every n elements. 
+c  2 N chop              On <str/list><int> chop str/list every n elements.
                          On <int><str/list> split str/list into n pieces (elements are equally distributed).
                          Also str.split, floating point division.
                          On <seq><col of ints> split seq at each int into list of seqs.
+                         On <seq><any> If not covered above, split a on b.
 d  0 N                   Variable. " "
 e  1 N end               %10 or last element. Imaginary part on complex.
 f  2 N filter            Implicit lambda, T -> Y -> Z -> . on num, iter.count. Default second input 1.
@@ -171,7 +172,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .x 2 N try-except        Attempts to run first arg. If an exception occurs, runs the second.
 .z 0 N all-input         Take all of STDIN, return as list of lines. Cached. .Q and .z refer to the same data.
 .Z 1 N compress          Compresses or decompresses a string. Before decompressing you might have to escape the chars '"' and '\' and replace the null-byte with `\0`.
-." X N pack_str          Packed string with no inital quote mark, in the following format: first char is lowest output char, second is highest, the rest is the string with the lowest char subtracted out, converted to the minimal base, converted with C (anything C accepts is fine). 
+." X N pack_str          Packed string with no inital quote mark, in the following format: first char is lowest output char, second is highest, the rest is the string with the lowest char subtracted out, converted to the minimal base, converted with C (anything C accepts is fine).
                          To convert, use +++\.N++hSzeSzCi-RChSzCMz-hCeSzChSzN
 .^ 3 N powmod            Python pow(a, b, c).
 .& 2 N bitand            Python bitwise &.
