@@ -140,8 +140,10 @@ environment['memoized'] = memoized
 
 # If argument is a number, turn it into a range.
 def num_to_range(arg):
+    if isinstance(arg, int) and arg > 0:
+        return range(arg)
     if is_num(arg):
-        return urange(int(arg))
+        return urange(arg)
 
     return arg
 environment['num_to_range'] = num_to_range

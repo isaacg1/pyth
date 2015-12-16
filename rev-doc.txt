@@ -191,4 +191,41 @@ g  <set> <col>            Superset. A.issuperset(B)
 g  <seq> <num>            Inclusive slice. A[B-1:] in Python.
 h  <seq>                  Head. A[0] in Python.
 h  <num>                  A + 1.
-h
+i  <str> <int>            Convert A from base B to int. if A is '', return 0. int(A, B) in Python.
+i  <seq> <num>            Convert A from base B to int.
+i  <int> <int>            GCD.
+j  <int> <int>            Convert A to base B as a list.
+j  <str> <col>            Join B on A. Convert elements of B to strings if needed.
+j  <col> <none>           Join A on newlines.
+j  <any> <col>            Join B on A. Convert A to a string, elements of B to strings.
+l  <col>                  len(A).
+l  <num>                  log base 2 of A.
+m  <l d> <col>            Map A(_) over B. d -> k -> b ->
+m  <l d> <num>            Map A(_) over U(B). (U is the Pyth function)
+n  <any> <any>            A != B
+o  <l N> <col>            Sort B with key function A. sorted(B, key=A) in Python.
+o  <l N> <num>            Same, but U(B).
+p  <any>                  Print A, with no trailing newline. Return A.
+q  <any> <any>            A == B
+r  <str> 0                A.lower()
+r  <str> 1                A.upper()
+r  <str> 2                A.swapcase()
+r  <str> 3                A.title()
+r  <str> 4                A.capitalize()
+r  <str> 5                string.capwords(A)
+r  <str> 6                A.strip() - Remove whitespace on both sides of A.
+r  <str> 7                Split A, eval each part.
+r  <seq> 8                Run length encode A. Output format [[3, 'a'], [2, 'b'], [1, 'c'], [1, 'd']].
+r  <str> 9                Run length decode A. Input format '3a2bcd' -> 'aaabbcd'
+r  <seq> 9                Run length decode A. Input format [[3, 'a'], [2, 'b'], [1, 'c'], [1, 'd']].
+r  <int> <int>            Range, half inclusive. range(A, B) in Python, or range(A, B, -1).
+r  <str> <str>            String range. r(C(A), C(B)), then convert each int to string using C.
+s  <col of str>           Concatenate. ''.join(A)
+s  <col>                  reduce on +. (Pyth +)
+s  []                     0
+s  <cmp>                  Real part. A.real in Python.
+s  <num>                  Floor to int. int(A) in Python.
+s  <str>                  Parse as int. int(A) in Python.
+s  ""                     0
+t  <num>                  A - 1.
+t  <seq>                  Tail. A[1:] in Python.
