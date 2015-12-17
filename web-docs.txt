@@ -2,7 +2,7 @@
 <space> 1 N blank Primarily used to separate numeric literals. Also suppresses printing, which is default on.
 ! 1 N not Logical not. Uses Python's truthy/falsy.
 " X N quote Begins and ends string literals. Implicit at end of file.
-# S Y infinite-loop "While True:" loop. On error, suppresses error and breaks out of loop.
+# S Y infinite-loop "While True:" loop. On error, suppresses error and breaks out of loop. Also is filter operator.
 $ X N super-quote Begins and ends Python literals. A Python literal is placed directly into the compiled Python output. Counts as one argument for arity purposes. Disabled online.
 % 2 N mod On integers, modulus. On complex, mod real and imag separately. On string, string formatting. %<int><seq> is a modular slice, <seq>[::<int>] in Python.
 & 2 N Python's and-operator (short circuiting). &ab returns a, if it evaluates to a falsy value otherwise b.
@@ -27,7 +27,7 @@ $ X N super-quote Begins and ends Python literals. A Python literal is placed di
 A 1 Y assign-pair A_ => G,H = _. Input must be a 2-tuple.
 B 0 Y break Python break. Implicit ). Also is bifurcate operator. <func>B<arg><args> = ,<arg><func><arg><args>
 C 1 N chr char -> int, int -> char. str -> int, treated as base 256 number. Matrix transpose on list of lists, zip(*a) specifically. If input was list of str, output will be as well. Conjugate on complex. If input is int outside unicode range, convert to string as base 256 number.
-D S Y def Python def. Match arity w/ existing function. Memoized.
+D S Y def Python def. Match arity w/ existing function. Memoized. Also is sort operator.
 E 0 N eval_input Take a line of user input, eval it.
 F S Y for Python for. Also is fold operator. <binary>F = .U<binary>bZ.
 G 0 N strinG.lowercase Variable. "abcdefghijklmnopqrstuvwxyz"

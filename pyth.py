@@ -185,6 +185,17 @@ def parse(code, spacing="\n "):
                 pyth_seg = remainder[:len(remainder) - len(rest)]
                 return parse(func_char + pyth_seg + active_char + remainder)
 
+            # D is Sort operator
+            # # is Filter operator - it looks like a strainer.
+            if sugar_char in 'D#':
+                func_dict = {
+                    'D': 'o',
+                    '#': 'f',
+                }
+                func_char = func_dict[sugar_char]
+                lambda_arg = lambda_vars[func_char][0][0]
+                return parse(func_char + active_char + lambda_arg + remainder)
+
     # =<function/infix>, ~<function/infix>: augmented assignment.
     if active_char in ('=', '~'):
         if augment_assignment_test(rest_code):
