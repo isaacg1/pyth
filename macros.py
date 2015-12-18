@@ -1200,7 +1200,7 @@ environment['dict_or_date'] = dict_or_date
 # .D num, num or seq, int or seq, col
 def divmod_or_delete(a, b):
     if is_num(a) and is_num(b):
-        return divmod(a, b)
+        return list(divmod(a, b))
     elif is_seq(a) and is_num(b):
         return divmod_or_delete(a, [b])
     elif is_seq(a) and is_col(b):

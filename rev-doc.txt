@@ -1,6 +1,7 @@
 Pyth reference and documentation
 
 This file is intended to be read with line wrapping.
+Tokens are given in the order: 1 character tokens, by code point, . tokens, by code point.
 
 Types:
 num = int, float
@@ -266,7 +267,14 @@ z                         Variable. Autoinitialized to input().
 .< <int> <int>            Left shift. A shifted left by B, or A * 2 ^ B. A << B in Python.
 .> <seq> <int>            Cyclicly rotate A right by B elements. A[-B:] + A[:-B] in Python.
 .> <int> <int>            Right shift. A shifted right by B, or A / (2 ^ B). A >> B in Python.
-
+.? <blk>                  Else statement. Must come after I, F, V, W or #. else: in Python.
+.A <col>                  Tests whether all elements of A are truthy. all in Python.
+.B <int>                  Converts A to a binary string.
+.B <str>                  Converts A to a binary string, treating the string as a base 256 integer.
+.C <col> <int>            Combinations with replacement. All ordered lists of elements of A, of length B.
+.D <num> <num>            Divmod. Returns [A / B, A % B].
+.D <seq> <col>            Returns A with elements at indexes in B removed.
+.D <seq> <num>            Returns A with the element at index B removed.
 
 
 
