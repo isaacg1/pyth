@@ -1290,6 +1290,8 @@ environment['interleave'] = interleave
 
 # .I. lambda, any
 def invert(a, b):
+    if not is_num(b):
+        raise BadTypeCombinationError(".I", a, b)
     inv = 1.
     if a(inv) == b:
         return inv
@@ -1640,6 +1642,7 @@ def Pwrite(a, b=''):
 environment['Pwrite'] = Pwrite
 
 
+# .W lambda, lambda, any
 def apply_while(a, b, c):
     condition = a
     function = b
