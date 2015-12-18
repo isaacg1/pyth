@@ -1838,14 +1838,9 @@ def substrings(a, b=None):
     elif isinstance(b, float):
         step = int(b * len(seq))
     elif not b:
-        all_substrs = [
-            substrings(
-                seq,
-                step) for step in range(
-                1,
-                len(seq) +
-                1)]
-        return list(itertools.chain(*all_substrs))
+        all_substrs = [substrings(seq, step)
+                       for step in range(1, len(seq) + 1)]
+        return list(itertools.chain.from_iterable(all_substrs))
     else:
         raise BadTypeCombinationError(".:", a, b)
     return [seq[start:start + step] for start in range(len(seq) - step + 1)]
