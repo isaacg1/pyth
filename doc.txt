@@ -70,7 +70,7 @@ S  1 N sorted            Python sorted. Inclusive range from 1 on int.
 T  0 N ten               Variable. 10
 U  1 N unary-range       Python unary range. U_=Ul_ on str, list. On negative ints, range(a, 0).
 V  S Y for-N-in          Implicit variable for loop. Equivalent to FN. Rotates FN -> FH -> Fb on nested use. Also is vectorize operator. +V[1 2 3)[4 5 6) = [5, 7, 9]. If given sequence, loops thorugh sequence.
-W  S Y while             Python while. Also is conditional aplication operator.
+W  S Y while             Python while. Also is conditional application operator.
                          _WNG = _G if N else G.
                          +WNZ2 = +Z2 if N else Z.
 X  3 N indeXed assign    Indexed assignment, returns updated. Only returns on str, mod-wrap on list.

@@ -604,6 +604,8 @@ Command line flags:
                 Specify line with 2nd to last argument. Fails on Windows.
 -h or --help    Show this help message.
 -m or --multi   Enable multi-line mode.
+-M or --no-memoization
+                Turn off automatic function memoization.
 
 See opening comment in pyth.py for more info.""")
     else:
@@ -620,11 +622,14 @@ See opening comment in pyth.py for more info.""")
         safe_mode = flag_on('s', '--safe')
         line_on = flag_on('l', '--line')
         multiline_on = flag_on('m', '--multiline')
+        memo_off = flag_on('M', '--no-memoization')
         if safe_mode:
             c_to_f['v'] = ('literal_eval', 1)
             del c_to_f['.w']
         if line_on:
             line_num = int(sys.argv[-2])
+        if memo_off:
+            c_to_s['D'] = (('def ', ':'), 1)
         if code_on and (line_on or multiline_on):
             print("Error: multiline input from command line.")
         else:
