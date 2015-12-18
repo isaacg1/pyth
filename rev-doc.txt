@@ -258,7 +258,7 @@ z                         Variable. Autoinitialized to input().
 .* <seq>                  Splat. A is treated as all of the arguments to the surrounding function.
 .- <col> <col>            Bagwise subtraction. For each element in B, remove its first occurrence in A from A and return. Non-mutating.
 ./ <seq>                  Partition. Return all divisions of A into disjoint substrings.
-./ <nneg>                 Integer partition. Return all ordered lists of positive integers that add to A.
+./ <nneg>                 Integer partition. Return all sorted lists of positive integers that add to A.
 .: <seq> <int>            All substrings of A of length B.
 .: <seq> <float>          All substrings of A of length floor(len(A) * B)
 .: <seq> <none>           All substrings of A of positive length.
@@ -271,15 +271,31 @@ z                         Variable. Autoinitialized to input().
 .A <col>                  Tests whether all elements of A are truthy. all in Python.
 .B <int>                  Converts A to a binary string.
 .B <str>                  Converts A to a binary string, treating the string as a base 256 integer.
-.C <col> <int>            Combinations with replacement. All ordered lists of elements of A, of length B.
+.C <col> <int>            Combinations with replacement. All sorted lists of elements of A, of length B.
 .D <num> <num>            Divmod. Returns [A / B, A % B].
 .D <seq> <col>            Returns A with elements at indexes in B removed.
 .D <seq> <num>            Returns A with the element at index B removed.
-
-
-
-
-
+.E <col>                  Tests whether any elements of A are truthy. any in Python.
+.F <str> <seq>            String format. A.format(*B) in Python.
+.F <str> <str>            String format. A.format(B) in Python.
+.H <int>                  Converts A to a hexadecimal string.
+.H <str>                  Converts A to a hexadecimal string, treating the string as a base 256 integer.
+.I <l G> <num>            Invert. A is a monotonic function from num to num. .I finds x such that A(x) = B.
+.M <l Z> <seq>            Filter B for elements x for which A(x) takes its maximal value.
+.N <any>                  def :(N, T, Y): return _. The function is called ':'. : -> X ->
+.O <int>                  Converts A to an octal string.
+.O <str>                  Converts A to an octal string, treating the string as a base 256 integer.
+.P <col> <int>            Permutations. All lists of elements of A of length B.
+.P <int> <int>            nPr. Number of permutations of length B from A elements.
+.Q                        Evaluate all input. Take all input from STDIN, literal_eval each line, return list of the result.
+.R <num> <int>            Round A to B decimal places. Convert to int if B == 0.
+.R <num> <num>            Round A to the same number of decimal places as B is rounded to.
+.S <col>                  Randomly shuffle A. If A is a list, mutate A to the result.
+.S <num>                  Randomly shuffle U(A).
+.T <col>                  Justified transpose. List of 0th elements of A's elments, list of 1st elments, ... Ignoring absences.
+.U <l bZ> <seq>           Reduce with no starting value. Reduce from left to right, with initial value B[0]. A(_, _) takes inputs current value, next element of B. b, Z -> k, Y ->.
+.W <l H> <l Z> <any>      Functional while. While A(value) is truthy, value = B(value). value starts as C. return ending value.
+.Z <str>                  Attempt to decompress A using zlip.decompress. If that fails, compress it with zlib.compress(A, 9).
 
 
 
