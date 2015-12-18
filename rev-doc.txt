@@ -17,9 +17,9 @@ func = function. Not evaluated.
 func n = function with arity n.
 pfn = Preceding function of arity n. *F, for instance.
 l _ = Lambda with lambda variable(s) _
-i>0 = positive int.
-i>=0 = nonnegative int.
-i<0 = negative int.
+pos = positive int.
+nneg = nonnegative int.
+neg = negative int.
 none = missing argument.
 
 Shorthands:
@@ -133,8 +133,8 @@ M  <pfn> <col of seq>     Map. Map A(*_) over B, where _ is the lambda variable.
 N                         Variable. Initialized to '"'.
 O  <int>                  If A > 0, random int below A. If A == 0, random float 0 to 1. If A < 0, random.seed(-A).
 O  <col>                  Random element of A.
-P  <i>=0>                 List of prime factors of A with multiplicity in increasing order. Uses sympy if sympy is installed, trial division otherwise. Empty list if A is 0 or 1.
-P  <i<0>                  Returns whether -A is prime.
+P  <nneg>                 List of prime factors of A with multiplicity in increasing order. Uses sympy if sympy is installed, trial division otherwise. Empty list if A is 0 or 1.
+P  <neg>                  Returns whether -A is prime.
 P  <num>                  Complex phase of A.
 P  <seq>                  All but the last element of A. A[:-1] in Python.
 Q                         Variable, Autoinitialized to eval(input()).
@@ -144,8 +144,8 @@ S  <col>                  Sort. sorted(A) in Python.
 S  <int>                  1-indexed range. [1, 2, ... A].
 S  <num>                  1-indexed range up to floor of A.
 T                         Variable. Initialized to 10. (Ten)
-U  <i>=0>                 Unary range. [0, 1, ... A-1]. range(A) in Python.
-U  <i<0>                  Reversed unary range. [A, A+1, ... -1]. range(A, 0) in Python.
+U  <nneg>                 Unary range. [0, 1, ... A-1]. range(A) in Python.
+U  <neg>                  Reversed unary range. [A, A+1, ... -1]. range(A, 0) in Python.
 V  <num> <blk>            Shorthand for 'FNU'. N -> H -> b ->
 V  <col> <blk>            Shorthand for 'FN'. N -> H -> b ->
 W  <any> <blk>            While loop. while A: B in Python.
@@ -234,3 +234,4 @@ u  <l GH> <seq> <any>     Reduce B from left to right, with function A(_, _) and
 u  <l GH> <int> <any>     Reduce U(B) from left to right, with function A(_, _) and C as starting value.
 u  <l GH> <any> <none>    Apply A(_, _) until a result that has occurred before is found. Starting value B. A takes current value, iteration number as inputs.
 v  <str>                  Eval. eval(A) without -s, ast.literal_eval(A) with -s (online). literal_eval only allows numeric, string, list, etc. literals, no variables or functions.
+w                         Take input. Reads up to newline. input() in Python 3.
