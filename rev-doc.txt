@@ -32,7 +32,7 @@ Format:
 Token | Input types | Effect
 
 0                         Leading 0 is a separate token, number zero.
-0123456789.               Numeric literals. Leading 0 ignored, trailing . often ignored.
+0123456789.               Numeric literals. Leading 0 ignored, trailing . often parses separately
 \n <any>                  Print with trailing newline. Return input.
    <any>                  Identity function. Suppresses printing.
 !  <any>                  Logical negation. 0, 0.0, "", [], (), {}, set() -> True, else False.
@@ -242,3 +242,8 @@ x  <non lst> <lst         All occurrences. Returns a list of the indexes of elem
 y  <seq>                  Powerset. All subsets of A, ordered by length.
 y  <num>                  A * 2.
 z                         Variable. Autoinitialized to input().
+{  <col>                  Deduplicate. Remove all duplicated elements in A, leaving the first occurrences in original order.
+|  <any> <any>            Logical or. If A, return A. Else, return B. Short circuiting. or in Python.
+}  <any> <lst>            In. Returns a boolean for whether A is an element of B. in in Python.
+}  <str> <str>            In. Returns a boolean for whether A is a substring of B. in in Python.
+}  <int> <int>            Inclusive range. [A, A+1, ... B]
