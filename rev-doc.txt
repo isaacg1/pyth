@@ -258,3 +258,26 @@ z                         Variable. Autoinitialized to input().
 .- <col> <col>            Bagwise subtraction. For each element in B, remove its first occurrence in A from A and return. Non-mutating.
 ./ <seq>                  Partition. Return all divisions of A into disjoint substrings.
 ./ <nneg>                 Integer partition. Return all ordered lists of positive integers that add to A.
+.: <seq> <int>            All substrings of A of length B.
+.: <seq> <float>          All substrings of A of length floor(len(A) * B)
+.: <seq> <none>           All substrings of A of positive length.
+.: <num> <num, none>      Same above, but with U(A) instead of A.
+.< <seq> <int>            Cyclicly rotate A left by B elements. A[B:] + A[:B] in Python.
+.< <int> <int>            Left shift. A shifted left by B, or A * 2 ^ B. A << B in Python.
+.> <seq> <int>            Cyclicly rotate A right by B elements. A[-B:] + A[:-B] in Python.
+.> <int> <int>            Right shift. A shifted right by B, or A / (2 ^ B). A >> B in Python.
+
+
+
+
+
+
+
+
+
+
+
+
+.{ <col>                  Convert A to set. If any of A's elements are not hashable, convert all elements to tuples and convert to set.
+.{ <num>                  Set containing A.
+.{ <none>                 Empty set.
