@@ -1783,7 +1783,7 @@ def partition(a):
                 for y in integer_partition(number - x):
                     result.add(tuple(sorted((x, ) + y)))
             return result
-        return list(sorted(integer_partition(a)))
+        return list(map(list, sorted(integer_partition(a))))
 
     raise BadTypeCombinationError("./", a)
 environment['partition'] = partition

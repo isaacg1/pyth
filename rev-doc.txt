@@ -1,7 +1,8 @@
 Pyth reference and documentation
 
-Types:
+This file is intended to be read with line wrapping.
 
+Types:
 num = int, float
 cmp = complex
 seq = str, list, tuple
@@ -247,3 +248,13 @@ z                         Variable. Autoinitialized to input().
 }  <any> <lst>            In. Returns a boolean for whether A is an element of B. in in Python.
 }  <str> <str>            In. Returns a boolean for whether A is a substring of B. in in Python.
 }  <int> <int>            Inclusive range. [A, A+1, ... B]
+.! <int>                  Factorial.
+.! <num>                  Gamma function of A + 1. This is continuous with the factorial function.
+."                        ." starts a packed string, terminated by " or end of file. Format is: first character is the lowest output character by code point, second is the highest. The rest of the string is the output string encoded as offsets from the lowest output character, treat as an integer in the minimal base, converted to base 256, as bytes in the rest of the string. To convert a desired output string to the format, use the following program: +++\.N++hSzeSzCi-RChSzCMz-hCeSzChSzN Null bytes, backslashes and double quotes will need to be escaped.
+.& <int> <int>            Bitwise and. & in Python.
+.( <lst> <int>            Pop at location. A is mutated to remove the element at index B, which is returned.
+.) <lst> <int>            Pop last element. A is mutated to remove its final element, which is returned.
+.* <seq>                  Splat. A is treated as all of the arguments to the surrounding function.
+.- <col> <col>            Bagwise subtraction. For each element in B, remove its first occurrence in A from A and return. Non-mutating.
+./ <seq>                  Partition. Return all divisions of A into disjoint substrings.
+./ <nneg>                 Integer partition. Return all ordered lists of positive integers that add to A.
