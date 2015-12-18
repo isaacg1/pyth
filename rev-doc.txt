@@ -9,8 +9,8 @@ lst = list, tuple
 idx = str, list, dict
 col = str, list, set, dict
 any = any expression
-smt = any series of statements
-... = any number of arguments.
+blk = a code block (any series of statements)
+... = any number of arguments of any type.
 n _ = n _ arguments.
 var = variable. Not evaluated.
 func = function. Not evaluated.
@@ -37,7 +37,7 @@ Token | Input types | Effect
    <any>                  Identity function. Suppresses printing.
 !  <any>                  Logical negation. 0, 0.0, "", [], (), {}, set() -> True, else False.
 "                         Begin and end string literal.
-#                         Loop until error statement. On error, suppress and break out of loop.
+#  <blk>                  Loop until error statement. On error, suppress and break out of loop.
 #  <pfn> <n-1 any> <col>  Filter A(_, B ...) over C. Uses f underneath, B may refer to f's lambda var. # looks like a strainer.
 $                         Begin and end Python literal. Counts as one token. Disabled in -s (online).
 %  <num> <num>            Modulo. Same as Python.
@@ -47,7 +47,7 @@ $                         Begin and end Python literal. Counts as one token. Dis
 %  <cmp> <num>            Apply modulo to real and imaginary parts separately.
 &  <any> <any>            If not A, return A. Else, return B. Short-circuiting. Same as Python and.
 '  <str>                  Open the file or website given by the input string. Return list of lines if normal file or website. Return list of color triples for color images, and list of brightness values for grayscale images.
-(  <any...>               Tuple constructor. tuple(A) in Python.
+(  <...>                  Tuple constructor. tuple(A) in Python.
 )                         End function or statement.
 *  <num> <num>            Multiplication. * in Python.
 *  <num> <seq>            Repetition. * in Python.
@@ -112,14 +112,14 @@ C  <float>                C(floor(A))
 C  <cmp>                  Complex conjugate.
 C  <str>                  Convert A to int using base 256 and code points.
 C  <col>                  Matrix transpose, truncating to the length of the shortest entry.
-D  <func n> <n var> <smt> Define a function. Same as def A(B...) in Python.
+D  <func n> <n var> <blk> Define a function. Same as def A(B...) in Python.
 D  <pfn> <n-1 any> <col>  Sort operator. Sort C with key A(_, B ...). Uses o underneath, B may refer to o's lambda var.
 E                         Evaluate input. Same as ast.literal_eval(input()) in Python.
-F  <var> <num> <smt>      For A in range(int(B)): C
-F  <var> <any> <smt>      For A in B: C
+F  <var> <num> <blk>      For A in range(int(B)): C
+F  <var> <any> <blk>      For A in B: C
 G                         Variable. Initialized to "abcdefghijklmnopqrstuvwxyz".
 H                         Variable. Initialized to {}. (Hash table)
-I  <ant> <smt>            if A: B
+I  <any> <blk>            if A: B
 I  <pfn> <any> <n-1 any>  Invariant. A(B, ...) == B.
 J  <any>                  Variable, Autoinitializing. J=A on first use.
 J                         Variable. Second use and later.
@@ -128,8 +128,8 @@ K                         Variable.  Second use and later.
 L  <any>                  def y(b): return A. y -> ' ->
 L  <pfn> <n-1 any> <col>  Left map. n>=2. Map A(B, ..., _) over C, where _ is the lambda variable. Map uses m underneath, and B may refer to its lambda variable.
 M  <any>                  def g(G,H): return A. g -> n ->
-M <pf1> <col>             Map. Map A(_) over B, where _ is the lambda variable. Map uses m underneath.
-M <pfn> <col of seq>      Map. Map A(*_) over B, where _ is the lambda variable. Map uses m underneath. Each element of B is splatted as the arguments to A.
+M  <pf1> <col>            Map. Map A(_) over B, where _ is the lambda variable. Map uses m underneath.
+M  <pfn> <col of seq>     Map. Map A(*_) over B, where _ is the lambda variable. Map uses m underneath. Each element of B is splatted as the arguments to A.
 N                         Variable. Initialized to '"'.
 O  <int>                  If A > 0, random int below A. If A == 0, random float 0 to 1. If A < 0, random.seed(-A).
 O  <col>                  Random element of A.
@@ -146,9 +146,9 @@ S  <num>                  1-indexed range up to floor of A.
 T                         Variable. Initialized to 10. (Ten)
 U  <i>=0>                 Unary range. [0, 1, ... A-1]. range(A) in Python.
 U  <i<0>                  Reversed unary range. [A, A+1, ... -1]. range(A, 0) in Python.
-V  <num> <stmt>           Shorthand for 'FNU'. N -> H -> b ->
-V  <col> <stmt>           Shorthand for 'FN'. N -> H -> b ->
-W  <any> <stmt>           While loop. while A: B in Python.
+V  <num> <blk>            Shorthand for 'FNU'. N -> H -> b ->
+V  <col> <blk>            Shorthand for 'FN'. N -> H -> b ->
+W  <any> <blk>            While loop. while A: B in Python.
 W  <pfn> <any> <any> <n-1 any> Conditional application. If B, A(C, ...). Else, C.
 X  <dict> <list> <any>    Dictionary assignment. A[tuple(B)] = C in Python.
 X  <dict> <any> <any>     Dictionary assignment. A[B] = C
@@ -162,7 +162,7 @@ X  <any> <dict> <any>     B[A] += C, or B[A] = C if A not in B.
 X  <int> <str> <any>      Insert into string. Insert str(C) into B at A.
 Y                         Variable. Initialized to [].
 Z                         Variable. Initialized to 0. (zero)
-[  <any...>               List constructor. list(A) in Python.
+[  <...>                  List constructor. list(A) in Python.
 \  <char>                 One character string.
 ]  <any>                  [A].
 ^  <num> <num>            Exponentiation. A ** B in Python.
@@ -224,14 +224,13 @@ r  <seq> 9                Run length decode A. Input format [[3, 'a'], [2, 'b'],
 r  <int> <int>            Range, half inclusive. range(A, B) in Python, or range(A, B, -1).
 r  <str> <str>            String range. r(C(A), C(B)), then convert each int to string using C.
 s  <col of str>           Concatenate. ''.join(A)
-s  <col>                  reduce on +. (Pyth +)
-s  []                     0
+s  <col>                  reduce on +, base case 0. (Pyth +)
 s  <cmp>                  Real part. A.real in Python.
 s  <num>                  Floor to int. int(A) in Python.
-s  <str>                  Parse as int. int(A) in Python.
-s  ""                     0
+s  <str>                  Parse as int. "" parses to 0. int(A) in Python.
 t  <num>                  A - 1.
 t  <seq>                  Tail. A[1:] in Python.
 u  <l GH> <seq> <any>     Reduce B from left to right, with function A(_, _) and C as starting value. G, H -> N, T ->. A takes current value, next element of B as inputs. Note that A can ignore either input.
 u  <l GH> <int> <any>     Reduce U(B) from left to right, with function A(_, _) and C as starting value.
 u  <l GH> <any> <none>    Apply A(_, _) until a result that has occurred before is found. Starting value B. A takes current value, iteration number as inputs.
+v  <str>                  Eval. eval(A) without -s, ast.literal_eval(A) with -s (online). literal_eval only allows numeric, string, list, etc. literals, no variables or functions.
