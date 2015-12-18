@@ -235,3 +235,10 @@ u  <l GH> <int> <any>     Reduce U(B) from left to right, with function A(_, _) 
 u  <l GH> <any> <none>    Apply A(_, _) until a result that has occurred before is found. Starting value B. A takes current value, iteration number as inputs.
 v  <str>                  Eval. eval(A) without -s, ast.literal_eval(A) with -s (online). literal_eval only allows numeric, string, list, etc. literals, no variables or functions.
 w                         Take input. Reads up to newline. input() in Python 3.
+x  <int> <int>            Bitwise XOR. A ^ B in Python.
+x  <lst> <any>            First occurrence. Return the index of the first element of A equal to B, or -1 if none exists.
+x  <str> <str>            First occurrence. Return the index of the first substring of A equal to B, or -1 if none exists.
+x  <non lst> <lst         All occurrences. Returns a list of the indexes of elements of B that equal A.
+y  <seq>                  Powerset. All subsets of A, ordered by length.
+y  <num>                  A * 2.
+z                         Variable. Autoinitialized to input().

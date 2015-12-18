@@ -1037,7 +1037,7 @@ def index(a, b):
         # replicate functionality from str.find
         else:
             return -1
-    if (is_num(a) or isinstance(a, str)) and is_lst(b):
+    if is_lst(b):
         return [index for index, elem in enumerate(b) if elem == a]
     raise BadTypeCombinationError("x", a, b)
 environment['index'] = index
@@ -1047,26 +1047,11 @@ environment['index'] = index
 def subsets(a):
     if is_num(a):
         return a * 2
-    if isinstance(a, str):
-        if len(a) == 0:
-            return [a]
-        if len(a) == 1:
-            return ['', a]
-        else:
-            others = subsets(a[:-1])
-            out = others + list(map(lambda sub: sub + a[-1], others))
-            return sorted(out, key=len)
-    if is_seq(a):
-        if len(a) == 0:
-            return [a]
-        if len(a) == 1:
-            return [[], list(a)]
-        else:
-            others = subsets(a[:-1])
-            out = others + list(map(lambda sub: sub + [a[-1]], others))
-            return sorted(out, key=len)
-    if isinstance(a, set):
-        return subsets(sorted(list(a)))
+    if is_col(a):
+        def powerset(col):
+            return itertools.chain.from_iterable(
+                itertools.combinations(col, i) for i in range(0, len(col) + 1))
+        return itertools_norm(powerset, a)
     raise BadTypeCombinationError("y", a)
 environment['subsets'] = subsets
 
