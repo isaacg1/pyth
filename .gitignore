@@ -3,3 +3,4 @@
 *.pyth
 venv/
 tags
+*.gv
