@@ -3,4 +3,5 @@
 *.pyth
 venv/
 tags
-*.gv
+*.gv*
+.coverage
