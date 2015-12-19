@@ -1189,8 +1189,9 @@ def dict_or_date(a):
                 return attributes[a - 3]
             if a == 9:
                 return today.weekday()
-
-        raise BadTypeCombinationError(".d", a)
+    if is_num(a):
+        time.sleep(a)
+        return
     if is_col(a):
         return dict(a)
     raise BadTypeCombinationError(".d", a)

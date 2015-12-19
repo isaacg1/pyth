@@ -92,7 +92,7 @@ z 0 N z Variable. Autoinitializing to input.
 .B 1 N bin Binary string representing _. Direct on int, interpreted as UTF-8 on str. No '0b'.
 .c 2 N combinations combinations of elements from a of length b. On two integers, nCr.
 .C 2 N comb-replacement Combinations of elements from a of length b, with replacement.
-.d 1 n dict_or_date On col, python dict function. On int, various info about current date and time. 0 Time since epoch in seconds. 1 On Unix, time process has been running for. On Windows, time since .n1 was first called. 2 Current [year, month, day, hour, minute, second, microseconds] 3 year 4 month 5 day 6 hour 7 minute 8 second 9 weekday (0 is monday, 6 is sunday)
+.d 1 n dict_or_date On col, python dict function. On specific ints, various info about current date and time. On float and other ints, time.sleep. 0 Time since epoch in seconds. 1 On Unix, time process has been running for. On Windows, time since .n1 was first called. 2 Current [year, month, day, hour, minute, second, microseconds] 3 year 4 month 5 day 6 hour 7 minute 8 second 9 weekday (0 is monday, 6 is sunday)
 .D 2 N divmod_or_delete  .D<num><num is divmod(<num>,<num>). .D<seq><num> removes the <num>th element of <seq>. .D<seq><seq> is the same but for all the elements in <seq>.
 .e 2 N enumerate map over a enumerate. First arg is lambda, (k, b) -> (Y, Z) ->. k is the number, b is the sequence.
 .E 1 N any Python any(_).

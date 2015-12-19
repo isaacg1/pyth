@@ -127,7 +127,7 @@ z  0 N                   Variable. Autoinitializing to input.
 .B 1 N bin               Binary string representing _. Direct on int, interpreted as UTF-8 on str. No '0b'.
 .c 2 N combinations      Combinations of elements from a of length b. On two ints, nCr.
 .C 2 N comb-replacement  Combinations of elements from a of length b, with replacement.
-.d 1 n dict_or_date      On col, python dict function. On int, various info about current date and time.
+.d 1 n dict_or_date      On col, python dict function. On specific ints, various info about current date and time. On float and other ints, time.sleep
 .D 2 N divmod_or_delete  .D<num><num is divmod(<num>,<num>).
                          .D<seq><num> removes the <num>th element of <seq>.
                          .D<seq><seq> is the same but for all the elements in <seq>.
