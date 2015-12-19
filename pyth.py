@@ -429,7 +429,7 @@ def add_print(code):
             if code[1] not in '0123456789':
                 return False
 
-        if (code[0] not in 'p a\n'
+        if (code[0] not in 'p \n'
                 and code[0] in c_to_f) or \
             code[0] in variables or \
             code[0] in "@&|]}?,\\\".0123456789," or \

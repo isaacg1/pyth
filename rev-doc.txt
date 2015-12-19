@@ -174,7 +174,8 @@ _  <seq>                  Reversal. A[::-1] in Python.
 _  <dict>                 Swap keys and values.
 `  <any>                  Representation. repr in Python.
 a  <list> <any>           Append. A.append(B) in Python. Return A.
-a  <set> <any>            Add. A.add(B) in Python. return A.
+a  <set> <any>            Add. A.add(B) in Python. Return A.
+a  <num> <num>            Absolute difference. abs(A - B) in Python.
 b                         Variable. Initialized to '\n'.
 c  <num> <num>            Float division. A / B in Python.
 c  <str> <str>            Split. A.split(B) in Python.

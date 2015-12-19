@@ -536,6 +536,8 @@ def append(a, b):
         else:
             a.add(tuple(b))
             return a
+    if is_num(a) and is_num(b):
+        return abs(a - b)
     raise BadTypeCombinationError("a", a, b)
 environment['append'] = append
 

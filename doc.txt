@@ -87,6 +87,7 @@ _  1 N neg               Negation. Str and list reverse.
 a  2 N append            Python .append(), .add(). First argument must be a list or set.
                          Returns resultant list or string as well as modifying input.
                          On non-hashable additions to set, casts to tuple.
+                         On num, num, absolute difference.
 b  0 N lineBreak         Variable. "\n"
 c  2 N chop              On <str/list><int> chop str/list every n elements.
                          On <int><str/list> split str/list into n pieces (elements are equally distributed).

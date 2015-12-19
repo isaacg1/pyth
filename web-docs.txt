@@ -56,7 +56,7 @@ Z 0 N zero Variable. 0
 ^ 2 N power Python pow, Cartesian product with # of repeats.
 _ 1 N neg Negation. Str and list reverse.
 ` 1 N repr Python repr.
-a 2 N append Python .append(), .add(). First argument must be a list or set. Returns resultant list or string as well as modifying input. On non-hashable additions to set, casts to tuple.
+a 2 N append Python .append(), .add(). First argument must be a list or set. Returns resultant list or string as well as modifying input. On non-hashable additions to set, casts to tuple. On num, num, absolute difference.
 b 0 N line-Break Variable. "\n"
 c 2 N chop On <str/list><int> chop str/list every n elements. On <int><str/list> split str/list into n pieces (elements are equally distributed). On <str><str>, str.split. On <num><num> floating point division. On <seq><col of ints> split seq at each int into list of seqs. On <seq><any> If not covered above, split a on b.
 d 0 N d Variable. " "
