@@ -204,6 +204,7 @@
 				}).keyup();
 
 				var docs_cols = ['Char', 'Arity', 'Starts', 'Mnemonic', 'Details'];
+				var search_entries = ['Char', 'Any', 'Arity', 'Starts', 'Mnemonic', 'Details'];
 				var search_type;
 
 				function search() {
@@ -229,10 +230,10 @@
 					search();
 				}
 
-				for(var i = -1; i < docs_cols.length; i++) {
+				for(var i = 0; i < docs_cols.length; i++) {
 					$('#search-type-menu').append(
 						$('<li>').append(
-							$('<a>').text(i === -1? 'Any': docs_cols[i]).click(change_search_type)
+							$('<a>').text(search_entries[i]).click(change_search_type)
 						)
 					);
 				}
