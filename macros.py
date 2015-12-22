@@ -1542,6 +1542,8 @@ environment['trig'] = trig
 # .T. list
 def transpose(a):
     if is_col(a):
+        if not a:
+            return a
         lol = [urange(elem) if is_num(elem) else elem for elem in a]
         cols = max(len(sublist) for sublist in lol)
         trans = [[] for _ in range(cols)]
