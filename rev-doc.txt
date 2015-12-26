@@ -10,21 +10,22 @@ seq = str, list, tuple
 lst = list, tuple
 idx = str, list, dict
 col = str, list, set, dict
-any = any expression
+any = any expression (a for short)
 blk = a code block (any series of statements)
 ... = any number of arguments of any type.
-n _ = n _ arguments.
+n:_ = n _ arguments.
 var = variable. Not evaluated.
 func = function. Not evaluated.
 func n = function with arity n.
 pfn = Preceding function of arity n. *F, for instance.
-l _ = Lambda with lambda variable(s) _
+l:_ = Lambda with lambda variable(s) _
 pos = positive int.
 nneg = nonnegative int.
 neg = negative int.
 none = missing argument.
 c/n or col/num = col or num, where num is cast to list using U.
 s/n or seq/num = seq or num, where num is cast to list using U.
+<type1(type2)> = Type1 whose elements are of the for Type2.
 
 Shorthands:
 In the text, A refers to the first argument, B to the second, etc.
@@ -35,6 +36,7 @@ x -> y -> z -> ... means on future / nested uses, the successive character is us
 Format:
 Token | Input types | Effect
 
+Tokens:
 0                         Leading 0 is a separate token, number zero.
 0123456789.               Numeric literals. Leading 0 ignored, trailing . often parses separately
 \n <any>                  Print with trailing newline. Return input.
@@ -42,7 +44,7 @@ Token | Input types | Effect
 !  <any>                  Logical negation. 0, 0.0, "", [], (), {}, set() -> True, else False.
 "                         Begin and end string literal.
 #  <blk>                  Loop until error statement. On error, suppress and break out of loop.
-#  <pfn> <n-1 any> <col>  Filter A(_, B ...) over C. Uses f underneath, B may refer to f's lambda var. # looks like a strainer.
+#  <pfn> <n-1:any> <col>  Filter A(_, B ...) over C. Uses f underneath, B may refer to f's lambda var. # looks like a strainer.
 $                         Begin and end Python literal. Counts as one token. Disabled in -s (online).
 %  <num> <num>            Modulo. Same as Python.
 %  <int> <seq>            Every Ath element of B. B[::A] in Python.
@@ -79,7 +81,7 @@ $                         Begin and end Python literal. Counts as one token. Dis
 :  <idx> <col> <col>      Multiple assignment. For i in B, A[i] = C[i], If C runs out, it repeats.
 :  <idx> <col> <num>      Multiple assignment. For i in B, A[i] = C.
 :  <str> <str> <str>      Regex substitution. In A, replace B with C.
-:  <str> <str> 0 or )     Regex search boolean. In A, return whether a match for B is found.
+:  <str> <str> 0/)        Regex search boolean. In A, return whether a match for B is found.
 :  <str> <str> 1          Regex search. In A, return every match for B (non overlapping)
 :  <str> <str> 2          In A, replace each match of regex B with its first capturing group.
 :  <str> <str> 3          Split A on matches of regex B. Retain capturing groups.
@@ -108,32 +110,32 @@ $                         Begin and end Python literal. Counts as one token. Dis
 @  <dict> <any>           Index into the dict. A[B] in Python.
 @  <col> <col>            Intersection. Filter B on presence in A.
 @  <num> <num>            Root. A ** (1/B) in Python.
-A  <list, 2 elements>     Assign the first value of the list to G and the second to H. Return the input.
+A  <list,2-elements>      Assign the first value of the list to G and the second to H. Return the input.
 B                         Break. Ends surrounding statement.
-B  <pfn> <any> <n-1 any>  Bifurcate. Return two element list [B, A(B, ...)].
+B  <pfn> <any> <n-1:any>  Bifurcate. Return two element list [B, A(B, ...)].
 C  <int>                  Character with code point A. If A is too large, convert to base 256 and turn each into a character.
 C  <float>                C(floor(A))
 C  <cmp>                  Complex conjugate.
 C  <str>                  Convert A to int using base 256 and code points.
 C  <col>                  Matrix transpose, truncating to the length of the shortest entry.
-D  <func n> <n var> <blk> Define a function. Same as def A(B...) in Python.
-D  <pfn> <n-1 any> <col>  Sort operator. Sort C with key A(_, B ...). Uses o underneath, B may refer to o's lambda var.
+D  <func n> <n:var> <blk> Define a function. Same as def A(B...) in Python.
+D  <pfn> <n-1:any> <col>  Sort operator. Sort C with key A(_, B ...). Uses o underneath, B may refer to o's lambda var.
 E                         Evaluate input. Same as ast.literal_eval(input()) in Python.
 F  <var> <num> <blk>      For A in range(int(B)): C
 F  <var> <any> <blk>      For A in B: C
 G                         Variable. Initialized to "abcdefghijklmnopqrstuvwxyz".
 H                         Variable. Initialized to {}. (Hash table)
 I  <any> <blk>            if A: B
-I  <pfn> <any> <n-1 any>  Invariant. A(B, ...) == B.
+I  <pfn> <any> <n-1:any>  Invariant. A(B, ...) == B.
 J  <any>                  Variable, Autoinitializing. J=A on first use.
 J                         Variable. Second use and later.
 K  <any>                  Variable, Autoinitializing. K=A on first use.
 K                         Variable.  Second use and later.
 L  <any>                  def y(b): return A. y -> ' ->
-L  <pfn> <n-1 any> <col>  Left map. n>=2. Map A(B, ..., _) over C, where _ is the lambda variable. Map uses m underneath, and B may refer to its lambda variable.
+L  <pfn> <n-1:any> <col>  Left map. n>=2. Map A(B, ..., _) over C, where _ is the lambda variable. Map uses m underneath, and B may refer to its lambda variable.
 M  <any>                  def g(G,H): return A. g -> n ->
 M  <pf1> <col>            Map. Map A(_) over B, where _ is the lambda variable. Map uses m underneath.
-M  <pfn> <col of seq>     Map. Map A(*_) over B, where _ is the lambda variable. Map uses m underneath. Each element of B is splatted as the arguments to A.
+M  <pfn> <col(seq)>       Map. Map A(*_) over B, where _ is the lambda variable. Map uses m underneath. Each element of B is splatted as the arguments to A.
 N                         Variable. Initialized to '"'.
 O  <int>                  If A > 0, random int below A. If A == 0, random float 0 to 1. If A < 0, random.seed(-A).
 O  <col>                  Random element of A.
@@ -143,7 +145,7 @@ P  <num>                  Complex phase of A.
 P  <seq>                  All but the last element of A. A[:-1] in Python.
 Q                         Variable, Autoinitialized to eval(input()).
 R  <any>                  Return, used inside D.
-R  <pfn> <n-1 any> <col>  Right map. n >= 2. Map A(_, B, ...) over C, where _ is the lambda variable. Map uses m underneath, and B may refer to its lambda variable.
+R  <pfn> <n-1:any> <col>  Right map. n >= 2. Map A(_, B, ...) over C, where _ is the lambda variable. Map uses m underneath, and B may refer to its lambda variable.
 S  <col>                  Sort. sorted(A) in Python.
 S  <int>                  1-indexed range. [1, 2, ... A].
 S  <num>                  1-indexed range up to floor of A.
@@ -153,7 +155,7 @@ U  <neg>                  Reversed unary range. [A, A+1, ... -1]. range(A, 0) in
 V  <num> <blk>            Shorthand for 'FNU'. N -> H -> b ->
 V  <col> <blk>            Shorthand for 'FN'. N -> H -> b ->
 W  <any> <blk>            While loop. while A: B in Python.
-W  <pfn> <any> <any> <n-1 any> Conditional application. If B, A(C, ...). Else, C.
+W  <pfn> <a> <a> <n-1:a>  Conditional application. If B, A(C, ...). Else, C.
 X  <dict> <list> <any>    Dictionary assignment. A[tuple(B)] = C in Python.
 X  <dict> <any> <any>     Dictionary assignment. A[B] = C
 X  <str> <int> <any>      String assignment. Replace in A at index B with str(C). Modular indexing.
@@ -190,9 +192,9 @@ d                         Variable. Initialized to ' '.
 e  <seq>                  End. A[-1] in Python.
 e  <cmp>                  Imaginary part. A.imag in Python.
 e  <num>                  Last digit. A % 10 in Python.
-f  <l T> <col>            Filter A(_) over B. T -> Y -> Z ->
-f  <l T> <num>            First input where A(_) is truthy over [B, B+1, B+2, ...]
-f  <l T> <none>           First input where A(_) is truthy over [1, 2, 3, 4...]
+f  <l:T> <col>            Filter A(_) over B. T -> Y -> Z ->
+f  <l:T> <num>            First input where A(_) is truthy over [B, B+1, B+2, ...]
+f  <l:T> <none>           First input where A(_) is truthy over [1, 2, 3, 4...]
 g  <num> <num>            Greater than or equal. A >= B in Python.
 g  <seq> <seq>            Greater than or equal. A >= B in Python.
 g  <set> <col>            Superset. A.issuperset(B)
@@ -208,9 +210,9 @@ j  <col> <none>           Join A on newlines.
 j  <any> <col>            Join B on A. Convert A to a string, elements of B to strings.
 l  <col>                  len(A).
 l  <num>                  log base 2 of A.
-m  <l d> <col/num>        Map A(_) over B. d -> k -> b ->
+m  <l:d> <col/num>        Map A(_) over B. d -> k -> b ->
 n  <any> <any>            A != B
-o  <l N> <col/num>        Sort B with key function A. sorted(B, key=A) in Python. N -> Y ->
+o  <l:N> <col/num>        Sort B with key function A. sorted(B, key=A) in Python. N -> Y ->
 p  <any>                  Print A, with no trailing newline. Return A.
 q  <any> <any>            A == B
 r  <str> 0                A.lower()
@@ -226,21 +228,21 @@ r  <str> 9                Run length decode A. Input format '3a2bcd' -> 'aaabbcd
 r  <seq> 9                Run length decode A. Input format [[3, 'a'], [2, 'b'], [1, 'c'], [1, 'd']].
 r  <int> <int>            Range, half inclusive. range(A, B) in Python, or range(A, B, -1).
 r  <str> <str>            String range. r(C(A), C(B)), then convert each int to string using C.
-s  <col of str>           Concatenate. ''.join(A)
+s  <col(str)>             Concatenate. ''.join(A)
 s  <col>                  reduce on +, base case 0. (Pyth +)
 s  <cmp>                  Real part. A.real in Python.
 s  <num>                  Floor to int. int(A) in Python.
 s  <str>                  Parse as int. "" parses to 0. int(A) in Python.
 t  <num>                  A - 1.
 t  <seq>                  Tail. A[1:] in Python.
-u  <l GH> <seq/num> <any> Reduce B from left to right, with function A(_, _) and C as starting value. G, H -> N, T ->. A takes current value, next element of B as inputs. Note that A can ignore either input.
-u  <l GH> <any> <none>    Apply A(_, _) until a result that has occurred before is found. Starting value B. A takes current value, iteration number as inputs.
+u  <l:GH> <seq/num> <any> Reduce B from left to right, with function A(_, _) and C as starting value. G, H -> N, T ->. A takes current value, next element of B as inputs. Note that A can ignore either input.
+u  <l:GH> <any> <none>    Apply A(_, _) until a result that has occurred before is found. Starting value B. A takes current value, iteration number as inputs.
 v  <str>                  Eval. eval(A) without -s, ast.literal_eval(A) with -s (online). literal_eval only allows numeric, string, list, etc. literals, no variables or functions.
 w                         Take input. Reads up to newline. input() in Python 3.
 x  <int> <int>            Bitwise XOR. A ^ B in Python.
 x  <lst> <any>            First occurrence. Return the index of the first element of A equal to B, or -1 if none exists.
 x  <str> <str>            First occurrence. Return the index of the first substring of A equal to B, or -1 if none exists.
-x  <non lst> <lst         All occurrences. Returns a list of the indexes of elements of B that equal A.
+x  <non-lst> <lst>        All occurrences. Returns a list of the indexes of elements of B that equal A.
 y  <seq>                  Powerset. All subsets of A, ordered by length.
 y  <num>                  A * 2.
 z                         Variable. Autoinitialized to input().
@@ -279,8 +281,8 @@ z                         Variable. Autoinitialized to input().
 .F <str> <str>            String format. A.format(B) in Python.
 .H <int>                  Converts A to a hexadecimal string.
 .H <str>                  Converts A to a hexadecimal string, treating the string as a base 256 integer.
-.I <l G> <num>            Invert. A is a monotonic function from num to num. .I finds x such that A(x) = B.
-.M <l Z> <seq>            Filter B for elements x for which A(x) takes its maximal value.
+.I <l:G> <num>            Invert. A is a monotonic function from num to num. .I finds x such that A(x) = B.
+.M <l:Z> <seq>            Filter B for elements x for which A(x) takes its maximal value.
 .N <any>                  def :(N, T, Y): return _. The function is called ':'. : -> X ->
 .O <int>                  Converts A to an octal string.
 .O <str>                  Converts A to an octal string, treating the string as a base 256 integer.
@@ -291,8 +293,8 @@ z                         Variable. Autoinitialized to input().
 .R <num> <num>            Round A to the same number of decimal places as B is rounded to.
 .S <col/num>              Randomly shuffle A. If A is a list, mutate A to the result.
 .T <col>                  Justified transpose. List of 0th elements of A's elments, list of 1st elments, ... Ignoring absences.
-.U <l bZ> <seq>           Reduce with no starting value. Reduce from left to right, with initial value B[0]. A(_, _) takes inputs current value, next element of B. b, Z -> k, Y ->.
-.W <l H> <l Z> <any>      Functional while. While A(value) is truthy, value = B(value). value starts as C. return ending value.
+.U <l:bZ> <seq>           Reduce with no starting value. Reduce from left to right, with initial value B[0]. A(_, _) takes inputs current value, next element of B. b, Z -> k, Y ->.
+.W <l:H> <l:Z> <any>      Functional while. While A(value) is truthy, value = B(value). value starts as C. return ending value.
 .Z <str>                  Attempt to decompress A using zlip.decompress. If that fails, compress it with zlib.compress(A, 9).
 .[ <str> <str> <int>      Pad A on the left with a prefix of repeated copies of B to a length of the nearest multiple of C.
 .{ <str> <int> <str>      Pad C on the right with a prefix of repeated copies of A to a length of the nearest multiple of B.
@@ -305,8 +307,8 @@ z                         Variable. Autoinitialized to input().
 .a <num>                  Absolute value. abs in Python.
 .a <lst of num>           L2 norm of A, treated as a vector.
 .a <lst of 2 lst of num>  L2 norm of vector difference of A[0] and A[1].
-.b <l NY> <c/n> <c/n>     Map A over B and C in parallel.
-.b <l NY> <seq of 2 col> <none> Same as above, but map over B[0] and B[1] instead.
+.b <l:NY> <c/n> <c/n>     Map A over B and C in parallel.
+.b <l:NY> <seq> <none>    Same as above, but map over B[0] and B[1] instead.
 .c <int> <int>            nCr. Number of distinct B-element combinations of A distinct items.
 .c <col> <int>            All B-element combinations of A, not necessarily distinct.
 .d 0                      Current system time, in seconds since epoch. time.time() in Python.
@@ -320,19 +322,19 @@ z                         Variable. Autoinitialized to input().
 .d 8                      The current second.
 .d 9                      The current weekday, zero indexed at Monday.
 .d <num>                  Sleep for A seconds.
-.d <col of 2-elem lst>    Dictionary constructor. dict in Python.
-.e <l bk> <col>           Enumerated map. Map A over elements of B (as b) and their indexes (as k). b, k -> Y, Z ->.
-.f <l Z> <int> <num>      First B inputs to A with truthy results, starting at C and counting up by 1.
-.f <l Z> <int> <str>      First B inputs to A with truthy results, starting at C and proceeding lexicographically throw upper and lowercase strings.
-.f <l Z> <int> <none>     First B inputs to A with truthy results, of 1, 2, 3, ...
-.g <l k> <col/num>        Group the elements of B by matching outputs of A, sorted by values of A.
+.d <col(2-element-lst)>   Dictionary constructor. dict in Python.
+.e <l:bk> <col>           Enumerated map. Map A over elements of B (as b) and their indexes (as k). b, k -> Y, Z ->.
+.f <l:Z> <int> <num>      First B inputs to A with truthy results, starting at C and counting up by 1.
+.f <l:Z> <int> <str>      First B inputs to A with truthy results, starting at C and proceeding lexicographically throw upper and lowercase strings.
+.f <l:Z> <int> <none>     First B inputs to A with truthy results, of 1, 2, 3, ...
+.g <l:k> <col/num>        Group the elements of B by matching outputs of A, sorted by values of A.
 .i <col> <col>            Interleave the elements of A and B. Non-truncating.
 .j <num> <num>            A + B * j. j is imaginary unit.
 .j <num> <none>           A + j. j is imaginary unit.
 .j <none> <none>          j. j is imaginary unit.
 .l <num> <num>            log A base B.
 .l <num> <none>           log A base e.
-.m <l b> <col/num>        Filter B for elements x for which A(x) takes its minimal value.
+.m <l:b> <col/num>        Filter B for elements x for which A(x) takes its minimal value.
 .n <lst>                  Flatten A to a unnested list.
 .n 0                      Pi
 .n 1                      e
@@ -347,9 +349,32 @@ z                         Variable. Autoinitialized to input().
 .s <str> <str>            Strip from A maximal prefix and suffix of A consisting of characters in B.
 .s <seq> <col>            Strip from A maximal prefix and suffix of A consisting of elements of B.
 .s <seq> <any>            Strip from A maximal prefix and suffix of A consisting of copies of B.
-.t 
-
-
+.t <lst> <any>            Transpose A, padding lines with copies of B.
+.t <num> 0                sin(A)
+.t <num> 1                cos(A)
+.t <num> 2                tan(A)
+.t <num> 3                arcsin(A)
+.t <num> 4                arccos(A)
+.t <num> 5                arctan(A)
+.t <num> 6                A radians in degrees. A * 180 / pi
+.t <num> 7                A degrees in radians. A * pi / 180
+.t <num> 8                sinh(A)
+.t <num> 9                cosh(A)
+.t <num> 10               tanh(A)
+.t <num> 11               arcsinh(A)
+.t <num> 12               arccosh(A)
+.t <num> 13               arctanh(A)
+.u <l:NY> <seq/num> <any> Cumulative reduce. Reduce B from left to right, with function A(_, _) and C as starting value, and return all intermediate values, starting with C. A takes current value, next element of B as inputs.
+.u <l:NY> <any> <none>    Cumulative fixed-point. Apply A(_, _) until a result that has occurred before is found. Starting value B. Return all intermediate results, starting with B. A takes current value, iteration number as inputs.
+.w <dict> <"http"-str>    If B starts with "http", perform a request to the URL B, with contents consisting of A's  elements joined on '=', joined on '&'. Return as a list of lines.
+.w <any> <"http"-str>     If B starts with "http", perform a request to the URL B, with contents consisting of A. Return as a list of lines.
+.w <lst> <str/none>       Write an image. Requires PIL. For color images, A must be a matrix of 3+ element lists. For grayscale, A must be a matrix of integers. File name is B, unless B has no '.', in which case it is B + ".png". If B does not exist, defaults to 'o.png'.
+.w <lst> <str/none>       Write/append to a file. Write A joined on newlines with a trailing newline to the file B, unless B has no '.', in which case B + '.txt', unless B does not exist, in which case 'o.txt'
+.w <any> <str/none>       Write/append to a file. Write A with a trailing newline to the file B, unless B has no '.', in which case B + '.txt', unless B does not exist, in which case 'o.txt'
+.x <any> <any>            Try - catch. A, unless A throws an error, in which case B. B is only evaluated if A throws an error.
+.z                        All input. Take all input from STDIN, return as list of lines.
 .{ <col>                  Convert A to set. If any of A's elements are not hashable, convert all elements to tuples and convert to set.
 .{ <num>                  Set containing A.
 .{ <none>                 Empty set.
+.| <int> <int>            Bitwise or. | in Python.
+.| <col> <col>            Set union. Does not preserve input order.
