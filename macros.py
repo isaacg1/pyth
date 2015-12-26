@@ -948,9 +948,9 @@ def reduce(a, b, c=None):
         return results[-1]
 
     # Reduce
-    if is_seq(b) or isinstance(b, int):
-        if isinstance(b, int):
-            seq = range(b)
+    if is_seq(b) or is_num(b):
+        if is_num(b):
+            seq = urange(b)
         else:
             seq = b
         acc = c
@@ -1175,7 +1175,7 @@ def dict_or_date(a):
         if a == 0:
             return time.time()
         if a == 1:
-            return time.clock()
+            return time.process_time()
         if 2 <= a <= 9:
             today = datetime.datetime.now()
             attributes = [today.year,
@@ -1437,7 +1437,7 @@ def eval_all_input():
 environment['eval_all_input'] = eval_all_input
 
 
-# .r seq, int / col, seq
+# .r col, seq
 def rotate(a, b):
     if is_col(a) and is_seq(b):
         def trans_func(elem):
@@ -1477,7 +1477,7 @@ def Pstrip(a, b):
     if isinstance(a, str) and isinstance(b, str):
         return a.strip(b)
     if is_seq(a):
-        if is_seq(b):
+        if is_col(b):
             strip_items = list(b)
         else:
             strip_items = [b]
