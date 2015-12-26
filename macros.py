@@ -1569,7 +1569,7 @@ def cu_reduce(a, b, c=None):
             results.append(copy.deepcopy(acc))
             acc = a(acc, counter)
         return results
-    if is_seq(b) or isinstance(b, int):
+    if is_seq(b) or is_num(b):
         if is_num(b):
             seq = urange(b)
         else:
