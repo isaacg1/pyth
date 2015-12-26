@@ -23,6 +23,8 @@ pos = positive int.
 nneg = nonnegative int.
 neg = negative int.
 none = missing argument.
+c/n or col/num = col or num, where num is cast to list using U.
+s/n or seq/num = seq or num, where num is cast to list using U.
 
 Shorthands:
 In the text, A refers to the first argument, B to the second, etc.
@@ -206,11 +208,9 @@ j  <col> <none>           Join A on newlines.
 j  <any> <col>            Join B on A. Convert A to a string, elements of B to strings.
 l  <col>                  len(A).
 l  <num>                  log base 2 of A.
-m  <l d> <col>            Map A(_) over B. d -> k -> b ->
-m  <l d> <num>            Map A(_) over U(B). (U is the Pyth function)
+m  <l d> <col/num>        Map A(_) over B. d -> k -> b ->
 n  <any> <any>            A != B
-o  <l N> <col>            Sort B with key function A. sorted(B, key=A) in Python. N -> Y ->
-o  <l N> <num>            Same, but U(B).
+o  <l N> <col/num>        Sort B with key function A. sorted(B, key=A) in Python. N -> Y ->
 p  <any>                  Print A, with no trailing newline. Return A.
 q  <any> <any>            A == B
 r  <str> 0                A.lower()
@@ -233,8 +233,7 @@ s  <num>                  Floor to int. int(A) in Python.
 s  <str>                  Parse as int. "" parses to 0. int(A) in Python.
 t  <num>                  A - 1.
 t  <seq>                  Tail. A[1:] in Python.
-u  <l GH> <seq> <any>     Reduce B from left to right, with function A(_, _) and C as starting value. G, H -> N, T ->. A takes current value, next element of B as inputs. Note that A can ignore either input.
-u  <l GH> <int> <any>     Reduce U(B) from left to right, with function A(_, _) and C as starting value.
+u  <l GH> <seq/num> <any> Reduce B from left to right, with function A(_, _) and C as starting value. G, H -> N, T ->. A takes current value, next element of B as inputs. Note that A can ignore either input.
 u  <l GH> <any> <none>    Apply A(_, _) until a result that has occurred before is found. Starting value B. A takes current value, iteration number as inputs.
 v  <str>                  Eval. eval(A) without -s, ast.literal_eval(A) with -s (online). literal_eval only allows numeric, string, list, etc. literals, no variables or functions.
 w                         Take input. Reads up to newline. input() in Python 3.
@@ -260,10 +259,9 @@ z                         Variable. Autoinitialized to input().
 .- <col> <col>            Bagwise subtraction. For each element in B, remove its first occurrence in A from A and return. Non-mutating.
 ./ <seq>                  Partition. Return all divisions of A into disjoint substrings.
 ./ <nneg>                 Integer partition. Return all sorted lists of positive integers that add to A.
-.: <seq> <int>            All substrings of A of length B.
-.: <seq> <float>          All substrings of A of length floor(len(A) * B)
-.: <seq> <none>           All substrings of A of positive length.
-.: <num> <num, none>      Same above, but with U(A) instead of A.
+.: <seq/num> <int>        All substrings of A of length B.
+.: <seq/num> <float>      All substrings of A of length floor(len(A) * B)
+.: <seq/num> <none>       All substrings of A of positive length.
 .< <seq> <int>            Cyclicly rotate A left by B elements. A[B:] + A[:B] in Python.
 .< <int> <int>            Left shift. A shifted left by B, or A * 2 ^ B. A << B in Python.
 .> <seq> <int>            Cyclicly rotate A right by B elements. A[-B:] + A[:-B] in Python.
@@ -291,16 +289,65 @@ z                         Variable. Autoinitialized to input().
 .Q                        Evaluate all input. Take all input from STDIN, literal_eval each line, return list of the result.
 .R <num> <int>            Round A to B decimal places. Convert to int if B == 0.
 .R <num> <num>            Round A to the same number of decimal places as B is rounded to.
-.S <col>                  Randomly shuffle A. If A is a list, mutate A to the result.
-.S <num>                  Randomly shuffle U(A).
+.S <col/num>              Randomly shuffle A. If A is a list, mutate A to the result.
 .T <col>                  Justified transpose. List of 0th elements of A's elments, list of 1st elments, ... Ignoring absences.
 .U <l bZ> <seq>           Reduce with no starting value. Reduce from left to right, with initial value B[0]. A(_, _) takes inputs current value, next element of B. b, Z -> k, Y ->.
 .W <l H> <l Z> <any>      Functional while. While A(value) is truthy, value = B(value). value starts as C. return ending value.
 .Z <str>                  Attempt to decompress A using zlip.decompress. If that fails, compress it with zlib.compress(A, 9).
-
-
-
-
+.[ <str> <str> <int>      Pad A on the left with a prefix of repeated copies of B to a length of the nearest multiple of C.
+.{ <str> <int> <str>      Pad C on the right with a prefix of repeated copies of A to a length of the nearest multiple of B.
+.[ <int> <str> <str>      Pad B on evenly on both sides with a prefix of repeated copies of C to a length of the nearest multiple of A. Ties broken to the right.
+.[ <seq> <any> <int>      Pad list(A) on the left with copies of B as elements to a length of the nearest multiple of C.
+.[ <any> <int> <seq>      Pad list(C) on the left with copies of A as elements to a length of the nearest multiple of B.
+.[ <int> <seq> <any>      Pad list(B) on both sides with copies of B as elements to a length of the nearest multiple of C. Ties broken to the right.
+._ <seq>                  All prefixes of A, length 1 to len(A).
+._ <num>                  Sign of A. 1 if A > 0, -1 if A < 0, 0 otherwise.
+.a <num>                  Absolute value. abs in Python.
+.a <lst of num>           L2 norm of A, treated as a vector.
+.a <lst of 2 lst of num>  L2 norm of vector difference of A[0] and A[1].
+.b <l NY> <c/n> <c/n>     Map A over B and C in parallel.
+.b <l NY> <seq of 2 col> <none> Same as above, but map over B[0] and B[1] instead.
+.c <int> <int>            nCr. Number of distinct B-element combinations of A distinct items.
+.c <col> <int>            All B-element combinations of A, not necessarily distinct.
+.d 0                      Current system time, in seconds since epoch. time.time() in Python.
+.d 1                      Amount of time the current program has been running. time.process_time() in Python.
+.d 2                      The current [year, month, day, hour, minute, second, microsecond]
+.d 3                      The current year.
+.d 4                      The current month.
+.d 5                      The current day.
+.d 6                      The current hour.
+.d 7                      The current minute.
+.d 8                      The current second.
+.d 9                      The current weekday, zero indexed at Monday.
+.d <num>                  Sleep for A seconds.
+.d <col of 2-elem lst>    Dictionary constructor. dict in Python.
+.e <l bk> <col>           Enumerated map. Map A over elements of B (as b) and their indexes (as k). b, k -> Y, Z ->.
+.f <l Z> <int> <num>      First B inputs to A with truthy results, starting at C and counting up by 1.
+.f <l Z> <int> <str>      First B inputs to A with truthy results, starting at C and proceeding lexicographically throw upper and lowercase strings.
+.f <l Z> <int> <none>     First B inputs to A with truthy results, of 1, 2, 3, ...
+.g <l k> <col/num>        Group the elements of B by matching outputs of A, sorted by values of A.
+.i <col> <col>            Interleave the elements of A and B. Non-truncating.
+.j <num> <num>            A + B * j. j is imaginary unit.
+.j <num> <none>           A + j. j is imaginary unit.
+.j <none> <none>          j. j is imaginary unit.
+.l <num> <num>            log A base B.
+.l <num> <none>           log A base e.
+.m <l b> <col/num>        Filter B for elements x for which A(x) takes its minimal value.
+.n <lst>                  Flatten A to a unnested list.
+.n 0                      Pi
+.n 1                      e
+.n 2                      2 ** 0.5
+.n 3                      Phi
+.n 4                      Infinity
+.n 5                      - Infinity
+.n 6                      NaN
+.p <col/num>              All permutations of A.
+.q                        Exit. Immediately ends the program.
+.r <col> <seq>            Translate each element of A to its cyclic successor in B.
+.s <str> <str>            Strip from A maximal prefix and suffix of A consisting of characters in B.
+.s <seq> <col>            Strip from A maximal prefix and suffix of A consisting of elements of B.
+.s <seq> <any>            Strip from A maximal prefix and suffix of A consisting of copies of B.
+.t 
 
 
 .{ <col>                  Convert A to set. If any of A's elements are not hashable, convert all elements to tuples and convert to set.
