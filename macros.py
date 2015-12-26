@@ -1390,7 +1390,7 @@ environment['Pnumbers'] = Pnumbers
 
 # .O. int/str. Octal, average
 def Poct(a):
-    if is_seq(a) and all(map(is_num, a)):
+    if is_col(a) and all(map(is_num, a)):
         if len(a) == 0:
             return 0.0
         else:
