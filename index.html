@@ -31,17 +31,11 @@
 			.Char {
 				width: 15%;
 			}
-			.Arity {
-				width: 10%;
-			}
-			.Starts {
-				width: 10%;
-			}
-			.Mnemonic {
+			.Args {
 				width: 25%;
 			}
 			.Details {
-				width: 40%;
+				width: 60%;
 				overflow: auto;
 			}
 			.search-bar {
@@ -129,6 +123,7 @@
 
 				<div class="col-md-6 docs">
 					<h4>Pyth Character Reference</h4>
+					<a href="rev-doc.txt">Key and text version</a>
 					<div class="search-bar input-group">
 						<input id="query" class="form-control" placeholder="Search">
 						<div class="input-group-btn">
@@ -203,8 +198,8 @@
 					$('#length').text(e.target.value.length);
 				}).keyup();
 
-				var docs_cols = ['Char', 'Arity', 'Starts', 'Mnemonic', 'Details'];
-				var search_entries = ['Char', 'Any', 'Arity', 'Starts', 'Mnemonic', 'Details'];
+				var docs_cols = ['Char', 'Args', 'Details'];
+				var search_entries = ['Char', 'Any', 'Args', 'Details'];
 				var search_type;
 
 				function search() {
@@ -240,8 +235,13 @@
 
 				$('#search-type-menu > li > a').eq(0).click();
 
-				$.get('/web-docs.txt', function(data) {
-					var lines = data.split('\n');
+				$.get('/rev-doc.txt', function(data) {
+					var lines = data.trim().split('\n');
+
+					var data_start = lines.indexOf('Tokens:') + 1;
+					var data_lines = lines.slice(data_start);
+
+					var details_start = lines[data_start - 2].indexOf('|');
 
 					var table = $('#docs-table');
 
@@ -251,13 +251,17 @@
 						}))
 					);
 
-					var rows = lines.map(function(line) {
-						var words = line.split(' ');
+					var rows = data_lines.map(function(line) {
+						// Change the 27 if you change rev-doc.txt
 
-						var details_offset = docs_cols.length - 1;
+						var char_args_words = line.substring(0, details_start).split(' ');
 
-						var tokens = words.slice(0, details_offset);
-						var details = words.slice(details_offset).join(' ');
+						var tokens = char_args_words.slice(0, 1);
+						var args = char_args_words.slice(1).join(' ');
+
+						tokens.push(args);
+
+						var details = line.substring(details_start);
 
 						tokens.push(details);
 

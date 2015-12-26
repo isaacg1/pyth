@@ -34,8 +34,7 @@ No operations modify the input unless specifically specified.
 x -> y -> z -> ... means on future / nested uses, the successive character is used. If there is an extra -> at the end, it is cyclic.
 
 Format:
-Token | Input types | Effect
-
+Char, Input types         | Effect
 Tokens:
 0                         Leading 0 is a separate token, number zero.
 0123456789.               Numeric literals. Leading 0 ignored, trailing . often parses separately
