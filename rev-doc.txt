@@ -122,7 +122,7 @@ D  <pfn> <n-1:any> <col>  Sort operator. Sort C with key A(_, B ...). Uses o und
 E                         Evaluate input. Same as ast.literal_eval(input()) in Python.
 F  <var> <num> <blk>      For A in range(int(B)): C
 F  <var> <any> <blk>      For A in B: C
-G                         Variable. Initialized to "abcdefghijklmnopqrstuvwxyz".
+G                         Variable. Initialized to "abcdefghijklmnopqrstuvwxyz", alphabet.
 H                         Variable. Initialized to {}. (Hash table)
 I  <any> <blk>            if A: B
 I  <pfn> <any> <n-1:any>  Invariant. A(B, ...) == B.
@@ -135,7 +135,7 @@ L  <pfn> <n-1:any> <col>  Left map. n>=2. Map A(B, ..., _) over C, where _ is th
 M  <any>                  def g(G,H): return A. g -> n ->
 M  <pf1> <col>            Map. Map A(_) over B, where _ is the lambda variable. Map uses m underneath.
 M  <pfn> <col(seq)>       Map. Map A(*_) over B, where _ is the lambda variable. Map uses m underneath. Each element of B is splatted as the arguments to A.
-N                         Variable. Initialized to '"'.
+N                         Variable. Initialized to '"', quote mark.
 O  <int>                  If A > 0, random int below A. If A == 0, random float 0 to 1. If A < 0, random.seed(-A).
 O  <col>                  Random element of A.
 P  <nneg>                 List of prime factors of A with multiplicity in increasing order. Uses sympy if sympy is installed, trial division otherwise. Empty list if A is 0 or 1.
@@ -165,7 +165,7 @@ X  <int> <list> <any>     In-place +=. B[A] += C. Modular indexing.
 X  <list> <dict> <any>    B[tuple(A)] += C, or B[tuple(A)] = C if tuple(A) not in B.
 X  <any> <dict> <any>     B[A] += C, or B[A] = C if A not in B.
 X  <int> <str> <any>      Insert into string. Insert str(C) into B at A.
-Y                         Variable. Initialized to [].
+Y                         Variable. Initialized to [], empty list.
 Z                         Variable. Initialized to 0. (zero)
 [  <...>                  List constructor. list(A) in Python.
 \  <char>                 One character string.
@@ -179,7 +179,7 @@ _  <dict>                 Swap keys and values.
 a  <list> <any>           Append. A.append(B) in Python. Return A.
 a  <set> <any>            Add. A.add(B) in Python. Return A.
 a  <num> <num>            Absolute difference. abs(A - B) in Python.
-b                         Variable. Initialized to '\n'.
+b                         Variable. Initialized to '\n', newline.
 c  <num> <num>            Float division. A / B in Python.
 c  <str> <str>            Split. A.split(B) in Python.
 c  <str> <none>           Split on whitespace. A.split() in Python.
@@ -187,7 +187,7 @@ c  <str> <int>            Chop A into pieces of length B. Last shorter if necess
 c  <int> <str>            Chop A into B pieces of equal sizes, initial pieces one longer if necessary.
 c  <seq> <col of ints>    Chop A at every location in B.
 c  <seq> <any>            Chop A at every occurrence of B.
-d                         Variable. Initialized to ' '.
+d                         Variable. Initialized to ' ', space.
 e  <seq>                  End. A[-1] in Python.
 e  <cmp>                  Imaginary part. A.imag in Python.
 e  <num>                  Last digit. A % 10 in Python.
@@ -207,6 +207,7 @@ j  <int> <int>            Convert A to base B as a list.
 j  <str> <col>            Join B on A. Convert elements of B to strings if needed.
 j  <col> <none>           Join A on newlines.
 j  <any> <col>            Join B on A. Convert A to a string, elements of B to strings.
+k                         Variable. Initialized to '', empty string.
 l  <col>                  len(A).
 l  <num>                  log base 2 of A.
 m  <l:d> <col/num>        Map A(_) over B. d -> k -> b ->
