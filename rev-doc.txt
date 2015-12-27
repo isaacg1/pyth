@@ -298,7 +298,7 @@ z                         Variable. Autoinitialized to input().
 .W <l:H> <l:Z> <any>      Functional while. While A(value) is truthy, value = B(value). value starts as C. return ending value.
 .Z <str>                  Attempt to decompress A using zlip.decompress. If that fails, compress it with zlib.compress(A, 9).
 .[ <str> <str> <int>      Pad A on the left with a prefix of repeated copies of B to a length of the nearest multiple of C.
-.{ <str> <int> <str>      Pad C on the right with a prefix of repeated copies of A to a length of the nearest multiple of B.
+.[ <str> <int> <str>      Pad C on the right with a prefix of repeated copies of A to a length of the nearest multiple of B.
 .[ <int> <str> <str>      Pad B on evenly on both sides with a prefix of repeated copies of C to a length of the nearest multiple of A. Ties broken to the right.
 .[ <seq> <any> <int>      Pad list(A) on the left with copies of B as elements to a length of the nearest multiple of C.
 .[ <any> <int> <seq>      Pad list(C) on the left with copies of A as elements to a length of the nearest multiple of B.
