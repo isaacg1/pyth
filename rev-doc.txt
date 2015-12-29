@@ -303,6 +303,7 @@ z                         Variable. Autoinitialized to input().
 .[ <seq> <any> <int>      Pad list(A) on the right with copies of B as elements to a length of the nearest multiple of C.
 .[ <any> <int> <seq>      Pad list(C) on the left with copies of A as elements to a length of the nearest multiple of B.
 .[ <int> <seq> <any>      Pad list(B) on both sides with copies of C as elements to a length of the nearest multiple of A. Ties broken to the right.
+.^ <int> <int> <int>      Modular exponentiation. A ^ B % C, but faster. pow in Python.
 ._ <seq>                  All prefixes of A, length 1 to len(A).
 ._ <num>                  Sign of A. 1 if A > 0, -1 if A < 0, 0 otherwise.
 .a <num>                  Absolute value. abs in Python.
