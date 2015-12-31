@@ -137,6 +137,8 @@ M  <pf1> <col>            Map. Map A(_) over B, where _ is the lambda variable. 
 M  <pfn> <col(seq)>       Map. Map A(*_) over B, where _ is the lambda variable. Map uses m underneath. Each element of B is splatted as the arguments to A.
 N                         Variable. Initialized to '"', quote mark.
 O  <int>                  If A > 0, random int below A. If A == 0, random float 0 to 1. If A < 0, random.seed(-A).
+O  <float>                Random float 0 to A.
+O  <cmp>                  A multiplied by random float 0 to 1.
 O  <col>                  Random element of A.
 P  <nneg>                 List of prime factors of A with multiplicity in increasing order. Uses sympy if sympy is installed, trial division otherwise. Empty list if A is 0 or 1.
 P  <neg>                  Returns whether -A is prime.

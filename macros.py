@@ -762,6 +762,11 @@ def rchoice(a):
             return
         if a > 0:
             return random.randrange(a)
+    if is_num(a):
+        # random.uniform works for both complex and float
+        return random.uniform(0, a)
+    if is_seq(a):
+        return random.choice(a)
     if is_col(a):
         return random.choice(list(a))
     raise BadTypeCombinationError("O", a)
