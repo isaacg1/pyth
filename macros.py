@@ -761,7 +761,7 @@ def rchoice(a):
             random.seed(-a)
             return
         if a > 0:
-            return random.choice(urange(a))
+            return random.randrange(a)
     if is_col(a):
         return random.choice(list(a))
     raise BadTypeCombinationError("O", a)
