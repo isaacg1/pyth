@@ -290,6 +290,7 @@ z                         Variable. Autoinitialized to input().
 .O <str>                  Converts A to an octal string, treating the string as a base 256 integer.
 .O <col(num)>             Average of A. If A is empty, 0.0
 .P <col> <int>            Permutations. All lists of elements of A of length B.
+.P <int> <col>            Ath lexicographical permutation of B. Zero-indexed with modular indexing.
 .P <int> <int>            nPr. Number of permutations of length B from A elements.
 .Q                        Evaluate all input. Take all input from STDIN, literal_eval each line, return list of the result.
 .R <num> <int>            Round A to B decimal places. Convert to int if B == 0.
