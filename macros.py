@@ -1421,13 +1421,13 @@ def permutations2(a, b):
     if isinstance(a, int) and isinstance(b, int):
         # compute n P r
         return functools.reduce(operator.mul, range(a - b + 1, a + 1), 1)
-    
+
     if is_col(a) and isinstance(b, int):
         return itertools_norm(itertools.permutations, a, b)
-    
+
     if isinstance(a, int) and isinstance(b, str):
         return "".join(permutations2(a, list(b)))
-    
+
     if isinstance(a, int) and is_col(b):
         # Algorithm modified from
         # http://stackoverflow.com/a/6784359/1938435
@@ -1442,7 +1442,7 @@ def permutations2(a, b):
             result.append(items[index])
             del items[index]
         return result
-    
+
     raise BadTypeCombinationError(".P", a, b)
 environment['permutations2'] = permutations2
 

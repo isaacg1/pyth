@@ -686,6 +686,7 @@ test_cases = [
     ('.TU4', '[[0, 0, 0], [1, 1], [2]]'),
     ('.T[[1 5 4)]2[3 4', '[[1, 2, 3], [5, 4], [4]]'),
     ('.Tc"a sdfa bsdf as', "['asba', 'dss', 'fd', 'af']"),
+    ('.TY', '[]'),
     # .u
     ('.u*NhY5 1', '[1, 1, 2, 6, 24, 120]'),
     ('.ue*NN7', '[7, 9, 1]'),
@@ -808,7 +809,7 @@ def test(pyth_code, expected_output, input_message=''):
             sys.exit("Error thrown by %s on input %s:\n%s" %
                      (pyth_code, input_message, error))
         if output != expected_output and output != expected_output + '\n':
-            sys.exit("Bad output by %s on input %s."
+            sys.exit("Bad output by %s on input %s"
                      "\nExpected: %r.\nReceived: %r" %
                      (pyth_code, input_message, expected_output, output))
     else:
@@ -816,7 +817,7 @@ def test(pyth_code, expected_output, input_message=''):
             sys.exit("Error thrown by %s:\n%s" %
                      (pyth_code, error))
         if output != expected_output and output != expected_output + '\n':
-            sys.exit("Bad output by %s."
+            sys.exit("Bad output by %s"
                      "\nExpected: %r.\nReceived: %r" %
                      (pyth_code, expected_output, output))
 
