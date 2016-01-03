@@ -157,6 +157,12 @@ def imp_print(a):
 environment['imp_print'] = imp_print
 
 
+# Lookup from the environment, ignoring lambdas.
+def env_lookup(var):
+    return environment[var]
+environment['env_lookup'] = env_lookup
+
+
 # Function library. See data for letter -> function correspondences.
 # =. N/A
 def assign(a, b):

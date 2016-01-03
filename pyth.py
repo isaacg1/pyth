@@ -27,6 +27,7 @@ environment['literal_eval'] = literal_eval
 
 sys.setrecursionlimit(100000)
 
+lambda_stack = []
 
 # Parse it!
 def general_parse(code):
@@ -83,6 +84,8 @@ def parse(code, spacing="\n "):
         return '', rest_code
     # Semicolon is more magic (early-end all active functions/statements).
     if active_char == ';':
+        if lambda_stack:
+            return 'env_lookup({!r})'.format(lambda_stack[-1]), rest_code
         if rest_code == '':
             return '', ''
         else:
@@ -137,26 +140,19 @@ def parse(code, spacing="\n "):
                 else:
                     return parse('m' + active_char + '.*' + m_arg + remainder)
 
-            # <binary function>R<any><seq>: Right Map operator
-            # '+R4[1 2 3 4' -> 'm+d4[1 2 3 4'.
-            if sugar_char == 'R':
-                if arity >= 2:
-                    map_arg = lambda_vars['m'][0][0]
-                    return parse('m' + active_char + map_arg + remainder)
-                else:
-                    raise PythParseError(active_char + sugar_char, remainder)
-
             # <binary function>L<any><seq>: Left Map operator
             # >LG[1 2 3 4 -> 'm>Gd[1 2 3 4'.
             if sugar_char == 'L':
                 if arity >= 2:
                     pyth_seg = ''
                     for _ in range(arity - 1):
-                        parsed, rest = state_maintaining_parse(remainder)
-                        pyth_seg += remainder[:len(remainder) - len(rest)]
-                        remainder = rest
+                        # parsed, rest = state_maintaining_parse(remainder)
+                        # pyth_seg += remainder[:len(remainder) - len(rest)]
+                        # remainder = rest
+                        seg, remainder = next_seg(remainder)
+                        pyth_seg += seg
                     m_arg = lambda_vars['m'][0][0]
-                    return parse('m' + active_char + pyth_seg + m_arg + rest)
+                    return parse('m' + active_char + pyth_seg + m_arg + remainder)
 
             # <function>V<seq><seq> Vectorize operator.
             # Equivalent to <func>MC,<seq><seq>.
@@ -185,10 +181,13 @@ def parse(code, spacing="\n "):
                 pyth_seg = remainder[:len(remainder) - len(rest)]
                 return parse(func_char + pyth_seg + active_char + remainder)
 
+            # Right operators
+            # R is Map operator
             # D is Sort operator
             # # is Filter operator - it looks like a strainer.
-            if sugar_char in 'D#':
+            if sugar_char in 'RD#':
                 func_dict = {
+                    'R': 'm',
                     'D': 'o',
                     '#': 'f',
                 }
@@ -227,8 +226,10 @@ def next_seg(code):
 def state_maintaining_parse(code):
     global c_to_i
     saved_c_to_i = c.deepcopy(c_to_i)
+    lambda_stack.append("This is a placeholder")
     py_code, rest_code = parse(code)
     c_to_i = saved_c_to_i
+    lambda_stack.pop()
     return py_code, rest_code
 
 
@@ -272,11 +273,13 @@ def lambda_function_parse(active_char, rest_code):
     # Swap what variables are used in lambda functions.
     saved_lambda_vars = lambda_vars[active_char]
     lambda_vars[active_char] = lambda_vars[active_char][1:] + [var]
+    lambda_stack.append(var[0])
     # Take one argument, the lambda.
     parsed, rest_code = parse(rest_code)
     args_list = [parsed]
     # Rotate back.
     lambda_vars[active_char] = saved_lambda_vars
+    lambda_stack.pop()
     while len(args_list) != arity and parsed != '':
         parsed, rest_code = parse(rest_code)
         args_list.append(parsed)
@@ -314,9 +317,13 @@ def infix_parse(active_char, rest_code):
         c_to_i[active_char] = next_c_to_i[active_char]
     args_list = []
     parsed = 'Not empty'
+    if active_char == '.W':
+        lambda_stack.extend(['Z', 'H'])
     while len(args_list) != arity and parsed != '':
         parsed, rest_code = parse(rest_code)
         args_list.append(parsed)
+        if active_char == '.W' and len(args_list) <= 2:
+            lambda_stack.pop()
     # Statements that cannot have anything after them
     if active_char in end_statement:
         rest_code = ")" + rest_code

@@ -153,7 +153,13 @@ test_cases = [
     (':"abcdef""b(c)d"4', "[['bcd', 'c']]"),
     # ;
     ('chc"4 5";', '[\'4\']'),
-    ('V2V2INN;', '1\n1\n'),
+    ('V2V2INN;3', '1\n1\n3'),
+    ('jL;c2<G6', "['a b c', 'd e f']"),
+    ('m*dC;U4', '[0, 32, 64, 96]'),
+    ('-R;["a b""def"" ', "['ab', 'def', '']"),
+    ('.u+N;2k', '[\'\', \'"\', \'""\']'),
+    ('m,;m,;m;1 1 1', "[[' ', [['', ['\\n']]]]]"),
+    ('.W}H*G!;C+h;CZ\\a', '{'),
     # <
     ('<.{1U2', 'True'),
     ('<G6', 'abcdef'),
@@ -806,7 +812,7 @@ def test(pyth_code, expected_output, input_message=''):
 
     if input_message != '':
         if error:
-            sys.exit("Error thrown by %s on input %s:\n%s" %
+            sys.exit("Error thrown by %s on input %s\n%s" %
                      (pyth_code, input_message, error))
         if output != expected_output and output != expected_output + '\n':
             sys.exit("Bad output by %s on input %s"
@@ -814,7 +820,7 @@ def test(pyth_code, expected_output, input_message=''):
                      (pyth_code, input_message, expected_output, output))
     else:
         if error:
-            sys.exit("Error thrown by %s:\n%s" %
+            sys.exit("Error thrown by %s\n%s" %
                      (pyth_code, error))
         if output != expected_output and output != expected_output + '\n':
             sys.exit("Bad output by %s"
