@@ -573,7 +573,7 @@ def chop(a, b=None):
         return l
     # seq, col of ints -> chop seq at number locations.
     if is_seq(a) and is_col(b):
-        if all(isinstance(elem, int) for elem in b):
+        if all(isinstance(elem, int) for elem in b) and not isinstance(b, str):
             locs = sorted(b)
             return list(map(lambda i, j: a[i:j], [0] + locs, locs + [len(a)]))
     if is_seq(a):
