@@ -298,6 +298,8 @@ z                         Variable. Autoinitialized to input().
 .S <col/num>              Randomly shuffle A. If A is a list, mutate A to the result.
 .T <col>                  Justified transpose. List of 0th elements of A's elments, list of 1st elments, ... Ignoring absences.
 .U <l:bZ> <seq>           Reduce with no starting value. Reduce from left to right, with initial value B[0]. A(_, _) takes inputs current value, next element of B. b, Z -> k, Y ->.
+.V <num>                  Infinite for loop. b iterates over an infinite incrementing sequence starting at the input number.
+.V <str>                  Infinite for loop. b iterates over an infinite lexicographically sequence of upper and lowercase strings starting at the input string. 
 .W <l:H> <l:Z> <any>      Functional while. While A(value) is truthy, value = B(value). value starts as C. return ending value.
 .Z <str>                  Attempt to decompress A using zlip.decompress. If that fails, compress it with zlib.compress(A, 9).
 .[ <str> <str> <int>      Pad A on the right with a prefix of repeated copies of B to a length of the nearest multiple of C.
@@ -371,6 +373,7 @@ z                         Variable. Autoinitialized to input().
 .t <num> 13               arctanh(A)
 .u <l:NY> <seq/num> <any> Cumulative reduce. Reduce B from left to right, with function A(_, _) and C as starting value, and return all intermediate values, starting with C. A takes current value, next element of B as inputs.
 .u <l:NY> <any> <none>    Cumulative fixed-point. Apply A(_, _) until a result that has occurred before is found. Starting value B. Return all intermediate results, starting with B. A takes current value, iteration number as inputs.
+.v <str>                  Evaluates a pyth expression. Everything after the first expression will be ignored.
 .w <dict> <"http"-str>    If B starts with "http", perform a request to the URL B, with contents consisting of A's  elements joined on '=', joined on '&'. Return as a list of lines.
 .w <any> <"http"-str>     If B starts with "http", perform a request to the URL B, with contents consisting of A. Return as a list of lines.
 .w <lst> <str/none>       Write an image. Requires PIL. For color images, A must be a matrix of 3+ element lists. For grayscale, A must be a matrix of integers. File name is B, unless B has no '.', in which case it is B + ".png". If B does not exist, defaults to 'o.png'.
