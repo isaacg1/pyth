@@ -85,7 +85,8 @@ $                         Begin and end Python literal. Counts as one token. Dis
 :  <str> <str> 2          In A, replace each match of regex B with its first capturing group.
 :  <str> <str> 3          Split A on matches of regex B. Retain capturing groups.
 :  <str> <str> 4          Return list of match and all capturing groups for each match of B in A.
-;                         End all containing functions, statements, etc.
+;                         End all containing functions, statements, etc., if not inside a lambda function.
+;                         Global value of innermost lambda's first variable.
 <  <num> <num>            Less than, numeric.
 <  <str> <str>            Less than, lexicographic.
 <  <lst> <lst>            Less than, lexicographic.
@@ -299,7 +300,7 @@ z                         Variable. Autoinitialized to input().
 .T <col>                  Justified transpose. List of 0th elements of A's elments, list of 1st elments, ... Ignoring absences.
 .U <l:bZ> <seq>           Reduce with no starting value. Reduce from left to right, with initial value B[0]. A(_, _) takes inputs current value, next element of B. b, Z -> k, Y ->.
 .V <num>                  Infinite for loop. b iterates over an infinite incrementing sequence starting at the input number.
-.V <str>                  Infinite for loop. b iterates over an infinite lexicographically sequence of upper and lowercase strings starting at the input string. 
+.V <str>                  Infinite for loop. b iterates over an infinite lexicographically sequence of upper and lowercase strings starting at the input string.
 .W <l:H> <l:Z> <any>      Functional while. While A(value) is truthy, value = B(value). value starts as C. return ending value.
 .Z <str>                  Attempt to decompress A using zlip.decompress. If that fails, compress it with zlib.compress(A, 9).
 .[ <str> <str> <int>      Pad A on the right with a prefix of repeated copies of B to a length of the nearest multiple of C.
