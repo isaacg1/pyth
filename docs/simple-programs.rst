@@ -36,7 +36,7 @@ Pyth has many of the control flow options available by Python, including ``for``
 	==================================================
 	FNrZTN
 	==================================================
-	for N in Prange(1,T):
+	for N in Prange(0,T):
 	 Pprint("\n",N)
 	==================================================
 	0
