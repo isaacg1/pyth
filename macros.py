@@ -1096,7 +1096,7 @@ def hash_repr(a):
 
 def hex_multitype(a, func):
     if isinstance(a, str):
-        return "0x" + binascii.hexlify(a.encode("utf-8")).decode("utf-8")
+        return "0x" + (binascii.hexlify(a.encode("utf-8")).decode("utf-8") or "0")
 
     if isinstance(a, int):
         return hex(a)
