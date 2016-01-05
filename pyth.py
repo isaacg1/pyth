@@ -333,33 +333,31 @@ def statement_parse(active_char, rest_code, spacing):
         infixes, arity, num_spaces = c_to_s[active_char]
         addl_spaces = ' ' * num_spaces
     # Handle newlines in infix segments
-    infixes = [infix.replace("\n", spacing[:-1]) for infix in infixes]
+    infixes = infixes.replace("\n", spacing[:-1])
     args_list = []
     parsed = 'Not empty'
     while len(args_list) != arity and parsed != '':
         parsed, rest_code = parse(rest_code)
         args_list.append(parsed)
-    part_py_code = infixes[0]
-    for i in range(len(args_list)):
-        part_py_code += args_list[i]
-        part_py_code += infixes[i + 1]
     # Handle the body - ends object as well.
-    args_list = []
+    body_lines = []
     parsed = 'Not empty'
     while parsed != '':
         to_print = add_print(rest_code)
         parsed, rest_code = parse(rest_code, spacing + addl_spaces + ' ')
         if to_print:
-            parsed = 'imp_print(' + parsed + ')'
-        args_list.append(parsed)
+            parsed = 'imp_print(%s)' % parsed
+        body_lines.append(parsed)
     # Trim the '' away and combine.
-    if args_list[-1] == '':
-        args_list = args_list[:-1]
-    if args_list == []:
-        args_list = ['pass']
+    if body_lines[-1] == '':
+        body_lines = body_lines[:-1]
+    if body_lines == []:
+        body_lines = ['pass']
     # Combine pieces - intro, statement, conclusion.
-    all_pieces = [part_py_code] + args_list + infixes[arity + 1:]
-    return (spacing + addl_spaces).join(all_pieces), rest_code
+    total_spacing = spacing + addl_spaces
+    body = total_spacing + total_spacing.join(body_lines) + total_spacing
+    args_list.append(body)
+    return infixes.format(*args_list), rest_code
 
 
 def replace_parse(active_char, rest_code, spacing):
