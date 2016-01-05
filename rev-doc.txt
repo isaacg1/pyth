@@ -164,9 +164,9 @@ X  <str> <int> <any>      String assignment. Replace in A at index B with str(C)
 X  <seq> <int> <any>      Sequence assignment. Replace in A at index B with C. Modular indexing.
 X  <seq> <seq> <seq>      Translate A from B to C. Modular indexing.
 X  <seq> <seq> <none>     Translate A from B to B[::-1].
-X  <int> <list> <any>     In-place +=. B[A] += C. Modular indexing.
-X  <list> <dict> <any>    B[tuple(A)] += C, or B[tuple(A)] = C if tuple(A) not in B.
-X  <any> <dict> <any>     B[A] += C, or B[A] = C if A not in B.
+X  <int> <list> <any>     In-place +=. B[A] += C. Modular indexing. Uses Pyth +.
+X  <list> <dict> <any>    B[tuple(A)] += C, or B[tuple(A)] = C if tuple(A) not in B. Uses Pyth +.
+X  <any> <dict> <any>     B[A] += C, or B[A] = C if A not in B. Uses Pyth +.
 X  <int> <str> <any>      Insert into string. Insert str(C) into B at A.
 Y                         Variable. Initialized to [], empty list.
 Z                         Variable. Initialized to 0. (zero)

@@ -1019,15 +1019,15 @@ def assign_at(a, b, c=None):
         else:
             return list(translation)
     # += in a list, X<int><list><any>
-    if isinstance(a, int) and isinstance(b, list):
-        b[a % len(b)] += c
+    if isinstance(a, int) and is_lst(b):
+        b[a % len(b)] = plus(b[a % len(b)], c)
         return b
     # += in a dict, X<any><dict><any>
     if isinstance(b, dict):
         if isinstance(a, list):
             a = tuple(a)
         if a in b:
-            b[a] += c
+            b[a] = plus(b[a], c)
         else:
             b[a] = c
         return b
