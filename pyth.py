@@ -72,7 +72,7 @@ def parse(code, spacing="\n "):
         return str_parse(active_char, rest_code)
     if active_char == '."':
         string, rest_code = str_parse('"', rest_code)
-        return c_to_f['."'][0] + '(' + string + ')', rest_code
+        return "%s(%s)" % (c_to_f['."'][0], string), rest_code
     # Python code literals
     if active_char == '$':
         if safe_mode:
@@ -82,10 +82,11 @@ def parse(code, spacing="\n "):
     # End paren is magic (early-end current function/statement).
     if active_char == ')':
         return '', rest_code
-    # Semicolon is more magic (early-end all active functions/statements).
     if active_char == ';':
+        # Inside a lambda, return the innermost lambdas leading variable.
         if lambda_stack:
             return 'env_lookup({!r})'.format(lambda_stack[-1]), rest_code
+        # Semicolon is more magic (early-end all active functions/statements).
         if rest_code == '':
             return '', ''
         else:
@@ -117,7 +118,8 @@ def parse(code, spacing="\n "):
                                  reduce_arg2 +
                                  remainder)
                 else:
-                    raise PythParseError(active_char + sugar_char, remainder)
+                    # Just splat it - it's a common use case.
+                    return parse(active_char + ".*" + remainder)
 
             # <function>M: Map operator
             if sugar_char == 'M':
@@ -135,20 +137,14 @@ def parse(code, spacing="\n "):
                     return parse('m' + active_char + m_arg + remainder)
                 if arity == 1:
                     return parse('m' + active_char + m_arg + remainder)
-                elif arity == 2:
-                    return parse('m' + active_char + 'F' + m_arg + remainder)
                 else:
-                    return parse('m' + active_char + '.*' + m_arg + remainder)
-
+                    return parse('m%sF%s%s' % (active_char, m_arg, remainder))
             # <binary function>L<any><seq>: Left Map operator
             # >LG[1 2 3 4 -> 'm>Gd[1 2 3 4'.
             if sugar_char == 'L':
                 if arity >= 2:
                     pyth_seg = ''
                     for _ in range(arity - 1):
-                        # parsed, rest = state_maintaining_parse(remainder)
-                        # pyth_seg += remainder[:len(remainder) - len(rest)]
-                        # remainder = rest
                         seg, remainder = next_seg(remainder)
                         pyth_seg += seg
                     m_arg = lambda_vars['m'][0][0]
@@ -157,7 +153,7 @@ def parse(code, spacing="\n "):
             # <function>V<seq><seq> Vectorize operator.
             # Equivalent to <func>MC,<seq><seq>.
             if sugar_char == 'V':
-                return parse(active_char + "MC," + remainder)
+                return parse("%sMC,%s" % (active_char, remainder))
 
             # <function>W<condition><arg><rgs> Condition application operator.
             # Equivalent to ?<condition><function><arg><args><arg>
@@ -165,8 +161,7 @@ def parse(code, spacing="\n "):
                 condition, rest_code1 = parse(remainder)
                 arg1, rest_code2 = state_maintaining_parse(rest_code1)
                 func, rest_code2b = parse(active_char + rest_code1)
-                return ('(' + func + ' if ' + condition
-                        + ' else ' + arg1 + ')', rest_code2b)
+                return ('(%s if %s else %s)' % (func, condition, arg1), rest_code2b)
 
             # <function>B<arg><args> -> ,<arg><function><arg><args>
             # <unary function>I<any> Invariant operator.
@@ -283,11 +278,9 @@ def lambda_function_parse(active_char, rest_code):
     while len(args_list) != arity and parsed != '':
         parsed, rest_code = parse(rest_code)
         args_list.append(parsed)
-    py_code = func_name + '(lambda ' + var + ':'
     if len(args_list) > 0 and args_list[-1] == '':
         args_list = args_list[:-1]
-    py_code += ','.join(args_list)
-    py_code += ')'
+    py_code = '%s(lambda %s:%s)' % (func_name, var, ','.join(args_list))
     return py_code, rest_code
 
 
@@ -301,11 +294,9 @@ def function_parse(active_char, rest_code):
         parsed, rest_code = parse(rest_code)
         args_list.append(parsed)
     # Build the output string.
-    py_code = func_name + '('
     if len(args_list) > 0 and args_list[-1] == '':
         args_list = args_list[:-1]
-    py_code += ','.join(args_list)
-    py_code += ')'
+    py_code = '%s(%s)' % (func_name, ','.join(args_list))
     return py_code, rest_code
 
 
@@ -317,6 +308,7 @@ def infix_parse(active_char, rest_code):
         c_to_i[active_char] = next_c_to_i[active_char]
     args_list = []
     parsed = 'Not empty'
+    # Lambda infix(es)
     if active_char == '.W':
         lambda_stack.extend(['Z', 'H'])
     while len(args_list) != arity and parsed != '':
