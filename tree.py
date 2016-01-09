@@ -1,6 +1,5 @@
 import extra_parse
 import data
-from graphviz import Digraph
 import sys
 
 # Call with Pyth program on STDIN.
@@ -155,6 +154,7 @@ def text_tree(trees):
 code = input()
 trees = assemble_trees(code)
 if len(sys.argv) > 1:
+    from graphviz import Digraph
     disp_tree(trees)
 else:
     print(text_tree(trees))
