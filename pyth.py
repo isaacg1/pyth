@@ -355,7 +355,7 @@ def statement_parse(active_char, rest_code, spacing):
         body_lines = ['pass']
     # Combine pieces - intro, statement, conclusion.
     total_spacing = spacing + addl_spaces
-    body = total_spacing + total_spacing.join(body_lines) + total_spacing
+    body = total_spacing + total_spacing.join(body_lines)
     args_list.append(body)
     return infixes.format(*args_list), rest_code
 
