@@ -1,6 +1,7 @@
 import extra_parse
 import data
 from graphviz import Digraph
+import sys
 
 # Call with Pyth program on STDIN.
 
@@ -120,7 +121,7 @@ def assemble_trees(code):
         trees.append(tree)
     return trees
 
-def disp_tree(tree):
+def disp_tree(trees):
     graph = Digraph()
     count = 0
     def add(tree, count):
@@ -138,6 +139,22 @@ def disp_tree(tree):
         count = add(tree, count) + 1
     graph.render('tree-rep.gv', view=True)
 
+def text_tree(trees):
+    def single_tree(tree):
+        head, *children = tree
+        if not children:
+            return head
+        start = head + ' '
+        rest = (single_tree(children[0]) if len(children) == 1
+                else ''.join(
+                    '\n' + single_tree(child)
+                    for child in children))
+        return start + rest.replace('\n', '\n' + ' ' * len(start))
+    return '\n'.join(single_tree(tree) for tree in trees)
+
 code = input()
 trees = assemble_trees(code)
-disp_tree(trees)
+if len(sys.argv) > 1:
+    disp_tree(trees)
+else:
+    print(text_tree(trees))
