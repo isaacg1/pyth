@@ -495,6 +495,7 @@ test_cases = [
     ('xG\\1', '-1'),
     ('x0[1 10 0 2 0 4 _1 0', '[2, 4, 7]'),
     ('x"abc"c"nas abc asdf sad ab asdf abcd abc', '[1, 7]'),
+    ('x"b1j2iod2de"2', '3'),
     # y
     ('y5', '10'),
     ('yk', "['']"),

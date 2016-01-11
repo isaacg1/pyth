@@ -246,6 +246,7 @@ x  <int> <int>            Bitwise XOR. A ^ B in Python.
 x  <lst> <any>            First occurrence. Return the index of the first element of A equal to B, or -1 if none exists.
 x  <str> <str>            First occurrence. Return the index of the first substring of A equal to B, or -1 if none exists.
 x  <non-lst> <lst>        All occurrences. Returns a list of the indexes of elements of B that equal A.
+x  <str> <non-lst>        First occurence. Return the index of the first substring of A equal to str(B), or -1 if none exists.
 y  <seq>                  Powerset. All subsets of A, ordered by length.
 y  <num>                  A * 2.
 z                         Variable. Autoinitialized to input().
@@ -254,6 +255,8 @@ z                         Variable. Autoinitialized to input().
 }  <any> <lst>            In. Returns a boolean for whether A is an element of B. in in Python.
 }  <str> <str>            In. Returns a boolean for whether A is a substring of B. in in Python.
 }  <int> <int>            Inclusive range. [A, A+1, ... B]
+~  <var> <any>            Assign A value B. Return original value of A.
+~  <func> <var> <...>     Assign B value A(B,C,..). The Python Y += 3 would be =+Y3. Return original value of B.
 .! <int>                  Factorial.
 .! <num>                  Gamma function of A + 1. This is continuous with the factorial function.
 ."                        ." starts a packed string, terminated by " or end of file. Format is: first character is the lowest output character by code point, second is the highest. The rest of the string is the output string encoded as offsets from the lowest output character, treat as an integer in the minimal base, converted to base 256, as bytes in the rest of the string. To convert a desired output string to the format, use the following program: +++\.N++hSzeSzCi-RChSzCMz-hCeSzChSzN Null bytes, backslashes and double quotes will need to be escaped.

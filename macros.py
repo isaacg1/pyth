@@ -1052,6 +1052,8 @@ def index(a, b):
             return -1
     if is_lst(b):
         return [index for index, elem in enumerate(b) if elem == a]
+    if isinstance(a, str):
+        return index(a, str(b))
     raise BadTypeCombinationError("x", a, b)
 environment['index'] = index
 
