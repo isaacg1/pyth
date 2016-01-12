@@ -283,6 +283,7 @@ z                         Variable. Autoinitialized to input().
 .D <seq> <col>            Returns A with elements at indexes in B removed.
 .D <seq> <num>            Returns A with the element at index B removed.
 .E <col>                  Tests whether any elements of A are truthy. any in Python.
+.E <num>                  Rounds up. int(math.ceil(A)) in Python.
 .F <str> <seq>            String format. A.format(*B) in Python.
 .F <str> <str>            String format. A.format(B) in Python.
 .H <int>                  Converts A to a hexadecimal string.

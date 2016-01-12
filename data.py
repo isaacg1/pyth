@@ -119,7 +119,7 @@ c_to_f = {
     '.C': ('combinations_with_replacement', 2),
     '.d': ('dict_or_date', 1),
     '.D': ('divmod_or_delete', 2),
-    '.E': ('any', 1),
+    '.E': ('Pany', 1),
     '.e': ('Penumerate', 2),
     '.f': ('first_n', 3),
     '.F': ('Pformat', 2),

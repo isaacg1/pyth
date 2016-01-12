@@ -1238,6 +1238,16 @@ def Penumerate(a, b):
 environment['Penumerate'] = Penumerate
 
 
+# .E. col/num
+def Pany(a):
+    if is_col(a):
+        return any(a)
+    if is_num(a):
+        return int(math.ceil(a))
+    raise BadTypeCombinationError(".E", a)
+environment['Pany'] = Pany
+
+
 # .f. lambda, int, num or str.
 def first_n(a, b, c=1):
     if not isinstance(b, int):
