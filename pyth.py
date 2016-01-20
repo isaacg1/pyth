@@ -21,9 +21,6 @@ from data import *
 import copy as c
 import sys
 import io
-from ast import literal_eval
-
-environment['literal_eval'] = literal_eval
 
 sys.setrecursionlimit(100000)
 
@@ -621,7 +618,7 @@ See opening comment in pyth.py for more info.""")
         multiline_on = flag_on('m', '--multiline')
         memo_off = flag_on('M', '--no-memoization')
         if safe_mode:
-            c_to_f['v'] = ('literal_eval', 1)
+            c_to_f['v'] = ('Pliteral_eval', 1)
             del c_to_f['.w']
         if line_on:
             line_num = int(sys.argv[-2])

@@ -861,7 +861,7 @@ def Prange(a, b):
             if b == 6:
                 return a.strip()
             if b == 7:
-                return [literal_eval(part) for part in a.split()]
+                return [Pliteral_eval(part) for part in a.split()]
             if b == 8:
                 return run_length_encode(a)
             if b == 9:
@@ -987,6 +987,32 @@ def urange(a):
         return list(range(len(a)))
     raise BadTypeCombinationError("U", a)
 environment['urange'] = urange
+
+
+# v. str.
+def preprocess_eval(a):
+    if isinstance(a, str):
+        if a and a[0] == '0':
+            to_eval = a.lstrip('0')
+            if not to_eval or not to_eval[0].isdecimal():
+                to_eval = '0' + to_eval
+            return to_eval
+        else:
+            return a
+    raise BadTypeCombinationError('v', a)
+
+def Pliteral_eval(a):
+    if isinstance(a, str):
+        return literal_eval(preprocess_eval(a))
+    raise BadTypeCombinationError('v', a)
+environment['Pliteral_eval'] = Pliteral_eval
+
+
+def Punsafe_eval(a):
+    if isinstance(a, str):
+        return eval(preprocess_eval(a))
+    raise BadTypeCombinationError('v', a)
+environment['Punsafe_eval'] = Punsafe_eval
 
 
 # X.
