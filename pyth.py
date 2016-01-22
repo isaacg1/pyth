@@ -103,6 +103,13 @@ def parse(code, spacing="\n "):
         else:
             arity = c_to_i[active_char][1]
 
+        # Sugar Chaining
+        sugar_chars = 'FMLBRID#VW'
+        sugar_active_char = active_char
+        while sugar_char in sugar_chars and remainder and remainder[0] in sugar_chars:
+            sugar_active_char += sugar_char
+            sugar_char = remainder[0]
+            remainder = remainder[1:]
         if arity > 0:
             # <binary function/infix>F: Fold operator
             if sugar_char == 'F':
@@ -110,32 +117,21 @@ def parse(code, spacing="\n "):
                     reduce_arg1 = lambda_vars['.U'][0][0]
                     reduce_arg2 = lambda_vars['.U'][0][-1]
                     return parse(".U" +
-                                 active_char +
+                                 sugar_active_char +
                                  reduce_arg1 +
                                  reduce_arg2 +
                                  remainder)
                 else:
                     # Just splat it - it's a common use case.
-                    return parse(active_char + ".*" + remainder)
+                    return parse(sugar_active_char + ".*" + remainder)
 
             # <function>M: Map operator
             if sugar_char == 'M':
                 m_arg = lambda_vars['m'][0][0]
-                if remainder and remainder[0] in 'LMR':
-                    while remainder and remainder[0] in 'LMR':
-                        if remainder[0] == 'M':
-                            active_char += remainder[0]
-                            remainder = remainder[1:]
-                        if remainder and remainder[0] in 'LR':
-                            active_char += remainder[0]
-                            remainder = remainder[1:]
-                            seg, remainder = next_seg(remainder)
-                            active_char += seg
-                    return parse('m' + active_char + m_arg + remainder)
                 if arity == 1:
-                    return parse('m' + active_char + m_arg + remainder)
+                    return parse('m' + sugar_active_char + m_arg + remainder)
                 else:
-                    return parse('m%sF%s%s' % (active_char, m_arg, remainder))
+                    return parse('m%sF%s%s' % (sugar_active_char, m_arg, remainder))
             # <binary function>L<any><seq>: Left Map operator
             # >LG[1 2 3 4 -> 'm>Gd[1 2 3 4'.
             if sugar_char == 'L':
@@ -145,19 +141,19 @@ def parse(code, spacing="\n "):
                         seg, remainder = next_seg(remainder)
                         pyth_seg += seg
                     m_arg = lambda_vars['m'][0][0]
-                    return parse('m' + active_char + pyth_seg + m_arg + remainder)
+                    return parse('m' + sugar_active_char + pyth_seg + m_arg + remainder)
 
             # <function>V<seq><seq> Vectorize operator.
             # Equivalent to <func>MC,<seq><seq>.
             if sugar_char == 'V':
-                return parse("%sMC,%s" % (active_char, remainder))
+                return parse("%sMC,%s" % (sugar_active_char, remainder))
 
             # <function>W<condition><arg><rgs> Condition application operator.
             # Equivalent to ?<condition><function><arg><args><arg>
             if sugar_char == 'W':
                 condition, rest_code1 = parse(remainder)
                 arg1, rest_code2 = state_maintaining_parse(rest_code1)
-                func, rest_code2b = parse(active_char + rest_code1)
+                func, rest_code2b = parse(sugar_active_char + rest_code1)
                 return ('(%s if %s else %s)' % (func, condition, arg1), rest_code2b)
 
             # <function>B<arg><args> -> ,<arg><function><arg><args>
@@ -171,7 +167,7 @@ def parse(code, spacing="\n "):
                 func_char = func_dict[sugar_char]
                 parsed, rest = state_maintaining_parse(remainder)
                 pyth_seg = remainder[:len(remainder) - len(rest)]
-                return parse(func_char + pyth_seg + active_char + remainder)
+                return parse(func_char + pyth_seg + sugar_active_char + remainder)
 
             # Right operators
             # R is Map operator
@@ -185,7 +181,7 @@ def parse(code, spacing="\n "):
                 }
                 func_char = func_dict[sugar_char]
                 lambda_arg = lambda_vars[func_char][0][0]
-                return parse(func_char + active_char + lambda_arg + remainder)
+                return parse(func_char + sugar_active_char + lambda_arg + remainder)
 
     # =<function/infix>, ~<function/infix>: augmented assignment.
     if active_char in ('=', '~'):
