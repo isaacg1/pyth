@@ -6,18 +6,18 @@ Collatz Sequence
 
 Another relatively simple programming problem for us to golf down is to generate Collatz sequences. The Collatz sequence consists of repeatedly applying the following procedure: If the current number is even, divide it by two. If the current number is odd, triple it and add one. Repeat until 1 is reached. Suppose we would like to print out the entire sequence, from the input to 1. Here is a very straightforward implementation, which illustrates many of Pyth's statements::
 
-    input; 3
+    input: 3
 
-    ==================== 22 chars ====================
-    WtQI%Q2=Qh*Q3)E=Q/Q2)Q
+    ==================== 23 chars ====================
+    WtQI%Q2=Qh*Q3).?=Q/Q2)Q
     ==================================================
-    Q=copy(literal_eval(input()))
+    assign('Q',Punsafe_eval(input()))
     while tail(Q):
      if mod(Q,2):
-      Q=copy(head(times(Q,3)))
+      assign('Q',head(times(Q,3)))
      else:
-      Q=copy(div(Q,2))
-     Pprint("\n",Q)
+      assign('Q',div(Q,2))
+     imp_print(Q)
     ==================================================
     10
     5

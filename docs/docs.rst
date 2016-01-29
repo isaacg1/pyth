@@ -4,20 +4,7 @@
 5.1. Documentation
 ==================
 
-Now you've got a basic grasp of Pyth. Going forward from here, the best way to learn more about the language is via the documentation. Pyth's documentation is located `on Github <https://raw.githubusercontent.com/isaacg1/pyth/master/doc.txt>`_, and is updated continuously as the language evolves. A representative line from the documentation looks like this::
-
-    @  2 N lookup            Lookup from str, list or dict. Modulo wrapping on list, str.
-                             On seq, seq, intersection.
-                             Specifically, filter second arg on presence in first arg.
-                             On num, num, bth root of a.
-
-Let's break down what this says piece by piece.
-
-* The first field, which is ``@`` here, is the name of the function in question.
-* The second field, ``2`` in this case, is the arity of the function. So we have the function ``@``, which takes 2 arguments.
-* The next field says whether printing is suppressed for this function. ``N`` means that printing is normal. An example of a token which suppresses printing is ``F``, the for loop. It wouldn't make sense to try to print a for loop.
-* Next, we have a (hopefully) more memorable name for the function. This usually describes the most common usage of the function. In this case, the ``@`` function is most associated with the lookup functionality, also known as indexing.
-* Finally, we have the full description of the function.
+Now you've got a basic grasp of Pyth. Going forward from here, the best way to learn more about the language is via the documentation. Pyth's documentation is located `on Github <https://raw.githubusercontent.com/isaacg1/pyth/master/rev-doc.txt>`_, and is updated continuously as the language evolves.
 
 While the documentation is a good first step towards understanding how a function works, the only way to get a full understanding is by using it. Write programs using that function, and it'll become clear.
 
