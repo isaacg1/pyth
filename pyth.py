@@ -228,13 +228,7 @@ def augment_assignment_test(rest_code):
     else:
         func_char = rest_code[0]
         following_code = rest_code[1:]
-    if (func_char in c_to_f and c_to_f[func_char][1] > 0) or\
-       (func_char in c_to_i and c_to_i[func_char][1] > 0
-            and not func_char == ','):
-        var_char = following_code[0]
-        if (var_char in variables or var_char in next_c_to_i):
-            return True
-    return False
+    return func_char not in variables and func_char not in next_c_to_i and func_char != ','
 
 
 def augment_assignment_parse(active_char, rest_code):
@@ -244,12 +238,12 @@ def augment_assignment_parse(active_char, rest_code):
     else:
         func_char = rest_code[0]
         following_code = rest_code[1:]
-    var_char = following_code[0]
+    following_vars = [char for char in following_code if char in variables or char in next_c_to_i]
+    assert following_vars, 'Assignment needs a variable'
+    var_char = following_vars[0]
     return parse(active_char +
                  var_char +
-                 func_char +
-                 var_char +
-                 following_code[1:])
+                 rest_code)
 
 
 def lambda_function_parse(active_char, rest_code):
