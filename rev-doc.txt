@@ -95,8 +95,8 @@ $                         Begin and end Python literal. Counts as one token. Dis
 <  <cmp> <num>            Less than, absolute value/magnitude.
 <  <num> <cmp>            Less than, absolute value/magnitude.
 <  <set> <col>            Proper subset.
-=  <var> <any>            Assign A value B. deepcopy value before assignment.
-=  <func> <var> <...>     Assign B value A(B,C,..). The Python Y += 3 would be =+Y3.
+=  <var> <any>            Assign A value B. deepcopy value before assignment. Return assigned value.
+=  <func> <...>           Assign x value A(B,..), where x is the first variable after the =. The Python Y += 3 would be =+Y3. Return assigned value.
 >  <num> <num>            Greater than, numeric.
 >  <str> <str>            Greater than, lexicographic.
 >  <lst> <lst>            Greater than, lexicographic.
@@ -256,7 +256,7 @@ z                         Variable. Autoinitialized to input().
 }  <str> <str>            In. Returns a boolean for whether A is a substring of B. in in Python.
 }  <int> <int>            Inclusive range. [A, A+1, ... B]
 ~  <var> <any>            Assign A value B. Return original value of A.
-~  <func> <var> <...>     Assign B value A(B,C,..). The Python Y += 3 would be =+Y3. Return original value of B.
+~  <func> <var> <...>     Assign x value A(B,..), where x is the first variable after the =. The Python Y += 3 would be =+Y3. Return original value of B.
 .! <int>                  Factorial.
 .! <num>                  Gamma function of A + 1. This is continuous with the factorial function.
 ."                        ." starts a packed string, terminated by " or end of file. Format is: first character is the lowest output character by code point, second is the highest. The rest of the string is the output string encoded as offsets from the lowest output character, treat as an integer in the minimal base, converted to base 256, as bytes in the rest of the string. To convert a desired output string to the format, use the following program: +++\.N++hSzeSzCi-RChSzCMz-hCeSzChSzN Null bytes, backslashes and double quotes will need to be escaped.
