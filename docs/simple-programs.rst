@@ -151,7 +151,7 @@ Now, we have to have our variable that holds the answer. Pyth has an assignment 
 	==================================================
 	5
 
-But if you only need one variable, it's better to use ``K`` or ``J``  which don't need an equals sign to be assigned to::
+But if you only need one variable, it's better to use ``K`` or ``J``  which don't need an equals sign to be assigned to on their first use::
 
 	==================================================
 	K5K
