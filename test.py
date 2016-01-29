@@ -818,6 +818,15 @@ test_cases = [
     # .?
     ('IZ2).?3', '3'),
     ('V4N).?4', '0\n1\n2\n3\n4\n'),
+    # Docs
+    ('"Hello World!', 'Hello World!'),
+    ('FNrZTN', '0\n1\n2\n3\n4\n5\n6\n7\n8\n9'),
+    ('K1FNr1hQ=*KN;K', '120', '5'),
+    ('L*3by12', '36'),
+    ('L?b*bytb1yQ', '120', '5'),
+    ('u*GhHQ1', '120', '5'),
+    ('J1VQJKZ=ZJ=J+ZK', '1\n1\n2\n3\n5\n8\n13\n21\n34\n55', '10'),
+    ('A(Z1)VQHA(H+HG', '1\n1\n2\n3\n5\n8\n13\n21\n34\n55', '10'),
 ]
 
 
