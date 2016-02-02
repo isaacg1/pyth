@@ -124,7 +124,7 @@ Now we should be able to write an iterative factorial.
 3.1.3. The Iterative Factorial
 ------------------------------
 
-First, let's loop from one to the input. It should be easy, but we can't use ``V`` since we have to use range to strart from ``1``, not ``0``. Remember also to increment the input::
+First, let's loop from one to the input. It should be easy, but we can't use ``V`` since we want our range to start from ``1``, not ``0``. Remember also to increment the input::
 
 	input: 5
 	
