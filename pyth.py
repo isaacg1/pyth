@@ -140,10 +140,10 @@ def parse(code, spacing="\n "):
                     assert rest == '', "Sugar parse M 1 arg failed"
                     return full_map, post_map
                 else:
-                    map_targets, remainder = next_n_segs(arity, remainder)
-                    full_map, rest = parse('m%sF%s%s' % (sugar_active_char, m_arg, map_targets))
+                    map_target, post_map = next_seg(remainder)
+                    full_map, rest = parse('m%sF%s%s' % (sugar_active_char, m_arg, map_target))
                     assert rest == '', "Sugar parse M 2+ args failed"
-                    return full_map, remainder
+                    return full_map, post_map
 
             # <binary function>L<any><seq>: Left Map operator
             # >LG[1 2 3 4 -> 'm>Gd[1 2 3 4'.
