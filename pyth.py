@@ -27,6 +27,8 @@ sys.setrecursionlimit(100000)
 lambda_stack = []
 
 # Parse it!
+
+
 def general_parse(code):
     code = prepend_parse(code)
     # Parsing
@@ -116,37 +118,51 @@ def parse(code, spacing="\n "):
                 if arity == 2:
                     reduce_arg1 = lambda_vars['.U'][0][0]
                     reduce_arg2 = lambda_vars['.U'][0][-1]
-                    return parse(".U" +
-                                 sugar_active_char +
-                                 reduce_arg1 +
-                                 reduce_arg2 +
-                                 remainder)
+                    fold_list, post_fold = next_seg(remainder)
+                    full_fold, rest = parse(".U" + sugar_active_char +
+                                            reduce_arg1 + reduce_arg2 + fold_list)
+                    assert rest == '', "Sugar parse F fold failed"
+                    return full_fold, post_fold
                 else:
                     # Just splat it - it's a common use case.
-                    return parse(sugar_active_char + ".*" + remainder)
+                    splat_list, post_splat = next_seg(remainder)
+                    full_splat, rest = parse(
+                        sugar_active_char + '.*' + splat_list)
+                    assert rest == '', "Sugar parse F splat failed"
+                    return full_splat, post_splat
 
             # <function>M: Map operator
             if sugar_char == 'M':
                 m_arg = lambda_vars['m'][0][0]
                 if arity == 1:
-                    return parse('m' + sugar_active_char + m_arg + remainder)
+                    map_target, post_map = next_seg(remainder)
+                    full_map, rest = parse('m' + sugar_active_char + m_arg + map_target)
+                    assert rest == '', "Sugar parse M 1 arg failed"
+                    return full_map, post_map
                 else:
-                    return parse('m%sF%s%s' % (sugar_active_char, m_arg, remainder))
+                    map_targets, remainder = next_n_segs(arity, remainder)
+                    full_map, rest = parse('m%sF%s%s' % (sugar_active_char, m_arg, map_targets))
+                    assert rest == '', "Sugar parse M 2+ args failed"
+                    return full_map, remainder
+
             # <binary function>L<any><seq>: Left Map operator
             # >LG[1 2 3 4 -> 'm>Gd[1 2 3 4'.
             if sugar_char == 'L':
                 if arity >= 2:
-                    pyth_seg = ''
-                    for _ in range(arity - 1):
-                        seg, remainder = next_seg(remainder)
-                        pyth_seg += seg
                     m_arg = lambda_vars['m'][0][0]
-                    return parse('m' + sugar_active_char + pyth_seg + m_arg + remainder)
+                    lmap_lambda_args, remainder = next_n_segs(arity - 1, remainder)
+                    lmap_target, post_lmap = next_seg(remainder)
+                    full_lmap, rest = parse('m' + sugar_active_char + lmap_lambda_args + m_arg + lmap_target)
+                    assert rest == '', "Sugar parse L failed"
+                    return full_lmap, post_lmap
 
             # <function>V<seq><seq> Vectorize operator.
             # Equivalent to <func>MC,<seq><seq>.
             if sugar_char == 'V':
-                return parse("%sMC,%s" % (sugar_active_char, remainder))
+                vmap_target, post_vmap = next_n_segs(2, remainder)
+                full_vmap, rest = parse(sugar_active_char + 'MC,' + vmap_target)
+                assert rest == '', "Sugar parse V failed"
+                return full_vmap, post_vmap
 
             # <function>W<condition><arg><rgs> Condition application operator.
             # Equivalent to ?<condition><function><arg><args><arg>
@@ -160,14 +176,14 @@ def parse(code, spacing="\n "):
             # <unary function>I<any> Invariant operator.
             # Equivalent to q<func><any><any>
             if sugar_char in 'BI':
-                func_dict = {
-                    'B': ',',
-                    'I': 'q',
+                dup_dict = {
+                    'B': '[{},{}]',
+                    'I': '{}=={}',
                 }
-                func_char = func_dict[sugar_char]
-                parsed, rest = state_maintaining_parse(remainder)
-                pyth_seg = remainder[:len(remainder) - len(rest)]
-                return parse(func_char + pyth_seg + sugar_active_char + remainder)
+                dup_format = dup_dict[sugar_char]
+                dup_parsed, _ = parse(remainder)
+                non_dup_parsed, post_dup = parse(sugar_active_char + remainder)
+                return dup_format.format(dup_parsed, non_dup_parsed), post_dup
 
             # Right operators
             # R is Map operator
@@ -181,7 +197,10 @@ def parse(code, spacing="\n "):
                 }
                 func_char = func_dict[sugar_char]
                 lambda_arg = lambda_vars[func_char][0][0]
-                return parse(func_char + sugar_active_char + lambda_arg + remainder)
+                rop_args, post_rop = next_n_segs(arity, remainder)
+                full_rop, rest = parse(func_char + sugar_active_char + lambda_arg + rop_args)
+                assert rest == '', 'Sugar parse %s failed' % sugar_char
+                return full_rop, post_rop
 
     # =<function/infix>, ~<function/infix>: augmented assignment.
     if active_char in ('=', '~'):
@@ -211,6 +230,14 @@ def next_seg(code):
     return pyth_seg, rest
 
 
+def next_n_segs(n, code):
+    remainder = code
+    segs = ''
+    for _ in range(n):
+        seg, remainder = next_seg(remainder)
+        segs += seg
+    return segs, remainder
+
 def state_maintaining_parse(code):
     global c_to_i
     saved_c_to_i = c.deepcopy(c_to_i)
@@ -238,7 +265,8 @@ def augment_assignment_parse(active_char, rest_code):
     else:
         func_char = rest_code[0]
         following_code = rest_code[1:]
-    following_vars = [char for char in following_code if char in variables or char in next_c_to_i]
+    following_vars = [
+        char for char in following_code if char in variables or char in next_c_to_i]
     assert following_vars, 'Assignment needs a variable'
     var_char = following_vars[0]
     return parse(active_char +
