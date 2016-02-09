@@ -223,7 +223,7 @@ One final change we can make to shorten the program is to use Pyth's augmented a
     ==================================================
     120
 
-3.1.4. User Definied Functions in Pyth
+3.1.4. User Defined Functions in Pyth
 ----------------------
 The most general way of defining functions in Pyth is with the ``D`` keyword. ``D`` works similarly to ``def`` in Python. To define a triple function called ``h`` that takes the input variable ``Z``, you could write the following::
 
