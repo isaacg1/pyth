@@ -121,7 +121,7 @@ C  <col>                  Matrix transpose, truncating to the length of the shor
 D  <func n> <n:var> <blk> Define a function. Same as def A(B...) in Python.
 D  <pfn> <n-1:any> <col>  Sort operator. Sort C with key A(_, B ...). Uses o underneath, B may refer to o's lambda var.
 E                         Evaluate input. Same as ast.literal_eval(input()) in Python.
-F  <pf2> <seq>            Fold A over B, with first element as initial value. Same as .U <A> bz <B>
+F  <pf2> <seq>            Fold A over B, with first element as initial value. Same as .U <A> bZ <B>
 F  <pf3+> <seq>           Apply A to B, with splatting. A(*B) in Python.
 F  <var> <num> <blk>      For A in range(int(B)): C
 F  <var> <any> <blk>      For A in B: C
