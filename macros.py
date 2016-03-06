@@ -753,8 +753,8 @@ environment['N'] = '"'
 
 
 # n. All.
-def ne(a, b):
-    return a != b
+def ne(a, b=None):
+    return not equal(a, b)
 environment['ne'] = ne
 
 
@@ -834,7 +834,12 @@ environment['Pprint'] = Pprint
 
 
 # q. All.
-def equal(a, b):
+def equal(a, b=None):
+    if b is None:
+        if is_seq(a):
+            if not a:
+                return True
+            return all(a[0] == a_elem for a_elem in a)
     return a == b
 environment['equal'] = equal
 
