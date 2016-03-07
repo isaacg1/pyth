@@ -381,8 +381,9 @@ environment['uniquify'] = uniquify
 # }. in
 def Pin(a, b):
     if isinstance(a, int) and isinstance(b, int):
-        return list(range(a, b + 1))
-
+        if a < b:
+            return list(range(a, b + 1))
+        return list(range(b, a + 1))[::-1]
     return a in b
 environment['Pin'] = Pin
 
