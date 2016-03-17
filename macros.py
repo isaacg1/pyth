@@ -723,6 +723,9 @@ def from_base_ten(arb, base):
         if remainder < 0:
             work += 1
             remainder -= base
+        if work == -1 and base > 0:
+            work = 0
+            remainder -= base
         base_list.append(remainder)
     return base_list[::-1]
 
