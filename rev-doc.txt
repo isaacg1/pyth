@@ -322,7 +322,7 @@ z                         Variable. Autoinitialized to input().
 .a <lst of num>           L2 norm of A, treated as a vector.
 .a <lst of 2 lst of num>  L2 norm of vector difference of A[0] and A[1].
 .b <l:NY> <c/n> <c/n>     Map A over B and C in parallel.
-.b <l:NY> <seq> <none>    Same as above, but map over B[0] and B[1] instead.
+.b <l:NY> <seq> <none>    Same as above, but splat each element of B into N and Y instead.
 .c <int> <int>            nCr. Number of distinct B-element combinations of A distinct items.
 .c <col> <int>            All B-element combinations of A, not necessarily distinct.
 .d 0                      Current system time, in seconds since epoch. time.time() in Python.
