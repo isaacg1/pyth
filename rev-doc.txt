@@ -337,7 +337,7 @@ z                         Variable. Autoinitialized to input().
 .d 9                      The current weekday, zero indexed at Monday.
 .d <num>                  Sleep for A seconds.
 .d <col(2-element-lst)>   Dictionary constructor. dict in Python.
-.e <l:bk> <col>           Enumerated map. Map A over elements of B (as b) and their indexes (as k). b, k -> Y, Z ->.
+.e <l:bk> <col>           Enumerated map. Map A over elements of B (as b) and their indexes (as k). b, k -> Z, Y ->.
 .f <l:Z> <int> <num>      First B inputs to A with truthy results, starting at C and counting up by 1.
 .f <l:Z> <int> <str>      First B inputs to A with truthy results, starting at C and proceeding lexicographically throw upper and lowercase strings.
 .f <l:Z> <int> <none>     First B inputs to A with truthy results, of 1, 2, 3, ...
