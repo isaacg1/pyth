@@ -155,6 +155,8 @@ c_to_f = {
     '.[': ('pad', 3),
     }
 
+optional_final_arg = set([':', 'c', 'f', 'j', 'n', 'q', 'u', 'X', '.b', '.f', '.j', '.l', '.u', '.w', '.:', '.{', ']'])
+
 replacements = {
     '\\': [('"{0}"', 1),],
     'V': ['FN','FH','Fb',],
@@ -193,6 +195,6 @@ next_c_to_i = {
 
 # Prependers.
 prepend = {
-    'Q': "=Qvw",
+    'Q': "=QE",
     'z': "=zw",
     }

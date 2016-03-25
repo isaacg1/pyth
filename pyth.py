@@ -25,16 +25,16 @@ import io
 sys.setrecursionlimit(100000)
 
 lambda_stack = []
+preps_used = set()
 
 # Parse it!
 
 
 def general_parse(code):
-    code = prepend_parse(code)
     # Parsing
     args_list = []
     parsed = 'Not empty'
-    while parsed != '':
+    while code != '':
         to_print = add_print(code)
         parsed, code = parse(code)
         if to_print:
@@ -44,14 +44,16 @@ def general_parse(code):
             code = code[1:]
         args_list.append(parsed)
     # Build the output string.
-    py_code = '\n'.join(args_list[:-1])
+    args_list = add_preps(preps_used) + args_list
+    py_code = '\n'.join(args_list)
     return py_code
 
 
 def parse(code, spacing="\n "):
     # If we've reached the end of the string, finish up.
     if code == '':
-        return '', ''
+        preps_used.add('Q')
+        return 'Q', ''
     # Separate active character from the rest of the code.
     active_char = code[0]
     rest_code = code[1:]
@@ -87,11 +89,13 @@ def parse(code, spacing="\n "):
             return 'env_lookup({!r})'.format(lambda_stack[-1]), rest_code
         # Semicolon is more magic (early-end all active functions/statements).
         if rest_code == '':
-            return '', ''
+            return '', ';'
         else:
             return '', ';' + rest_code
     # Designated variables
     if active_char in variables:
+        if active_char in prepend:
+            preps_used.add(active_char)
         return active_char, rest_code
     # Replace replaements
     if active_char in replacements:
@@ -290,7 +294,10 @@ def lambda_function_parse(active_char, rest_code):
     # Rotate back.
     lambda_vars[active_char] = saved_lambda_vars
     lambda_stack.pop()
-    while len(args_list) != arity and parsed != '':
+    while (len(args_list) != arity and parsed != ''
+            and not (rest_code == ''
+                and active_char in optional_final_arg
+                and len(args_list) == arity - 1)):
         parsed, rest_code = parse(rest_code)
         args_list.append(parsed)
     if len(args_list) > 0 and args_list[-1] == '':
@@ -305,7 +312,11 @@ def function_parse(active_char, rest_code):
     # or received enough arguments
     args_list = []
     parsed = 'Not empty'
-    while len(args_list) != arity and parsed != '':
+    while (len(args_list) != arity and parsed != ''
+            and not (arity == float('inf') and rest_code == '')
+            and not (rest_code == ''
+                and active_char in optional_final_arg
+                and len(args_list) == arity - 1)):
         parsed, rest_code = parse(rest_code)
         args_list.append(parsed)
     # Build the output string.
@@ -327,6 +338,11 @@ def infix_parse(active_char, rest_code):
     if active_char == '.W':
         lambda_stack.extend(['Z', 'H'])
     while len(args_list) != arity and parsed != '':
+        if (rest_code == ''
+                and active_char in optional_final_arg
+                and len(args_list) == arity - 1):
+            args_list.append('')
+            break
         parsed, rest_code = parse(rest_code)
         args_list.append(parsed)
         if active_char == '.W' and len(args_list) <= 2:
@@ -357,14 +373,14 @@ def statement_parse(active_char, rest_code, spacing):
     # Handle the body - ends object as well.
     body_lines = []
     parsed = 'Not empty'
-    while parsed != '':
+    while parsed != '' and rest_code != '':
         to_print = add_print(rest_code)
         parsed, rest_code = parse(rest_code, spacing + addl_spaces + ' ')
         if to_print:
             parsed = 'imp_print(%s)' % parsed
         body_lines.append(parsed)
     # Trim the '' away and combine.
-    if body_lines[-1] == '':
+    if body_lines and body_lines[-1] == '':
         body_lines = body_lines[:-1]
     if body_lines == []:
         body_lines = ['pass']
@@ -399,30 +415,8 @@ def replace_parse(active_char, rest_code, spacing):
 
 
 # Prependers are magic. Automatically prepend to program if present.
-def prepend_parse(code):
-    def not_escaped(code_part):
-        code_part = list(code_part)
-        count = 0
-        if code_part and code_part[-1] == '.' and quot_marks % 2 == 0:
-            count = 1
-        while code_part and code_part.pop() == '\\':
-            count += 1
-        return count % 2 == 0
-
-    out_code = code
-
-    for prep_char in sorted(prepend):
-        quot_marks = 0
-        for index, char in enumerate(code):
-            if char == '"' and (not_escaped(code[:index]) or
-                                (index > 0 and code[index - 1] == '.')):
-                quot_marks += 1
-            elif char == prep_char and quot_marks % 2 == 0 and \
-                    not_escaped(code[:index]):
-                out_code = prepend[prep_char] + out_code
-                break
-
-    return out_code
+def add_preps(preps):
+    return [parse(prepend[var])[0] for var in sorted(preps)]
 
 
 # Prepend print to any line starting with a function, var or
@@ -558,6 +552,7 @@ def run_code(code, inp):
     global environment
     global c_to_i
     global replacements
+    global preps_used
 
     old_stdout, old_stdin = sys.stdout, sys.stdin
 
@@ -569,6 +564,8 @@ def run_code(code, inp):
     saved_env = c.deepcopy(environment)
     saved_c_to_i = c.deepcopy(c_to_i)
     saved_replacements = c.deepcopy(replacements)
+
+    preps_used = set()
 
     try:
         safe_mode = False
