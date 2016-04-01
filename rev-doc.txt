@@ -272,9 +272,9 @@ z                         Variable. Autoinitialized to input().
 .: <seq/num> <int>        All substrings of A of length B.
 .: <seq/num> <float>      All substrings of A of length floor(len(A) * B)
 .: <seq/num> <none>       All substrings of A of positive length.
-.< <seq> <int>            Cyclicly rotate A left by B elements. A[B:] + A[:B] in Python.
+.< <seq> <int>            Cyclically rotate A left by B elements. A[B:] + A[:B] in Python.
 .< <int> <int>            Left shift. A shifted left by B, or A * 2 ^ B. A << B in Python.
-.> <seq> <int>            Cyclicly rotate A right by B elements. A[-B:] + A[:-B] in Python.
+.> <seq> <int>            Cyclically rotate A right by B elements. A[-B:] + A[:-B] in Python.
 .> <int> <int>            Right shift. A shifted right by B, or A / (2 ^ B). A >> B in Python.
 .? <blk>                  Else statement. Must come after I, F, V, W or #. else: in Python.
 .A <col>                  Tests whether all elements of A are truthy. all in Python.
@@ -303,7 +303,7 @@ z                         Variable. Autoinitialized to input().
 .R <num> <int>            Round A to B decimal places. Convert to int if B == 0.
 .R <num> <num>            Round A to the same number of decimal places as B is rounded to.
 .S <col/num>              Randomly shuffle A. If A is a list, mutate A to the result.
-.T <col>                  Justified transpose. List of 0th elements of A's elments, list of 1st elments, ... Ignoring absences.
+.T <col>                  Justified transpose. List of 0th elements of A's elements, list of 1st elements, ... Ignoring absences.
 .U <l:bZ> <seq>           Reduce with no starting value. Reduce from left to right, with initial value B[0]. A(_, _) takes inputs current value, next element of B. b, Z -> k, Y ->.
 .V <num>                  Infinite for loop. b iterates over an infinite incrementing sequence starting at the input number.
 .V <str>                  Infinite for loop. b iterates over an infinite lexicographically sequence of upper and lowercase strings starting at the input string.
