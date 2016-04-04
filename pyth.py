@@ -185,7 +185,7 @@ def parse(code, spacing="\n "):
                     'I': '{}=={}',
                 }
                 dup_format = dup_dict[sugar_char]
-                dup_parsed, _ = parse(remainder)
+                dup_parsed, _ = state_maintaining_parse(remainder)
                 non_dup_parsed, post_dup = parse(sugar_active_char + remainder)
                 return dup_format.format(dup_parsed, non_dup_parsed), post_dup
 
