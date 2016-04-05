@@ -158,6 +158,7 @@ U  <nneg>                 Unary range. [0, 1, ... A-1]. range(A) in Python.
 U  <neg>                  Reversed unary range. [A, A+1, ... -1]. range(A, 0) in Python.
 V  <num> <blk>            Shorthand for 'FNU'. N -> H -> b ->
 V  <col> <blk>            Shorthand for 'FN'. N -> H -> b ->
+V  <pfn> <col> <col>      Vectorized function. Equivalent to MC,
 W  <any> <blk>            While loop. while A: B in Python.
 W  <pfn> <a> <a> <n-1:a>  Conditional application. If B, A(C, ...). Else, C.
 X  <dict> <list> <any>    Dictionary assignment. A[tuple(B)] = C in Python.
