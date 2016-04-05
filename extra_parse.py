@@ -53,7 +53,7 @@ def str_parse(active_char, rest_code):
             output += '\\n'
             rest_code = rest_code[1:]
         elif rest_code[0] == '\0':
-            output += '\\0'
+            output += '\\000'
             rest_code = rest_code[1:]
         else:
             output += rest_code[0]
