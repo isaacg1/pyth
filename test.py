@@ -446,7 +446,6 @@ test_cases = [
     # n
     ('n1 2', 'True'),
     ('nYk', 'True'),
-    ('n,1 1', 'False'),
     # o
     ('o_NU3', '[2, 1, 0]'),
     ('oeCN"DFAFD', 'FFADD'),
@@ -457,8 +456,6 @@ test_cases = [
     # q
     ('q1 2', 'False'),
     ('qbb', 'True'),
-    ('q,1 2', 'False'),
-    ('q[3 3 3', 'True'),
     # r
     ('r4 9', '[4, 5, 6, 7, 8]'),
     ('r9 4', '[9, 8, 7, 6, 5]'),
