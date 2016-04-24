@@ -18,6 +18,7 @@ variables = 'bdGHkNQTYzZ'
 
 c_to_s = {
     'D': ('@memoized\ndef {0}:{1}', 1),
+    'D without memoization': ('def {0}:{1}', 1),
     'F': ('for {0} in num_to_range({1}):{2}', 2),
     'I': ('if {0}:{1}', 1),
     'W': ('while {0}:{1}', 1),

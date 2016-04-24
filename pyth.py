@@ -641,7 +641,7 @@ See opening comment in pyth.py for more info.""")
         if line_on:
             line_num = int(sys.argv[-2])
         if memo_off:
-            c_to_s['D'] = (('def ', ':'), 1)
+            c_to_s['D'] = c_to_s['D without memoization']
         if code_on and (line_on or multiline_on):
             print("Error: multiline input from command line.")
         else:
