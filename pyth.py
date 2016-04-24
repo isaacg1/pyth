@@ -52,8 +52,11 @@ def general_parse(code):
 def parse(code, spacing="\n "):
     # If we've reached the end of the string, finish up.
     if code == '':
-        preps_used.add('Q')
-        return 'Q', ''
+        if lambda_stack:
+            return lambda_stack[0], ''
+        else:
+            preps_used.add('Q')
+            return 'Q', ''
     # Separate active character from the rest of the code.
     active_char = code[0]
     rest_code = code[1:]
