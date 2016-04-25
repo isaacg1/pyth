@@ -1235,7 +1235,7 @@ def dict_or_date(a):
             if a == 9:
                 return today.weekday()
     if is_num(a):
-        time.sleep(a / 10)
+        time.sleep(-a)
         return
     if is_col(a):
         return dict(a)
