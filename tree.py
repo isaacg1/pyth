@@ -10,13 +10,15 @@ global K_used
 J_used = False
 K_used = False
 nums = '0123456789'
+
+
 def make_tree(code):
     if code == '':
         return [], ''
     char, code = code[0], code[1:]
-    if char == '.' and  code[0] not in nums:
-            char += code[0]
-            code = code[1:]
+    if char == '.' and code[0] not in nums:
+        char += code[0]
+        code = code[1:]
     if char in '.' + nums:
         while code and code[0] in nums:
             char += code[0]
@@ -111,6 +113,7 @@ def make_tree(code):
         return args, code
     raise NameError("%s unimplemented" % char)
 
+
 def assemble_trees(code):
     trees = []
     while code:
@@ -120,9 +123,11 @@ def assemble_trees(code):
         trees.append(tree)
     return trees
 
+
 def disp_tree(trees):
     graph = Digraph()
     count = 0
+
     def add(tree, count):
         if not tree:
             return count
@@ -137,6 +142,7 @@ def disp_tree(trees):
     for tree in trees:
         count = add(tree, count) + 1
     graph.render('tree-rep.gv', view=True)
+
 
 def text_tree(trees):
     def single_tree(tree):

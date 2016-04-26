@@ -1005,6 +1005,7 @@ def preprocess_eval(a):
             return a
     raise BadTypeCombinationError('v', a)
 
+
 def Pliteral_eval(a):
     if isinstance(a, str):
         return literal_eval(preprocess_eval(a))

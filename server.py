@@ -21,6 +21,7 @@ def root():
                            test_suite_input=request.args.get('test_suite_input', ''),
                            input_size=int(request.args.get('input_size', 1)))
 
+
 def run_code(code_message, input_message, debug_on):
     resp = ''
 
@@ -44,6 +45,7 @@ def run_code(code_message, input_message, debug_on):
 
     return resp
 
+
 @app.route('/submit', methods=['POST'])
 def submit():
     code_message = request.form.get('code', '')
@@ -52,15 +54,17 @@ def submit():
 
     return Response(run_code(code_message, input_message, debug_on))
 
+
 @app.route('/submit_test_suite', methods=['POST'])
 def submit_test_suite():
-	code_message = request.form.get('code', '')
-	input_size = int(request.form.get('input_size', '1'), 0)
-	inputs = ["\n".join(i) for i in zip(*[iter(request.form.get('input', '').split("\n"))]*input_size)]
-	debug_on = int(request.form.get('debug'), 0)
+    code_message = request.form.get('code', '')
+    input_size = int(request.form.get('input_size', '1'), 0)
+    inputs = ["\n".join(i) for i in zip(*[iter(request.form.get('input', '').split("\n"))] * input_size)]
+    debug_on = int(request.form.get('debug'), 0)
 
-	return Response("\n".join([run_code(code_message, inputs[0], debug_on)] + \
-				[run_code(code_message, i, False) for i in inputs[1:]]) if inputs else "")
+    return Response("\n".join([run_code(code_message, inputs[0], debug_on)] +
+                              [run_code(code_message, i, False) for i in inputs[1:]]) if inputs else "")
+
 
 @app.route('/<path>')
 def other(path):

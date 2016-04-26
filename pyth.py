@@ -245,6 +245,7 @@ def next_n_segs(n, code):
         segs += seg
     return segs, remainder
 
+
 def state_maintaining_parse(code):
     global c_to_i
     saved_c_to_i = c.deepcopy(c_to_i)
@@ -299,8 +300,8 @@ def lambda_function_parse(active_char, rest_code):
     lambda_stack.pop()
     while (len(args_list) != arity and parsed != ''
             and not (rest_code == ''
-                and active_char in optional_final_arg
-                and len(args_list) == arity - 1)):
+                     and active_char in optional_final_arg
+                     and len(args_list) == arity - 1)):
         parsed, rest_code = parse(rest_code)
         args_list.append(parsed)
     if len(args_list) > 0 and args_list[-1] == '':
@@ -318,8 +319,8 @@ def function_parse(active_char, rest_code):
     while (len(args_list) != arity and parsed != ''
             and not (arity == float('inf') and rest_code == '')
             and not (rest_code == ''
-                and active_char in optional_final_arg
-                and len(args_list) == arity - 1)):
+                     and active_char in optional_final_arg
+                     and len(args_list) == arity - 1)):
         parsed, rest_code = parse(rest_code)
         args_list.append(parsed)
     # Build the output string.

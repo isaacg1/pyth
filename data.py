@@ -25,28 +25,28 @@ c_to_s = {
     '#': ('while True:\n try:{0}\n except Exception:\n  break', 0, 1),
     '.V': ('for b in infinite_iterator({0}):{1}', 1),
     '.?': ('else:{0}', 0),
-    }
+}
 
 # Arbitrary format operators - use for assignment, infix, etc.
 # All surrounding strings, arity
 c_to_i = {
-    '=':  ('assign(\'{0}\',{1})', 2),
-    '~':  ('post_assign(\'{0}\',{1})', 2),
-    '&':  ('({0} and {1})', 2),
-    '|':  ('({0} or {1})', 2),
-    ']':  ('[{0}]', 1),
-    '?':  ('({1} if {0} else {2})', 3),
-    ',':  ('[{0},{1}]', 2),
-    'B':  ('break', 0),
-    'J':  ('assign("J",{0})', 1),
-    'K':  ('assign("K",{0})', 1),
-    'R':  ('return {0}', 1),
+    '=': ('assign(\'{0}\',{1})', 2),
+    '~': ('post_assign(\'{0}\',{1})', 2),
+    '&': ('({0} and {1})', 2),
+    '|': ('({0} or {1})', 2),
+    ']': ('[{0}]', 1),
+    '?': ('({1} if {0} else {2})', 3),
+    ',': ('[{0},{1}]', 2),
+    'B': ('break', 0),
+    'J': ('assign("J",{0})', 1),
+    'K': ('assign("K",{0})', 1),
+    'R': ('return {0}', 1),
     '.W': ('apply_while(lambda H:{0}, lambda Z:{1}, {2})', 3),
     '.x': ('Pexcept(lambda:{0}, lambda:{1})', 2),
     '.*': ('*({0})', 1),
     '.)': ('{0}.pop()', 1),
     '.(': ('{0}.pop({1})', 2),
-    }
+}
 
 # Simple functions only.
 # Extensible is allowed, nothing else complicated is.
@@ -154,18 +154,18 @@ c_to_f = {
     '.{': ('Pset', 1),
     '.!': ('factorial', 1),
     '.[': ('pad', 3),
-    }
+}
 
 optional_final_arg = set([':', 'c', 'f', 'j', 'u', 'X', '.b', '.f', '.j', '.l', '.u', '.w', '.:', '.{', ']'])
 
 replacements = {
-    '\\': [('"{0}"', 1),],
-    'V': ['FN','FH','Fb',],
-    'A': ['=,GH',],
-    'L': ['DybR',"D'bR",],
-    'M': ['DgGHR', 'DnGHR',],
-    '.N': ['D:NTYR','DXNTYR',],
-    }
+    '\\': [('"{0}"', 1), ],
+    'V': ['FN', 'FH', 'Fb', ],
+    'A': ['=,GH', ],
+    'L': ['DybR', "D'bR", ],
+    'M': ['DgGHR', 'DnGHR', ],
+    '.N': ['D:NTYR', 'DXNTYR', ],
+}
 
 rotate_back_replacements = ('V',)
 
@@ -186,16 +186,16 @@ lambda_vars = {
     '.M': ['Z'],
     '.u': ['N, Y'],
     '.U': ['b, Z', 'k, Y'],
-    }
+}
 
 # For autoinitializers. One shot, not rotating.
 next_c_to_i = {
     'J': (('J'), 0),
     'K': (('K'), 0),
-    }
+}
 
 # Prependers.
 prepend = {
     'Q': "=QE",
     'z': "=zw",
-    }
+}
