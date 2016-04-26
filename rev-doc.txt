@@ -36,16 +36,16 @@ x -> y -> z -> ... means on future / nested uses, the successive character is us
 Format:
 Char, Input types         | Effect
 Tokens:
-0                         Leading 0 is a separate token, number zero.
-0123456789.               Numeric literals. Leading 0 ignored, trailing . often parses separately
-\n <any>                  Print with trailing newline. Return input.
-   <any>                  Identity function. Suppresses printing.
+0                         Leading 0 is a separate token, number zero. That means 01 is interpreted as two tokens: 0 and 1.
+0123456789.               Numeric literals. Leading 0 ignored, trailing . often parses separately.
+\n (U+000A) <any>         Print with trailing newline. Return input.
+  (U+0020)  <any>         Identity function. Suppresses implicit printing.
 !  <any>                  Logical negation. 0, 0.0, "", [], (), {}, set() -> True, else False.
-"                         Begin and end string literal.
-#  <blk>                  Loop until error statement. On error, suppress and break out of loop.
+"                         Begin and end string literal. See ." for compressed strings and \ for one-character strings.
+#  <blk>                  Loop until error statement. On error, suppress and break out of loop. See .x .
 #  <pfn> <n-1:any> <col>  Filter A(_, B ...) over C. Uses f underneath, B may refer to f's lambda var. # looks like a strainer.
 $                         Begin and end Python literal. Counts as one token. Disabled in -s (online).
-%  <num> <num>            Modulo. Same as Python.
+%  <num> <num>            Modulo. Same as Python. %1 _3 returns -2, %_1 3 returns 2. See /, c, .D
 %  <int> <seq>            Every Ath element of B. B[::A] in Python.
 %  <str> <lst>            Format string, B is list of arguments. % in Python.
 %  <str> <any>            Format string, B is only argument.
@@ -53,12 +53,12 @@ $                         Begin and end Python literal. Counts as one token. Dis
 &  <any> <any>            If not A, return A. Else, return B. Short-circuiting. Same as Python and.
 '  <str>                  Open the file or website given by the input string. Return list of lines if normal file or website. Return list of color triples for color images, and list of brightness values for grayscale images.
 (  <...>                  Tuple constructor. tuple(A) in Python.
-)                         End function or statement.
-*  <num> <num>            Multiplication. * in Python.
+)                         End tuples, lists, dictionaries, sets, blocks (if, for, while, etc), functions (def), or statement. This does not end a string, use " instead. This does not end lambdas: they do not need an implicit end (they only take one argument instead of a block).
+*  <num> <num>            Multiplication. * in Python. See + - / c
 *  <num> <seq>            Repetition. * in Python.
 *  <seq> <num>            Repetition. * in Python.
-*  <col> <col>            Cartesian product. All pairs of A_elem, B_elem.
-+  <num> <num>            Addition. + in Python.
+*  <col> <col>            Cartesian product. All pairs of A_elem, B_elem. See , (comma). See ^.
++  <num> <num>            Addition. + in Python. See - * / c
 +  <str> <str>            Concatenate. + in Python.
 +  <lst> <lst>            Concatenate. + in Python (But cast to list).
 +  <lst> <any>            Append B to the end of A.
@@ -67,31 +67,31 @@ $                         Begin and end Python literal. Counts as one token. Dis
 +  <num> <str>            Prepend str(A) to the beginning of B.
 +  <set> <col>            Union of A and B.
 +  <set> <any>            Union of A and {B}.
-,  <any> <any>            [A, B]
+,  <any> <any>            [A, B]. See ] for one-element list constructor. See [ for multi-element list constructor.
 -  <num> <num>            Subtraction. - in Python.
 -  <col> <col>            Filter A on absence from b. Uses not in.
 -  <num> <col>            Cast A to B's type, then filter on absence.
 -  <col> <num>            Cast B to A's type, then filter on absence.
-/  <num> <num>            Integer division. // in Python.
-/  <lst> <any>            Count occurrences of B in A.
-/  <str> <str>            Count occurrences of B in A.
-:  <seq> <int> <int>      Slice of A from B to C. A[B:C] in Python.
+/  <num> <num>            Integer division. // in Python. See c for float division. See %, .D
+/  <lst> <any>            Count occurrences of B in A. See x.
+/  <str> <str>            Count occurrences of B in A. See x.
+:  <seq> <int> <int>      Slice of A from B to C. A[B:C] in Python. See h, e, t, %, <, >, g.
 :  <num> <num> <num>      Stepped range. Go from A to B with a step size of C.
 :  <idx> <col> <col>      Multiple assignment. For i in B, A[i] = C[i], If C runs out, it repeats.
 :  <idx> <col> <num>      Multiple assignment. For i in B, A[i] = C.
 :  <str> <str> <str>      Regex substitution. In A, replace B with C.
-:  <str> <str> 0/)        Regex search boolean. In A, return whether a match for B is found.
+:  <str> <str> 0          Regex search boolean. In A, return whether a match for B is found.
 :  <str> <str> 1          Regex search. In A, return every match for B (non overlapping)
 :  <str> <str> 2          In A, replace each match of regex B with its first capturing group.
 :  <str> <str> 3          Split A on matches of regex B. Retain capturing groups.
 :  <str> <str> 4          Return list of match and all capturing groups for each match of B in A.
-;                         End all containing functions, statements, etc., if not inside a lambda function.
+;                         End all tuples, lists, dictionaries, sets, blocks (if, for, while, etc), functions (def), and statements, if not inside a lambda function.
 ;                         Global value of innermost lambda's first variable.
 <  <num> <num>            Less than, numeric.
 <  <str> <str>            Less than, lexicographic.
 <  <lst> <lst>            Less than, lexicographic.
-<  <seq> <num>            First B elements of A. A[:B] in Python.
-<  <num> <seq>            All but last A elements of B. B[:len(B)-A] in Python.
+<  <seq> <num>            First B elements of A. A[:B] in Python. See h, e, t, %, >, :, g.
+<  <num> <seq>            All but last A elements of B. B[:len(B)-A] in Python. See h, e, t, %, >, :, g.
 <  <cmp> <num>            Less than, absolute value/magnitude.
 <  <num> <cmp>            Less than, absolute value/magnitude.
 <  <set> <col>            Proper subset.
@@ -100,16 +100,16 @@ $                         Begin and end Python literal. Counts as one token. Dis
 >  <num> <num>            Greater than, numeric.
 >  <str> <str>            Greater than, lexicographic.
 >  <lst> <lst>            Greater than, lexicographic.
->  <seq> <num>            A at and after index B. A[B:] in Python.
->  <num> <seq>            Last A elements of B. B[len(B)-A:] in Python.
+>  <seq> <num>            A at and after index B. A[B:] in Python. See h, e, t, %, <, :,g .
+>  <num> <seq>            Last A elements of B. B[len(B)-A:] in Python. See h, e, t, %, <, :, g.
 >  <cmp> <num>            Greater than, absolute value/magnitude.
 >  <num> <cmp>            Greater than, absolute value/magnitude.
 >  <set> <col>            Proper superset.
-?  <any> <any> <any>      Ternary. A ? B : C in C-like languages. B if A else C in Python.
+?  <any> <any> <any>      Ternary. A ? B : C in C-like languages. B if A else C in Python. A and B or C in Lua. See I.
 @  <seq> <num>            Index into the sequence. Modular wrapping. A[B % len(A)] in Python.
 @  <dict> <any>           Index into the dict. A[B] in Python.
 @  <col> <col>            Intersection. Filter B on presence in A.
-@  <num> <num>            Root. A ** (1/B) in Python.
+@  <num> <num>            Root. A ** (1/B) in Python. See ^, .^
 A  <list,2-elements>      Assign the first value of the list to G and the second to H. Return the input.
 B                         Break. Ends surrounding statement.
 B  <pfn> <any> <n-1:any>  Bifurcate. Return two element list [B, A(B, ...)].
@@ -117,28 +117,28 @@ C  <int>                  Character with code point A. If A is too large, conver
 C  <float>                C(floor(A))
 C  <cmp>                  Complex conjugate.
 C  <str>                  Convert A to int using base 256 and code points.
-C  <col>                  Matrix transpose, truncating to the length of the shortest entry.
-D  <func n> <n:var> <blk> Define a function. Same as def A(B...) in Python.
+C  <col>                  Matrix transpose, truncating to the length of the shortest entry. See _.
+D  <func n> <n:var> <blk> Define a function. Same as def A(B...) in Python. See L.
 D  <pfn> <n-1:any> <col>  Sort operator. Sort C with key A(_, B ...). Uses o underneath, B may refer to o's lambda var.
 E                         Evaluate input. Same as ast.literal_eval(input()) in Python.
 F  <pf2> <seq>            Fold A over B, with first element as initial value. Same as .U <A> bZ <B>
 F  <pf3+> <seq>           Apply A to B, with splatting. A(*B) in Python.
-F  <var> <num> <blk>      For A in range(int(B)): C
-F  <var> <any> <blk>      For A in B: C
+F  <var> <num> <blk>      For A in range(int(B)): C. See V, W, M, m.
+F  <var> <any> <blk>      For A in B: C. See V, M, m.
 G                         Variable. Initialized to "abcdefghijklmnopqrstuvwxyz", alphabet.
-H                         Variable. Initialized to {}. (Hash table)
-I  <any> <blk>            if A: B
+H                         Variable. Initialized to .d[). (Empty dictionary)
+I  <any> <blk>            if A: B. See ? (question-mark).
 I  <pfn> <any> <n-1:any>  Invariant. A(B, ...) == B.
 J  <any>                  Variable, Autoinitializing. J=A on first use.
 J                         Variable. Second use and later.
 K  <any>                  Variable, Autoinitializing. K=A on first use.
 K                         Variable.  Second use and later.
-L  <any>                  def y(b): return A. y -> ' ->
+L  <any>                  def y(b): return A. See M, .N) y -> ' ->
 L  <pfn> <n-1:any> <col>  Left map. n>=2. Map A(B, ..., _) over C, where _ is the lambda variable. Map uses m underneath, and B may refer to its lambda variable.
-M  <any>                  def g(G,H): return A. g -> n ->
-M  <pf1> <col>            Map. Map A(_) over B, where _ is the lambda variable. Map uses m underneath.
+M  <any>                  def g(G,H): return A. See L, .N) g -> n ->
+M  <pf1> <col>            Map. Map A(_) over B, where _ is the lambda variable. Map uses m underneath. See V.
 M  <pfn> <col(seq)>       Map. Map A(*_) over B, where _ is the lambda variable. Map uses m underneath. Each element of B is splatted as the arguments to A.
-N                         Variable. Initialized to '"', quote mark.
+N                         Variable. Initialized to '"', double-quote mark.
 O  <int>                  If A > 0, random int below A. If A == 0, random float 0 to 1. If A < 0, random.seed(-A).
 O  <float>                Random float 0 to A.
 O  <cmp>                  A multiplied by random float 0 to 1.
@@ -147,18 +147,18 @@ P  <nneg>                 List of prime factors of A with multiplicity in increa
 P  <neg>                  Returns whether -A is prime.
 P  <num>                  Complex phase of A.
 P  <seq>                  All but the last element of A. A[:-1] in Python.
-Q                         Variable, Autoinitialized to eval(input()).
+Q                         Variable, Autoinitialized to eval(input()). See z, .z
 R  <any>                  Return, used inside D.
 R  <pfn> <n-1:any> <col>  Right map. n >= 2. Map A(_, B, ...) over C, where _ is the lambda variable. Map uses m underneath, and B may refer to its lambda variable.
 S  <col>                  Sort. sorted(A) in Python.
-S  <int>                  1-indexed range. [1, 2, ... A].
+S  <int>                  1-indexed range. [1, 2, ... A]. See U.
 S  <num>                  1-indexed range up to floor of A.
 T                         Variable. Initialized to 10. (Ten)
-U  <nneg>                 Unary range. [0, 1, ... A-1]. range(A) in Python.
+U  <nneg>                 Unary range. [0, 1, ... A-1]. range(A) in Python. See S.
 U  <neg>                  Reversed unary range. [A, A+1, ... -1]. range(A, 0) in Python.
 V  <num> <blk>            Shorthand for 'FNU'. N -> H -> b ->
 V  <col> <blk>            Shorthand for 'FN'. N -> H -> b ->
-V  <pfn> <col> <col>      Vectorized function. Equivalent to MC,
+V  <pfn> <col> <col>      Vectorized function. See M, m. Equivalent to MC,
 W  <any> <blk>            While loop. while A: B in Python.
 W  <pfn> <a> <a> <n-1:a>  Conditional application. If B, A(C, ...). Else, C.
 X  <dict> <list> <any>    Dictionary assignment. A[tuple(B)] = C in Python.
@@ -173,20 +173,20 @@ X  <any> <dict> <any>     B[A] += C, or B[A] = C if A not in B. Uses Pyth +.
 X  <int> <str> <any>      Insert into string. Insert str(C) into B at A.
 Y                         Variable. Initialized to [], empty list.
 Z                         Variable. Initialized to 0. (zero)
-[  <...>                  List constructor. list(A) in Python.
-\  <char>                 One character string.
-]  <any>                  [A].
-^  <num> <num>            Exponentiation. A ** B in Python.
-^  <col> <int>            Repeated Cartesian Product. itertools.product(A, repeat=B) in Python.
+[  <...>                  List constructor. list(A) in Python. End with ). See , (comma) and ].
+\  <char>                 One character string. See " for multi-character strings.
+]  <any>                  [A]. See , (comma) and [.
+^  <num> <num>            Exponentiation. A ** B in Python. See @, .^
+^  <col> <int>            Repeated Cartesian Product. itertools.product(A, repeat=B) in Python. See *.
 _  <num>                  Negation. -A in Python.
 _  <seq>                  Reversal. A[::-1] in Python.
-_  <dict>                 Swap keys and values.
-`  <any>                  Representation. repr in Python.
+_  <dict>                 Swap keys and values. See C for transpose.
+`  <any>                  Representation. repr in Python. Convert A to string.
 a  <list> <any>           Append. A.append(B) in Python. Return A.
 a  <set> <any>            Add. A.add(B) in Python. Return A.
 a  <num> <num>            Absolute difference. abs(A - B) in Python.
 b                         Variable. Initialized to '\n', newline.
-c  <num> <num>            Float division. A / B in Python.
+c  <num> <num>            Float division. A / B in Python. See / for integer division. See %, .D
 c  <str> <str>            Split. A.split(B) in Python.
 c  <str> <none>           Split on whitespace. A.split() in Python.
 c  <str> <int>            Chop A into pieces of length B. Last shorter if necessary.
@@ -194,7 +194,7 @@ c  <int> <str>            Chop A into B pieces of equal sizes, initial pieces on
 c  <seq> <col of ints>    Chop A at every location in B.
 c  <seq> <any>            Chop A at every occurrence of B.
 d                         Variable. Initialized to ' ', space.
-e  <seq>                  End. A[-1] in Python.
+e  <seq>                  End. A[-1] in Python. See h, t, %, <, >, :, g.
 e  <cmp>                  Imaginary part. A.imag in Python.
 e  <num>                  Last digit. A % 10 in Python.
 f  <l:T> <col>            Filter A(_) over B. T -> Y -> Z ->
@@ -202,9 +202,9 @@ f  <l:T> <num>            First input where A(_) is truthy over [B, B+1, B+2, ..
 f  <l:T> <none>           First input where A(_) is truthy over [1, 2, 3, 4...]
 g  <num> <num>            Greater than or equal. A >= B in Python.
 g  <seq> <seq>            Greater than or equal. A >= B in Python.
-g  <set> <col>            Superset. A.issuperset(B)
-g  <seq> <num>            Inclusive slice. A[B-1:] in Python.
-h  <seq>                  Head. A[0] in Python.
+g  <set> <col>            Superset. A.is_super_set(B)
+g  <seq> <num>            Inclusive slice. A[B-1:] in Python. See h, e, t, %, <, >, :.
+h  <seq>                  Head. A[0] in Python. See e, t, %, <, >, :, g.
 h  <num>                  A + 1.
 i  <str> <int>            Convert A from base B to int. if A is '', return 0. int(A, B) in Python.
 i  <seq> <num>            Convert A from base B to int.
@@ -240,7 +240,7 @@ s  <cmp>                  Real part. A.real in Python.
 s  <num>                  Floor to int. int(A) in Python.
 s  <str>                  Parse as int. "" parses to 0. int(A) in Python.
 t  <num>                  A - 1.
-t  <seq>                  Tail. A[1:] in Python.
+t  <seq>                  Tail. A[1:] in Python. See h, e, %, <, >, :, g.
 u  <l:GH> <seq/num> <any> Reduce B from left to right, with function A(_, _) and C as starting value. G, H -> N, T ->. A takes current value, next element of B as inputs. Note that A can ignore either input.
 u  <l:GH> <any> <none>    Apply A(_, _) until a result that has occurred before is found. Starting value B. A takes current value, iteration number as inputs.
 v  <str>                  Eval. eval(A) without -s, ast.literal_eval(A) with -s (online). literal_eval only allows numeric, string, list, etc. literals, no variables or functions.
@@ -252,7 +252,7 @@ x  <non-lst> <lst>        All occurrences. Returns a list of the indexes of elem
 x  <str> <non-lst>        First occurence. Return the index of the first substring of A equal to str(B), or -1 if none exists.
 y  <seq>                  Powerset. All subsets of A, ordered by length.
 y  <num>                  A * 2.
-z                         Variable. Autoinitialized to input().
+z                         Variable. Autoinitialized to input(). See Q, .z
 {  <col>                  Deduplicate. Remove all duplicated elements in A, leaving the first occurrences in original order.
 |  <any> <any>            Logical or. If A, return A. Else, return B. Short circuiting. or in Python.
 }  <any> <lst>            In. Returns a boolean for whether A is an element of B. in in Python.
@@ -282,7 +282,7 @@ z                         Variable. Autoinitialized to input().
 .B <int>                  Converts A to a binary string.
 .B <str>                  Converts A to a binary string, treating the string as a base 256 integer.
 .C <col> <int>            Combinations with replacement. All sorted lists of elements of A, of length B.
-.D <num> <num>            Divmod. Returns [A / B, A % B].
+.D <num> <num>            Divmod. Returns [A / B, A % B]. See c, /, %.
 .D <seq> <col>            Returns A with elements at indexes in B removed.
 .D <seq> <num>            Returns A with the element at index B removed.
 .E <col>                  Tests whether any elements of A are truthy. any in Python.
@@ -293,7 +293,7 @@ z                         Variable. Autoinitialized to input().
 .H <str>                  Converts A to a hexadecimal string, treating the string as a base 256 integer.
 .I <l:G> <num>            Invert. A is a monotonic function from num to num. .I finds x such that A(x) = B.
 .M <l:Z> <seq>            Filter B for elements x for which A(x) takes its maximal value.
-.N <any>                  def :(N, T, Y): return _. The function is called ':'. : -> X ->
+.N <any>                  def :(N, T, Y): return A. The function is called ':'. See L, M. : -> X ->
 .O <int>                  Converts A to an octal string.
 .O <str>                  Converts A to an octal string, treating the string as a base 256 integer.
 .O <col(num)>             Average of A. If A is empty, 0.0
@@ -316,7 +316,7 @@ z                         Variable. Autoinitialized to input().
 .[ <seq> <any> <int>      Pad list(A) on the right with copies of B as elements to a length of the nearest multiple of C.
 .[ <any> <int> <seq>      Pad list(C) on the left with copies of A as elements to a length of the nearest multiple of B.
 .[ <int> <seq> <any>      Pad list(B) on both sides with copies of C as elements to a length of the nearest multiple of A. Ties broken to the right.
-.^ <int> <int> <int>      Modular exponentiation. A ^ B % C, but faster. pow in Python.
+.^ <int> <int> <int>      Modular exponentiation. A ^ B % C, but faster. pow in Python. See ^, @.
 ._ <seq>                  All prefixes of A, length 1 to len(A).
 ._ <num>                  Sign of A. 1 if A > 0, -1 if A < 0, 0 otherwise.
 .a <num>                  Absolute value. abs in Python.
@@ -388,7 +388,7 @@ z                         Variable. Autoinitialized to input().
 .w <lst> <str/none>       Write/append to a file. Write A joined on newlines with a trailing newline to the file B, unless B has no '.', in which case B + '.txt', unless B does not exist, in which case 'o.txt'
 .w <any> <str/none>       Write/append to a file. Write A with a trailing newline to the file B, unless B has no '.', in which case B + '.txt', unless B does not exist, in which case 'o.txt'
 .x <any> <any>            Try - catch. A, unless A throws an error, in which case B. B is only evaluated if A throws an error.
-.z                        All input. Take all input from STDIN, return as list of lines.
+.z                        All input. Take all input from STDIN, return as list of lines. See Q, z.
 .{ <col>                  Convert A to set. If any of A's elements are not hashable, convert all elements to tuples and convert to set.
 .{ <num>                  Set containing A.
 .{ <none>                 Empty set.
