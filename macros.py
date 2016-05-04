@@ -898,6 +898,9 @@ def Prange(a, b):
         ab_range = Prange(a_val, b_val)
         return [''.join(chr(char_val) for char_val in join(str_val, 256))
                 for str_val in ab_range]
+    if isinstance(a, int) and is_seq(b):
+        return Prange(b, a)
+    raise BadTypeCombinationError("r", a, b)
 environment['Prange'] = Prange
 
 
@@ -1586,7 +1589,7 @@ environment['shuffle'] = shuffle
 
 
 # .t. num, int
-def trig(a, b):
+def trig(a, b=' '):
     if is_num(a) and isinstance(b, int):
 
         funcs = [math.sin, math.cos, math.tan,
