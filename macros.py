@@ -804,24 +804,16 @@ def primes_pop(a):
             return len(primes_pop(-a)) == 1
         if a < 2:
             return []
-        try:
-            from sympy import factorint
-            factor_dict = factorint(a)
-            factors_with_mult = [[fact for _ in range(
-                factor_dict[fact])] for fact in factor_dict]
-            return sorted(sum(factors_with_mult, []))
-        except:
-            working = a
-            output = []
-            num = 2
-            while num * num <= working:
-                while working % num == 0:
-                    output.append(num)
-                    working //= num
-                num += 1
-            if working != 1:
-                output.append(working)
-            return output
+        output = []
+        num = 2
+        while num * num <= a:
+            while a % num == 0:
+                output.append(num)
+                a //= num
+            num += 1
+        if a>1:
+            return output.append(a)
+        return output
     if is_num(a):
         return cmath.phase(a)
     if is_seq(a):
