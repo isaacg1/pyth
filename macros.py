@@ -157,6 +157,17 @@ def imp_print(a):
 environment['imp_print'] = imp_print
 
 
+# F on unary function. Repeated application.
+def repeat(func, start, repetitions):
+    if not isinstance(repetitions, int):
+        raise BadTypeCombinationError("F", repetitions, start)
+    value = start
+    for i in range(repetitions):
+        value = func(value)
+    return value
+environment['repeat'] = repeat
+
+
 # Lookup from the environment, ignoring lambdas.
 def env_lookup(var):
     return environment[var]

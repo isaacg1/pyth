@@ -120,9 +120,18 @@ def parse(code, spacing="\n "):
             sugar_char = remainder[0]
             remainder = remainder[1:]
         if arity > 0:
-            # <binary function/infix>F: Fold operator
             if sugar_char == 'F':
+                if arity == 1:
+                    # Unary: Repeated application
+                    rep_arg1, post1 = parse(remainder)
+                    rep_arg2, post2 = parse(post1)
+                    if sugar_active_char in c_to_f:
+                        func = c_to_f[sugar_active_char][0]
+                    else:
+                        func = "lambda unary_F: " + c_to_i[sugar_active_char][0].format(unary_F)
+                    return "repeat({}, {}, {})".format(func, rep_arg1, rep_arg2), post2
                 if arity == 2:
+                    # <binary function/infix>F: Fold operator
                     reduce_arg1 = lambda_vars['.U'][0][0]
                     reduce_arg2 = lambda_vars['.U'][0][-1]
                     fold_list, post_fold = next_seg(remainder)
@@ -130,7 +139,7 @@ def parse(code, spacing="\n "):
                                             reduce_arg1 + reduce_arg2 + fold_list)
                     assert rest == '', "Sugar parse F fold failed"
                     return full_fold, post_fold
-                else:
+                if arity > 2:
                     # Just splat it - it's a common use case.
                     splat_list, post_splat = next_seg(remainder)
                     full_splat, rest = parse(
