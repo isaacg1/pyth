@@ -50,7 +50,6 @@ c_to_i = {
 
 # Simple functions only.
 # Extensible is allowed, nothing else complicated is.
-# -1 means extensible
 # name,arity
 c_to_f = {
     '`': ('repr', 1),

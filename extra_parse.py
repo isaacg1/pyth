@@ -23,8 +23,9 @@ class UnsafeInputError(Exception):
             (self.active_char, len(self.rest_code) + 1)
 
 
-def num_parse(active_char, rest_code):
-    output = active_char
+def num_parse(code):
+    output = ''
+    rest_code = code
     while len(rest_code) > 0 \
             and rest_code[0] in ".0123456789" \
             and (output + rest_code[0]).count(".") <= 1:
@@ -36,8 +37,10 @@ def num_parse(active_char, rest_code):
     return output, rest_code
 
 
-def str_parse(active_char, rest_code):
-    output = active_char
+def str_parse(rest_code):
+    """Input: Everything after the leading double quote.
+    Output: Resultant string, remaining code."""
+    output = '"'
     found_end = False
     while len(rest_code) > 0 and not found_end:
         if rest_code[0] == '\\' and len(rest_code) == 1:
@@ -65,8 +68,10 @@ def str_parse(active_char, rest_code):
     return output, rest_code
 
 
-def python_parse(active_char, rest_code):
+def python_parse(code):
+    assert code[0] == '$'
     output = ''
+    rest_code = code[1:]
     while (len(rest_code) > 0
            and rest_code[0] != '$'):
         output += rest_code[0]

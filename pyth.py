@@ -70,19 +70,19 @@ def parse(code, spacing="\n "):
     if active_char == "0":
         return active_char, rest_code
     if active_char in ".123456789":
-        return num_parse(active_char, rest_code)
+        return num_parse(active_char + rest_code)
     # String literals
     if active_char == '"':
-        return str_parse(active_char, rest_code)
+        return str_parse(rest_code)
     if active_char == '."':
-        string, rest_code = str_parse('"', rest_code)
+        string, rest_code = str_parse(rest_code)
         return "%s(%s)" % (c_to_f['."'][0], string), rest_code
     # Python code literals
     if active_char == '$':
         if safe_mode:
             raise UnsafeInputError(active_char, rest_code)
         else:
-            return python_parse(active_char, rest_code)
+            return python_parse(active_char + rest_code)
     # End paren is magic (early-end current function/statement).
     if active_char == ')':
         return '', rest_code

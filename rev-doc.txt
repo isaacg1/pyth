@@ -80,7 +80,7 @@ $                         Begin and end Python literal. Counts as one token. Dis
 :  <idx> <col> <col>      Multiple assignment. For i in B, A[i] = C[i], If C runs out, it repeats.
 :  <idx> <col> <num>      Multiple assignment. For i in B, A[i] = C.
 :  <str> <str> <str>      Regex substitution. In A, replace B with C.
-:  <str> <str> 0/)        Regex search boolean. In A, return whether a match for B is found.
+:  <str> <str> 0|<none>   Regex search boolean. In A, return whether a match for B is found.
 :  <str> <str> 1          Regex search. In A, return every match for B (non overlapping)
 :  <str> <str> 2          In A, replace each match of regex B with its first capturing group.
 :  <str> <str> 3          Split A on matches of regex B. Retain capturing groups.
@@ -234,6 +234,7 @@ r  <str> 9                Run length decode A. Input format '3a2bcd' -> 'aaabbcd
 r  <seq> 9                Run length decode A. Input format [[3, 'a'], [2, 'b'], [1, 'c'], [1, 'd']].
 r  <int> <int>            Range, half inclusive. range(A, B) in Python, or range(A, B, -1).
 r  <str> <str>            String range. r(C(A), C(B)), then convert each int to string using C.
+r  <int> <seq>            r(B, A)
 s  <col(str)>             Concatenate. ''.join(A)
 s  <col>                  reduce on +, base case 0. (Pyth +)
 s  <cmp>                  Real part. A.real in Python.
@@ -365,6 +366,7 @@ z                         Variable. Autoinitialized to input().
 .s <seq> <col>            Strip from A maximal prefix and suffix of A consisting of elements of B.
 .s <seq> <any>            Strip from A maximal prefix and suffix of A consisting of copies of B.
 .t <lst> <any>            Transpose A, padding lines with copies of B.
+.t <lst>                  Transpose, padding with spaces.
 .t <num> 0                sin(A)
 .t <num> 1                cos(A)
 .t <num> 2                tan(A)
