@@ -231,6 +231,7 @@ test_cases = [
     ('Fd<G3d', 'a\nb\nc'),
     ('rF,1 5', '[1, 2, 3, 4]'),
     ('^F[4 3 2 1', '4096'),
+    ('.!F3 2', '720'),
     # G
     ('G', 'abcdefghijklmnopqrstuvwxyz'),
     ('lG', '26'),
