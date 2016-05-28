@@ -501,6 +501,8 @@ def lt(a, b):
     if is_seq(a) and is_num(b):
         return a[:b]
     if is_num(a) and is_seq(b):
+        if a >= len(b):
+            return ''
         return b[:len(b) - a]
     if isinstance(a, complex) or isinstance(b, complex):
         return abs(a) < abs(b)
@@ -520,6 +522,8 @@ def gt(a, b):
     if is_seq(a) and is_num(b):
         return a[b:]
     if is_num(a) and is_seq(b):
+        if a >= len(b):
+            return ''
         return b[len(b) - a:]
     if isinstance(a, complex) or isinstance(b, complex):
         return abs(a) > abs(b)
