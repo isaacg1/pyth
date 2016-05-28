@@ -80,7 +80,7 @@ $                         Begin and end Python literal. Counts as one token. Dis
 :  <idx> <col> <col>      Multiple assignment. For i in B, A[i] = C[i], If C runs out, it repeats.
 :  <idx> <col> <num>      Multiple assignment. For i in B, A[i] = C.
 :  <str> <str> <str>      Regex substitution. In A, replace B with C.
-:  <str> <str> 0/)        Regex search boolean. In A, return whether a match for B is found.
+:  <str> <str> 0          Regex search boolean. In A, return whether a match for B is found.
 :  <str> <str> 1          Regex search. In A, return every match for B (non overlapping)
 :  <str> <str> 2          In A, replace each match of regex B with its first capturing group.
 :  <str> <str> 3          Split A on matches of regex B. Retain capturing groups.
