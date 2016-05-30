@@ -128,7 +128,7 @@ def parse(code, spacing="\n "):
                     if sugar_active_char in c_to_f:
                         func = c_to_f[sugar_active_char][0]
                     else:
-                        func = "lambda unary_F: " + c_to_i[sugar_active_char][0].format(unary_F)
+                        func = "lambda unary_F: " + c_to_i[sugar_active_char][0].format("unary_F")
                     return "repeat({}, {}, {})".format(func, rep_arg1, rep_arg2), post2
                 if arity == 2:
                     # <binary function/infix>F: Fold operator
