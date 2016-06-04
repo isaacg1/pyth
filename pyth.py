@@ -26,6 +26,7 @@ sys.setrecursionlimit(100000)
 
 lambda_stack = []
 preps_used = set()
+state_maintaining_depth = 0
 
 # Parse it!
 
@@ -88,8 +89,8 @@ def parse(code, spacing="\n "):
         return '', rest_code
     if active_char == ';':
         # Inside a lambda, return the innermost lambdas leading variable.
-        if lambda_stack:
-            return 'env_lookup({!r})'.format(lambda_stack[-1]), rest_code
+        if lambda_stack or state_maintaining_depth:
+            return 'env_lookup({!r})'.format((lambda_stack or ['Q'])[-1]), rest_code
         # Semicolon is more magic (early-end all active functions/statements).
         if rest_code == '':
             return '', ';'
@@ -247,6 +248,9 @@ def next_seg(code):
 
 
 def next_n_segs(n, code):
+    if not isinstance(n, int):
+        assert n == float('inf'), "arities must be either ints or infinity"
+        raise RuntimeError # Can't use unbounded arity function in this context.
     remainder = code
     segs = ''
     for _ in range(n):
@@ -257,11 +261,12 @@ def next_n_segs(n, code):
 
 def state_maintaining_parse(code):
     global c_to_i
+    global state_maintaining_depth
     saved_c_to_i = c.deepcopy(c_to_i)
-    lambda_stack.append("This is a placeholder")
+    state_maintaining_depth += 1
     py_code, rest_code = parse(code)
+    state_maintaining_depth -= 1
     c_to_i = saved_c_to_i
-    lambda_stack.pop()
     return py_code, rest_code
 
 

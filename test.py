@@ -250,6 +250,8 @@ test_cases = [
     ('wI1]1', 'blah\n[1]', 'blah'),
     ('-IG2', 'True'),
     ('-IG\\a', 'False'),
+    ('{I', 'False', '[1, 1]'),
+    ('{IsM.cF', 'True', '[1, 2, 3], 2'),
     # J
     ('J3J', '3'),
     # K
