@@ -395,7 +395,9 @@ def Pin(a, b):
         if a < b:
             return list(range(a, b + 1))
         return list(range(b, a + 1))[::-1]
-    return a in b
+    if is_col(b):
+        return a in b
+    raise BadTypeCombinationError('}', a)
 environment['Pin'] = Pin
 
 
@@ -502,7 +504,10 @@ def lt(a, b):
         return a[:b]
     if is_num(a) and is_seq(b):
         if a >= len(b):
-            return ''
+            if isinstance(a, str):
+                return ''
+            else:
+                return []
         return b[:len(b) - a]
     if isinstance(a, complex) or isinstance(b, complex):
         return abs(a) < abs(b)
@@ -983,7 +988,7 @@ def reduce(a, b, c=None):
             counter += 1
             results.append(copy.deepcopy(acc))
             acc = a(acc, counter)
-        return results[-1]
+        return copy.deepcopy(acc)
 
     # Reduce
     if is_seq(b) or is_num(b):
