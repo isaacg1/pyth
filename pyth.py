@@ -641,6 +641,9 @@ Use "help [token]" to get information about that token, or read rev-doc.txt""")
     def postloop(self):
         print()
 
+    def complete(self):
+        pass
+
 if __name__ == '__main__':
     global safe_mode, c_to_f
 
@@ -652,9 +655,7 @@ if __name__ == '__main__':
             or "--repl" in sys.argv[1:] \
             or len(sys.argv) == 1:
 
-        #setting to None not working, so temp fix setting to key doesn't exist
-        #wating for answer on http://stackoverflow.com/questions/37981271
-        Repl("skjlksdjfjdsf").cmdloop()
+        Repl().cmdloop()
 
     elif len(sys.argv) > 1 and \
             "-h" in sys.argv[1:] \
