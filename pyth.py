@@ -16,11 +16,12 @@
 # uses, once expanded.                                                     #
 ############################################################################
 from extra_parse import *
-from macros import environment, BadTypeCombinationError
+from macros import environment, BadTypeCombinationError, memoized
 from data import *
 import copy as c
 import sys
 import io
+import cmd
 
 sys.setrecursionlimit(100000)
 
@@ -607,6 +608,38 @@ def run_code(code, inp):
 
     return result, error
 
+class Repl(cmd.Cmd):
+    output = ""
+    prompt = ">>> "
+    intro = """Welcome to the Pyth REPL.
+Each input line will be compiled and executed, and the results of
+each one will be passed into the next one's input stream.
+"""
+
+    def default(self, code):
+        self.output, error = run_code(code, self.output)
+        print(self.output, end="")
+
+    def do_EOF(self, line):
+        return True
+
+    @property
+    @memoized
+    def docs(self): #Cache the docs so don't read multiple times
+        with open("rev-doc.txt") as doc_file:
+            return {i.split(" ")[0] if not i.startswith(" ") else "space":i for
+                i in doc_file.read().split("Tokens:\n")[1].split("\n")[:-1]}
+
+    def do_help(self, line):
+        if line:
+            print(self.docs.get(line, "%s is not a valid token" % line) if not
+                all(i in "123456789." for i in line) else self.docs["0123456789."])
+        else:
+            print("""This is the REPL for Pyth, an extremely concise language.
+Use "help [token]" to get information about that token, or read rev-doc.txt""")
+
+    def postloop(self):
+        print()
 
 if __name__ == '__main__':
     global safe_mode, c_to_f
@@ -615,14 +648,23 @@ if __name__ == '__main__':
     # If debug is on, print code, python code, separator.
     # If help is on, print help message.
     if len(sys.argv) > 1 and \
-            "-h" in sys.argv[1:] \
-            or "--help" in sys.argv[1:] \
+            "-r" in sys.argv[1:] \
+            or "--repl" in sys.argv[1:] \
             or len(sys.argv) == 1:
+
+        #setting to None not working, so temp fix setting to key doesn't exist
+        #wating for answer on http://stackoverflow.com/questions/37981271
+        Repl("skjlksdjfjdsf").cmdloop()
+
+    elif len(sys.argv) > 1 and \
+            "-h" in sys.argv[1:] \
+            or "--help" in sys.argv[1:]:
         print("""This is the Pyth -> Python compliler and executor.
 Give file containing Pyth code as final command line argument.
 
 Command line flags:
 -c or --code:   Give code as final command arg, instead of file name.
+-r or --repl:   Enter REPL mode.
 -d or --debug   Show input code, generated python code.
 -s or --safe    Run in safe mode. Safe mode does not permit execution of
                 arbitrary Python code. Meant for online interpreter.
