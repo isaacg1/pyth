@@ -22,6 +22,7 @@ import copy as c
 import sys
 import io
 import cmd
+import traceback
 
 sys.setrecursionlimit(100000)
 
@@ -617,7 +618,25 @@ each one will be passed into the next one's input stream.
 """
 
     def default(self, code):
-        self.output, error = run_code(code, self.output)
+        global preps_used
+
+        old_stdout, old_stdin = sys.stdout, sys.stdin
+
+        sys.stdout = io.StringIO()
+        sys.stdin = io.StringIO(self.output)
+
+        preps_used = set()
+        x=general_parse(code)
+        try:
+            exec(x, environment)
+        except Exception as e:
+            traceback.print_exc()
+
+        self.output = sys.stdout.getvalue()
+
+        sys.stdout = old_stdout
+        sys.stdin = old_stdin
+
         print(self.output, end="")
 
     def do_EOF(self, line):
