@@ -504,7 +504,7 @@ def lt(a, b):
         return a[:b]
     if is_num(a) and is_seq(b):
         if a >= len(b):
-            if isinstance(a, str):
+            if isinstance(b, str):
                 return ''
             else:
                 return []
