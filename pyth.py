@@ -18,6 +18,8 @@
 from extra_parse import *
 from macros import environment, BadTypeCombinationError, memoized
 from data import *
+from lexer import lex
+
 import copy as c
 import sys
 import io
@@ -33,18 +35,19 @@ state_maintaining_depth = 0
 # Parse it!
 
 
-def general_parse(code):
+def general_parse(code, safe_mode):
     # Parsing
     args_list = []
     parsed = 'Not empty'
-    while code != '':
-        to_print = add_print(code)
-        parsed, code = parse(code)
+    tokens = lex(code, safe_mode)
+    while tokens != []:
+        to_print = add_print(tokens)
+        parsed, tokens = parse(tokens)
         if to_print:
             parsed = 'imp_print(' + parsed + ')'
         # Finish semicolon parsing
-        if code and code[0] == ';':
-            code = code[1:]
+        if tokens and tokens[0] == ';':
+            tokens = tokens[1:]
         args_list.append(parsed)
     # Build the output string.
     args_list = add_preps(preps_used) + args_list
@@ -52,74 +55,76 @@ def general_parse(code):
     return py_code
 
 
-def parse(code, spacing="\n "):
+def parse(tokens, spacing="\n "):
+    assert isinstance(tokens, list)
     # If we've reached the end of the string, finish up.
-    if code == '':
+    if not tokens:
         if lambda_stack:
-            return lambda_stack[0], ''
+            return lambda_stack[0], []
         else:
             preps_used.add('Q')
-            return 'Q', ''
+            return 'Q', []
     # Separate active character from the rest of the code.
-    active_char = code[0]
-    rest_code = code[1:]
-    # Deal with alternate command table
-    if active_char == ".":
-        assert len(rest_code) >= 1, 'expected letter after .'
-        if rest_code[0] not in "0123456789":
-            active_char += rest_code[0]
-            rest_code = rest_code[1:]
+    active_token = tokens[0]
+    rest_tokens = tokens[1:]
+    assert isinstance(active_token, str)
     # Deal with numbers
-    if active_char == "0":
-        return active_char, rest_code
-    if active_char in ".123456789":
-        return num_parse(active_char + rest_code)
+    if active_token == '.':
+        raise PythParseError(active_token, rest_tokens)        
+    if active_token[0] in "0123456789"\
+       or active_token[0] == '.' and active_token[1] in "0123456789":
+        return active_token, rest_tokens
     # String literals
-    if active_char == '"':
-        return str_parse(rest_code)
-    if active_char == '."':
-        string, rest_code = str_parse(rest_code)
-        return "%s(%s)" % (c_to_f['."'][0], string), rest_code
+    if active_token[0] == '"':
+        return str_parse_next(active_token), rest_tokens
+    if active_token[:2] == '."':
+        string = str_parse_next(active_token[1:])
+        return "%s(%s)" % (c_to_f['."'][0], string), rest_tokens
     # Python code literals
-    if active_char == '$':
+    if active_token[0] == '$':
         if safe_mode:
-            raise UnsafeInputError(active_char, rest_code)
+            raise UnsafeInputError(active_token, rest_tokens)
         else:
-            return python_parse(active_char + rest_code)
+            return active_token.strip('$'), rest_tokens
     # End paren is magic (early-end current function/statement).
-    if active_char == ')':
-        return '', rest_code
-    if active_char == ';':
+    if active_token == ')':
+        return '', rest_tokens
+    if active_token == ';':
         # Inside a lambda, return the innermost lambdas leading variable.
         if lambda_stack or state_maintaining_depth:
-            return 'env_lookup({!r})'.format((lambda_stack or ['Q'])[-1]), rest_code
+            return 'env_lookup({!r})'.format((lambda_stack or ['Q'])[-1]), rest_tokens
         # Semicolon is more magic (early-end all active functions/statements).
-        if rest_code == '':
-            return '', ';'
+        if not rest_tokens:
+            return '', [';']
         else:
-            return '', ';' + rest_code
+            return '', [';'] + rest_tokens
     # Designated variables
-    if active_char in variables:
-        if active_char in prepend:
-            preps_used.add(active_char)
-        return active_char, rest_code
-    # Replace replaements
-    if active_char in replacements:
-        return replace_parse(active_char, rest_code, spacing)
-    # Syntactic sugar handling.
-    if rest_code and (active_char in c_to_f or active_char in c_to_i):
-        sugar_char = rest_code[0]
-        remainder = rest_code[1:]
-        if active_char in c_to_f:
-            arity = c_to_f[active_char][1]
+    if active_token in variables:
+        if active_token in prepend:
+            preps_used.add(active_token)
+        return active_token, rest_tokens
+    if active_token[0] == '\\':
+        if active_token[1] in '"\\':
+            return '"\\%s"' % active_token[1], rest_tokens
         else:
-            arity = c_to_i[active_char][1]
+            return '"%s"' % active_token[1], rest_tokens
+    # Replace replaements
+    if active_token in replacements:
+        return replace_parse(active_token, rest_tokens, spacing)
+    # Syntactic sugar handling.
+    if rest_tokens and (active_token in c_to_f or active_token in c_to_i):
+        sugar_char = rest_tokens[0]
+        remainder = rest_tokens[1:]
+        if active_token in c_to_f:
+            arity = c_to_f[active_token][1]
+        else:
+            arity = c_to_i[active_token][1]
 
         # Sugar Chaining
         sugar_chars = 'FMLBRID#VW'
-        sugar_active_char = active_char
+        sugar_active_tokens = [active_token]
         while sugar_char in sugar_chars and remainder and remainder[0] in sugar_chars:
-            sugar_active_char += sugar_char
+            sugar_active_tokens += sugar_char
             sugar_char = remainder[0]
             remainder = remainder[1:]
         if arity > 0:
@@ -128,26 +133,24 @@ def parse(code, spacing="\n "):
                     # Unary: Repeated application
                     rep_arg1, post1 = parse(remainder)
                     rep_arg2, post2 = parse(post1)
-                    if sugar_active_char in c_to_f:
-                        func = c_to_f[sugar_active_char][0]
-                    else:
-                        func = "lambda unary_F: " + c_to_i[sugar_active_char][0].format("unary_F")
+                    func, rest = parse(sugar_active_tokens + ['b'])
+                    assert not rest, "Sugar parse F repeat failed"
+                    func = "lambda b:" + func
                     return "repeat({}, {}, {})".format(func, rep_arg1, rep_arg2), post2
                 if arity == 2:
                     # <binary function/infix>F: Fold operator
                     reduce_arg1 = lambda_vars['.U'][0][0]
                     reduce_arg2 = lambda_vars['.U'][0][-1]
                     fold_list, post_fold = next_seg(remainder)
-                    full_fold, rest = parse(".U" + sugar_active_char +
-                                            reduce_arg1 + reduce_arg2 + fold_list)
-                    assert rest == '', "Sugar parse F fold failed"
+                    full_fold, rest = parse([".U"] + sugar_active_tokens +
+                                            [reduce_arg1, reduce_arg2] + fold_list)
+                    assert not rest, "Sugar parse F fold failed"
                     return full_fold, post_fold
                 if arity > 2:
                     # Just splat it - it's a common use case.
                     splat_list, post_splat = next_seg(remainder)
-                    full_splat, rest = parse(
-                        sugar_active_char + '.*' + splat_list)
-                    assert rest == '', "Sugar parse F splat failed"
+                    full_splat, rest = parse(sugar_active_tokens + ['.*'] + splat_list)
+                    assert not rest, "Sugar parse F splat failed"
                     return full_splat, post_splat
 
             # <function>M: Map operator
@@ -155,13 +158,13 @@ def parse(code, spacing="\n "):
                 m_arg = lambda_vars['m'][0][0]
                 if arity == 1:
                     map_target, post_map = next_seg(remainder)
-                    full_map, rest = parse('m' + sugar_active_char + m_arg + map_target)
-                    assert rest == '', "Sugar parse M 1 arg failed"
+                    full_map, rest = parse(['m'] + sugar_active_tokens + [m_arg] + map_target)
+                    assert not rest, "Sugar parse M 1 arg failed"
                     return full_map, post_map
                 else:
                     map_target, post_map = next_seg(remainder)
-                    full_map, rest = parse('m%sF%s%s' % (sugar_active_char, m_arg, map_target))
-                    assert rest == '', "Sugar parse M 2+ args failed"
+                    full_map, rest = parse(['m'] + sugar_active_tokens + ['F', m_arg] + map_target)
+                    assert not rest, "Sugar parse M 2+ args failed"
                     return full_map, post_map
 
             # <binary function>L<any><seq>: Left Map operator
@@ -171,25 +174,26 @@ def parse(code, spacing="\n "):
                     m_arg = lambda_vars['m'][0][0]
                     lmap_lambda_args, remainder = next_n_segs(arity - 1, remainder)
                     lmap_target, post_lmap = next_seg(remainder)
-                    full_lmap, rest = parse('m' + sugar_active_char + lmap_lambda_args + m_arg + lmap_target)
-                    assert rest == '', "Sugar parse L failed"
+                    full_lmap, rest = parse(['m'] + sugar_active_tokens +
+                                            lmap_lambda_args + [m_arg] + lmap_target)
+                    assert not rest, "Sugar parse L failed"
                     return full_lmap, post_lmap
 
             # <function>V<seq><seq> Vectorize operator.
             # Equivalent to <func>MC,<seq><seq>.
             if sugar_char == 'V':
                 vmap_target, post_vmap = next_n_segs(2, remainder)
-                full_vmap, rest = parse(sugar_active_char + 'MC,' + vmap_target)
-                assert rest == '', "Sugar parse V failed"
+                full_vmap, rest = parse(sugar_active_tokens + ['M', 'C', ','] + vmap_target)
+                assert not rest, "Sugar parse V failed"
                 return full_vmap, post_vmap
 
             # <function>W<condition><arg><rgs> Condition application operator.
             # Equivalent to ?<condition><function><arg><args><arg>
             if sugar_char == 'W':
-                condition, rest_code1 = parse(remainder)
-                arg1, rest_code2 = state_maintaining_parse(rest_code1)
-                func, rest_code2b = parse(sugar_active_char + rest_code1)
-                return ('(%s if %s else %s)' % (func, condition, arg1), rest_code2b)
+                condition, rest_tokens1 = parse(remainder)
+                arg1, rest_tokens2 = state_maintaining_parse(rest_tokens1)
+                func, rest_tokens2b = parse(sugar_active_tokens + rest_tokens1)
+                return ('(%s if %s else %s)' % (func, condition, arg1), rest_tokens2b)
 
             # <function>B<arg><args> -> ,<arg><function><arg><args>
             # <unary function>I<any> Invariant operator.
@@ -201,7 +205,7 @@ def parse(code, spacing="\n "):
                 }
                 dup_format = dup_dict[sugar_char]
                 dup_parsed, _ = state_maintaining_parse(remainder)
-                non_dup_parsed, post_dup = parse(sugar_active_char + remainder)
+                non_dup_parsed, post_dup = parse(sugar_active_tokens + remainder)
                 return dup_format.format(dup_parsed, non_dup_parsed), post_dup
 
             # Right operators
@@ -217,30 +221,30 @@ def parse(code, spacing="\n "):
                 func_char = func_dict[sugar_char]
                 lambda_arg = lambda_vars[func_char][0][0]
                 rop_args, post_rop = next_n_segs(arity, remainder)
-                full_rop, rest = parse(func_char + sugar_active_char + lambda_arg + rop_args)
-                assert rest == '', 'Sugar parse %s failed' % sugar_char
+                full_rop, rest = parse([func_char] + sugar_active_tokens + [lambda_arg] + rop_args)
+                assert not rest, 'Sugar parse %s failed' % sugar_char
                 return full_rop, post_rop
 
     # =<function/infix>, ~<function/infix>: augmented assignment.
-    if active_char in ('=', '~'):
-        if augment_assignment_test(rest_code):
-            return augment_assignment_parse(active_char, rest_code)
+    if active_token in ('=', '~'):
+        if augment_assignment_test(rest_tokens):
+            return augment_assignment_parse(active_token, rest_tokens)
 
     # And for general functions
-    if active_char in c_to_f:
-        if active_char in lambda_f:
-            return lambda_function_parse(active_char, rest_code)
+    if active_token in c_to_f:
+        if active_token in lambda_f:
+            return lambda_function_parse(active_token, rest_tokens)
         else:
-            return function_parse(active_char, rest_code)
+            return function_parse(active_token, rest_tokens)
     # General format functions/operators
-    if active_char in c_to_i:
-        return infix_parse(active_char, rest_code)
+    if active_token in c_to_i:
+        return infix_parse(active_token, rest_tokens)
     # Statements:
-    if active_char in c_to_s:
-        return statement_parse(active_char, rest_code, spacing)
+    if active_token in c_to_s:
+        return statement_parse(active_token, rest_tokens, spacing)
     # If we get here, the character has not been implemented.
     # There is no non-ASCII support.
-    raise PythParseError(active_char, rest_code)
+    raise PythParseError(active_token, rest_tokens)
 
 
 def next_seg(code):
@@ -254,7 +258,7 @@ def next_n_segs(n, code):
         assert n == float('inf'), "arities must be either ints or infinity"
         raise RuntimeError # Can't use unbounded arity function in this context.
     remainder = code
-    segs = ''
+    segs = []
     for _ in range(n):
         seg, remainder = next_seg(remainder)
         segs += seg
@@ -266,136 +270,122 @@ def state_maintaining_parse(code):
     global state_maintaining_depth
     saved_c_to_i = c.deepcopy(c_to_i)
     state_maintaining_depth += 1
-    py_code, rest_code = parse(code)
+    py_code, rest_tokens = parse(code)
     state_maintaining_depth -= 1
     c_to_i = saved_c_to_i
-    return py_code, rest_code
+    return py_code, rest_tokens
 
 
-def augment_assignment_test(rest_code):
-    if rest_code[0] == ".":
-        func_char = rest_code[:2]
-        following_code = rest_code[2:]
-    else:
-        func_char = rest_code[0]
-        following_code = rest_code[1:]
-    return func_char not in variables and func_char not in next_c_to_i and func_char != ','
+def augment_assignment_test(rest_tokens):
+    func_token = rest_tokens[0]
+    return func_token not in variables and func_token not in next_c_to_i and func_token != ','
 
 
-def augment_assignment_parse(active_char, rest_code):
-    if rest_code[0] == ".":
-        func_char = rest_code[:2]
-        following_code = rest_code[2:]
-    else:
-        func_char = rest_code[0]
-        following_code = rest_code[1:]
-    following_vars = [
-        char for char in following_code if char in variables or char in next_c_to_i]
+def augment_assignment_parse(active_token, rest_tokens):
+    following_vars = [token for token in rest_tokens if token in variables or token in next_c_to_i]
     assert following_vars, 'Assignment needs a variable'
-    var_char = following_vars[0]
-    return parse(active_char +
-                 var_char +
-                 rest_code)
+    var_token = following_vars[0]
+    return parse([active_token, var_token] + rest_tokens)
 
 
-def lambda_function_parse(active_char, rest_code):
+def lambda_function_parse(active_token, rest_tokens):
     # Function will definitely be in next_c_to_f
     global c_to_f
     global next_c_to_f
-    func_name, arity = c_to_f[active_char]
-    var = lambda_vars[active_char][0]
+    func_name, arity = c_to_f[active_token]
+    var = lambda_vars[active_token][0]
     # Swap what variables are used in lambda functions.
-    saved_lambda_vars = lambda_vars[active_char]
-    lambda_vars[active_char] = lambda_vars[active_char][1:] + [var]
+    saved_lambda_vars = lambda_vars[active_token]
+    lambda_vars[active_token] = lambda_vars[active_token][1:] + [var]
     lambda_stack.append(var[0])
     # Take one argument, the lambda.
-    parsed, rest_code = parse(rest_code)
+    parsed, rest_tokens = parse(rest_tokens)
     args_list = [parsed]
     # Rotate back.
-    lambda_vars[active_char] = saved_lambda_vars
+    lambda_vars[active_token] = saved_lambda_vars
     lambda_stack.pop()
     while (len(args_list) != arity and parsed != ''
-            and not (rest_code == ''
-                     and active_char in optional_final_arg
+            and not (not rest_tokens
+                     and active_token in optional_final_arg
                      and len(args_list) == arity - 1)):
-        parsed, rest_code = parse(rest_code)
+        parsed, rest_tokens = parse(rest_tokens)
         args_list.append(parsed)
     if len(args_list) > 0 and args_list[-1] == '':
         args_list = args_list[:-1]
     py_code = '%s(lambda %s:%s)' % (func_name, var, ','.join(args_list))
-    return py_code, rest_code
+    return py_code, rest_tokens
 
 
-def function_parse(active_char, rest_code):
-    func_name, arity = c_to_f[active_char]
+def function_parse(active_token, rest_tokens):
+    func_name, arity = c_to_f[active_token]
     # Recurse until terminated by end paren or EOF
     # or received enough arguments
     args_list = []
     parsed = 'Not empty'
     while (len(args_list) != arity and parsed != ''
-            and not (arity == float('inf') and rest_code == '')
-            and not (rest_code == ''
-                     and active_char in optional_final_arg
+            and not (arity == float('inf') and rest_tokens == [])
+            and not (not rest_tokens
+                     and active_token in optional_final_arg
                      and len(args_list) == arity - 1)):
-        parsed, rest_code = parse(rest_code)
+        parsed, rest_tokens = parse(rest_tokens)
         args_list.append(parsed)
     # Build the output string.
     if len(args_list) > 0 and args_list[-1] == '':
         args_list = args_list[:-1]
     py_code = '%s(%s)' % (func_name, ','.join(args_list))
-    return py_code, rest_code
+    return py_code, rest_tokens
 
 
-def infix_parse(active_char, rest_code):
+def infix_parse(active_token, rest_tokens):
     global c_to_i
-    infixes, arity = c_to_i[active_char]
+    infixes, arity = c_to_i[active_token]
     # Advance infixes.
-    if active_char in next_c_to_i:
-        c_to_i[active_char] = next_c_to_i[active_char]
+    if active_token in next_c_to_i:
+        c_to_i[active_token] = next_c_to_i[active_token]
     args_list = []
     parsed = 'Not empty'
     # Lambda infix(es)
-    if active_char == '.W':
+    if active_token == '.W':
         lambda_stack.extend(['Z', 'H'])
     while len(args_list) != arity and parsed != '':
-        if (rest_code == ''
-                and active_char in optional_final_arg
-                and len(args_list) == arity - 1):
+        if (not rest_tokens
+            and active_token in optional_final_arg
+            and len(args_list) == arity - 1):
             args_list.append('')
             break
-        parsed, rest_code = parse(rest_code)
+        parsed, rest_tokens = parse(rest_tokens)
         args_list.append(parsed)
-        if active_char == '.W' and len(args_list) <= 2:
+        if active_token == '.W' and len(args_list) <= 2:
             lambda_stack.pop()
     # Statements that cannot have anything after them
-    if active_char in end_statement:
-        rest_code = ")" + rest_code
+    if active_token in end_statement:
+        rest_tokens = [")"] + rest_tokens
     py_code = infixes.format(*args_list)
-    return py_code, rest_code
+    return py_code, rest_tokens
 
 
-def statement_parse(active_char, rest_code, spacing):
+def statement_parse(active_token, rest_tokens, spacing):
     # Handle the initial portion (head)
     # addl_spaces denotes the amount of extra spacing needed.
-    if len(c_to_s[active_char]) == 2:
-        infixes, arity = c_to_s[active_char]
+    if len(c_to_s[active_token]) == 2:
+        infixes, arity = c_to_s[active_token]
         addl_spaces = ''
     else:
-        infixes, arity, num_spaces = c_to_s[active_char]
+        infixes, arity, num_spaces = c_to_s[active_token]
         addl_spaces = ' ' * num_spaces
     # Handle newlines in infix segments
     infixes = infixes.replace("\n", spacing[:-1])
     args_list = []
     parsed = 'Not empty'
     while len(args_list) != arity and parsed != '':
-        parsed, rest_code = parse(rest_code)
+        parsed, rest_tokens = parse(rest_tokens)
         args_list.append(parsed)
     # Handle the body - ends object as well.
     body_lines = []
     parsed = 'Not empty'
-    while parsed != '' and rest_code != '':
-        to_print = add_print(rest_code)
-        parsed, rest_code = parse(rest_code, spacing + addl_spaces + ' ')
+    while parsed != '' and rest_tokens:
+        to_print = add_print(rest_tokens)
+        parsed, rest_tokens = parse(rest_tokens, spacing + addl_spaces + ' ')
         if to_print:
             parsed = 'imp_print(%s)' % parsed
         body_lines.append(parsed)
@@ -408,29 +398,19 @@ def statement_parse(active_char, rest_code, spacing):
     total_spacing = spacing + addl_spaces
     body = total_spacing + total_spacing.join(body_lines)
     args_list.append(body)
-    return infixes.format(*args_list), rest_code
+    return infixes.format(*args_list), rest_tokens
 
 
-def replace_parse(active_char, rest_code, spacing):
+def replace_parse(active_token, rest_tokens, spacing):
     global replacements
-    # Special case for \\
-    if active_char == "\\" and rest_code[0] in "\"\\":
-        return parse('"\\' + rest_code[0] + '"' + rest_code[1:], spacing)
     # Rotate replacements.
-    repl_str = replacements[active_char][0]
-    saved_replacements = replacements[active_char]
-    replacements[active_char] = replacements[active_char][1:] + [repl_str]
-    # Parse
-    if isinstance(repl_str, tuple):
-        repl_str, num_args = repl_str
-        format_chars = tuple(rest_code[:num_args])
-        new_code = repl_str.format(*format_chars) + rest_code[num_args:]
-        parsed, remainder = parse(new_code, spacing)
-    else:
-        parsed, remainder = parse(repl_str + rest_code, spacing)
+    repl_list = replacements[active_token][0]
+    saved_replacements = replacements[active_token]
+    replacements[active_token] = replacements[active_token][1:] + [repl_list]
+    parsed, remainder = parse(repl_list + rest_tokens, spacing)
     # Rotate back in some cases.
-    if active_char in rotate_back_replacements:
-        replacements[active_char] = saved_replacements
+    if active_token in rotate_back_replacements:
+        replacements[active_token] = saved_replacements
     return parsed, remainder
 
 
@@ -443,33 +423,19 @@ def add_preps(preps):
 # safe infix.
 def add_print(code):
     if len(code) > 0:
-        # Handle alternate table commands before confusion with numerals.
-        if code[0] == ".":
-            assert len(code) >= 2, 'expected letter after .'
-            if code[:2] in c_to_f and not code[:2] == '.q':
-                return True
-            if code[:2] in variables:
-                return True
-            if code[:2] in ('.x', '.W', '.(', '.)',):
-                return True
-            if code[1] not in '0123456789':
-                return False
-
-        if (code[0] not in 'p \n'
-                and code[0] in c_to_f) or \
-            code[0] in variables or \
-            code[0] in "@&|]}?,\\\".0123456789," or \
-            ((code[0] in 'JK' or code[0] in prepend) and
-                c_to_i[code[0]] == next_c_to_i[code[0]]):
-            return True
-    return False
+        if code[0] in c_to_s or code[0] in replacements or\
+           code[0] in ('=', '~', 'B', 'R', 'p', ' ', '\n', ')', ';'):
+            return False
+        if code[0] in next_c_to_i:
+            return c_to_i[code[0]] == next_c_to_i[code[0]]
+        return True
 
 
 # Pyth eval
 def pyth_eval(a):
     if not isinstance(a, str):
         raise BadTypeCombinationError(".v", a)
-    return eval(parse(a)[0], environment)
+    return eval(parse(lex(a, safe_mode))[0], environment)
 environment['pyth_eval'] = pyth_eval
 
 
@@ -589,7 +555,7 @@ def run_code(code, inp):
 
     try:
         safe_mode = False
-        exec(general_parse(code), environment)
+        exec(general_parse(code, safe_mode), environment)
     except SystemExit:
         pass
     except Exception as e:
@@ -626,7 +592,7 @@ each one will be passed into the next one's input stream.
         sys.stdin = io.StringIO(self.output)
 
         preps_used = set()
-        x=general_parse(code)
+        x=general_parse(code, False)
         try:
             exec(x, environment)
         except Exception as e:
@@ -646,8 +612,16 @@ each one will be passed into the next one's input stream.
     @memoized
     def docs(self): #Cache the docs so don't read multiple times
         with open("rev-doc.txt") as doc_file:
-            return {i.split(" ")[0] if not i.startswith(" ") else "space":i for
-                i in doc_file.read().split("Tokens:\n")[1].split("\n")[:-1]}
+            docs_dict = {}
+            for line in doc_file.read().split("Tokens:\n")[1].split("\n")[:-1]:
+                token = (line.split(" ")[0] if not line.startswith(" ") else "space")
+                lines = docs_dict.get(token, [])
+                lines.append(line)
+                docs_dict[token] = lines
+            string_docs_dict = {}
+            for token, lines in docs_dict.items():
+                docs_dict[token] = '\n'.join(lines)
+            return docs_dict
 
     def do_help(self, line):
         if line:
@@ -669,9 +643,9 @@ if __name__ == '__main__':
     # Check for command line flags.
     # If debug is on, print code, python code, separator.
     # If help is on, print help message.
-    if len(sys.argv) > 1 and \
-            "-r" in sys.argv[1:] \
-            or "--repl" in sys.argv[1:] \
+    if (len(sys.argv) > 1 and
+            "-r" in sys.argv[1:] 
+            or "--repl" in sys.argv[1:]) \
             or len(sys.argv) == 1:
 
         Repl().cmdloop()
@@ -750,7 +724,7 @@ See opening comment in pyth.py for more info.""")
                 print(pyth_code, file=sys.stderr)
                 print('=' * 50, file=sys.stderr)
 
-            py_code_line = general_parse(pyth_code)
+            py_code_line = general_parse(pyth_code, safe_mode)
 
             if debug_on:
                 print(py_code_line, file=sys.stderr)
