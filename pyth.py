@@ -583,6 +583,10 @@ Each input line will be compiled and executed, and the results of
 each one will be passed into the next one's input stream.
 """
 
+    def __init__(self, debug_on):
+        self.debug_on = debug_on
+        cmd.Cmd.__init__(self)
+
     def default(self, code):
         global preps_used
 
@@ -592,9 +596,12 @@ each one will be passed into the next one's input stream.
         sys.stdin = io.StringIO(self.output)
 
         preps_used = set()
-        x=general_parse(code, False)
+        pyth_code = general_parse(code, False)
+        if self.debug_on:
+            print(pyth_code, file=sys.stderr)
+            print('=' * 50, file=sys.stderr)
         try:
-            exec(x, environment)
+            exec(pyth_code, environment)
         except Exception as e:
             traceback.print_exc()
 
@@ -648,7 +655,7 @@ if __name__ == '__main__':
             or "--repl" in sys.argv[1:]) \
             or len(sys.argv) == 1:
 
-        Repl().cmdloop()
+        Repl("-d" in sys.argv[1:] or "--debug" in sys.argv[1:]).cmdloop()
 
     elif len(sys.argv) > 1 and \
             "-h" in sys.argv[1:] \
