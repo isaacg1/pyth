@@ -653,7 +653,7 @@ if __name__ == '__main__':
     if (len(sys.argv) > 1 and
             "-r" in sys.argv[1:] 
             or "--repl" in sys.argv[1:]) \
-            or len(sys.argv) == 1:
+            or all(flag in ("-d", "--debug") for flag in sys.argv[1:]):
 
         Repl("-d" in sys.argv[1:] or "--debug" in sys.argv[1:]).cmdloop()
 
