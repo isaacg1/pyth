@@ -708,11 +708,15 @@ def to_base_ten(arb, base):
     # Special cases
     if abs(base) == 1:
         return len(arb)
-    acc = 0
-    for digit in arb:
-        acc *= base
-        acc += digit
-    return acc
+    if len(arb) < 2:
+        return arb[0] if arb else 0
+    digits = []
+    it = iter(arb)
+    if len(arb) % 2 != 0:
+        digits.append(next(it))
+    for digit in it:
+        digits.append(digit * base + next(it))
+    return to_base_ten(digits, base * base)
 
 
 # j. str.
@@ -737,8 +741,19 @@ def from_base_ten(arb, base):
         return [0] * arb
     # Main routine
     base_list = []
-    work = arb
-    while work != 0:
+    it = reversed(from_base_ten(arb, base * base) if abs(arb) >= abs(base) else [arb])
+    digit = next(it)
+    clock = 0
+    work = 0
+    while clock >= 0 or work != 0:
+        if clock == 0:
+            work += digit
+            try:
+                digit = next(it)
+                clock = 2
+            except StopIteration:
+                digit = 0
+        clock -= 1
         work, remainder = divmod(work, base)
         if remainder < 0:
             work += 1
