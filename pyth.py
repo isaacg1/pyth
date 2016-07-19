@@ -675,6 +675,8 @@ Command line flags:
 -m or --multi   Enable multi-line mode.
 -M or --no-memoization
                 Turn off automatic function memoization.
+-D or --only-debug
+                Turn off code execution and show only debug informations.
 
 See opening comment in pyth.py for more info.""")
     else:
@@ -692,6 +694,7 @@ See opening comment in pyth.py for more info.""")
         line_on = flag_on('l', '--line')
         multiline_on = flag_on('m', '--multiline')
         memo_off = flag_on('M', '--no-memoization')
+        only_debug = flag_on('D', '--only-debug')
         if safe_mode:
             c_to_f['v'] = ('Pliteral_eval', 1)
             del c_to_f['.w']
@@ -723,20 +726,17 @@ See opening comment in pyth.py for more info.""")
                     if len(pyth_code) > 0 and pyth_code[-1] == '\n':
                         pyth_code = pyth_code[:-1]
 
+            py_code_line = general_parse(pyth_code, safe_mode)
             # Debug message
-            if debug_on:
+            if debug_on or only_debug:
                 print('{:=^50}'.format(' ' + str(len(pyth_code)) + ' chars '),
                       file=sys.stderr)
                 print(pyth_code, file=sys.stderr)
                 print('=' * 50, file=sys.stderr)
-
-            py_code_line = general_parse(pyth_code, safe_mode)
-
-            if debug_on:
                 print(py_code_line, file=sys.stderr)
                 print('=' * 50, file=sys.stderr)
 
-            if safe_mode:
+            if safe_mode and not only_debug:
                 # to fix most security problems, we will disable the use of
                 # unnecessary parts of the python
                 # language which should never be needed for golfing code.
@@ -765,6 +765,6 @@ See opening comment in pyth.py for more info.""")
                 # PS: Security shouldn't be a black mark to Pyth.
                 # I think it's a really neat idea!
 
-            else:
+            elif not safe_mode and not only_debug:
                 safe_mode = False
                 exec(py_code_line, environment)
