@@ -646,13 +646,13 @@ Use "help [token]" to get information about that token, or read rev-doc.txt""")
 
 if __name__ == '__main__':
     global safe_mode, c_to_f
-
+    is_interactive = sys.stdin.isatty()
     # Check for command line flags.
     # If debug is on, print code, python code, separator.
     # If help is on, print help message.
-    if ("-r" in sys.argv[1:] 
+    if is_interactive and (("-r" in sys.argv[1:] 
         or "--repl" in sys.argv[1:]) \
-        or all(flag in ("-d", "--debug") for flag in sys.argv[1:]):
+        or all(flag in ("-d", "--debug") for flag in sys.argv[1:])):
 
         Repl("-d" in sys.argv[1:] or "--debug" in sys.argv[1:]).cmdloop()
 
@@ -695,6 +695,9 @@ See opening comment in pyth.py for more info.""")
         multiline_on = flag_on('m', '--multiline')
         memo_off = flag_on('M', '--no-memoization')
         only_debug = flag_on('D', '--only-debug')
+        if not is_interactive:
+            file_or_string = sys.stdin.readlines()
+            code_on = False
         if safe_mode:
             c_to_f['v'] = ('Pliteral_eval', 1)
             del c_to_f['.w']
@@ -708,7 +711,10 @@ See opening comment in pyth.py for more info.""")
             if code_on:
                 pyth_code = file_or_string
             else:
-                code_lines = list(open(file_or_string, encoding='iso-8859-1'))
+                if not is_interactive:
+                    code_lines = file_or_string
+                else:
+                    code_lines = list(open(file_or_string, encoding='iso-8859-1'))
                 if line_on:
                     runable_code_lines = [code_line[:-1]
                                           for code_line in code_lines
