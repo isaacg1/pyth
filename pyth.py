@@ -681,7 +681,7 @@ Command line flags:
 See opening comment in pyth.py for more info.""")
     else:
         file_or_string = sys.argv[-1]
-        flags = sys.argv[1:-1]
+        flags = sys.argv[1:-1] if is_interactive else sys.argv[1:]
         verbose_flags = [flag for flag in flags if flag[:2] == '--']
         short_flags = [flag for flag in flags if flag[:2] != '--']
 
