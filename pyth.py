@@ -677,11 +677,18 @@ Command line flags:
                 Turn off automatic function memoization.
 -D or --only-debug
                 Turn off code execution and show only debug informations.
+-x    --execute-stdin
+                Instead of reading code from file or commandline, use the
+                first line of STDIN. Only short-form flags can be used with 
+                -x, as one argument. (-xcd)
 
 See opening comment in pyth.py for more info.""")
     else:
         file_or_string = sys.argv[-1]
-        flags = sys.argv[1:-1] if is_interactive else sys.argv[1:]
+        if len(sys.argv) == 2 and sys.argv[1][0] == '-':
+            flags = sys.argv[1:]
+        else:
+            flags = sys.argv[1:-1]  
         verbose_flags = [flag for flag in flags if flag[:2] == '--']
         short_flags = [flag for flag in flags if flag[:2] != '--']
 
@@ -695,7 +702,9 @@ See opening comment in pyth.py for more info.""")
         multiline_on = flag_on('m', '--multiline')
         memo_off = flag_on('M', '--no-memoization')
         only_debug = flag_on('D', '--only-debug')
-        if not is_interactive:
+        execute_stdin = flag_on('x', '--execute-stdin')
+        if execute_stdin:
+            assert len(sys.argv) == 2, "-x is not compatible with multiple command line arguments"
             file_or_string = sys.stdin.readlines()
             code_on = False
         if safe_mode:
