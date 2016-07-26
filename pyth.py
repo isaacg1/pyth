@@ -70,7 +70,7 @@ def parse(tokens, spacing="\n "):
     assert isinstance(active_token, str)
     # Deal with numbers
     if active_token == '.':
-        raise PythParseError(active_token, rest_tokens)        
+        raise PythParseError(active_token, rest_tokens)
     if active_token[0] in "0123456789"\
        or active_token[0] == '.' and active_token[1] in "0123456789":
         return active_token, rest_tokens
@@ -650,7 +650,7 @@ if __name__ == '__main__':
     # Check for command line flags.
     # If debug is on, print code, python code, separator.
     # If help is on, print help message.
-    if is_interactive and (("-r" in sys.argv[1:] 
+    if is_interactive and (("-r" in sys.argv[1:]
         or "--repl" in sys.argv[1:]) \
         or all(flag in ("-d", "--debug") for flag in sys.argv[1:])):
 
@@ -679,7 +679,7 @@ Command line flags:
                 Turn off code execution and show only debug informations.
 -x    --execute-stdin
                 Instead of reading code from file or commandline, use the
-                first line of STDIN. Only short-form flags can be used with 
+                first line of STDIN. Only short-form flags can be used with
                 -x, as one argument. (-xcd)
 
 See opening comment in pyth.py for more info.""")
@@ -688,7 +688,7 @@ See opening comment in pyth.py for more info.""")
         if len(sys.argv) == 2 and sys.argv[1][0] == '-':
             flags = sys.argv[1:]
         else:
-            flags = sys.argv[1:-1]  
+            flags = sys.argv[1:-1]
         verbose_flags = [flag for flag in flags if flag[:2] == '--']
         short_flags = [flag for flag in flags if flag[:2] != '--']
 
@@ -720,7 +720,7 @@ See opening comment in pyth.py for more info.""")
             if code_on:
                 pyth_code = file_or_string
             else:
-                if not is_interactive:
+                if execute_stdin:
                     code_lines = file_or_string
                 else:
                     code_lines = list(open(file_or_string, encoding='iso-8859-1'))
