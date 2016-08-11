@@ -430,6 +430,10 @@ def Plist(*a):
     return list(a)
 environment['Plist'] = Plist
 
+# ]. All.
+def singleton(a):
+    return [a]
+environment['singleton'] = singleton
 
 # :. list.
 def at_slice(a, b, c=0):
