@@ -1861,6 +1861,8 @@ def leftshift(a, b):
         raise BadTypeCombinationError(".<", a, b)
 
     if is_seq(a):
+        if not a:
+            return a
         b %= len(a)
         return a[b:] + a[:b]
 
@@ -1877,6 +1879,8 @@ def rightshift(a, b):
         raise BadTypeCombinationError(".>", a, b)
 
     if is_seq(a):
+        if not a:
+            return a
         b %= len(a)
         return a[-b:] + a[:-b]
 
