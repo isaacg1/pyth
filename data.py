@@ -149,6 +149,7 @@ c_to_f = {
     './': ('partition', 1),
     '._': ('sign', 1),
     '.-': ('remove', 2),
+    '.+': ('deltas', 2),
     '.:': ('substrings', 2),
     '.{': ('Pset', 1),
     '.!': ('factorial', 1),
