@@ -1955,7 +1955,7 @@ environment['remove'] = remove
 # .+. seq
 def deltas(a):
     if is_col(a):
-        return [a[i+1] - x for i,x in enumerate(a[:-1])]
+        return [minus(a[i+1], x) for i,x in enumerate(a[:-1])]
     raise BadTypeCombinationError(".+", a)
 environment['deltas'] = deltas    
 
