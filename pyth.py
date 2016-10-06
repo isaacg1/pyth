@@ -287,6 +287,20 @@ def augment_assignment_parse(active_token, rest_tokens):
     var_token = following_vars[0]
     return parse([active_token, var_token] + rest_tokens)
 
+def gather_args(active_token, rest_tokens, arity):
+    # Recurse until terminated by end paren or EOF
+    # or received enough arguments
+    args_list = []
+    while (len(args_list) != arity
+            and not (not rest_tokens
+                     and (arity == float('inf')
+                          or (active_token in optional_final_arg
+                              and len(args_list) == arity - 1)))):
+        parsed, rest_tokens = parse(rest_tokens)
+        if not parsed: break
+        args_list.append(parsed)
+    return args_list, rest_tokens
+
 
 def lambda_function_parse(active_token, rest_tokens):
     # Function will definitely be in next_c_to_f
@@ -299,39 +313,19 @@ def lambda_function_parse(active_token, rest_tokens):
     lambda_vars[active_token] = lambda_vars[active_token][1:] + [var]
     lambda_stack.append(var[0])
     # Take one argument, the lambda.
-    parsed, rest_tokens = parse(rest_tokens)
-    args_list = [parsed]
+    lambda_parsed, rest_tokens = parse(rest_tokens)
     # Rotate back.
     lambda_vars[active_token] = saved_lambda_vars
     lambda_stack.pop()
-    while (len(args_list) != arity and parsed != ''
-            and not (not rest_tokens
-                     and active_token in optional_final_arg
-                     and len(args_list) == arity - 1)):
-        parsed, rest_tokens = parse(rest_tokens)
-        args_list.append(parsed)
-    if len(args_list) > 0 and args_list[-1] == '':
-        args_list = args_list[:-1]
+    partial_args_list, rest_tokens = gather_args(active_token, rest_tokens, arity-1)
+    args_list = [lambda_parsed] + partial_args_list
     py_code = '%s(lambda %s:%s)' % (func_name, var, ','.join(args_list))
     return py_code, rest_tokens
 
 
 def function_parse(active_token, rest_tokens):
     func_name, arity = c_to_f[active_token]
-    # Recurse until terminated by end paren or EOF
-    # or received enough arguments
-    args_list = []
-    parsed = 'Not empty'
-    while (len(args_list) != arity and parsed != ''
-            and not (arity == float('inf') and rest_tokens == [])
-            and not (not rest_tokens
-                     and active_token in optional_final_arg
-                     and len(args_list) == arity - 1)):
-        parsed, rest_tokens = parse(rest_tokens)
-        args_list.append(parsed)
-    # Build the output string.
-    if len(args_list) > 0 and args_list[-1] == '':
-        args_list = args_list[:-1]
+    args_list, rest_tokens = gather_args(active_token, rest_tokens, arity)
     py_code = '%s(%s)' % (func_name, ','.join(args_list))
     return py_code, rest_tokens
 
@@ -343,17 +337,17 @@ def infix_parse(active_token, rest_tokens):
     if active_token in next_c_to_i:
         c_to_i[active_token] = next_c_to_i[active_token]
     args_list = []
-    parsed = 'Not empty'
     # Lambda infix(es)
     if active_token == '.W':
         lambda_stack.extend(['Z', 'H'])
-    while len(args_list) != arity and parsed != '':
+    while len(args_list) != arity:
         if (not rest_tokens
             and active_token in optional_final_arg
             and len(args_list) == arity - 1):
             args_list.append('')
             break
         parsed, rest_tokens = parse(rest_tokens)
+        if not parsed: break
         args_list.append(parsed)
         if active_token == '.W' and len(args_list) <= 2:
             lambda_stack.pop()
@@ -375,23 +369,16 @@ def statement_parse(active_token, rest_tokens, spacing):
         addl_spaces = ' ' * num_spaces
     # Handle newlines in infix segments
     infixes = infixes.replace("\n", spacing[:-1])
-    args_list = []
-    parsed = 'Not empty'
-    while len(args_list) != arity and parsed != '':
-        parsed, rest_tokens = parse(rest_tokens)
-        args_list.append(parsed)
+    args_list, rest_tokens = gather_args(active_token, rest_tokens, arity)
     # Handle the body - ends object as well.
     body_lines = []
-    parsed = 'Not empty'
-    while parsed != '' and rest_tokens:
+    while rest_tokens:
         to_print = add_print(rest_tokens)
         parsed, rest_tokens = parse(rest_tokens, spacing + addl_spaces + ' ')
+        if not parsed: break
         if to_print:
             parsed = 'imp_print(%s)' % parsed
         body_lines.append(parsed)
-    # Trim the '' away and combine.
-    if body_lines and body_lines[-1] == '':
-        body_lines = body_lines[:-1]
     if body_lines == []:
         body_lines = ['pass']
     # Combine pieces - intro, statement, conclusion.
