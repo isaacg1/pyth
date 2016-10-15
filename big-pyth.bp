@@ -1,0 +1,12 @@
+not
+  index-in func-filter 
+             end sorted filter-var
+    group-by
+      sum group-by-var
+      subsets 
+        reverse 
+          sorted
+            times
+              end implicit-input
+              implicit-input
+
