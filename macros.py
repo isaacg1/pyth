@@ -1415,7 +1415,7 @@ environment['invert'] = invert
 
 
 # .j. int, int
-def Pcomplex(a, b=1):
+def Pcomplex(a=0, b=1):
     if not is_num(a) and is_num(b):
         raise BadTypeCombinationError(".j", a, b)
     return a + b * complex(0, 1)
