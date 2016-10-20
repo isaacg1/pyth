@@ -1,15 +1,15 @@
 from extra_parse import UnsafeInputError
 
-def lex(code, safe_mode):
+def lex(code):
     remainder = code
     tokens = []
     while remainder:
-        split_point = find_split_point(remainder, safe_mode)
+        split_point = find_split_point(remainder)
         token, remainder = remainder[:split_point], remainder[split_point:]
         tokens.append(token)
     return tokens
 
-def find_split_point(code, safe_mode):
+def find_split_point(code):
     if len(code) == 1:
         return 1
     if code[0] == ".":
@@ -24,10 +24,7 @@ def find_split_point(code, safe_mode):
     if code[0] == '"':
         return string_split(code)
     if code[0] == '$':
-        if safe_mode:
-            raise UnsafeInputError(code[0], code[1:])
-        else:
-            return python_lit_split(code)
+        return python_lit_split(code)
     return 1
 
 def string_split(code):
