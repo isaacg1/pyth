@@ -117,6 +117,7 @@ pyth_shrinker = {
     , 'unary-range': 'U'
     , 'up-to-0': 'U'
     , 'short-for': 'V'
+    , 'short-for-var': 'N'
     , 'short-for-var1': 'N'
     , 'short-for-var2': 'H'
     , 'short-for-var3': 'b'
