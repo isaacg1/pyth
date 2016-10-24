@@ -102,7 +102,7 @@ Ex::
 	10
 	11
 
-8.5. "E" - The Else Statement
+8.5. ".?" - The Else Statement
 =============================
 
 **Arity: Unbounded**
@@ -112,7 +112,7 @@ This is the else part of the if-else construct. It is pretty self explanatory an
 Ex::
 
 	==================================================
-	I>5T"It's greater")E"It's less than"
+	I>5T"It's greater").?"It's less than"
 	==================================================
 	if gt(5,T):
 	 Pprint("\n","It's greater")
@@ -243,12 +243,12 @@ Ex::
 
 **Arity: 3**
 
-This is Pyth's ternary. Unlike most languages, but like Python, the conditional is the second input. The first input is executed and returned if the conditional is truthy, and the third input is executed and returned if the conditional is falsy.  It is shortcircuiting, just like Python's ``if else``.
+This is Pyth's ternary. Like most languages, but unlike Python, the conditional is the first input. The second input is executed and returned if the conditional is truthy, and the third input is executed and returned if the conditional is falsy.  It is shortcircuiting, just like Python's ``if else``.
 
 Ex::
 
     ==================== 8 chars =====================
-    ?1T3?1Z3
+    ?T1 3?Z1 3
     ==================================================
     Pprint("\n",(1 if T else 3))
     Pprint("\n",(1 if Z else 3))
