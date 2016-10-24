@@ -97,9 +97,8 @@ def infinite_iterator(start):
     if isinstance(start, str):
         while True:
             yield start
-            alphanum_locs = list(filter(lambda loc: start[loc].isalnum()
-                                        and ord(start[loc]) < 128,
-                                        range(len(start))))
+            alphanum_locs = [loc for loc in range(len(start))
+                             if start[loc].isalnum() and ord(start[loc]) < 128]
             if alphanum_locs:
                 locs = alphanum_locs[::-1]
             elif start:
@@ -162,7 +161,7 @@ def repeat(func, start, repetitions):
     if not isinstance(repetitions, int):
         raise BadTypeCombinationError("F", repetitions, start)
     value = start
-    for i in range(repetitions):
+    for _ in range(repetitions):
         value = func(value)
     return value
 environment['repeat'] = repeat
@@ -223,10 +222,10 @@ def lookup(a, b):
         return a[b % len(a)]
     if is_col(a) and is_col(b):
         if isinstance(a, str):
-            intersection = filter(lambda b_elm: isinstance(b_elm, str)
-                                  and b_elm in a, b)
+            intersection = [b_elem for  b_elem in b
+                            if isinstance(b_elem, str) and b_elem in a]
         else:
-            intersection = filter(lambda b_elem: b_elem in a, b)
+            intersection = [b_elem for b_elem in b if b_elem in a]
         if isinstance(a, str):
             return ''.join(intersection)
         if isinstance(a, set):
@@ -270,9 +269,9 @@ def times(a, b):
     if is_col(a) and is_col(b):
         prod = list(itertools.product(a, b))
         if isinstance(a, str) and isinstance(b, str):
-            return list(map(''.join, prod))
+            return[''.join(pair) for pair in prod]
         else:
-            return list(map(list, prod))
+            return [list(pair) for pair in prod]
     if is_num(a) and is_num(b) or\
             isinstance(a, int) and is_seq(b) or\
             is_seq(a) and isinstance(b, int):
@@ -307,10 +306,9 @@ def minus(a, b):
             return minus(a, {b})
     if is_col(a) and is_col(b):
         if isinstance(b, str):
-            difference =\
-                filter(lambda c: not isinstance(c, str) or c not in b, a)
+            difference = [c for c in a if not isinstance(c, str) or c not in b]
         else:
-            difference = filter(lambda c: c not in b, a)
+            difference = [c for c in a if c not in b]
         if isinstance(a, str):
             return ''.join(difference)
         if is_lst(a):
@@ -375,7 +373,7 @@ def uniquify(a):
                 if not elem in seen:
                     out.append(elem)
                     seen.add(elem)
-        except:
+        except TypeError:
             out = []
             for elem in a:
                 if not elem in out:
@@ -461,10 +459,12 @@ def at_slice(a, b, c=0):
             work = a
             gen_range = []
             if a <= b:
-                def cont_test(work): return work < b
+                def cont_test(work):
+                    return work < b
                 step = c
             else:
-                def cont_test(work): return work > b
+                def cont_test(work):
+                    return work > b
                 step = -c
             while cont_test(work):
                 gen_range.append(work)
@@ -476,20 +476,20 @@ def at_slice(a, b, c=0):
     # There is no nice ABC for this check.
     if hasattr(a, "__getitem__") and is_col(b):
         if is_col(c):
-            c = itertools.cycle(c)
+            rep_c = itertools.cycle(c)
         else:
-            c = itertools.repeat(c)
+            rep_c = itertools.repeat(c)
 
         if isinstance(a, str) or isinstance(a, tuple):
             indexable = list(a)
         else:
             indexable = a
 
-        for index in b:
+        for repl_index in b:
             if isinstance(a, str):
-                indexable[index] = str(next(c))
+                indexable[repl_index] = str(next(rep_c))
             else:
-                indexable[index] = next(c)
+                indexable[repl_index] = next(rep_c)
 
         if isinstance(a, str):
             return "".join(indexable)
@@ -590,17 +590,17 @@ def chop(a, b=None):
     if isinstance(a, int) and is_seq(b):
         m = len(b) // a  # min number of elements
         r = len(b) % a   # remainding elements
-        begin, end = 0, m + (r > 0)
+        begin_ind, end_ind = 0, m + (r > 0)
         l = []
         for i in range(a):
-            l.append(b[begin:end])
-            begin, end = end, end + m + (i + 1 < r)
+            l.append(b[begin_ind:end_ind])
+            begin_ind, end_ind = end_ind, end_ind + m + (i + 1 < r)
         return l
     # seq, col of ints -> chop seq at number locations.
     if is_seq(a) and is_col(b):
         if all(isinstance(elem, int) for elem in b) and not isinstance(b, str):
             locs = sorted(b)
-            return list(map(lambda i, j: a[i:j], [0] + locs, locs + [len(a)]))
+            return [a[i:j] for i, j in zip([0] + locs, locs + [len(a)])]
     if is_seq(a):
         output = [[]]
         for elem in a:
@@ -618,20 +618,20 @@ def Pchr(a):
     if isinstance(a, int):
         try:
             return chr(a)
-        except:
+        except (ValueError, OverflowError):
             return ''.join(chr(digit) for digit in from_base_ten(a, 256))
     if isinstance(a, complex):
         return a.real - a.imag * 1j
     if is_num(a):
         return Pchr(int(a))
     if isinstance(a, str):
-        return to_base_ten(list(map(ord, a)), 256)
+        return to_base_ten([ord(char) for char in a], 256)
     if is_col(a):
         trans = list(zip(*a))
         if all(isinstance(sublist, str) for sublist in a):
-            return list(map(''.join, trans))
+            return [''.join(row) for row in trans]
         else:
-            return list(map(list, trans))
+            return [list(row) for row in trans]
     raise BadTypeCombinationError("C", a)
 environment['Pchr'] = Pchr
 
@@ -660,7 +660,7 @@ environment['eval_input'] = eval_input
 # f. single purpose.
 def Pfilter(a, b=1):
     if is_num(b):
-        return next(filter(a, itertools.count(b)))
+        return next(counter for counter in itertools.count(b) if a(counter))
     if is_col(b):
         return list(filter(a, b))
     raise BadTypeCombinationError("f", a, b)
