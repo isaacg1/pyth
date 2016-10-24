@@ -269,6 +269,7 @@ z                         Variable. Autoinitialized to input().
 .( <lst> <int>            Pop at location. A is mutated to remove the element at index B, which is returned.
 .) <lst> <int>            Pop last element. A is mutated to remove its final element, which is returned.
 .* <seq>                  Splat. A is treated as all of the arguments to the surrounding function.
+.+ <seq>                  Deltas. Difference between each consecutive pair of elements of A.
 .- <col> <col>            Bagwise subtraction. For each element in B, remove its first occurrence in A from A and return. Non-mutating.
 ./ <seq>                  Partition. Return all divisions of A into disjoint substrings.
 ./ <nneg>                 Integer partition. Return all sorted lists of positive integers that add to A.
