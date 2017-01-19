@@ -138,6 +138,7 @@ c_to_f = {
     '.u': ('cu_reduce', 3),
     '.v': ('pyth_eval', 1),
     '.w': ('Pwrite', 2),
+    '.y': ('all_subset_orders', 1),
     '.z': ('all_input', 0),
     '.Z': ('compress', 1),
     '."': ('packed_str', 1),

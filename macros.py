@@ -1786,6 +1786,17 @@ def Pexcept(a, b):
 environment['Pexcept'] = Pexcept
 
 
+# .y All subsets, all orders
+def all_subset_orders(a):
+    if is_num(a):
+        a = urange(a)
+    if not is_col(a):
+        raise BadTypeCombinationError(".p", a)
+    def all_subsets_all_orders(a):
+        return  itertools.chain.from_iterable(itertools.permutations(a, r) for r in range(len(a)+1))
+    return itertools_norm(all_subsets_all_orders, a)
+environment['all_subset_orders'] = all_subset_orders
+
 # .z. N/A
 @functools.lru_cache(1)
 def all_input():
