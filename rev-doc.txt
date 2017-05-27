@@ -122,7 +122,7 @@ D  <func n> <n:var> <blk> Define a function. Same as def A(B...) in Python.
 D  <pfn> <n-1:any> <col>  Sort operator. Sort C with key A(_, B ...). Uses o underneath, B may refer to o's lambda var.
 E                         Evaluate input. Same as ast.literal_eval(input()) in Python.
 F  <pf1> <any> <int>      Apply repeatedly. A(A(A(A(... B ... )))), C times.
-F  <pf2> <seq>            Fold A over B, with first element as initial value. Same as .U <A> bZ <B>
+F  <pf2> <seq>            Fold A over B, with first element as initial value. Same as .U <A> bZ <B>. On empty sequence, value is 0, unless A is *, in which case it is 1.
 F  <pf3+> <seq>           Apply A to B, with splatting. A(*B) in Python.
 F  <var> <num> <blk>      For A in range(int(B)): C
 F  <var> <any> <blk>      For A in B: C
@@ -237,7 +237,7 @@ r  <int> <int>            Range, half inclusive. range(A, B) in Python, or range
 r  <str> <str>            String range. r(C(A), C(B)), then convert each int to string using C.
 r  <int> <seq>            r(B, A)
 s  <col(str)>             Concatenate. ''.join(A)
-s  <col>                  reduce on +, base case 0. (Pyth +)
+s  <col>                  reduce on +, base case []. (Pyth +)
 s  <cmp>                  Real part. A.real in Python.
 s  <num>                  Floor to int. int(A) in Python.
 s  <str>                  Parse as int. "" parses to 0. int(A) in Python.
