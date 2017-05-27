@@ -527,9 +527,9 @@ environment['at_slice'] = at_slice
 def lt(a, b):
     if isinstance(a, set) and is_col(b):
         return a.issubset(b) and a != b
-    if is_seq(a) and is_num(b):
+    if is_seq(a) and isinstance(b, int):
         return a[:b]
-    if is_num(a) and is_seq(b):
+    if isinstance(a, int) and is_seq(b):
         if a >= len(b):
             if isinstance(b, str):
                 return ''
@@ -551,9 +551,9 @@ environment['lt'] = lt
 def gt(a, b):
     if isinstance(a, set) and is_col(b):
         return a.issuperset(b) and a != b
-    if is_seq(a) and is_num(b):
+    if is_seq(a) and isinstance(b, int):
         return a[b:]
-    if is_num(a) and is_seq(b):
+    if isinstance(a, int) and is_seq(b):
         if a >= len(b):
             return b
         return b[len(b) - a:]
@@ -695,7 +695,7 @@ environment['G'] = string.ascii_lowercase
 def gte(a, b):
     if isinstance(a, set) and is_col(b):
         return a.issuperset(b)
-    if is_seq(a) and is_num(b):
+    if is_seq(a) and isinstance(b, int):
         return a[b - 1:]
     if is_num(a) and is_num(b) or\
             isinstance(a, list) and isinstance(b, list) or\
