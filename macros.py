@@ -71,9 +71,9 @@ def itertools_norm(func, a, *args, **kwargs):
 def unknown_types(func, name, *args):
     if len(args) == 2:
         a, b = args
-        if is_seq(a):
+        if is_seq(a) and not (isinstance(a, str) and len(a) == 1):
             return list(map(lambda left:func(left, b), a))
-        elif is_seq(b):
+        elif is_seq(b) and not (isinstance(a, str) and len(a) == 1):
             return list(map(lambda right:func(a, right), b))
     raise BadTypeCombinationError(name, *args)
 
