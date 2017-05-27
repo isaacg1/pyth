@@ -24,7 +24,7 @@ import traceback
 from extra_parse import PythParseError, UnsafeInputError, str_parse_next
 from macros import environment, BadTypeCombinationError, memoized
 from data import lambda_f, end_statement, variables, c_to_s, c_to_i, c_to_f, \
-    optional_final_arg, replacements, rotate_back_replacements, lambda_vars, \
+    optional_final_args, replacements, rotate_back_replacements, lambda_vars, \
     next_c_to_i, prepend
 from lexer import lex
 
@@ -302,8 +302,8 @@ def gather_args(active_token, rest_tokens, arity, safe_mode):
     while (len(args_list) != arity
            and not (not rest_tokens
                     and (arity == float('inf')
-                         or (active_token in optional_final_arg
-                             and len(args_list) == arity - 1)))):
+                         or (active_token in optional_final_args
+                             and len(args_list) >= arity - optional_final_args[active_token])))):
         parsed, rest_tokens = parse(rest_tokens, safe_mode)
         if not parsed:
             break
@@ -347,8 +347,8 @@ def infix_parse(active_token, rest_tokens, safe_mode):
         lambda_stack.extend(['Z', 'H'])
     while len(args_list) != arity:
         if (not rest_tokens
-                and active_token in optional_final_arg
-                and len(args_list) == arity - 1):
+                and active_token in optional_final_args
+                and len(args_list) >= arity - optional_final_args[active_token]):
             args_list.append('')
             break
         parsed, rest_tokens = parse(rest_tokens, safe_mode)
