@@ -40,7 +40,6 @@ state_maintaining_depth = 0
 def general_parse(code, safe_mode):
     # Parsing
     args_list = []
-    parsed = 'Not empty'
     tokens = lex(code)
     while tokens != []:
         to_print = add_print(tokens)
@@ -141,9 +140,16 @@ def parse(tokens, safe_mode, spacing="\n "):
                     return "repeat({}, {}, {})".format(func, rep_arg1, rep_arg2), post2
                 if arity == 2:
                     # <binary function/infix>F: Fold operator
+                    fold_list, post_fold = next_seg(remainder, safe_mode)
+                    if len(sugar_active_tokens) == 1\
+                            and sugar_active_tokens[0] in c_to_f\
+                            and not sugar_active_tokens[0] in lambda_f:
+                        parsed_list, rest = parse(fold_list, safe_mode)
+                        assert not rest, "Sugar parse F fold simple failed"
+                        func = c_to_f[sugar_active_tokens[0]][0]
+                        return "fold({}, {})".format(func, parsed_list), post_fold
                     reduce_arg1 = lambda_vars['.U'][0][0]
                     reduce_arg2 = lambda_vars['.U'][0][-1]
-                    fold_list, post_fold = next_seg(remainder, safe_mode)
                     full_fold, rest = parse([".U"] + sugar_active_tokens +
                                             [reduce_arg1, reduce_arg2] + fold_list, safe_mode)
                     assert not rest, "Sugar parse F fold failed"
