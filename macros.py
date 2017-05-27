@@ -363,7 +363,7 @@ def read_file(a):
             return data
 
         if a.startswith("http"):
-            b = urllib.request.urlopen(a)
+            b = list(map(str, urllib.request.urlopen(a)))
         else:
             b = open(a)
 
