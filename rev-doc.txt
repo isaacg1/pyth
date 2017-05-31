@@ -174,7 +174,7 @@ X  <any> <dict> <any>     B[A] += C, or B[A] = C if A not in B. Uses Pyth +.
 X  <int> <str> <any>      Insert into string. Insert str(C) into B at A.
 Y                         Variable. Initialized to [], empty list.
 Z                         Variable. Initialized to 0. (zero)
-[  <...>                  List constructor. list(A) in Python.
+[  <...>                  List constructor, unbounded number of arguments. [A1, A2, A3, A4 ... ], where A1, A2, .. are the arguments. Often used with ")".
 \  <char>                 One character string.
 ]  <any>                  [A].
 ^  <num> <num>            Exponentiation. A ** B in Python.
