@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import pyth
-import cProfile
 import sys
 
 # The idea here is to test each type as input to each function.

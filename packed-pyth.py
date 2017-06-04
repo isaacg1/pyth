@@ -1,4 +1,3 @@
-import sys
 import pyth
 
 def byte_to_k_bits(b, k):

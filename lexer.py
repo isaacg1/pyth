@@ -1,5 +1,3 @@
-from extra_parse import UnsafeInputError
-
 def lex(code):
     remainder = code
     tokens = []
