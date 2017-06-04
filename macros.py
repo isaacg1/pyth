@@ -1277,7 +1277,7 @@ environment['combinations'] = combinations
 # .C. iter, int
 def combinations_with_replacement(a, b):
     if not is_col(a) or not isinstance(b, int):
-        return unknown_types(combinations_with_replacements, ".C", a, b)
+        return unknown_types(combinations_with_replacement, ".C", a, b)
 
     return itertools_norm(itertools.combinations_with_replacement, a, b)
 environment['combinations_with_replacement'] = combinations_with_replacement
