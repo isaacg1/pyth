@@ -69,6 +69,10 @@ def itertools_norm(func, a, *args, **kwargs):
 
 
 def unknown_types(func, name, *args):
+    if len(args) == 1:
+        a, = args
+        if is_seq(a) and not (isinstance(a, str) and len(a) == 1):
+            return list(map(func, a))
     if len(args) == 2:
         a, b = args
         if is_seq(a) and not (isinstance(a, str) and len(a) == 1):
