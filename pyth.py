@@ -671,6 +671,7 @@ Command line flags:
                 Instead of reading code from file or commandline, use the
                 first line of STDIN. Only short-form flags can be used with
                 -x, as one argument. (-xcd)
+-n    --newline Trim trailing newline from file input.
 
 See opening comment in pyth.py for more info.""")
     else:
@@ -693,6 +694,7 @@ See opening comment in pyth.py for more info.""")
         memo_off = flag_on('M', '--no-memoization')
         only_debug = flag_on('D', '--only-debug')
         execute_stdin = flag_on('x', '--execute-stdin')
+        trim_newline = flag_on('n', '--newline')
         if execute_stdin:
             assert len(sys.argv) == 2, "-x is not compatible with multiple command line arguments"
             code_lines = sys.stdin.readlines()
@@ -726,7 +728,7 @@ See opening comment in pyth.py for more info.""")
                         pyth_code = ''.join(code_lines[:end_line])
                     else:
                         pyth_code = ''.join(code_lines)
-                    if len(pyth_code) > 0 and pyth_code[-1] == '\n':
+                    if trim_newline and len(pyth_code) > 0 and pyth_code[-1] == '\n':
                         pyth_code = pyth_code[:-1]
 
             py_code_line = general_parse(pyth_code, safe_mode_on)
