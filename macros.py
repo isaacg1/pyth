@@ -299,10 +299,18 @@ def times(a, b):
             return[''.join(pair) for pair in prod]
         else:
             return [list(pair) for pair in prod]
-    if is_num(a) and is_num(b) or\
-            isinstance(a, int) and is_seq(b) or\
-            is_seq(a) and isinstance(b, int):
+    if is_num(a) and is_num(b):
         return a * b
+    if isinstance(a, int) and is_seq(b):
+        if a < 0:
+            return - a * b[::-1]
+        else:
+            return a * b
+    if is_seq(a) and isinstance(b, int):
+        if b < 0:
+            return -b * a[::-1]
+        else:
+            return a * b
     return unknown_types(times, "*", a, b)
 environment['times'] = times
 
