@@ -1259,11 +1259,13 @@ environment['Pbin'] = Pbin
 def combinations(a, b):
     if isinstance(a, int) and isinstance(b, int):
         # compute n C r
-        n, r = a, min(b, b - a)
+        n, r = a, min(b, a - b)
         if r == 0:
             return 1
         if r < 0:
-            r = b
+            r = max(b, a - b)
+            if r < 0:
+                return 0
 
         num = functools.reduce(operator.mul, range(n, n - r, -1), 1)
         den = math.factorial(r)
