@@ -157,6 +157,7 @@ S  <num>                  1-indexed range up to floor of A.
 T                         Variable. Initialized to 10. (Ten)
 U  <nneg>                 Unary range. [0, 1, ... A-1]. range(A) in Python.
 U  <neg>                  Reversed unary range. [A, A+1, ... -1]. range(A, 0) in Python.
+U  <col>                  Unary range of length. [0, 1, ... len(A)-1]. range(len(A)) in Python.
 V  <num> <blk>            Shorthand for 'FNU'. N -> H -> b ->
 V  <col> <blk>            Shorthand for 'FN'. N -> H -> b ->
 V  <pfn> <col> <col>      Vectorized function. Equivalent to MC,
