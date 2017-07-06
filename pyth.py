@@ -61,7 +61,7 @@ def parse(tokens, safe_mode, spacing="\n "):
     # If we've reached the end of the string, finish up.
     if not tokens:
         if lambda_stack:
-            return lambda_stack[0], []
+            return lambda_stack[-1], []
         else:
             preps_used.add('Q')
             return 'Q', []
