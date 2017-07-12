@@ -302,10 +302,7 @@ def times(a, b):
     if is_num(a) and is_num(b):
         return a * b
     if isinstance(a, int) and is_seq(b):
-        if a < 0:
-            return - a * b[::-1]
-        else:
-            return a * b
+        return a * b
     if is_seq(a) and isinstance(b, int):
         if b < 0:
             return -b * a[::-1]
