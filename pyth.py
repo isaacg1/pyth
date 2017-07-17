@@ -742,6 +742,10 @@ See opening comment in pyth.py for more info.""")
                 print('=' * 50, file=sys.stderr)
 
             if safe_mode_on and not only_debug:
+                # To limit memory use to 200 MB so that it doesn't crash heroku:
+
+                import resource
+                resource.setrlimit(resource.RLIMIT_AS, (2*10**8, 2*10**8))
                 # to fix most security problems, we will disable the use of
                 # unnecessary parts of the python
                 # language which should never be needed for golfing code.
