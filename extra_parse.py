@@ -39,6 +39,8 @@ def str_parse_next(active_token):
                 continue
         if active_token[point] == '\n':
             out.append('\\n')
+        elif active_token[point] == '\r':
+            out.append('\\r')
         elif active_token[point] == '\0':
             out.append('\\000')
         else:

@@ -713,7 +713,7 @@ See opening comment in pyth.py for more info.""")
                 pyth_code = file_or_string
             else:
                 if not execute_stdin:
-                    code_lines = list(open(file_or_string, encoding='iso-8859-1'))
+                    code_lines = list(open(file_or_string, encoding='iso-8859-1', newline=''))
                 if line_on:
                     runable_code_lines = [code_line[:-1]
                                           for code_line in code_lines
