@@ -268,7 +268,7 @@ z                         Variable. Autoinitialized to input().
 ."                        ." starts a packed string, terminated by " or end of file. Format is: first character is the lowest output character by code point, second is the highest. The rest of the string is the output string encoded as offsets from the lowest output character, treat as an integer in the minimal base, converted to base 256, as bytes in the rest of the string. To convert a desired output string to the format, use the following program: +++\.N++hSzeSzCi-RChSzCMz-hCeSzChSzN Null bytes, backslashes and double quotes will need to be escaped.
 .& <int> <int>            Bitwise and. & in Python.
 .( <lst> <int>            Pop at location. A is mutated to remove the element at index B, which is returned.
-.) <lst> <int>            Pop last element. A is mutated to remove its final element, which is returned.
+.) <lst>                  Pop last element. A is mutated to remove its final element, which is returned.
 .* <seq>                  Splat. A is treated as all of the arguments to the surrounding function.
 .+ <seq>                  Deltas. Difference between each consecutive pair of elements of A.
 .- <col> <col>            Bagwise subtraction. For each element in B, remove its first occurrence in A from A and return. Non-mutating.
