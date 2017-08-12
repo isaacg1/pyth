@@ -265,12 +265,16 @@ def next_n_segs(n, code, safe_mode):
     if not isinstance(n, int):
         assert n == float('inf'), "arities must be either ints or infinity"
         raise RuntimeError # Can't use unbounded arity function in this context.
+    global c_to_i
+    global state_maintaining_depth
+    saved_c_to_i = c.deepcopy(c_to_i)
+    state_maintaining_depth += 1
     remainder = code
-    segs = []
     for _ in range(n):
-        seg, remainder = next_seg(remainder, safe_mode)
-        segs += seg
-    return segs, remainder
+        _, remainder = parse(remainder, safe_mode)
+    state_maintaining_depth -= 1
+    c_to_i = saved_c_to_i
+    return code[:len(code) - len(remainder)], remainder
 
 
 def state_maintaining_parse(code, safe_mode):
