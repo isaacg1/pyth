@@ -342,9 +342,6 @@ def function_parse(active_token, rest_tokens, safe_mode):
 
 def infix_parse(active_token, rest_tokens, safe_mode):
     infixes, arity = c_to_i[active_token]
-    # Advance infixes.
-    if active_token in next_c_to_i:
-        c_to_i[active_token] = next_c_to_i[active_token]
     args_list = []
     # Lambda infix(es)
     if active_token == '.W':
@@ -365,6 +362,9 @@ def infix_parse(active_token, rest_tokens, safe_mode):
     if active_token in end_statement:
         rest_tokens = [")"] + rest_tokens
     py_code = infixes.format(*args_list)
+    # Advance infixes.
+    if active_token in next_c_to_i:
+        c_to_i[active_token] = next_c_to_i[active_token]
     return py_code, rest_tokens
 
 
