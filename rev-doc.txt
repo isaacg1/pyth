@@ -130,9 +130,9 @@ G                         Variable. Initialized to "abcdefghijklmnopqrstuvwxyz",
 H                         Variable. Initialized to {}. (Hash table)
 I  <any> <blk>            if A: B
 I  <pfn> <any> <n-1:any>  Invariant. A(B, ...) == B.
-J  <any>                  Variable, Autoinitializing. J=A on first use and all uses inside the assignment expression.
+J  <any>                  Variable, Autoinitializing. J=A on first use and all uses before an assignment expression finishes.
 J                         Variable. After the assignment expression.
-K  <any>                  Variable, Autoinitializing. K=A on first use and all uses inside the assignment expression.
+K  <any>                  Variable, Autoinitializing. K=A on first use and all uses before an assignment expression finishes.
 K                         Variable. After the assignment expression.
 L  <any>                  def y(b): return A. y -> ' ->
 L  <pfn> <n-1:any> <col>  Left map. n>=2. Map A(B, ..., _) over C, where _ is the lambda variable. Map uses m underneath, and B may refer to its lambda variable.
