@@ -183,14 +183,15 @@ environment['repeat'] = repeat
 
 # F on binary function. Fold.
 def fold(func, lst):
-    if not lst:
-        # '*'
-        if func == environment[c_to_f['*'][0]]:
+    if func == environment[c_to_f['*'][0]]:
+        if not lst:
             return 1
-        else:
-            return 0
-    else:
-        return reduce2(func, lst)
+        if not is_col(lst): 
+            return factorial(lst)
+
+    if not lst:
+        return 0
+    return reduce2(func, lst)
 environment['fold'] = fold
 
 

@@ -153,7 +153,6 @@ c_to_f = {
     '.+': ('deltas', 1),
     '.:': ('substrings', 2),
     '.{': ('Pset', 1),
-    '.!': ('factorial', 1),
     '.[': ('pad', 3),
 }
 
