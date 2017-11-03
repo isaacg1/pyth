@@ -9,5 +9,4 @@ setup(
     author='isaacg1',
     url='https://github.com/isaacg1/pyth',
     license='Expat',
-    py_modules=['pyth','macros','data','big-pyth','extra_parse','lexer','packed-pyth','test','tree']
-)
+    packages=['pyth'])
