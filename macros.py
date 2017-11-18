@@ -187,6 +187,8 @@ def fold(func, lst):
         # '*'
         if func == environment[c_to_f['*'][0]]:
             return 1
+        elif func == environment[c_to_f['+'][0]]:
+            return []
         else:
             return 0
     else:
@@ -984,7 +986,7 @@ environment['Prange'] = Prange
 def Psum(a):
     if is_col(a) and not isinstance(a, str):
         if len(a) == 0:
-            return []
+            return 0
         if all(isinstance(elem, str) for elem in a):
             return ''.join(a)
         if len(a) > 100:
