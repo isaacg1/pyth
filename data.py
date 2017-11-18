@@ -24,7 +24,7 @@ c_to_s = {
     'W': ('while {0}:{1}', 1),
     '#': ('while True:\n try:{0}\n except Exception:\n  break', 0, 1),
     '.V': ('for b in infinite_iterator({0}):{1}', 1),
-    '.?': ('else:{0}', 0),
+    'else': ('else:{0}', 0),
 }
 
 # Arbitrary format operators - use for assignment, infix, etc.
@@ -181,6 +181,7 @@ replacements = {
     'L': [['D', 'y', 'b', 'R'], ['D', "'", 'b', 'R'], ],
     'M': [['D', 'g', 'G', 'H', 'R'], ['D', 'n', 'G', 'H', 'R'], ],
     '.N': [['D', ':', 'N', 'T', 'Y', 'R'], ['D', 'X', 'N', 'T', 'Y', 'R'], ],
+    '.?': [[')', 'else'], ],
 }
 
 rotate_back_replacements = ('V',)
