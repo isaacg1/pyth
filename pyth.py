@@ -295,8 +295,7 @@ def augment_assignment_test(rest_tokens):
 
 def augment_assignment_parse(active_token, rest_tokens, safe_mode):
     following_vars = [token for token in rest_tokens if token in variables or token in next_c_to_i]
-    assert following_vars, 'Assignment needs a variable'
-    var_token = following_vars[0]
+    var_token = (following_vars + ['Q'])[0]
     return parse([active_token, var_token] + rest_tokens, safe_mode)
 
 def gather_args(active_token, rest_tokens, arity, safe_mode):

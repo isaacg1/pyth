@@ -96,7 +96,7 @@ $                         Begin and end Python literal. Counts as one token. Dis
 <  <num> <cmp>            Less than, absolute value/magnitude.
 <  <set> <col>            Proper subset.
 =  <var> <any>            Assign A value B. deepcopy value before assignment. Return assigned value.
-=  <func> <...>           Assign x value A(B,..), where x is the first variable after the =. The Python Y += 3 would be =+Y3. Return assigned value.
+=  <func> <...>           Assign x value A(B,..), where x is the first variable after the =, or Q if there is none. The Python Y += 3 would be =+Y3. Return assigned value.
 >  <num> <num>            Greater than, numeric.
 >  <str> <str>            Greater than, lexicographic.
 >  <lst> <lst>            Greater than, lexicographic.
@@ -263,8 +263,8 @@ z                         Variable. Autoinitialized to input().
 }  <int> <int>            Inclusive range. [A, A+1, ... B]
 ~  <var> <any>            Assign A value B. Return original value of A.
 ~  <func> <var> <...>     Assign x value A(B,..), where x is the first variable after the =. The Python Y += 3 would be =+Y3. Return original value of B.
-.! <int>                  Factorial.
-.! <num>                  Gamma function of A + 1. This is continuous with the factorial function.
+.! <int>                  Factorial. *F works the same and should be prefered.
+.! <num>                  Gamma function of A + 1. This is continuous with the factorial function. *F works the same and should be prefered.
 ."                        ." starts a packed string, terminated by " or end of file. Format is: first character is the lowest output character by code point, second is the highest. The rest of the string is the output string encoded as offsets from the lowest output character, treat as an integer in the minimal base, converted to base 256, as bytes in the rest of the string. To convert a desired output string to the format, use the following program: +++\.N++hSzeSzCi-RChSzCMz-hCeSzChSzN Null bytes, backslashes and double quotes will need to be escaped.
 .& <int> <int>            Bitwise and. & in Python.
 .( <lst> <int>            Pop at location. A is mutated to remove the element at index B, which is returned.
