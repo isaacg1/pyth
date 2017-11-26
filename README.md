@@ -11,6 +11,11 @@ Pyth, an extremely concise language.
 
 ## Recent changes:
 
+### 11/26/17
+
+* `=` and `~` now allow an implicit `Q` if they are not followed by any variables for the rest of the program.
+  * For instance, in the program `mQ=h`, the `=` assigns the result of `h`, which expands to `hQ` to `Q`. Thus, with an input of `2`, the output is `[3, 3, 3]`.
+
 ### 8/20/17
 
 * `J` and `K` now define assignment expressions until an assignment expression is complete, since the associated variables are not defined until that point. 
