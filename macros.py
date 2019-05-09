@@ -1,6 +1,6 @@
 import binascii
 import cmath
-import collections
+import collections.abc
 import copy
 import datetime
 import fractions
@@ -27,15 +27,15 @@ def is_num(a):
 
 
 def is_seq(a):
-    return isinstance(a, collections.Sequence)
+    return isinstance(a, collections.abc.Sequence)
 
 
 def is_col(a):
-    return isinstance(a, collections.Iterable)
+    return isinstance(a, collections.abc.Iterable)
 
 
 def is_hash(a):
-    return isinstance(a, collections.Hashable)
+    return isinstance(a, collections.abc.Hashable)
 
 
 def is_lst(a):
